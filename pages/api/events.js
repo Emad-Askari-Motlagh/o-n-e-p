@@ -1,17 +1,16 @@
 import dbInit from "../../lib/dbInit";
 import Orders from "../../server/mongoSchema/orderschema";
 import NextCors from "nextjs-cors";
-
 let i = 0;
 let clients = [];
 const myOrders = [];
 
-// const orderFetcher = async () => await Orders.find();
-// function sendEventsToAll(newFact, orders) {
-//   clients.forEach((client) =>
-//     client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)
-//   );
-// }
+const orderFetcher = async () => await Orders.find();
+function sendEventsToAll(newFact, orders) {
+  clients.forEach((client) =>
+    client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)
+  );
+}
 async function handler(req, res) {
   await NextCors(req, res, {
     // Options
@@ -19,7 +18,6 @@ async function handler(req, res) {
     origin: "*",
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   });
-
   if (req.method === "GET") {
     try {
       // Process a POST request
@@ -31,28 +29,24 @@ async function handler(req, res) {
       };
 
       res.writeHead(200, headers);
-      var data = 1;
-      setInterval(() => {
-        res.write(`data: ${JSON.stringify([{ myData: data }])}\n\n`);
-        data += 1;
-      }, 2000);
-      // const orders = await orderFetcher();
-      // const data = `data: ${JSON.stringify(orders)}\n\n`;
-      // res.write(data);
 
-      // const clientId = Date.now();
+      const orders = await orderFetcher();
+      const data = `data: ${JSON.stringify(orders)}\n\n`;
+      res.write(data);
 
-      // const newClient = {
-      //   id: clientId,
-      //   res,
-      // };
+      const clientId = Date.now();
 
-      // Orders.watch().on("change", async (ok) => {
-      //   await dbInit();
-      //   const orders = await orderFetcher();
-      //   const data = `data: ${JSON.stringify(orders)}\n\n`;
-      //   res.write(data);
-      // });
+      const newClient = {
+        id: clientId,
+        res,
+      };
+
+      Orders.watch().on("change", async (ok) => {
+        await dbInit();
+        const orders = await orderFetcher();
+        const data = `data: ${JSON.stringify(orders)}\n\n`;
+        res.write(data);
+      });
 
       req.on("close", () => {
         console.log(`${clientId} Connection closed`);

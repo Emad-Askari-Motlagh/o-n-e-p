@@ -4,6 +4,7 @@ import typeDefs from "../../server/graphql/typeDef/schema.graphql";
 import resolvers from "../../server/graphql/resolvers";
 import dbInit from "../../lib/dbInit";
 import JWT from "jsonwebtoken";
+import NextCors from "nextjs-cors";
 // const pubsub = new PubSub();
 const schema = makeExecutableSchema({
   typeDefs,
@@ -43,6 +44,12 @@ const server = createServer({
   ],
 
   context: async (ctx) => {
+    await NextCors(ctx.req, ctx.res, {
+      // Options
+      methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+      origin: "*",
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     const pubsub = await createPubSub();
 
     const db = await dbInit();
