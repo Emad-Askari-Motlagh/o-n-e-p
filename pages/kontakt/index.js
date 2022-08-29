@@ -37,7 +37,9 @@ const Kontakt = () => {
 
   async function connect_to_socket1() {
     try {
-      const evtSource = new EventSource("http://localhost:3000/api/events");
+      const evtSource = new EventSource(
+        "https://chat-app1365.vercel.app/api/events"
+      );
       evtSource.onmessage = (event) => {
         setData(JSON.parse(event.data));
         console.log(data);
