@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import styles from "./orders.module.scss";
-import { connect } from "socket.io-client";
 import useForm from "../../hooks/Form.hook";
 import { useRouter } from "next/router";
-import { BiTrash, BiScreenshot } from "react-icons/bi";
-import { FiEye } from "react-icons/fi";
 import useOrders from "../../hooks/useOrder";
 import { GET_ADMIN_ORDERS } from "../../server/graphql/querys/subscriptions";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
+
 const Kontakt = () => {
   //useReactiveVar
   const { query } = useRouter();
@@ -38,7 +36,7 @@ const Kontakt = () => {
   async function connect_to_socket1() {
     try {
       const evtSource = new EventSource(
-        "https://chat-app1365.vercel.app/api/events"
+        `${process.env.SERVER_LINK}/api/events`
       );
       evtSource.onmessage = (event) => {
         setData(JSON.parse(event.data));
