@@ -1,0 +1,19 @@
+{
+
+  "compilerOptions": {
+"target": "ES2017",
+    "baseUrl": ".",
+    "paths": {
+      "@/icons/*": ["components/icons/*"],
+      "@/components/*": ["components/*"],
+      "@/config/*": ["config/*"],
+      "@/lib/*": ["lib/*"],
+      "@/screens/*": ["screens/*"],
+      "@/public/*": ["public/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/server/*":["server/*"],
+    }
+  },
+
+  "exclude": ["node_modules"]
+}

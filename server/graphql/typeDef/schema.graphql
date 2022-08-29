@@ -1,0 +1,194 @@
+union CostumerMenuChoises = OrderItem | MenuItem
+
+type Address {
+  first: String!
+  secound: String!
+}
+
+type Message {
+  content: String
+  id: ID
+  user: String
+}
+
+type OrderItem {
+  orderQuantity: Int
+  id: ID
+  costumer: Costumer
+  product: MenuItem
+  restaurant: String
+  _id: ID
+}
+
+type MenuSubItem {
+  _id: MenuItem
+}
+
+type User {
+  name: String!
+  email: String!
+  password: String!
+  token: String!
+  _id: ID!
+  isAdmin: Boolean!
+  restaurant: Restaurant!
+}
+type myArray {
+  name: String!
+}
+
+type Restaurant {
+  name: String
+  owner: String
+  description: String
+  numReviews: Int
+  reviews: [String]
+  type: String
+  images: [String]
+  rating: Int
+  location: Location
+  _id: ID
+}
+
+type Location {
+  mytype: String!
+  coordinates: [Int!]
+}
+input LocationInput {
+  mytype: String!
+  coordinates: [Int!]
+}
+input RegisterInput {
+  email: String!
+  password: String!
+}
+type Token {
+  token: String!
+}
+type Costumer {
+  name: String
+  table: Int
+  email: String
+  _id: ID
+}
+type MenuItem {
+  name: String
+  itemsType: String
+  price: Int
+  description: String
+  quantity: Int
+  availability: Boolean
+  _id: ID
+  id: ID
+  restaurant: String
+  category: String
+  orderQuantity: Int
+}
+type MenuParent {
+  itemName: String
+  collectionType: String
+  item: [MenuItem]
+}
+type AdminOrder {
+  orderQuantity: Int
+  id: ID
+  costumer: Costumer
+  product: MenuItem
+  restaurant: String
+  _id: ID
+}
+input MenuItemInput {
+  name: String
+  itemsType: String
+  price: Int
+  description: String
+  quantity: Int
+  availability: Boolean
+}
+
+type Menu {
+  restaurant: Restaurant
+  category: [MenuParent]
+  _id: ID
+}
+input MenuParentInput {
+  id: Int!
+  itemName: String!
+  collectionType: String!
+  item: [MenuItemInput!]
+}
+
+type Subscription {
+  messages: [Message]
+  commentAdded(repoFullName: String!): Message
+  # orders: [OrderItem]
+  AdminOrders: [AdminOrder]!
+}
+
+type Query {
+  messages: [Message!]
+  getCurrentUser: User
+  fetchRestaurants: [Restaurant]
+  getCostumer: Costumer
+  getMenu(restaurant: String!): [MenuParent]
+  getMenuByCategory(restaurant: String!): [MenuParent]
+  getMenuItemByCategory(
+    category: String!
+    restaurant: String!
+  ): [CostumerMenuChoises]
+  getMenuItemCount(category: String!, restaurant: String!): Int
+  getOrderItems: OrderItem
+  orders(restaurant: String!): [OrderItem]!
+  CostumerOrders(restaurant: String!): [OrderItem]!
+  AdminOrders: [AdminOrder]!
+}
+
+type Mutation {
+  CreateUser(email: String!, password: String!, username: String!): User!
+  SignIn(email: String!, password: String!): Token!
+  signInWithGoogle(email: String!, password: String!): Token!
+  updateUser(id: String!, email: String!): User!
+  updatePassword(id: String!, password: String!): User!
+  addAddress(address: String!): User!
+  addRestaurant(
+    name: String!
+    owner: String!
+    description: String!
+    numReviews: Int!
+    reviews: [String!]
+    type: String!
+    images: [String!]
+    location: LocationInput!
+    rating: Int!
+    id: String!
+  ): Restaurant!
+  AddCostumer(name: String, table: Int, email: String): Costumer
+  fetchRestaurantsByQuery(searchQuery: String): [Restaurant]
+  addMenu(category: [MenuParentInput!], restaurant: String!): Menu
+  addMenuItem(
+    category: String!
+    restaurant: String!
+    name: String!
+    itemsType: String!
+    price: Int!
+    description: String!
+    quantity: Int!
+    availability: Boolean!
+  ): MenuItem
+  signOut: String
+  signOutCostumer: String
+  addMenuCategory(
+    restaurant: String!
+    itemName: String!
+    collectionType: String!
+  ): MenuParent
+  addOrder(productId: ID!): [AdminOrder]!
+  removeOrder(productId: ID!): [AdminOrder]!
+  getOrderItem(productId: ID!, restaurant: String!): OrderItem
+  CostumerExpiry: String
+  DeleteCostumer(costumerId: String): Costumer
+  connectToSocket: String
+  emitSocket: OrderItem
+  postMessage(user: String!, content: String!): ID!
+  CostumerOrders(restaurant: String!): [OrderItem]!
+}
