@@ -24,8 +24,12 @@ async function handler(req, res) {
       const headers = {
         Connection: "keep-alive",
         "Content-Encoding": "none",
+        "Transfer-Encoding": "Identity",
         "Cache-Control": "no-cache",
         "Content-Type": "text/event-stream",
+        Vary: "Accept-Encoding",
+        "Access-Control-Allow-Origin": "*",
+        Via: "1.1 vegur",
       };
 
       res.writeHead(200, headers);
