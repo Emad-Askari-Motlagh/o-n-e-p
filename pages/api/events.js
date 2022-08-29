@@ -1,6 +1,27 @@
 import dbInit from "../../lib/dbInit";
 import Orders from "../../server/mongoSchema/orderschema";
 import NextCors from "nextjs-cors";
+
+const allowCors = (fn) => async (req, res) => {
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+  return await fn(req, res);
+};
+
 let i = 0;
 let clients = [];
 const myOrders = [];
@@ -24,12 +45,8 @@ async function handler(req, res) {
       const headers = {
         Connection: "keep-alive",
         "Content-Encoding": "none",
-        "Transfer-Encoding": "Identity",
         "Cache-Control": "no-cache",
         "Content-Type": "text/event-stream",
-        Vary: "Accept-Encoding",
-        "Access-Control-Allow-Origin": "*",
-        Via: "1.1 vegur",
       };
 
       res.writeHead(200, headers);
@@ -65,4 +82,5 @@ async function handler(req, res) {
     res.end();
   }
 }
-export default handler;
+
+export default allowCors(handler);
