@@ -25,19 +25,15 @@ const orderResolvers = {
       const output = res.map((result) => result.orderQuantity > 0 && res);
       return output;
     },
-    async orders(_, { restaurant }, { costumerId }) {
+    async orders(_) {
       // if (!userId) {
       //   throw new ForbiddenError("User is not loged in");
       // }
 
-      if (!costumerId || !restaurant) {
-        return null;
-      }
-
       try {
         const id = mongoose.Types.ObjectId(costumerId);
 
-        const orders = await fetchOrders({ costumer: id, restaurant });
+        const orders = await fetchOrders();
         return orders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
