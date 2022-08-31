@@ -15,7 +15,12 @@ function sendEventsToAll(newFact, orders) {
   );
 }
 async function handler(req, res) {
-  // await dbInit();
+  // try {
+  //   await dbInit();
+  // } catch (err) {
+  //   throw new Error({ message: "dbError" });
+  //   console.log("db error");
+  // }
 
   // await NextCors(req, res, {
   //   // Options

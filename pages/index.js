@@ -8,7 +8,7 @@ import { BiTrash, BiScreenshot } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
 import useOrders from "../hooks/useOrder";
 import { GET_ADMIN_ORDERS } from "../server/graphql/querys/subscriptions";
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
+// import { useMutation, useQuery, useSubscription } from "@apollo/client";
 const Kontakt = () => {
   //useReactiveVar
   const { query } = useRouter();
@@ -18,7 +18,7 @@ const Kontakt = () => {
   const [data, setData] = useState([]);
   const broadcastButton = useRef(null);
 
-  const { AdminOrders, newUi } = useOrders();
+  // const { AdminOrders, newUi } = useOrders();
   // const { data: clientOrders } = useSubscription(GET_ADMIN_ORDERS, {
   //   onsubscriptiondata: (dataa) => {
   //     console.log(dataa);
@@ -50,6 +50,7 @@ const Kontakt = () => {
       evtSource.onopen = (event) => {
         console.log("open");
       };
+
       function getRealtimeData(data) {
         console.log(data);
         setData(data);
