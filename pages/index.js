@@ -19,14 +19,14 @@ const Kontakt = () => {
   const broadcastButton = useRef(null);
 
   const { AdminOrders, newUi } = useOrders();
-  const { data: clientOrders } = useSubscription(GET_ADMIN_ORDERS, {
-    onsubscriptiondata: (dataa) => {
-      console.log(dataa);
-    },
-    onError: () => {
-      console.log("error");
-    },
-  });
+  // const { data: clientOrders } = useSubscription(GET_ADMIN_ORDERS, {
+  //   onsubscriptiondata: (dataa) => {
+  //     console.log(dataa);
+  //   },
+  //   onError: () => {
+  //     console.log("error");
+  //   },
+  // });
   async function connect_to_socket() {
     try {
       // await axios.get("/api/socket");
@@ -41,6 +41,7 @@ const Kontakt = () => {
         `${process.env.SERVER_LINK}/api/events`
       );
       evtSource.onmessage = (event) => {
+        console.log(event.data);
         setData(JSON.parse(event.data));
       };
       evtSource.onerror = (event) => {

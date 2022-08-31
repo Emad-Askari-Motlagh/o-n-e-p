@@ -1,44 +1,28 @@
-import dbInit from "../../lib/dbInit";
-import Orders from "../../server/mongoSchema/orderschema";
-import NextCors from "nextjs-cors";
-
-const allowCors = (fn) => async (req, res) => {
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-  );
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
-  return await fn(req, res);
-};
+import dbInit from "@/lib/dbInit";
+import Orders from "@/server/mongoSchema/orderschema";
+import cors from "cors";
+// import NextCors from "nextjs-cors";
 
 let i = 0;
 let clients = [];
 const myOrders = [];
 
-const orderFetcher = async () => await Orders.find();
+const orderFetcher = async () =>
+  await Orders.find().populate("costumer").populate("product");
 function sendEventsToAll(newFact, orders) {
   clients.forEach((client) =>
     client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)
   );
 }
 async function handler(req, res) {
-  await NextCors(req, res, {
-    // Options
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    origin: "*",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  });
+  // await dbInit();
+
+  // await NextCors(req, res, {
+  //   // Options
+  //   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  //   origin: "*",
+  //   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  // });
   if (req.method === "GET") {
     try {
       // Process a POST request
@@ -50,10 +34,14 @@ async function handler(req, res) {
       };
 
       res.writeHead(200, headers);
+      // const orders = await orderFetcher();
+      var i = 1;
 
-      const orders = await orderFetcher();
-      const data = `data: ${JSON.stringify(orders)}\n\n`;
-      res.write(data);
+      setInterval(() => {
+        i++;
+        const data = `data: ${JSON.stringify([{ orderQuantity: i++ }])}\n\n`;
+        res.write(data);
+      }, 2000);
 
       const clientId = Date.now();
 
@@ -62,15 +50,17 @@ async function handler(req, res) {
         res,
       };
 
-      Orders.watch().on("change", async (ok) => {
-        await dbInit();
-        const orders = await orderFetcher();
-        const data = `data: ${JSON.stringify(orders)}\n\n`;
-        res.write(data);
-      });
+      // Orders.watch().on("change", async (ok) => {
+      //   const orders = await orderFetcher();
+      //   const data = `data: ${JSON.stringify(orders)}\n\n`;
+      //   res.write(data);
+      // });
+
+      clients.push(newClient);
 
       req.on("close", () => {
         console.log(`${clientId} Connection closed`);
+        clients = orders;
       });
     } catch (err) {
       console.log(err);
@@ -79,8 +69,12 @@ async function handler(req, res) {
     // res.flush();
   } else if (req.method === "POST") {
     //Handle any other HTTP method
-    res.end();
+
+    const newFact = req.body;
+    myOrders.push(newFact);
+    res.json(newFact);
+    const orders = await orderFetcher();
+    return sendEventsToAll(newFact, orders);
   }
 }
-
-export default allowCors(handler);
+export default handler;
