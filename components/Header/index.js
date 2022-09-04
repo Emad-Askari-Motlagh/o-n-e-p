@@ -13,6 +13,7 @@ import {
   CgHome,
 } from "react-icons/cg";
 import Link from "next/link";
+import captalizeFirstChar from "lib/captalizeFirstChar";
 
 export default function Header(props) {
   const { data: userData, error: userError, loading: userLoading } = props.user;
@@ -56,7 +57,8 @@ export default function Header(props) {
         )}
         {(costumerData || userData) && (
           <span className={styles.app_name}>
-            {costumerData?.getCostumer?.name || userData?.getCurrentUser?.email}
+            {captalizeFirstChar(costumerData?.getCostumer?.name) ||
+              captalizeFirstChar(userData?.getCurrentUser?.email)}
           </span>
         )}
       </div>

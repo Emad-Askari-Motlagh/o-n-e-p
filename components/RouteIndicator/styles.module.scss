@@ -57,6 +57,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        text-shadow: 1px 1px 1px black;
 
         @include md {
           margin: 2px 5px;

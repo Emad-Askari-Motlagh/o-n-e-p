@@ -1,7 +1,6 @@
-import Head from "next/head";
 import style from "./Layout.module.scss";
 import Sidebar from "components/Sidebar";
-import RouteBar from "components/Route-Indicator";
+import RouteBar from "components/RouteIndicator";
 import PageTwo from "components/Footer";
 import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";
@@ -15,7 +14,6 @@ import {
 import { useProvideAuth } from "hooks/Context.hook";
 import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations";
 import Sammary from "components/OrdersSammary";
-import { useEffect } from "react";
 
 export default function PrimaryLayout({ children, isCurrent }) {
   const { isVisible, setIsVisible, ref } = useVisible(false);
