@@ -67,7 +67,7 @@ export default function CheckOut() {
         className={
           styles.total_amount
         }>{`Total Amount : ${countSum()},00 kr`}</span>
-      <Payment isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      {/* <Payment isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} /> */}
     </div>
   );
 }
