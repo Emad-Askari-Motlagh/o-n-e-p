@@ -20,7 +20,7 @@
     "@sendgrid/mail": "^7.6.2",
     "@stripe/react-stripe-js": "^1.10.0",
     "@stripe/stripe-js": "^1.34.0",
-    "apollo-server": "^3.10.1",
+    "apollo-server": "^3.10.2",
     "apollo-server-core": "^3.8.1",
     "apollo-server-express": "^3.10.1",
     "apollo-server-micro": "^3.10.1",

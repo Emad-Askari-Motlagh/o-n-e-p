@@ -22,6 +22,7 @@ const useOrders = () => {
     loading: getAdminOrders_loading,
   } = useQuery(GET_ADMIN_ORDERS);
   const [addOrder, { data: orderData, loading: ooo }] = useMutation(ADD_ORDER, {
+    fetchPolicy: "network-only",
     refetchQueries: [
       { query: GET_ADMIN_ORDERS },
       "AdminOrders",
@@ -31,6 +32,7 @@ const useOrders = () => {
   });
 
   const [removeOrder] = useMutation(REMOVE_ORDER, {
+    fetchPolicy: "network-only",
     refetchQueries: [
       { query: GET_ADMIN_ORDERS },
       "AdminOrders",

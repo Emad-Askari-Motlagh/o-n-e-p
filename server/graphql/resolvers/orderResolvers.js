@@ -143,7 +143,6 @@ const orderResolvers = {
 
         const id = mongoose.Types.ObjectId(costumerId);
         const oldOrder = await Order.findOne({ product: productId });
-        const orders = await fetchOrders({});
         if (oldOrder) {
           const newOrder = await Order.findOneAndUpdate(
             {
@@ -163,14 +162,14 @@ const orderResolvers = {
             product: productId,
             restaurant: "Göteburgare",
           });
-          const res = await order.save();
+          await order.save();
           const orders = await fetchOrders({});
 
           return orders;
         }
       } catch (err) {
         console.log(err);
-        throw new ApolloError("There is an error", "400");
+        throw new ApolloError("There is an error", 500);
       }
     },
     async removeOrder(_, { productId }, { costumerId }) {
