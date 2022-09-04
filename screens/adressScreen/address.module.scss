@@ -1,0 +1,117 @@
+@import "/styles/breakpoints";
+
+.container {
+  width: 100%;
+
+  z-index: 100;
+  .title {
+    font-size: 28px;
+    margin: 0;
+  }
+
+  .content {
+    margin-top: 40px;
+    width: 100%;
+
+    .addresses {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .addAddress {
+      p {
+        font-size: 28px;
+        margin: 0;
+      }
+    }
+  }
+}
+.add_address_container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding-top: 60px;
+  color: wheat;
+
+  hr {
+    color: #f6f6f655;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: -20px;
+    width: inherit;
+  }
+
+  .content {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 16px;
+    z-index: 200;
+    position: relative;
+    background-image: linear-gradient(to top, tomato 0%, #8989ba 52%, #ba8998 100%);
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding-bottom: 5px;
+
+      h4 {
+        margin: 0;
+        margin-right: auto;
+        font-size: 18px;
+      }
+
+      div {
+        font-size: 30px;
+        cursor: pointer;
+        padding: 8px;
+        line-height: 20px;
+      }
+    }
+
+    form {
+      margin-top: -20px;
+      input {
+        border-radius: 40px;
+        padding-left: 2%;
+      }
+      .submitButton {
+        background-color: rgb(135, 132, 168);
+        margin: 2% 0;
+        border-radius: 10px;
+        border-width: 0.1px;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          filter: brightness(90%);
+        }
+      }
+      @include md {
+        margin-top: 0px;
+      }
+    }
+
+    .inputContainer {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        margin-bottom: 10px;
+        margin-top: 20px;
+      }
+
+      @include md {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+      }
+    }
+  }
+}

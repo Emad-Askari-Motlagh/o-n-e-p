@@ -1,0 +1,112 @@
+@import "styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  height: max-content;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: tomato;
+  flex-direction: column;
+  box-shadow: #32325d40 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+  .title {
+    font-size: 22px;
+    margin: 0 auto;
+    font-weight: 700;
+    position: relative;
+    overflow: visible;
+    padding: 20px 10px;
+    font-family: "Playfair Display", sans-serif;
+    @include md {
+      padding: 12px 10px;
+    }
+    &::after {
+      position: absolute;
+      content: "";
+      left: -4%;
+      bottom: 0;
+      background: url("/n.png") left center no-repeat;
+      width: 140%;
+      height: 100%;
+      background-size: 70% 80%;
+      @include md {
+        left: -0.4em;
+      }
+    }
+  }
+  .categoryName {
+    font-size: 90%;
+  }
+  .categories {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 20px;
+    width: 100%;
+    height: 100%;
+    &::-webkit-scrollbar {
+      width: 0px; /* Remove scrollbar space */
+      background: transparent; /* Optional: just make scrollbar invisible */
+    }
+    .categoryItem {
+      padding-top: 18px;
+      padding-bottom: 18px;
+      display: flex;
+      align-items: center;
+      @include md {
+        min-width: auto;
+        flex-direction: row;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        min-width: 100px;
+        color: rgb(37, 36, 36);
+        width: 100%;
+        font-family: "Playfair Display", sans-serif;
+        margin: 5px;
+        @include md {
+          min-width: auto;
+          flex-direction: row;
+        }
+      }
+      .emoji {
+        font-weight: 400;
+        font-family: apple color emoji, segoe ui emoji, noto color emoji, android emoji, emojisymbols, emojione mozilla,
+          twemoji mozilla, segoe ui symbol;
+        font-size: 18px;
+        margin: 4px;
+
+        @include md {
+          margin-right: 14px;
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
+  .helpContainer {
+    display: none;
+    align-items: center;
+    position: fixed;
+    bottom: 30px;
+    margin-left: -10px;
+    z-index: -1;
+
+    @include md {
+      display: flex;
+    }
+
+    .helpIcon {
+      padding: 15px;
+      background-color: #f6f7f9;
+      display: flex;
+      border-radius: 100%;
+      margin-right: 10px;
+      transform: scaleX(-1);
+    }
+  }
+}

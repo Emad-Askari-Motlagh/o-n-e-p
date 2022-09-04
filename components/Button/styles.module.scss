@@ -1,0 +1,30 @@
+@import "/styles/fonts";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  .btn_grad {
+    background-image: linear-gradient(to right, #16222a 0%, #3a6073 51%, #16222a 100%);
+    margin: 10px;
+    padding: 8px 15px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 8px rgba(238, 238, 238, 0.162);
+    border-radius: 20px;
+    width: 100%;
+    display: block;
+    border-width: 0;
+    font-family: "Paytone One", sans-serif;
+
+    &:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+}

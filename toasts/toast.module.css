@@ -1,0 +1,19 @@
+.main_container{
+    
+
+width: 100vw;
+
+}
+
+.container{
+    
+    background-color: lightcoral;
+    border-width: 2px;
+    border-radius: 7px;
+    height: max-content;
+    width: calc(50vw + 23px);;
+    position: absolute;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+   
+}

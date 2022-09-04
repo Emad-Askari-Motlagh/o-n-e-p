@@ -1,27 +1,20 @@
 import dbInit from "@/lib/dbInit";
 import Orders from "@/server/mongoSchema/orderschema";
-import cors from "cors";
-// import NextCors from "nextjs-cors";
-
+import NextCors from "nextjs-cors";
 let i = 0;
 let clients = [];
 const myOrders = [];
 
 const orderFetcher = async () =>
-  await Orders.find().populate("costumer").populate("product");
+  await Orders.find({})
+    .populate({ path: "costumer", model: "Costumer" })
+    .populate("product");
 function sendEventsToAll(newFact, orders) {
   clients.forEach((client) =>
     client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)
   );
 }
 async function handler(req, res) {
-  // try {
-  //   await dbInit();
-  // } catch (err) {
-  //   throw new Error({ message: "dbError" });
-  //   console.log("db error");
-  // }
-
   // await NextCors(req, res, {
   //   // Options
   //   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
@@ -30,6 +23,8 @@ async function handler(req, res) {
   // });
   if (req.method === "GET") {
     try {
+      await dbInit();
+
       // Process a POST request
       const headers = {
         Connection: "keep-alive",
@@ -39,14 +34,16 @@ async function handler(req, res) {
       };
 
       res.writeHead(200, headers);
-      // const orders = await orderFetcher();
+      const orders = await orderFetcher();
+      const data = `data: ${JSON.stringify(orders)}\n\n`;
+      res.write(data);
       var i = 1;
 
       setInterval(() => {
         i++;
-        const data = `data: ${JSON.stringify([{ orderQuantity: i++ }])}\n\n`;
+        const data = `data: ${JSON.stringify(orders)}\n\n`;
         res.write(data);
-      }, 2000);
+      }, 20000);
 
       const clientId = Date.now();
 

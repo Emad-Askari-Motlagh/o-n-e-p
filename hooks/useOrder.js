@@ -3,30 +3,25 @@ import {
   ADD_ORDER,
   REMOVE_ORDER,
   GET_COSTUMER_ORDERS,
-} from "../server/graphql/querys/mutations";
+} from "@/server/graphql/querys/mutations";
 import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
   NEW_PERSON_FRAGMENT,
 } from "@/server/graphql/querys/querys";
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
 const useOrders = () => {
   const [newUi, setNewUi] = useState([]);
   const router = useRouter();
   const restaurant = router.query.name;
-
   const {
     data,
     error,
     loading: getAdminOrders_loading,
     refetch,
-  } = useQuery(GET_ADMIN_ORDERS, {
-    onCompleted: () => {
-      console.log("cc");
-    },
-  });
+  } = useQuery(GET_ADMIN_ORDERS);
   const [addOrder, { data: orderData, loading: ooo }] = useMutation(ADD_ORDER, {
     refetchQueries: [
       { query: GET_ADMIN_ORDERS },
@@ -48,9 +43,7 @@ const useOrders = () => {
   const { data: fetchedOrders, loading } = useQuery(GET_ORDERS_CONSTANTLY, {
     variables: { restaurant },
   });
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+
   return {
     orders: fetchedOrders?.orders ?? [],
     addOrder,

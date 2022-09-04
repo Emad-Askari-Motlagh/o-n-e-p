@@ -20,20 +20,29 @@ const messages = [];
 const orderResolvers = {
   Query: {
     messages: () => messages,
-    async getOrderItems(_, __) {
-      const res = await Order.find().populate("product").populate("costumer");
+    async getOrderItems(_, __, { costumerId, user }) {
+      if (!costumerId) {
+        return null;
+      }
+      const res = await Order.find({ costumerId })
+        .populate("product")
+        .populate("costumer");
       const output = res.map((result) => result.orderQuantity > 0 && res);
       return output;
     },
-    async orders(_) {
+    async orders(_, { restaurant }, { costumerId }) {
       // if (!userId) {
       //   throw new ForbiddenError("User is not loged in");
       // }
 
+      if (!costumerId || !restaurant) {
+        return null;
+      }
+
       try {
         const id = mongoose.Types.ObjectId(costumerId);
 
-        const orders = await fetchOrders();
+        const orders = await fetchOrders({ costumer: id, restaurant });
         return orders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
@@ -63,55 +72,55 @@ const orderResolvers = {
     },
   },
 
-  Subscription: {
-    messages: {
-      subscribe: (_, __) => {
-        const channel = Math.random().toString(36).slice(2, 15);
-        onMessagesUpdates(() => pubsub.publish(channel, { messages }));
-        setTimeout(() => pubsub.publish(channel, { messages }), 0);
-        return pubsub.subscribe(channel);
-      },
-    },
-    // orders: {
-    //   subscribe: async (_, __, { costumerId }) => {
-    //     if (!costumerId) {
-    //       return null;
-    //       throw new ForbiddenError("User is not loged in");
-    //     }
-    //     const id = mongoose.Types.ObjectId(id);
-    //     const pubsub = createPubSub();
-    //     const orders = await fetchOrders({ costumer: costumerId });
-    //     Order.watch().on("change", async (res) => {
-    //       const orders = await fetchOrders({});
+  // Subscription: {
+  //   messages: {
+  //     subscribe: (_, __) => {
+  //       const channel = Math.random().toString(36).slice(2, 15);
+  //       onMessagesUpdates(() => pubsub.publish(channel, { messages }));
+  //       setTimeout(() => pubsub.publish(channel, { messages }), 0);
+  //       return pubsub.subscribe(channel);
+  //     },
+  //   },
+  //   // orders: {
+  //   //   subscribe: async (_, __, { costumerId }) => {
+  //   //     if (!costumerId) {
+  //   //       return null;
+  //   //       throw new ForbiddenError("User is not loged in");
+  //   //     }
+  //   //     const id = mongoose.Types.ObjectId(id);
+  //   //     const pubsub = createPubSub();
+  //   //     const orders = await fetchOrders({ costumer: costumerId });
+  //   //     Order.watch().on("change", async (res) => {
+  //   //       const orders = await fetchOrders({});
 
-    //       pubsub.publish("orders", { orders });
-    //       return pubsub.subscribe("orders");
-    //     });
-    //     pubsub.publish("orders", { orders });
-    //     return pubsub.subscribe("orders");
-    //   },
-    // },
-    AdminOrders: {
-      subscribe: async (_, __, { pubsub }) => {
-        // const pubsub = createPubSub();
-        const orders = await fetchOrders({});
-        Order.watch().on("change", async (res) => {
-          const orders = await fetchOrders({});
+  //   //       pubsub.publish("orders", { orders });
+  //   //       return pubsub.subscribe("orders");
+  //   //     });
+  //   //     pubsub.publish("orders", { orders });
+  //   //     return pubsub.subscribe("orders");
+  //   //   },
+  //   // },
+  //   AdminOrders: {
+  //     subscribe: async (_, __, { pubsub }) => {
+  //       // const pubsub = createPubSub();
+  //       const orders = await fetchOrders({});
+  //       Order.watch().on("change", async (res) => {
+  //         const orders = await fetchOrders({});
 
-          // pubsub.publish("AdminOrders", { AdminOrders: orders });
-          return pubsub.subscribe("AdminOrders");
-        });
+  //         // pubsub.publish("AdminOrders", { AdminOrders: orders });
+  //         return pubsub.subscribe("AdminOrders");
+  //       });
 
-        // pubsub.publish("AdminOrders", { AdminOrders: orders });
-        return pubsub.subscribe("AdminOrders");
-      },
-    },
-  },
-  OrderItem: {
-    product: (parent) => parent.product,
-    costumer: (parent) => parent.costumer,
-    restaurant: (parent) => parent.restaurant,
-  },
+  //       // pubsub.publish("AdminOrders", { AdminOrders: orders });
+  //       return pubsub.subscribe("AdminOrders");
+  //     },
+  //   },
+  // },
+  // OrderItem: {
+  //   product: (parent) => parent.product,
+  //   costumer: (parent) => parent.costumer,
+  //   restaurant: (parent) => parent.restaurant,
+  // },
 
   Mutation: {
     postMessage: (parent, { user, content }) => {

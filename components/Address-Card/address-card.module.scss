@@ -1,0 +1,135 @@
+@import "/styles/breakpoints";
+@import "/styles/fonts";
+
+.container {
+  width: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  .header {
+    display: flex;
+    font-family: "Paytone One", sans-serif;
+    font-weight: 900;
+
+    h4 {
+      margin: 0;
+      margin-bottom: 5px;
+      font-family: "Paytone One", sans-serif;
+      font-weight: 900;
+    }
+  }
+
+  .addressContainer {
+    font-size: 14px;
+  }
+
+  .buttons {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    margin-top: auto;
+
+    button {
+      background-color: transparent;
+      border: 0;
+      padding: 0;
+      font-size: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .delete {
+      color: red;
+      margin-right: auto;
+    }
+    .update {
+      border: 1px solid rgb(252, 252, 252);
+      padding: 5px;
+      border-radius: 5px;
+    }
+  }
+}
+.update_container {
+  width: 100%;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding-top: 60px;
+
+  .content {
+    width: 80%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 16px;
+
+    position: relative;
+    background-color: #383838;
+
+    @include portrait {
+      width: 90%;
+    }
+    .inputContainer {
+      width: 100%;
+    }
+    .header {
+      position: absolute;
+      top: 0;
+
+      background-color: lightgrey;
+      left: 2%;
+      right: 2%;
+      -webkit-transform: translateY(100%);
+      transform: translateY(-90%);
+      padding: 10px;
+      z-index: -1;
+      border-radius: 10px;
+      width: 96%;
+
+      h4 {
+        margin: 0;
+        margin-right: auto;
+        font-size: 18px;
+        color: #383838;
+      }
+
+      div {
+        font-size: 30px;
+        cursor: pointer;
+        padding: 8px;
+        line-height: 20px;
+        color: white;
+        background-color: #383838;
+        border-radius: 100%;
+      }
+    }
+
+    form {
+      margin-top: -20px;
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      @include md {
+        margin-top: 10px;
+      }
+    }
+
+    .inputContainer {
+      width: 100%;
+
+      span {
+        margin-bottom: 10px;
+        margin-top: 20px;
+      }
+    }
+  }
+}

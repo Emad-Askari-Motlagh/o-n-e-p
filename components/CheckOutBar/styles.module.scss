@@ -1,0 +1,97 @@
+@import "styles/fonts.scss";
+@import "styles/breakpoints.scss";
+
+.container {
+  width: 80%;
+
+  overflow: visible;
+  background-color: #404040c5;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(4px);
+  margin: auto;
+  border-radius: 7px;
+  box-shadow: rgba(41, 41, 134, 0.594) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+  border: 1px solid rgba(255, 255, 255, 0.535);
+  font-family: "Paytone One", sans-serif;
+  z-index: 100;
+
+  .parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .checkout_button {
+      border-width: 0;
+      padding: 0.2em 2em;
+      background-color: #8899a6;
+      font-family: "Paytone One", sans-serif;
+      color: #ffffff;
+      font-weight: 500;
+      margin: 10px;
+      border-radius: 20px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+      transition: all 0.3s ease-in;
+      &:hover {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+        scale: 1.1;
+      }
+    }
+  }
+  label {
+    margin: auto;
+    text-align: center;
+    color: beige;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .downArrow_parent {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 20vw;
+    @include portrait {
+      width: 40vw;
+    }
+    .items_view_label {
+      color: #8899a6;
+      padding: 5px;
+      font-family: "Paytone One", sans-serif;
+      @include portrait {
+        font-size: 12px;
+      }
+    }
+    .downArrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 34px;
+      color: tan;
+      transition: 0.3s all ease-in-out;
+      &:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+
+        & {
+          animation-play-state: paused;
+          color: tomato;
+          font-size: 34px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes arrow_animation {
+  0% {
+    font-size: 44px;
+  }
+
+  100% {
+    font-size: 34px;
+  }
+}

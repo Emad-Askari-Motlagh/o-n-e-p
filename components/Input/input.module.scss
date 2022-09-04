@@ -1,0 +1,57 @@
+.container {
+  width: 100%;
+  .input_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    margin: 10px auto;
+
+    &:hover {
+      border-color: aliceblue;
+    }
+    label {
+      color: #f6f6f6;
+      font-size: 12px;
+      margin: 0;
+      align-self: flex-start;
+    }
+    .input {
+      color: rgb(22, 19, 19);
+      width: 100%;
+      border-radius: 5px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+      background-color: aliceblue;
+      transition: background-color 0.2s ease-in;
+      padding: 10px 15px;
+      border-width: 0;
+      font-size: 16px;
+      &:focus {
+        outline: none;
+
+        &::placeholder {
+          color: rgba(29, 26, 26, 0.486);
+          font-size: 14px;
+          caret-color: red;
+        }
+      }
+      &::placeholder {
+        font-size: 14px;
+        color: #130e0e;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+@media screen and (max-width: 767px) {
+  .container {
+    input,
+    select,
+    textarea,
+    .input {
+      font-size: 16px;
+    }
+  }
+}

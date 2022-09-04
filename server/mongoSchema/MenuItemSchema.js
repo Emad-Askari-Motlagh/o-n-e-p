@@ -1,14 +1,16 @@
 import mongoose from "mongoose";
+import menuCategorySchema from "./menuCategorySchema";
+import restaurangSchema from "./restaurangSchema";
 
 var MenuItemSchema = new mongoose.Schema(
   {
     category: {
       type: String,
-      ref: "MenuCategory",
+      ref: menuCategorySchema ?? "MenuCategory",
     },
     restaurant: {
       type: String,
-      ref: "Restaurang",
+      ref: restaurangSchema ?? "Restaurang",
     },
     name: String,
     itemsType: String,

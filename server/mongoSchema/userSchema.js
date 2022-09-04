@@ -1,4 +1,5 @@
 import mongoose, { SchemaTypes } from "mongoose";
+import restaurangSchema from "./restaurangSchema";
 
 var userSchema = new mongoose.Schema(
   {
@@ -7,7 +8,10 @@ var userSchema = new mongoose.Schema(
     password: { type: String, unique: true, required: true },
     token: { type: String, unique: true },
     id: String,
-    restaurant: { type: SchemaTypes.ObjectId, ref: "Restaurang" },
+    restaurant: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Restaurang",
+    },
   },
   { timestamps: true }
 );

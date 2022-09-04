@@ -1,0 +1,13 @@
+@import "styles/breakpoints.scss";
+
+.main {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(201, 159, 159, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px;
+
+  @include lg {
+    margin: initial;
+    border-radius: initial;
+    width: initial;
+    height: initial;
+  }
+}

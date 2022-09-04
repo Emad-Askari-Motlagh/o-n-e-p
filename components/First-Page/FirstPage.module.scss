@@ -1,0 +1,270 @@
+@import "styles/breakpoints.scss";
+@import "styles/fonts.scss";
+
+.pageOne {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #e8e8f0;
+  background-image: radial-gradient(#4680a752 0.5px, #e5e5f7 0.5px);
+  position: relative;
+  border-width: 0;
+
+  .blobContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+    @include lg {
+      flex-direction: column;
+    }
+    .imageTheme {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40%;
+      height: 40%;
+      position: relative;
+      bottom: 60px;
+      right: 10%;
+      @include xl {
+        width: 50%;
+        height: 50%;
+        margin: auto;
+        bottom: initial;
+        margin-bottom: 5%;
+        right: initial;
+        margin-top: 10%;
+      }
+      @include sm {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .blob1 {
+      width: 40%;
+      height: 400px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 4;
+      align-items: flex-end;
+      align-content: flex-end;
+
+      @include md {
+        height: 200px;
+      }
+    }
+    .blob2 {
+      width: 40%;
+      height: 200px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 4;
+      display: flex;
+      align-items: flex-end;
+      align-content: flex-end;
+      align-self: flex-end;
+    }
+  }
+
+  .svgWave {
+    position: absolute;
+    top: 0;
+    transform: rotateY(180);
+    width: 100%;
+  }
+  .svgWave2 {
+    position: absolute;
+    top: 0;
+    transform: rotateY(180);
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 25%, black 75%);
+    mask-image: linear-gradient(to bottom, transparent 25%, black 75%);
+  }
+  .svgWave_down {
+    position: absolute;
+    bottom: 0;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 40px;
+      background-color: brown;
+    }
+  }
+  .searviceExplain {
+    z-index: 22;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include xl {
+      min-height: auto;
+      margin-top: 10%;
+    }
+    @include sm {
+      margin-block-start: 15%;
+    }
+
+    .outerDiv {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      flex-direction: column;
+      color: rgba(247, 54, 20, 0.575);
+      @include sm {
+        width: 90%;
+      }
+    }
+    .noselect {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .searviceExplain_header {
+      text-shadow: 2px px 3px rgba(0, 0, 0, 0.36);
+      color: #001f3f;
+      text-shadow: -1px 0 rgba(0, 0, 0, 0.36), 0 1px rgba(0, 0, 0, 0.36), 1px 0 rgba(0, 0, 0, 0.36), 0 -1px tomato;
+      -webkit-text-stroke-width: 0.2px;
+      -webkit-text-stroke-color: rgba(0, 0, 0, 0.36);
+      font-family: sans;
+      margin: auto;
+
+      font-weight: 900;
+      font-family: "Sigmar One";
+      z-index: 22;
+      margin-bottom: 22px;
+      text-align: center;
+      background-color: #001f3f;
+      color: if(30vw > 400, blue, #ffc421);
+      width: max-content;
+      padding: 0.1em 1em;
+      border-radius: 0.3em;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+      font-size: 1.4vw;
+      letter-spacing: 0.2em;
+      @include xl {
+        font-size: 2.3vw;
+        max-width: 80%;
+
+        border-radius: 0.5em;
+      }
+      @include sm {
+        font-size: 4vw;
+      }
+    }
+    .searviceExplain_description {
+      text-shadow: 2px px 3px rgba(0, 0, 0, 0.36);
+      color: #001f3f;
+      max-width: 50%;
+      font-family: sans;
+      margin: auto;
+      font-size: 15px;
+      font-family: "Chango";
+      margin-bottom: 15px;
+      text-align: center;
+      @include xl {
+        font-size: 0.76vw;
+        max-width: 80%;
+
+        border-radius: 0.7em;
+      }
+      @include xl {
+        font-size: 1.7vw;
+      }
+      @include sm {
+        font-size: 3vw;
+        max-width: 80%;
+      }
+    }
+  }
+  button {
+    cursor: pointer;
+    padding: 0.2em 0.4em;
+    font-size: 18px;
+    font-family: "Akaya Kanadaka", cursive;
+    letter-spacing: 5px;
+    background: #ffc421;
+    border: 2px solid black;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    transition: 500ms;
+    border-radius: 0.4em;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include md {
+      font-size: 15px;
+      padding: 0.1em 0.5em;
+
+      letter-spacing: 0.1em;
+    }
+  }
+
+  button:after {
+    content: "";
+    position: absolute;
+    transform: translateX(-55px) translateY(-40px);
+    width: 25px;
+    height: 25px;
+    border-radius: 80%;
+    background: transparent;
+    box-shadow: 0px 0px 50px transparent;
+    transition: 500ms;
+  }
+
+  button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+  }
+
+  button:hover:after {
+    background: white;
+    box-shadow: 0px 0px 20px #ffc421, 0px 0px 30px #ffc421, inset 0px 0px 10px #ffc421;
+    animation: spin 1s infinite linear;
+  }
+
+  @keyframes spin {
+    25% {
+      transform: translateX(-25px) translateY(-35px);
+      width: 15px;
+      height: 15px;
+    }
+    50% {
+      transform: translateX(-55px) translateY(-30px);
+      width: 5px;
+      height: 5px;
+    }
+    75% {
+      transform: translateX(-85px) translateY(-35px);
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  button:focus {
+    outline: none;
+  }
+}
+
+@keyframes example {
+  0% {
+    left: 0px;
+  }
+
+  100% {
+    left: -200px;
+  }
+}

@@ -1,0 +1,20 @@
+@import "code";
+
+.cont {
+  border: 1px solid lightblue;
+  width: 40%;
+  margin: auto;
+  padding: 5px;
+  background-color: $my_color;
+  .weeks_cont {
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 1px solid gray;
+    padding: 2px 10px;
+    .weeks_days {
+    }
+  }
+}

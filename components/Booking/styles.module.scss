@@ -1,0 +1,96 @@
+@import "/styles/breakpoints.scss";
+@import "/styles/fonts";
+
+.container {
+  h3 {
+    color: azure;
+    text-align: center;
+    margin: 20px 0;
+    letter-spacing: 2px;
+    text-decoration: underline;
+  }
+  .calendar {
+    border: 1px solid lightblue;
+    width: 50%;
+    margin: 20px auto;
+    padding: 15px;
+    background: #283048; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #859398, #283048); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #859398,
+      #283048
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    @include md {
+      width: 90%;
+    }
+  }
+  .date_view {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: whitesmoke;
+  }
+  .times_container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .time_item {
+      color: green;
+      width: 20%;
+      position: relative;
+      height: 100px;
+      background-color: rgba(255, 99, 71, 0.425);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgb(170, 156, 156);
+      margin: 10px;
+      min-width: 300px;
+      font-family: "Amaranth", sans-serif;
+      background: #757f9a; /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #d7dde8, #757f9a); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to right,
+        #d7dde8,
+        #757f9a
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+      &:hover {
+        transform: scale(1.1);
+      }
+      .more_icon {
+        float: right;
+        background-color: #282828;
+        border-radius: 50px;
+        padding: 4px;
+        font-size: 23px;
+        cursor: pointer;
+        color: wheat;
+        transition: all 0.3s ease-in;
+      }
+      span {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .book_item {
+    border: 2px solid white;
+    width: 90%;
+    padding: 1% 4%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: "Amaranth", sans-serif;
+  }
+}

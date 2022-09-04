@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import restaurangSchema from "./restaurangSchema";
 
 var MenutSchema = new mongoose.Schema(
   {
     restaurant: {
       type: String,
-      ref: "Restaurang",
+      ref: restaurangSchema ?? "Restaurang",
     },
     // category: [
     //   {

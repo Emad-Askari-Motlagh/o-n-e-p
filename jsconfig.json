@@ -12,6 +12,7 @@
       "@/public/*": ["public/*"],
       "@/hooks/*": ["src/hooks/*"],
       "@/server/*":["server/*"],
+      "@/utils/*":["utils/*"],
     }
   },
 

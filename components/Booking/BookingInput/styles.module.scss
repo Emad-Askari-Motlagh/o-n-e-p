@@ -1,0 +1,31 @@
+@import "/styles/breakpoints.scss";
+@import "/styles/fonts";
+$theme: lightgray;
+
+.container {
+  width: 40%;
+  min-width: 40%;
+  margin: 10px;
+  cursor: pointer;
+  @include portrait {
+    width: 90%;
+  }
+  .label {
+    color: whitesmoke;
+  }
+  .input {
+    width: 100%;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    box-shadow: rgba(204, 198, 198, 0.211) 0px 4px 12px;
+    border-radius: 4px;
+    background-color: $theme;
+    border: 2px solid theme;
+    overflow: hidden;
+    border-width: 0;
+
+    padding: 5px 15px;
+    &::placeholder {
+      color: gray;
+    }
+  }
+}

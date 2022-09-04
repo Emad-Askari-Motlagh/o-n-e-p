@@ -1,0 +1,17 @@
+.checkout_perent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  .checkout_button {
+    width: 100%;
+  }
+  .orders_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+}

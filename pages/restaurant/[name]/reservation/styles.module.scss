@@ -1,0 +1,21 @@
+@import "/styles/breakpoints.scss";
+.container {
+  .calendar {
+    border: 1px solid lightblue;
+    width: 50%;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: grey;
+    border-radius: 5px;
+    @include md {
+      width: 90%;
+    }
+  }
+  .date_view {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: whitesmoke;
+  }
+}

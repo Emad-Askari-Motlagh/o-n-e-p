@@ -1,15 +1,17 @@
 import mongoose, { Schema } from "mongoose";
+import costumerSchema from "./costumerSchema";
+import MenuItemSchema from "./MenuItemSchema";
 
 var OrderSchema = new mongoose.Schema(
   {
     costumer: {
       type: Schema.Types.ObjectId,
-      ref: "Costumer",
+      ref: costumerSchema ?? "Costumer",
     },
     id: { type: String },
     product: {
       type: Schema.Types.ObjectId,
-      ref: "MenuItem",
+      ref: MenuItemSchema ?? "MenuItem",
     },
     restaurant: { type: String },
     // description: { type: String, unique: true, required: true },

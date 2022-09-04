@@ -118,12 +118,12 @@ input MenuParentInput {
   item: [MenuItemInput!]
 }
 
-type Subscription {
-  messages: [Message]
-  commentAdded(repoFullName: String!): Message
-  # orders: [OrderItem]
-  AdminOrders: [AdminOrder]!
-}
+# type Subscription {
+#   messages: [Message]
+#   commentAdded(repoFullName: String!): Message
+#   # orders: [OrderItem]
+#   AdminOrders: [AdminOrder]!
+# }
 
 type Query {
   messages: [Message!]

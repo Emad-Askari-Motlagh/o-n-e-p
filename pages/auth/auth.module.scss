@@ -1,0 +1,286 @@
+@import "styles/breakpoints.scss";
+@import "/styles/fonts";
+$font: "Paytone One", sans-serif;
+
+$font_size: 12px;
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  .route_bar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    a {
+      color: rgb(117, 52, 41);
+      background-color: red;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .container {
+      input,
+      select,
+      textarea {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.login_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 155px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.431);
+  a {
+    color: white;
+    transition: all 0.2s ease;
+    &:hover {
+      transform: scale(1.03);
+      color: tomato;
+    }
+  }
+  .route_bar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    a {
+      color: tomato;
+    }
+  }
+
+  form {
+    width: max-content;
+    text-align: center;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    max-width: 1920px;
+  }
+}
+.signup_parent {
+  width: 100%;
+
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+    color: wheat;
+    .input_container {
+      width: 80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include portrait {
+        width: 90%;
+      }
+    }
+  }
+}
+.register_header {
+  margin: auto;
+  color: white;
+}
+
+.login_alternatives_container {
+  display: flex;
+  margin: auto;
+  cursor: pointer;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  font-family: $font;
+  flex-wrap: wrap;
+
+  .login_alternatives_parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    @include portrait {
+    }
+  }
+  .auth_buttons {
+    transition: all 0.3s ease-in-out;
+    font-family: $font;
+    color: whitesmoke;
+    font-size: $font_size;
+    padding: 4px 14px;
+    color: tomato;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 2.6px;
+    margin: 10px;
+    min-width: 40%;
+    height: 3em;
+    span {
+      @include portrait {
+        font-size: 10px;
+      }
+    }
+    .icons {
+      margin: 10px;
+      color: blue;
+    }
+  }
+  .auth_buttons:hover {
+    box-shadow: rgba(0, 0, 0, 0.15) 8px 8px 4.6px;
+    transform: scale(1.02);
+  }
+}
+
+.forgotPassword_div {
+  margin: auto;
+  padding: 12px 12px;
+  text-align: center;
+  width: max-content;
+  color: wheat;
+  cursor: pointer;
+  font-size: calc(0.6vw + 9px);
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: rgb(50, 92, 78);
+    transform: scale(1.04);
+  }
+  & a {
+    text-decoration: underline;
+    color: cadetblue;
+  }
+}
+
+.input_container {
+  margin: 12px auto;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  border-width: 0;
+  @include portrait {
+    width: 90%;
+  }
+  label {
+    color: whitesmoke;
+    width: 80%;
+    margin: auto;
+    text-align: left;
+  }
+  .logininputs {
+    width: 40%;
+    margin: auto;
+    border-radius: 5px;
+    border-width: 0.2px;
+    height: 2.5rem;
+    padding-left: 0.5rem;
+  }
+  .logininputs::placeholder {
+    padding-left: 12px;
+  }
+  .loginfirstdiv form h5 {
+    width: fit-content;
+    margin-right: auto;
+  }
+}
+.submitForm {
+  width: 80%;
+  margin: auto;
+  border-radius: 7px;
+  border-width: 1px;
+  box-shadow: 0 10px 10px rgba(93, 68, 68, 0.354);
+  background-color: rgb(34, 32, 32);
+  color: white;
+  margin-top: 2rem;
+  padding: 0.5em 1em;
+}
+.submitForm:hover {
+  transform: scale(1.02);
+  box-shadow: 3px 3px 2px 0 rgba(90, 86, 86, 0.267);
+  background-color: coral;
+  transition: all 0.2s ease-in-out;
+}
+.error_message {
+  width: max-content;
+  font-size: calc(0.6vw + 5px);
+  margin: auto;
+  margin-top: 3vw;
+  color: rgb(211, 107, 107);
+}
+.succeced_message {
+  width: max-content;
+  font-size: calc(0.6vw + 5px);
+  margin: auto;
+  margin-top: 3vw;
+  color: rgb(107, 211, 121);
+}
+.account_recomendation {
+  width: max-content;
+  margin-left: auto;
+  padding: 22px 22px;
+
+  cursor: pointer;
+  font-size: calc(0.6vw + 5px);
+  margin-top: 5vw;
+  text-decoration: underline;
+}
+.account_recomendation h3 {
+  background-color: rgba(0, 0, 0, 0.849);
+  text-align: center;
+  border-radius: 5px;
+  font-size: 144%;
+  color: rgb(255, 239, 239);
+  padding: 4px 4px;
+}
+.verified_email_container {
+  margin: auto;
+
+  border-radius: 7px;
+}
+.verified_email_container :first-child {
+  margin: auto;
+
+  width: min-content;
+  text-align: center;
+  border-radius: 7px;
+  letter-spacing: 0.1rem;
+}
+.verified_email_container :last-child {
+  margin: auto;
+  background-color: rgba(238, 150, 144, 0.521);
+  padding: 1rem 1rem;
+  border-radius: 5px;
+}
+
+@media (orientation: portrait) {
+  .loginfirstdiv {
+    margin: 0;
+  }
+  .logininputs {
+    width: 80vw;
+    margin: auto;
+    border-radius: 5px;
+    border-width: 0.2px;
+    height: 2.5rem;
+    padding-left: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 800px) and (max-height: 700px) {
+  .loginfirstdiv {
+    margin: 0;
+  }
+}

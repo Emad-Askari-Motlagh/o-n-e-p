@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import userSchema from "./userSchema";
 
 const restaurangSchema = new mongoose.Schema(
   {

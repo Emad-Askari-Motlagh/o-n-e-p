@@ -1,0 +1,300 @@
+@import "styles/breakpoints.scss";
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+@import "styles/fonts.scss";
+
+$bg: white;
+$bg-accent: #484a4d;
+$text-color: #2058e6;
+$nav-size: 90px;
+$border: 1px solid #474a4d;
+$border-radius: 8px;
+$speed: 500ms;
+$nav-bar-padding: 1% 1%;
+$nav-bar-margin: auto;
+$distance: 30px;
+$after-gap: -8px;
+$base-color: #282828;
+
+@mixin bottomLine {
+  content: "";
+  @content;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  width: 100%;
+  perspective: 1000;
+
+  margin: auto;
+  background-color: #849fbbc0;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+@mixin bottomLineRight {
+  content: "";
+  position: absolute;
+  left: 0px;
+  border-top-left-radius: 80px;
+  border-top-right-radius: 80px;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 95%;
+  height: 100%;
+  margin: auto;
+  border-top-width: 0;
+}
+
+/* Dropdown Menu */
+
+.dropdown {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: $border;
+  transition: all $speed ease;
+  border-top-right-radius: 0;
+  z-index: 30;
+  background-color: $base-color;
+  padding-bottom: 20px;
+  .items_wrapper {
+    width: 100%;
+    padding-top: 15%;
+    transition: all 0.6s ease-in;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: $distance + $after-gap;
+      border-top-left-radius: 80px;
+      border-top-right-radius: 80px;
+      top: 2%;
+      width: 3px;
+      height: 100%;
+      background-color: gray;
+    }
+    .user_container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-radius: 10px;
+      width: 60%;
+      margin: auto;
+      padding: 10px 0;
+      position: relative;
+      background-color: cadetblue;
+      border: 1px groove #242424;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+      &::after {
+        @include bottomLine() {
+          bottom: -10px;
+        }
+      }
+
+      .user_icon {
+        color: #e2d5d5;
+        background-color: tomato;
+        border-radius: 40px;
+      }
+      .restaurant_name {
+        color: whitesmoke;
+        display: flex;
+        font-size: 10px;
+      }
+    }
+    .nav_item_icons {
+      font-size: 33px;
+    }
+    .logout_button {
+      background-color: lightgray;
+      border-width: 0;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+      align-items: center;
+      transition: transorm color box-shadow 0.3s ease-in;
+
+      &:hover {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(206, 196, 196, 0.3) 0px 30px 60px -30px;
+        transform: scale(1.02);
+        background-color: tomato;
+      }
+    }
+  }
+  .upArrow {
+    color: white;
+    margin: 10px;
+  }
+}
+.setting_button {
+  background-color: brown;
+}
+.eed {
+  overflow: hidden;
+  width: 400px;
+  top: 44px;
+  position: absolute;
+  right: -20px;
+  height: 0;
+  transition: height 0.8s ease-in-out;
+}
+.setting_label {
+  font-size: 13px;
+  color: white;
+  font-weight: 900;
+}
+
+.menu {
+  width: 100%;
+  padding-bottom: 44px;
+  padding-top: 5%;
+}
+
+.menu_item {
+  display: flex;
+  align-items: center;
+  border-radius: $border-radius;
+  transition: all 0.3s ease-in;
+  color: whitesmoke;
+  position: relative;
+  margin: 10px;
+  cursor: pointer;
+  min-width: 70px;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: max-content;
+  min-width: 150px;
+  padding: 0 10px;
+  margin: 15px auto;
+
+  .menu_item_layer_one {
+    position: relative;
+    transition: all 0.3s ease-in;
+    &:hover {
+      transform: scale(1.1);
+      .sideBar1 {
+        transform: scale(1.5) rotate(360deg);
+        background-color: cornflowerblue;
+        border-radius: 2px;
+        left: -$distance - 4px;
+        width: 20px;
+      }
+    }
+  }
+
+  .sideBar1 {
+    position: absolute;
+    left: -$distance - 10px;
+    top: 35%;
+    border-radius: 50px;
+    background-color: lightblue;
+    height: 10px;
+    width: 10px;
+    transition: all 0.3s ease-in;
+  }
+  .sideBar1WithIndicator {
+    @extend .sideBar1;
+    transform: scale(1.5) rotate(360deg);
+    background-color: tomato;
+    border-radius: 0;
+    width: 20px;
+  }
+
+  button {
+    font-size: 12px;
+    color: whitesmoke;
+    text-align: left;
+    background-color: red;
+  }
+  a {
+    font-size: 12px;
+    color: whitesmoke;
+    text-align: left;
+    transition: all 0.3s ease-in;
+    &:hover {
+      color: honeydew;
+      text-decoration: none;
+    }
+  }
+}
+
+.menu_item .icon_button {
+  margin-right: 0.5rem;
+  color: gray;
+}
+
+.icon_right {
+  margin-left: auto;
+}
+/* CSSTransition classes  */
+.menu_primary_enter {
+  position: absolute;
+  transform: translateX(-110%);
+}
+.menu_primary_enter_active {
+  transform: translateX(0%);
+  transition: all $speed ease;
+}
+.menu_primary_exit {
+  position: absolute;
+}
+.menu_primary_exit_active {
+  transform: translateX(-110%);
+  transition: all $speed ease;
+}
+
+.menu_secondary_enter {
+  transform: translateX(110%);
+}
+.menu_secondary_enter_active {
+  transform: translateX(0%);
+  transition: all $speed ease;
+}
+
+.menu_secondary_exit_active {
+  transform: translateX(110%);
+  transition: all $speed ease;
+}
+.logout_button {
+  position: initial;
+  background-color: tomato;
+  border-width: 1px;
+  border-radius: 7px;
+  display: flex;
+  margin: auto;
+  width: 60%;
+  margin-top: 40%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.349);
+}
+.logout_button:hover {
+  background-color: pink;
+  text-decoration: none;
+  color: black;
+  transition: all 0.2s ease-in;
+}
+.delet_account_button {
+  background-color: red;
+  border-radius: 4px;
+  border-width: 1px;
+  color: black;
+  box-shadow: 2px 2px 2px 2px rgba(128, 128, 128, 0.349);
+  text-decoration: none;
+}
+.delet_account_button:hover {
+  background-color: pink;
+  text-decoration: none;
+  color: black;
+  transition: all 0.2s ease-in;
+}
+/*keyframes*/

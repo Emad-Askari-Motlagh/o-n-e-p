@@ -1,0 +1,85 @@
+@mixin button_style {
+  background-color: tomato;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: rgba(68, 2, 250, 0.15) 1.95px 1.95px 2.6px;
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.checkout_container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  z-index: 1000;
+
+  .checkout_button {
+    color: red;
+  }
+  .orders_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+  .button_parent {
+    position: absolute;
+    bottom: 0;
+    background-color: red;
+  }
+}
+.error_Parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  span {
+    text-align: center;
+    margin: auto;
+
+    padding: 5px;
+  }
+}
+.container {
+}
+.price_container {
+  display: flex;
+  color: wheat;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Archivo Black", sans-serif;
+  width: 100%;
+  .quantity_parent {
+    display: flex;
+    width: 20%;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: rgba(202, 120, 120, 0.24) 0px 3px 8px;
+    padding: 0 4px;
+    .minus_button {
+      @include button_style;
+    }
+    .plus_button {
+      @include button_style;
+    }
+  }
+  span {
+    color: wheat;
+  }
+}
+.button_parent {
+  width: 50%;
+  margin: auto;
+}
