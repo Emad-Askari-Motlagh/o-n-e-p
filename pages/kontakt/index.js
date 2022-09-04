@@ -10,8 +10,6 @@ import { useRouter } from "node_modules/next/router";
 import { BiTrash, BiScreenshot } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/useOrder";
-import axios from "axios";
-import socket from "lib/socketClient";
 
 const Kontakt = () => {
   const { query } = useRouter();

@@ -8,6 +8,8 @@ export default function WebsiteName() {
       <Image
         alt="WebsiteName"
         src={"/AllianceLogo.png"}
+        width={30}
+        height={30}
         className={styles.label}></Image>
     </div>
   );

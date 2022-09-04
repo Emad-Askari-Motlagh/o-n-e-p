@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/restaurant",
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config, { isServer, dev }) => {
     // Fixes npm packages that depend on `fs` module
 

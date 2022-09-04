@@ -14,7 +14,7 @@ export default function SideBarItem({
   const { asPath } = useRouter();
 
   useEffect(() => {
-    Router.asPath === endPoint
+    asPath === endPoint
       ? setSideBarClassName("sideBar1WithIndicator")
       : setSideBarClassName("sideBar1");
   }, [asPath, endPoint]);

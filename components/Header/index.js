@@ -3,7 +3,7 @@ import styles from "./header.module.scss";
 import Navbar from "./Navbar";
 import NavItem from "./NavItem";
 import { useRouter } from "next/router";
-import Logo from "@/components/Logo";
+import Logo from "components/Logo";
 import { CgProfile } from "react-icons/cg";
 import {
   CgDetailsMore,
@@ -22,8 +22,7 @@ export default function Header(props) {
     <Navbar {...props}>
       <div
         onClick={() => props?.setIsVisible(!props?.isVisible)}
-        className={styles.more_icon_container}
-      >
+        className={styles.more_icon_container}>
         <CgDetailsMore
           className={styles.moreIconInHeader}
           color="white"
@@ -47,8 +46,7 @@ export default function Header(props) {
             typeof costumerData === "undefined"
               ? "white"
               : "red"
-          }
-        ></CgUser>
+          }></CgUser>
 
         {(costumerLoading || userLoading) && (
           <CgLoadbar color="white" className={styles.navBar_icons} />
