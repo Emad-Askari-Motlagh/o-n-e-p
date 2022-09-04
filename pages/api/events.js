@@ -34,16 +34,8 @@ async function handler(req, res) {
       };
 
       res.writeHead(200, headers);
-      const orders = await orderFetcher();
-      const data = `data: ${JSON.stringify(orders)}\n\n`;
-      res.write(data);
-      var i = 1;
 
-      setInterval(() => {
-        i++;
-        const data = `data: ${JSON.stringify(orders)}\n\n`;
-        res.write(data);
-      }, 20000);
+      var i = 1;
 
       const clientId = Date.now();
 
@@ -52,11 +44,11 @@ async function handler(req, res) {
         res,
       };
 
-      // Orders.watch().on("change", async (ok) => {
-      //   const orders = await orderFetcher();
-      //   const data = `data: ${JSON.stringify(orders)}\n\n`;
-      //   res.write(data);
-      // });
+      Orders.watch().on("change", async (ok) => {
+        const orders = await orderFetcher();
+        const data = `data: ${JSON.stringify(orders)}\n\n`;
+        res.write(data);
+      });
 
       clients.push(newClient);
 

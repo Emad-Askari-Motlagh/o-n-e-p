@@ -27,7 +27,6 @@ const Kontakt = () => {
         `${process.env.SERVER_LINK}/api/events`
       );
       evtSource.onmessage = (event) => {
-        console.log(event.data);
         setData(JSON.parse(event.data));
       };
       evtSource.onerror = (event) => {
@@ -52,8 +51,8 @@ const Kontakt = () => {
   }, []);
 
   const callApiRouteThatWillEmitEvent = () => {};
-  // const orders = clientOrders?.length ? clientOrders : AdminOrders;
-  const orders = data;
+  const orders = data?.length ? data : AdminOrders;
+
   return (
     <div className={styles.container}>
       <span className={styles.restaurant}>{query.name}</span>
