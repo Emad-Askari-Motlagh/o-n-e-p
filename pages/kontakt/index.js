@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import "bootstrap/dist/css/bootstrap.css";
-import { Alert, Container, Form, Button } from "react-bootstrap";
 import styles from "./orders.module.scss";
-import { connect } from "socket.io-client";
 import useForm from "hooks/Form.hook";
 import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
-import { BiTrash, BiScreenshot } from "react-icons/bi";
+import { BiTrash } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/useOrder";
 
@@ -60,7 +57,8 @@ const Kontakt = () => {
 
       {Array.isArray(orders) && (
         <table>
-          <thead>
+          <thead></thead>
+          <tbody>
             <tr style={{ backgroundColor: "tomato" }}>
               <TableHeader>Table</TableHeader>
               <TableHeader>Name</TableHeader>
@@ -69,8 +67,6 @@ const Kontakt = () => {
               <TableHeader>Description</TableHeader>
               <TableHeader>View</TableHeader>
             </tr>
-          </thead>
-          <tbody>
             {Array.isArray(orders) &&
               orders?.map((fact, i) => (
                 <tr key={i}>
@@ -91,10 +87,6 @@ const Kontakt = () => {
           </tbody>
         </table>
       )}
-
-      <article>
-        <button onClick={callApiRouteThatWillEmitEvent}>call API</button>
-      </article>
     </div>
   );
 };
@@ -112,3 +104,4 @@ const TableHeader = ({ children }) => (
 //   };
 // }
 export default Kontakt;
+Kontakt.Layout = PrimaryLayout;

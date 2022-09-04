@@ -64,9 +64,9 @@
   }
   table {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: table;
+    width: 100%;
+    justify-content: space-between;
     align-items: center;
     span {
       padding: 5px 10px;
@@ -79,32 +79,23 @@
       }
     }
     tbody {
-      display: table;
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
       width: 100%;
-      justify-content: center;
-      align-items: center;
     }
 
     th {
       color: white;
       width: 100vw;
-      font-size: 6px;
+      font-size: 12px;
       span {
         font-size: 6px;
       }
     }
-    tr {
-    }
+
     .table_header {
+      text-align: center;
       span {
         vertical-align: baseline;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: auto;
-        text-align: left;
-        float: left;
       }
     }
     td {
