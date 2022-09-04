@@ -45,10 +45,9 @@ const server = createServer({
   context: async (ctx) => {
     try {
       // const pubsub = await createPubSub();
-
       await dbInit();
     } catch (err) {
-      console.log("there is an error on graphql server");
+      console.log("there is an error on mongoDb");
     }
 
     let { token, costumerId, costumerExpire } = ctx.req.cookies;

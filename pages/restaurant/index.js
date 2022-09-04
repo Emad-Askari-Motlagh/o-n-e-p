@@ -59,7 +59,6 @@ export async function getServerSideProps({ req }) {
     const res = await apolloClient.query({
       query: FETCH_ALL_RESTAURANTS,
     });
-    console.log(res);
     //Get the cookie from the req
     return {
       props: {

@@ -11,7 +11,6 @@ const costumerResolvers = {
         if (!costumerId) {
           return null;
         }
-
         const id = Types.ObjectId(costumerId);
         const costumer = await Costumer.findById(id);
         return costumer;
