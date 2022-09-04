@@ -15,7 +15,6 @@ import {
   createPubSub,
   GraphQLYogaError,
 } from "@graphql-yoga/node";
-import { useDepthLimit } from "@envelop/depth-limit";
 
 let serverCleanup = null;
 
