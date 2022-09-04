@@ -20,7 +20,6 @@ const useOrders = () => {
     data,
     error,
     loading: getAdminOrders_loading,
-    refetch,
   } = useQuery(GET_ADMIN_ORDERS);
   const [addOrder, { data: orderData, loading: ooo }] = useMutation(ADD_ORDER, {
     refetchQueries: [
@@ -29,15 +28,15 @@ const useOrders = () => {
       { query: GET_ORDERS_CONSTANTLY },
       "orders",
     ],
-    onCompleted: async () => {
-      const rr = await (await refetch()).data?.AdminOrders;
-      console.log(rr);
-      setNewUi(rr);
-    },
   });
 
   const [removeOrder] = useMutation(REMOVE_ORDER, {
-    refetchQueries: [GET_ADMIN_ORDERS, GET_ORDERS_CONSTANTLY],
+    refetchQueries: [
+      { query: GET_ADMIN_ORDERS },
+      "AdminOrders",
+      { query: GET_ORDERS_CONSTANTLY },
+      "orders",
+    ],
   });
 
   const { data: fetchedOrders, loading } = useQuery(GET_ORDERS_CONSTANTLY, {
