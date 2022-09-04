@@ -23,7 +23,7 @@ export default function Items() {
     variables: { category: Router.query?.item, restaurant: Router.query?.name },
   });
 
-  //Compute final quantity based on co§;stumers Orders
+  //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(id, orders) {
     if (Array.isArray(orders) && id) {
       const result = orders.find((ress) => ress.product?._id === id);
