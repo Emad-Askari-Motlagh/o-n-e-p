@@ -43,12 +43,8 @@ const server = createServer({
   ],
 
   context: async (ctx) => {
-    try {
-      // const pubsub = await createPubSub();
-      await dbInit();
-    } catch (err) {
-      console.log("there is an error on mongoDb");
-    }
+    // const pubsub = await createPubSub();
+    await dbInit();
 
     let { token, costumerId, costumerExpire } = ctx.req.cookies;
     // 1. Find optional visitor id
