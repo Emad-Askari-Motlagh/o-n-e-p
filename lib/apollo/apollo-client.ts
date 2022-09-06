@@ -3,6 +3,7 @@ import {
   ApolloClient,
   InMemoryCache,
   split,
+  NormalizedCacheObject,
   HttpLink,
   createHttpLink,
 } from "@apollo/client";
@@ -57,7 +58,9 @@ function createApolloClient() {
   });
 }
 
-export function initializeApollo(initialState = null) {
+export function initializeApollo(
+  initialState = null
+): ApolloClient<NormalizedCacheObject> {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   if (initialState) {

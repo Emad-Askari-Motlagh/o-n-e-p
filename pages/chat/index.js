@@ -1,12 +1,11 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { useSubscription, useMutation, gql, useQuery } from "@apollo/client";
 import { Container, Row, Col, Button } from "react-bootstrap";
-
 import useSocketIo from "hooks/SocketIo.hook";
 
 const POST_MESSAGE = gql`
   mutation ($user: String!, $content: String!) {
-    postMessage(user: $user, content: $content)
+    PostMessage(user: $user, content: $content)
   }
 `;
 

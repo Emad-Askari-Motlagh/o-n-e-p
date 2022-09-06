@@ -6,7 +6,7 @@ import { Types } from "mongoose";
 
 const costumerResolvers = {
   Query: {
-    async getCostumer(_, __, { costumerId }) {
+    async Costumer(_, __, { costumerId }) {
       try {
         if (!costumerId) {
           return null;
@@ -77,7 +77,7 @@ const costumerResolvers = {
       }
     },
     //signOut user
-    async signOutCostumer(_, __, { res }) {
+    async SignOutCostumer(_, __, { res }) {
       try {
         //Delete the cookie, we can inject an array in multiple cookie cases
         await deleteCookie(["costumerId", "expireTime"], res);

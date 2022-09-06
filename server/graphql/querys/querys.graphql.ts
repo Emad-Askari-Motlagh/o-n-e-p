@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const FETCH_ALL_RESTAURANTS = gql`
-  query fetchRestaurants {
-    fetchRestaurants {
+  query Restaurants {
+    Restaurants {
       name
       owner
       description
@@ -17,8 +17,8 @@ export const FETCH_ALL_RESTAURANTS = gql`
 `;
 
 export const GET_CURRENT_USER = gql`
-  query getCurrentUser {
-    getCurrentUser {
+  query CurrentUser {
+    CurrentUser {
       name
       email
       _id
@@ -30,8 +30,8 @@ export const GET_CURRENT_USER = gql`
 `;
 
 export const GET_COSTUMER = gql`
-  query getCostumer {
-    getCostumer {
+  query Costumer {
+    Costumer {
       name
       email
       table
@@ -41,8 +41,8 @@ export const GET_COSTUMER = gql`
 `;
 
 export const GET_MENU_CATREGORY = gql`
-  query getMenuByCategory($restaurant: String!) {
-    getMenuByCategory(restaurant: $restaurant) {
+  query MenuByCategory($restaurant: String!) {
+    MenuByCategory(restaurant: $restaurant) {
       itemName
     }
   }
@@ -55,8 +55,8 @@ export const GET_MENU = gql`
   }
 `;
 export const GET_MENU_ITEM_BY_CATREGORY = gql`
-  query getMenuItemByCategory($category: String!, $restaurant: String!) {
-    getMenuItemByCategory(category: $category, restaurant: $restaurant) {
+  query MenuItemByCategory($category: String!, $restaurant: String!) {
+    MenuItemByCategory(category: $category, restaurant: $restaurant) {
       __typename
       ... on MenuItem {
         name
@@ -75,25 +75,27 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
 `;
 
 export const GET_MENU_ITEM_COUNT = gql`
-  query getMenuItemCount($category: String!, $restaurant: String!) {
-    getMenuItemCount(category: $category, restaurant: $restaurant) {
-      count
+  query MenuItemCount($category: String!, $restaurant: String!) {
+    MenuItemCount(category: $category, restaurant: $restaurant) {
+      orderQuantity
     }
   }
 `;
 
 export const GET_MENU_ITEMS = gql`
-  query getOrderItems {
-    getOrderItems {
+  query OrderItems {
+    OrderItems {
       _id
-      quantity
+      product {
+        quantity
+      }
     }
   }
 `;
 
 export const GET_ORDERS_CONSTANTLY = gql`
-  query orders($restaurant: String!) {
-    orders(restaurant: $restaurant) {
+  query Orders($restaurant: String!) {
+    Orders(restaurant: $restaurant) {
       _id
       orderQuantity
       product {
@@ -127,27 +129,27 @@ export const GET_ADMIN_ORDERS = gql`
     }
   }
 `;
-export const NEW_PERSON_FRAGMENT = gql`
-  fragment NewOrder on AdminOrder {
-    AdminOrders {
-      __typename
-      _id
-      orderQuantity
-      product {
-        __typename
-        name
-        price
-        description
-        _id
-      }
-      costumer {
-        __typename
-        table
-        _id
-      }
-    }
-  }
-`;
+// export const NEW_PERSON_FRAGMENT = gql`
+//   fragment NewOrder on AdminOrder {
+//     AdminOrders {
+//       __typename
+//       _id
+//       orderQuantity
+//       product {
+//         __typename
+//         name
+//         price
+//         description
+//         _id
+//       }
+//       costumer {
+//         __typename
+//         table
+//         _id
+//       }
+//     }
+//   }
+// `;
 export const GET_COSTUMER_ORDERS = gql`
   query CostumerOrders($restaurant: String!) {
     CostumerOrders(restaurant: $restaurant) {

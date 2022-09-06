@@ -10,7 +10,7 @@ import {
 } from "react-icons/cg";
 import { trimUserName } from "utils/stringHelpers";
 
-function Navbar({ navbar, user, userLoading, children }) {
+function Navbar({ children }) {
   return <nav className={styles.navbar}>{children}</nav>;
 }
 

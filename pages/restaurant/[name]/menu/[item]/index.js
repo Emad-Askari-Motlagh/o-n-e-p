@@ -1,7 +1,7 @@
 import MenuItem from "components/MenuItem";
 import PrimaryLayout from "components/Primary-layout";
 import useOrders from "hooks/useOrder";
-import { GET_MENU_ITEM_BY_CATREGORY } from "server/graphql/querys/querys";
+import { GET_MENU_ITEM_BY_CATREGORY } from "server/graphql/querys/querys.graphql";
 import { useMutation, useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -44,9 +44,9 @@ export default function Items() {
         {Router.query?.item}
       </motion.label>
       <div className={styles.items_container}>
-        {Array.isArray(data?.getMenuItemByCategory) &&
+        {Array.isArray(data?.MenuItemByCategory) &&
           !loading &&
-          data.getMenuItemByCategory.map((res, i) => (
+          data.MenuItemByCategory.map((res, i) => (
             <MenuItem
               key={res?._id || i}
               id={res?._id}

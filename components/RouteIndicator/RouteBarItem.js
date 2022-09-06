@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import captalizer from "utils/captalizeFirstLetter";
 import styles from "./styles.module.scss";
 
-export default function RouteBarItem({ name, color, src }) {
+export default function RouteBarItem({ name, color, src, user }) {
   const [sideBarClassName, setSideBarClassName] = useState();
   const router = useRouter();
   useEffect(() => {
@@ -29,7 +29,9 @@ export default function RouteBarItem({ name, color, src }) {
       }}>
       <li className={styles.li}>
         <Link href={src}>
-          <a className={styles[sideBarClassName]}>{`${captalizer(name)}`}</a>
+          <a className={styles[sideBarClassName]}>
+            {user?._id === captalizer(name) ? user.name : `${captalizer(name)}`}
+          </a>
         </Link>
       </li>
     </div>

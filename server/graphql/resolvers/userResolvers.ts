@@ -9,7 +9,7 @@ import JWT from "jsonwebtoken";
 const userResolvers = {
   Query: {
     //Find the user by id
-    async getCurrentUser(_, args, { userId }) {
+    async CurrentUser(_, args, { userId }) {
       if (!userId) {
         return null;
       }
@@ -70,9 +70,10 @@ const userResolvers = {
 
     async SignIn(_, { email, password }, { res }) {
       try {
+        const lowerCaseEmail = email.toLowerCase();
         //check if there is any user with given email
         const existingUser = await User.findOne({
-          email,
+          email: lowerCaseEmail,
         });
         //check if there is not any user with this email
         if (!existingUser) {
@@ -112,7 +113,7 @@ const userResolvers = {
       }
     },
     //signOut user
-    async signOut(_, args, { res }) {
+    async SignOut(_, args, { res }) {
       try {
         await deleteCookie("token", res);
         return "User signed Out";
@@ -120,9 +121,9 @@ const userResolvers = {
         console.log(err);
       }
     },
-    async signInWithGoogle() {},
+    async SignInWithGoogle() {},
 
-    async updateUser(parent, args, context) {
+    async UpdateUser(parent, args, context) {
       const doc = await (
         await User.findById(args.id)
       ).$set({
@@ -133,7 +134,7 @@ const userResolvers = {
       return doc;
     },
 
-    async updatePassword(parent, args, context) {
+    async UpdatePassword(parent, args, context) {
       const doc = await (
         await User.findById(args.id)
       ).$set({
@@ -143,7 +144,7 @@ const userResolvers = {
       if (!context.user) return {};
       return doc;
     },
-    async addAddress(parent, args, context) {
+    async AddAddress(parent, args, context) {
       try {
         const doc = await User.findById(context.sub);
         await doc.$set({

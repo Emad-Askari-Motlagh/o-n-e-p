@@ -20,7 +20,7 @@ const menuResolvers = {
     },
   },
   Query: {
-    async getMenu(_, args, context) {
+    async Menu(_, args, context) {
       const res = await Menu.aggregate([
         { $match: { restaurant: args.restaurant } },
 
@@ -66,7 +66,7 @@ const menuResolvers = {
       return res;
     },
 
-    async getMenuByCategory(_, args, context) {
+    async MenuByCategory(_, args, context) {
       try {
         //Find the one with given restaurant name and select category array inside it
         const res = await menuCategorySchema.find({
@@ -82,7 +82,7 @@ const menuResolvers = {
       }
     },
 
-    async getMenuItemByCategory(_, args, { costumerId }) {
+    async MenuItemByCategory(_, args, { costumerId }) {
       try {
         const { category, restaurant } = args;
         // const res1 = await Menu.aggregate([
@@ -131,7 +131,7 @@ const menuResolvers = {
         throw new ApolloError("Couldn`t find any item", 400);
       }
     },
-    async getMenuItemCount(_, args) {
+    async MenuItemCount(_, args) {
       try {
         const { category, restaurant } = args;
 
@@ -148,7 +148,7 @@ const menuResolvers = {
   },
 
   Mutation: {
-    async addMenu(_, args) {
+    async AddMenu(_, args) {
       try {
         const { category, restaurant } = args;
         const res = await Restaurant.findOne(
@@ -167,7 +167,7 @@ const menuResolvers = {
         console.log(err);
       }
     },
-    async addMenuItem(_, args) {
+    async AddMenuItem(_, args) {
       try {
         const {
           category,
@@ -196,7 +196,7 @@ const menuResolvers = {
         console.log(err);
       }
     },
-    async addMenuCategory(_, args) {
+    async AddMenuCategory(_, args) {
       const { itemName, collectionType, restaurant } = args;
       const menuCategory = await new menuCategorySchema({
         itemName,

@@ -57,8 +57,8 @@ export default function Header(props) {
         )}
         {(costumerData || userData) && (
           <span className={styles.app_name}>
-            {captalizeFirstChar(costumerData?.getCostumer?.name) ||
-              captalizeFirstChar(userData?.getCurrentUser?.email)}
+            {captalizeFirstChar(costumerData?.Costumer?.name) ||
+              captalizeFirstChar(userData?.CurrentUser?.email)}
           </span>
         )}
       </div>

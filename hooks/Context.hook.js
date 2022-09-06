@@ -1,14 +1,14 @@
 import React, { useState, useContext, createContext, useEffect } from "react";
 import { ApolloProvider, useQuery } from "@apollo/client";
 import { initializeApollo, useApollo } from "lib/apollo/apollo-client";
-import router, { useRouter } from "next/router";
-import { GET_CURRENT_USER } from "server/graphql/querys/querys";
-import { SIGN_OUT } from "server/graphql/querys/mutations";
+import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import {
-  LoginMutation,
-  CreateUser,
-  LoginWithGoogle,
-} from "@/server/graphql/querys/mutations";
+  LOGIN,
+  SIGN_OUT,
+  CREATE_USER,
+  LOGIN_WITH_GOOGLE,
+} from "@/server/graphql/querys/mutations.graphql";
+import { useRouter } from "next/router";
 
 const authContext = createContext();
 
@@ -41,7 +41,7 @@ export function useProvideAuth(props) {
       });
 
       if (result.data) {
-        setUser(result.data.getCurrentUser);
+        setUser(result.data.CurrentUser);
       }
     } catch (err) {
       setSignInError(err);
@@ -71,9 +71,9 @@ export function useProvideAuth(props) {
   const signIn = async ({ email, password }) => {
     try {
       const result = await client.mutate({
-        mutation: LoginMutation,
+        mutation: LOGIN,
         variables: { email, password },
-        refetchQueries: [{ query: GET_CURRENT_USER }, "getCurrentUser"],
+        refetchQueries: [{ query: GET_CURRENT_USER }, "CurrentUser"],
       });
       const token = result.data?.SignIn.token;
 
@@ -90,7 +90,7 @@ export function useProvideAuth(props) {
 
   const SigninWithGoogle = async ({ email, password }) => {
     const result = await client.mutate({
-      mutation: LoginWithGoogle,
+      mutation: LOGIN_WITH_GOOGLE,
       variables: { email, password },
     });
     setAuthToken(result.data.SignIn.token);
@@ -101,7 +101,7 @@ export function useProvideAuth(props) {
   const signUp = async ({ email, password, username }) => {
     try {
       const result = await client.mutate({
-        mutation: CreateUser,
+        mutation: CREATE_USER,
         variables: { email, password, username },
       });
 

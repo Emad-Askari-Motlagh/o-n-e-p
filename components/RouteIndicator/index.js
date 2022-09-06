@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import RouteBarItem from "./RouteBarItem";
 
-const RouteBar = (src) => {
+const RouteBar = ({ user }) => {
   const [allRoutes, setAllRoutes] = useState([]);
   const router = useRouter();
   useEffect(() => {
@@ -21,6 +21,7 @@ const RouteBar = (src) => {
             <RouteBarItem
               key={i}
               name={res}
+              user={user}
               src={decodeURI(router.asPath).split(allRoutes[i + 1])[0]}
             />
           );

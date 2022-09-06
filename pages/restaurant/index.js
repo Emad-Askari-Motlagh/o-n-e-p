@@ -3,7 +3,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import Home_screen from "screens/Home.Screen";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import PrimaryLayout from "components/Primary-layout";
-import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys";
+import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys.graphql";
 import dbInit from "lib/dbInit";
 import Search_form from "components/Search-form";
 import { AiOutlineFork } from "react-icons/ai";
@@ -59,10 +59,11 @@ export async function getServerSideProps({ req }) {
     const res = await apolloClient.query({
       query: FETCH_ALL_RESTAURANTS,
     });
+
     //Get the cookie from the req
     return {
       props: {
-        ALL_RESTAURANTS: res.data?.fetchRestaurants ?? [],
+        ALL_RESTAURANTS: res.data?.Restaurants ?? [],
       },
     };
   } catch (err) {

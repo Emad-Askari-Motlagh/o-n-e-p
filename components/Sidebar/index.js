@@ -21,8 +21,8 @@ function SideBar({
     await signOut();
     Router.reload();
   }
-  const fetchedUser = user?.data?.getCurrentUser;
-  const fetchedCostumer = costumerData.data?.getCostumer;
+  const fetchedUser = user?.data?.CurrentUser;
+  const fetchedCostumer = costumerData.data?.Costumer;
   return (
     <div className={styles.dropdown}>
       <div className={styles.items_wrapper}>
@@ -65,7 +65,7 @@ function SideBar({
           rightIcon={null}
           endPoint="/om"
           itemsLabel="Om"></DropdownItem>
-        {costumerData.data?.getCostumer && Router.query?.name && (
+        {costumerData.data?.Costumer && Router.query?.name && (
           <DropdownItem
             leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
             rightIcon={null}
@@ -77,7 +77,7 @@ function SideBar({
           <button className={styles.logout_button} onClick={SignOutByCostumer}>
             {isAdmin
               ? "Logout"
-              : costumerData.data?.getCostumer && "Close the table"}
+              : costumerData.data?.Costumer && "Close the table"}
           </button>
         }
       </div>

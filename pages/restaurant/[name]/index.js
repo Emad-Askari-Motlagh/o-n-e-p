@@ -3,12 +3,7 @@ import styles from "./styles.module.scss";
 import PrimaryLayout from "components/Primary-layout";
 import RegisterForm from "components/CostumerRegistration";
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  ADD_COSTUMER,
-  DELETE_COSTUMER,
-  SAVE_COSTUMER_EXPIRE_TIME,
-} from "server/graphql/querys/mutations";
-import { GET_COSTUMER } from "server/graphql/querys/querys";
+import { ADD_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import dbInit from "lib/dbInit";
 import Costumer from "server/mongoSchema/costumerSchema";
 import RestaurantSubItem from "components/RestaurantSubItem";
@@ -16,7 +11,7 @@ import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 
 export default function Restaurant({ COSTUMER }) {
-  const [AddCostumer, { data, error }] = useMutation(ADD_COSTUMER, {
+  const [AddCostumer] = useMutation(ADD_COSTUMER, {
     onError: (err) => {
       console.log(err);
     },

@@ -9,10 +9,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_CURRENT_USER,
   GET_COSTUMER,
-  GET_ORDERS_CONSTANTLY,
-} from "@/server/graphql/querys/querys";
+} from "server/graphql/querys/querys.graphql";
 import { useProvideAuth } from "hooks/Context.hook";
-import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations";
+import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import Sammary from "components/OrdersSammary";
 
 export default function PrimaryLayout({ children, isCurrent }) {
@@ -54,10 +53,10 @@ export default function PrimaryLayout({ children, isCurrent }) {
 
       <main className={style.main}>
         <div style={{ width: "100%" }}>
-          <RouteBar />
+          <RouteBar user={userData?.data?.CurrentUser} />
         </div>
         {children}
-        {costumerData?.data?.getCostumer && router.query.name && (
+        {costumerData?.data?.Costumer && router.query.name && (
           <Sammary costumerData={costumerData} />
         )}
       </main>

@@ -120,25 +120,22 @@ input MenuParentInput {
 
 # type Subscription {
 #   messages: [Message]
-#   commentAdded(repoFullName: String!): Message
-#   # orders: [OrderItem]
-#   AdminOrders: [AdminOrder]!
 # }
 
 type Query {
   messages: [Message!]
-  getCurrentUser: User
-  fetchRestaurants: [Restaurant]
-  getCostumer: Costumer
-  getMenu(restaurant: String!): [MenuParent]
-  getMenuByCategory(restaurant: String!): [MenuParent]
-  getMenuItemByCategory(
+  CurrentUser: User
+  Restaurants: [Restaurant]
+  Costumer: Costumer
+  Menu(restaurant: String!): [MenuParent]
+  MenuByCategory(restaurant: String!): [MenuParent]
+  MenuItemByCategory(
     category: String!
     restaurant: String!
   ): [CostumerMenuChoises]
-  getMenuItemCount(category: String!, restaurant: String!): Int
-  getOrderItems: OrderItem
-  orders(restaurant: String!): [OrderItem]!
+  MenuItemCount(category: String!, restaurant: String!): OrderItem
+  OrderItems: OrderItem
+  Orders(restaurant: String!): [OrderItem]!
   CostumerOrders(restaurant: String!): [OrderItem]!
   AdminOrders: [AdminOrder]!
 }
@@ -146,11 +143,11 @@ type Query {
 type Mutation {
   CreateUser(email: String!, password: String!, username: String!): User!
   SignIn(email: String!, password: String!): Token!
-  signInWithGoogle(email: String!, password: String!): Token!
-  updateUser(id: String!, email: String!): User!
-  updatePassword(id: String!, password: String!): User!
-  addAddress(address: String!): User!
-  addRestaurant(
+  SignInWithGoogle(email: String!, password: String!): Token!
+  UpdateUser(id: String!, email: String!): User!
+  UpdatePassword(id: String!, password: String!): User!
+  AddAddress(address: String!): User!
+  AddRestaurant(
     name: String!
     owner: String!
     description: String!
@@ -163,9 +160,9 @@ type Mutation {
     id: String!
   ): Restaurant!
   AddCostumer(name: String, table: Int, email: String): Costumer
-  fetchRestaurantsByQuery(searchQuery: String): [Restaurant]
-  addMenu(category: [MenuParentInput!], restaurant: String!): Menu
-  addMenuItem(
+  FetchRestaurantsByQuery(searchQuery: String): [Restaurant]
+  AddMenu(category: [MenuParentInput!], restaurant: String!): Menu
+  AddMenuItem(
     category: String!
     restaurant: String!
     name: String!
@@ -175,20 +172,19 @@ type Mutation {
     quantity: Int!
     availability: Boolean!
   ): MenuItem
-  signOut: String
-  signOutCostumer: String
-  addMenuCategory(
+  SignOut: String
+  SignOutCostumer: String
+  AddMenuCategory(
     restaurant: String!
     itemName: String!
     collectionType: String!
   ): MenuParent
-  addOrder(productId: ID!): [AdminOrder]!
-  removeOrder(productId: ID!): [AdminOrder]!
-  getOrderItem(productId: ID!, restaurant: String!): OrderItem
+  AddOrder(productId: ID!): [AdminOrder]!
+  RemoveOrder(productId: ID!): [AdminOrder]!
+  GetOrderItem(productId: ID!, restaurant: String!): OrderItem
   CostumerExpiry: String
   DeleteCostumer(costumerId: String): Costumer
-  connectToSocket: String
-  emitSocket: OrderItem
-  postMessage(user: String!, content: String!): ID!
-  CostumerOrders(restaurant: String!): [OrderItem]!
+  EmitSocket: OrderItem
+  PostMessage(user: String!, content: String!): ID!
+  GetCostumerOrders(restaurant: String!): [OrderItem]!
 }

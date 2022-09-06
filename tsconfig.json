@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2017",
     "baseUrl": ".",
+    
     "paths": {
       "@/icons/*": [
         "components/icons/*"
@@ -45,8 +46,10 @@
     "esModuleInterop": true,
     "module": "esnext",
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    
   },
   "exclude": [
     "node_modules"
@@ -55,5 +58,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "pages/_app.js"  ]
 }

@@ -20,7 +20,7 @@ const messages = [];
 const orderResolvers = {
   Query: {
     messages: () => messages,
-    async getOrderItems(_, __, { costumerId, user }) {
+    async OrderItems(_, __, { costumerId, user }) {
       if (!costumerId) {
         return null;
       }
@@ -30,7 +30,7 @@ const orderResolvers = {
       const output = res.map((result) => result.orderQuantity > 0 && res);
       return output;
     },
-    async orders(_, { restaurant }, { costumerId }) {
+    async Orders(_, { restaurant }, { costumerId }) {
       // if (!userId) {
       //   throw new ForbiddenError("User is not loged in");
       // }
@@ -123,7 +123,7 @@ const orderResolvers = {
   // },
 
   Mutation: {
-    postMessage: (parent, { user, content }) => {
+    PostMessage: (parent, { user, content }) => {
       const id = messages.length;
       messages.push({
         id,
@@ -134,7 +134,7 @@ const orderResolvers = {
       return id;
     },
 
-    async addOrder(parent, { productId }, { costumerId, req }) {
+    async AddOrder(parent, { productId }, { costumerId, req }) {
       try {
         if (!costumerId) {
           return null;
@@ -172,7 +172,7 @@ const orderResolvers = {
         throw new ApolloError("There is an error", 500);
       }
     },
-    async removeOrder(_, { productId }, { costumerId }) {
+    async RemoveOrder(_, { productId }, { costumerId }) {
       try {
         if (!costumerId) {
           return null;
@@ -201,7 +201,7 @@ const orderResolvers = {
         throw new ApolloError("There is not any Order", "400");
       }
     },
-    async getOrderItem(parent, args, { costumerId }) {
+    async GetOrderItem(parent, args, { costumerId }) {
       if (!costumerId) {
         return null;
       }
@@ -211,7 +211,7 @@ const orderResolvers = {
       return res;
     },
 
-    async CostumerOrders(_, { restaurant }, { costumerId }) {
+    async GetCostumerOrders(_, { restaurant }, { costumerId }) {
       if (!costumerId || !restaurant) {
         return null;
       }

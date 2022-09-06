@@ -3,12 +3,12 @@ import {
   ADD_ORDER,
   REMOVE_ORDER,
   GET_COSTUMER_ORDERS,
-} from "@/server/graphql/querys/mutations";
+} from "@/server/graphql/querys/mutations.graphql";
 import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
   NEW_PERSON_FRAGMENT,
-} from "@/server/graphql/querys/querys";
+} from "@/server/graphql/querys/querys.graphql";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -27,7 +27,7 @@ const useOrders = () => {
       { query: GET_ADMIN_ORDERS },
       "AdminOrders",
       { query: GET_ORDERS_CONSTANTLY },
-      "orders",
+      "Orders",
     ],
   });
 
@@ -37,7 +37,7 @@ const useOrders = () => {
       { query: GET_ADMIN_ORDERS },
       "AdminOrders",
       { query: GET_ORDERS_CONSTANTLY },
-      "orders",
+      "Orders",
     ],
   });
 
@@ -46,7 +46,7 @@ const useOrders = () => {
   });
 
   return {
-    orders: fetchedOrders?.orders ?? [],
+    orders: fetchedOrders?.Orders ?? [],
     addOrder,
     removeOrder,
     loading,

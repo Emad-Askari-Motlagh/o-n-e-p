@@ -11,7 +11,7 @@ const useRestaurant = (props) => {
 
   const setRestaurant = async () => {
     const result = await client?.mutate({
-      mutation: addRestaurant,
+      mutation: AddRestaurant,
     });
     console.log(result);
     return result;

@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       {loading ? (
         <AuthProvider>
-          <Layout {...pageProps}>
+          <Layout>
             <div className={styles.container}>
               <div className={styles.spinner}>
                 <h3 className={styles.loading_h5}>Loading...</h3>
@@ -58,7 +58,7 @@ function MyApp({ Component, pageProps }) {
         </AuthProvider>
       ) : (
         <AuthProvider>
-          <Layout {...pageProps}>
+          <Layout>
             <Component {...pageProps} />
           </Layout>
         </AuthProvider>
