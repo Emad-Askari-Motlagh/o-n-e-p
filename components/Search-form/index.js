@@ -3,16 +3,15 @@ import React from "react";
 import Input from "./Input";
 import styles from "./styles.module.scss";
 
-export default function Search_form({ onSubmit, onChange }) {
+export default function Search_form({ onSubmit, onChange, label }) {
   return (
     <motion.div
       className={styles.container}
       initial={{ opacity: 0, y: -100 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+      animate={{ opacity: 1, y: 0 }}>
       <Input
-        placeholder="Hitta din restaurang"
-        label={"Restaurang"}
+        placeholder={label}
+        label={label}
         name={"searchInput"}
         onChange={onChange}
       />

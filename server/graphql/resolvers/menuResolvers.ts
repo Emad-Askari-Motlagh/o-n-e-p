@@ -1,10 +1,11 @@
-import Menu from "@/server/mongoSchema/menuSchema";
-import Restaurant from "@/server/mongoSchema/restaurangSchema";
-import MenuItem from "@/server/mongoSchema/MenuItemSchema";
-import MenuItemSchema from "@/server/mongoSchema/MenuItemSchema";
+import Restaurant from "server/mongoSchema/restaurangSchema";
+import MenuItem from "server/mongoSchema/MenuItemSchema";
+import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
 import { ApolloError } from "apollo-server";
-import Order from "@/server/mongoSchema/orderschema";
+import Order from "server/mongoSchema/orderschema";
+import { Types } from "mongoose";
+import Menu from "server/mongoSchema/MenuItemSchema";
 
 const menuResolvers = {
   CostumerMenuChoises: {
@@ -72,12 +73,13 @@ const menuResolvers = {
         const res = await menuCategorySchema.find({
           restaurant: args.restaurant,
         });
+
         return res;
       } catch (err) {
         console.log(err);
         throw new ApolloError(
           "There is not any Category associated with this restaurant",
-          400
+          "400"
         );
       }
     },
@@ -128,7 +130,7 @@ const menuResolvers = {
         return res;
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn`t find any item", 400);
+        throw new ApolloError("Couldn`t find any item", "400");
       }
     },
     async MenuItemCount(_, args) {
@@ -206,6 +208,28 @@ const menuResolvers = {
       const res = await menuCategory.save();
       return res;
     },
+    async UpdateMenuItems(_, args, { userId }) {
+      //Check if user is logedIn
+      try {
+        console.log("here");
+        //Filter by category and restaurant name
+        const { category, restaurant, input } = args;
+        //Find and update
+        console.log(input);
+        const newMenu = await Menu.findOneAndUpdate(
+          { restaurant, category },
+          {
+            name: input.name,
+            price: input.price,
+            description: input.description,
+          }
+        );
+        return newMenu;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
+
 export default menuResolvers;

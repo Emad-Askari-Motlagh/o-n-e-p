@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
+import Form from "components/MenuItem/Form";
+import ChoisesCard from "components/MenuItem/ChoisesCard";
+import Selection from "components/Selection";
 
 export default function Items() {
   const Router = useRouter();
@@ -58,6 +61,14 @@ export default function Items() {
               removeOrder={removeOrder}
               price={res.price}
               quantity={countQuantity(res._id, orders)}
+              itemsChildren={
+                <>
+                  <Form>
+                    <Selection />
+                  </Form>
+                  <ChoisesCard costumerExtra={"costumerExtra"} />
+                </>
+              }
             />
           ))}
       </div>

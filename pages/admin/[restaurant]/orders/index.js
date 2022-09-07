@@ -3,18 +3,19 @@ import "bootstrap/dist/css/bootstrap.css";
 import styles from "./orders.module.scss";
 import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
-import { BiTrash } from "react-icons/bi";
+import { BiSearch, BiTrash } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/useOrder";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
+import Search from "components/Search-form";
 
 const Kontakt = () => {
   const { query } = useRouter();
   const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState([]);
   const { AdminOrders } = useOrders();
-
+  const date = new Date();
   async function connect_to_socket1() {
     try {
       const evtSource = new EventSource(
@@ -51,12 +52,19 @@ const Kontakt = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.restaurant}>{query.name}</span>
-      {/* {error && <ApolloError error={error} />} */}
+      {/* <span style={{ marginLeft: "20px" }}>
+        {date.getFullYear() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getDate()}
+      </span> */}
+      <div className={styles.search_parent} style={{ margin: "20px" }}>
+        <Search placeHolder={"Filter"} label={"Hitta bord"} onChange={""} />
+      </div>
 
       {Array.isArray(orders) && (
         <table>
-          <thead></thead>
           <tbody>
             <tr style={{ backgroundColor: "tomato" }}>
               <TableHeader>Table</TableHeader>

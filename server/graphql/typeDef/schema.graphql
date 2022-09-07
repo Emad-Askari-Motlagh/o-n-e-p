@@ -88,6 +88,7 @@ type MenuParent {
   itemName: String
   collectionType: String
   item: [MenuItem]
+  restaurant: Restaurant
 }
 type AdminOrder {
   orderQuantity: Int
@@ -116,6 +117,11 @@ input MenuParentInput {
   itemName: String!
   collectionType: String!
   item: [MenuItemInput!]
+}
+input MenuItemInput {
+  price: Int
+  description: String
+  name: String
 }
 
 # type Subscription {
@@ -187,4 +193,9 @@ type Mutation {
   EmitSocket: OrderItem
   PostMessage(user: String!, content: String!): ID!
   GetCostumerOrders(restaurant: String!): [OrderItem]!
+  UpdateMenuItems(
+    restaurant: String!
+    category: String!
+    input: MenuItemInput
+  ): MenuItem!
 }

@@ -5,6 +5,9 @@ import styles from "./style.module.scss";
 import Selection from "../Selection";
 import Form from "./Form";
 import ChoisesCard from "./ChoisesCard";
+import Clickable from "./Clickable";
+import Description from "./MenuDescription";
+import { CgMore } from "react-icons/cg";
 
 const MenuItem = ({
   description,
@@ -15,51 +18,27 @@ const MenuItem = ({
   addOrder,
   price,
   quantity,
+  itemsChildren,
 }) => {
   const sum = price * quantity;
   return (
     <div className={styles.container}>
-      <div className={styles.parent}>
-        <ItemsParent name={name}>
-          <Form>
-            <Selection />
-          </Form>
-          <ChoisesCard costumerExtra={"costumerExtra"} />
+      <div className={styles.extraParent}>
+        <ItemsParent name={name} Icon={CgMore}>
+          {itemsChildren}
         </ItemsParent>
       </div>
-      <Image
-        className={styles.image}
-        src={ImageSrc}
-        width={200}
-        alt="Menu Item"
-        height={200}
-        layout="intrinsic"
+      <Description
+        description={description}
+        name={name}
+        ImageSrc={ImageSrc}
+        id={id}
       />
-
-      <div className={styles.description}>
-        <label>{name}</label>
-        <p>{description}</p>
-      </div>
-
-      <div className={styles.choose_part}>
-        <span
-          onClick={() => {
-            addOrder({
-              variables: { productId: id },
-            });
-          }}>
-          +
-        </span>
-        <span>{quantity}</span>
-        <span
-          onClick={() =>
-            removeOrder({
-              variables: { productId: id },
-            })
-          }>
-          -
-        </span>
-      </div>
+      <Clickable
+        quantity={quantity}
+        addOrder={addOrder}
+        removeOrder={removeOrder}
+      />
       <div className={styles.price_cont}>
         <span>{`${sum > 0 ? sum : 0},00 kr`}</span>
       </div>

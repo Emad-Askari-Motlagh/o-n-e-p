@@ -86,3 +86,19 @@ export const GET_COSTUMER_ORDERS = gql`
     }
   }
 `;
+
+export const UPDATE_MENU_ITEMS = gql`
+  mutation UpdateMenuItems(
+    $restaurant: String!
+    $category: String!
+    $input: MenuItemInput
+  ) {
+    UpdateMenuItems(
+      restaurant: $restaurant
+      category: $category
+      input: $input
+    ) {
+      name
+    }
+  }
+`;

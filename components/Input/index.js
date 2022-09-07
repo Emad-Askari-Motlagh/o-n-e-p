@@ -16,6 +16,7 @@ export default function Input(
     labelStyle,
     type,
     width,
+    defaultValue,
   },
   props
 ) {
@@ -30,6 +31,7 @@ export default function Input(
           onChange={onChange}
           name={name}
           type={type}
+          defaultValue={defaultValue}
           {...props}
         />
       </div>

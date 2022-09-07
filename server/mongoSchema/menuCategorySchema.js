@@ -5,7 +5,7 @@ var MenutCategorySchema = new mongoose.Schema(
   {
     restaurant: {
       type: String,
-      ref: restaurangSchema ?? "Restaurang",
+      ref: restaurangSchema,
     },
 
     itemName: String,

@@ -1,0 +1,74 @@
+@import "styles/breakpoints.scss";
+@import "styles/fonts.scss";
+
+@mixin ITEM_SIZES {
+  width: $ITEMS_WIDTH;
+  @include md {
+    width: 90%;
+  }
+  @include md {
+  }
+}
+@mixin ITEMS_AFTER {
+  position: absolute;
+  content: "";
+  right: 0;
+  bottom: -40%;
+  width: 100%;
+  height: 180%;
+  border-bottom: 3px solid darkgray;
+  border-right-width: 0;
+}
+@mixin ITEMS_STYLE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  margin: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  color: rgb(216, 201, 201);
+  text-shadow: 0 0 3px black;
+  font-family: "Archivo Black", sans-serif;
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+
+  &::after {
+    @include ITEMS_AFTER;
+  }
+  @include md {
+    max-width: 90%;
+    text-align: center;
+    min-height: 100px;
+  }
+}
+
+.container {
+  width: 100%;
+  margin-top: 20px;
+  .items_parent {
+    width: 98%;
+    margin: auto;
+    padding: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+  .add_button {
+    font-size: 44px;
+    margin-left: auto;
+    text-align: right;
+    float: right;
+    margin-right: 2%;
+    cursor: pointer;
+    color: white;
+    transform: scale(1);
+    transition: transform color 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+      color: tomato;
+    }
+  }
+}

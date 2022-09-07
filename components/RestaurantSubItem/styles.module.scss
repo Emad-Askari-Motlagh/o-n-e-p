@@ -20,7 +20,7 @@ $BC_COLOR: #242424;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
+  font-size: 35px;
   width: max-content;
   margin: auto;
   position: absolute;
@@ -44,30 +44,19 @@ $BC_COLOR: #242424;
 .items_card_container {
   position: relative;
   transition: all 0.2s ease-in;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border-radius: $ITEM_BORDERS;
   margin: 2% auto;
   border: 0.1px solid gray;
   cursor: pointer;
   backdrop-filter: blur(5px);
-  width: max-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
 
-  width: 40%;
-  @include portrait {
-    width: 70%;
-  }
+  overflow: hidden;
+  width: 100%;
+
   .image_con {
     position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
     .image {
       position: absolute;
     }
@@ -80,6 +69,6 @@ $BC_COLOR: #242424;
 
   &:hover {
     transform: scale(1.03);
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(20, 20, 21, 0.063) 0px 7px 12px 0px;
   }
 }

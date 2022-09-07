@@ -44,13 +44,14 @@ export const GET_MENU_CATREGORY = gql`
   query MenuByCategory($restaurant: String!) {
     MenuByCategory(restaurant: $restaurant) {
       itemName
+      collectionType
     }
   }
 `;
 export const GET_MENU = gql`
   query Menu($restaurant: String!) {
     Menu(restaurant: $restaurant) {
-      itemName
+      name
     }
   }
 `;
@@ -77,7 +78,7 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
 export const GET_MENU_ITEM_COUNT = gql`
   query MenuItemCount($category: String!, $restaurant: String!) {
     MenuItemCount(category: $category, restaurant: $restaurant) {
-      orderQuantity
+      name
     }
   }
 `;
