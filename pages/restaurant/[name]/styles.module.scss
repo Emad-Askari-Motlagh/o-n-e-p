@@ -70,9 +70,13 @@ $BC_COLOR: #242424;
   .items_parent {
     flex-wrap: wrap;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    width: 100%;
     align-items: center;
     min-height: calc(100vmin - 50vmin);
+    .item_parent {
+      width: 40%;
+    }
     @include md {
       min-height: inherit;
       flex-direction: column;

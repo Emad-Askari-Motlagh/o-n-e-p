@@ -82,9 +82,16 @@ $BC_COLOR: #242424;
   .items_parent {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
+    .item_parent {
+      width: 40%;
+
+      @include md {
+        width: 80%;
+      }
+    }
     @include md {
       display: flex;
       flex-wrap: wrap;

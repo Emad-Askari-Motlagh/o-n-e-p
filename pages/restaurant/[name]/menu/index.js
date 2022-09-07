@@ -29,13 +29,14 @@ export default function Menu() {
           <div className={styles.items_parent}>
             {(data ? data?.MenuByCategory : Array(6).fill(1)).map(
               (res, index) => (
-                <RestaurantSubItem
-                  key={index}
-                  label={res.itemName}
-                  endPoint={res.itemName}
-                  image={"/2.webp"}
-                  id={res?.id}
-                />
+                <div key={index} className={styles.item_parent}>
+                  <RestaurantSubItem
+                    label={res.itemName}
+                    endPoint={res.itemName}
+                    image={"/2.webp"}
+                    id={res?.id}
+                  />
+                </div>
               )
             )}
           </div>

@@ -38,6 +38,7 @@ const MenuItem = ({
         quantity={quantity}
         addOrder={addOrder}
         removeOrder={removeOrder}
+        id={id}
       />
       <div className={styles.price_cont}>
         <span>{`${sum > 0 ? sum : 0},00 kr`}</span>

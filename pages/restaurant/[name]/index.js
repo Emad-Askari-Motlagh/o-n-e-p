@@ -45,30 +45,30 @@ export default function Restaurant({ COSTUMER }) {
           ? "Costumer Registration"
           : "Please choose one of alternatives!"}
       </motion.label>
-      {!COSTUMER && (
+      {!COSTUMER ? (
         <>
           <RegisterForm onSubmit={submitForm} />
         </>
-      )}
-
-      <div className={styles.items_parent}>
-        {COSTUMER && (
-          <>
+      ) : (
+        <div className={styles.items_parent}>
+          <div className={styles.item_parent}>
             <RestaurantSubItem
               label={"EAT HERE"}
               endPoint={"Menu"}
               image={"/3.webp"}
               key={1}
             />
+          </div>
+          <div className={styles.item_parent}>
             <RestaurantSubItem
               label={"TAKE AWAY"}
               endPoint={"Menu"}
               image={"/1.webp"}
               key={2}
             />
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

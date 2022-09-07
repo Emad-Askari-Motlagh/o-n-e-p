@@ -57,8 +57,16 @@ export default function Items() {
               name={res?.name}
               ImageSrc={"/1.webp"}
               restaurant={Router.query.name}
-              addOrder={addOrder}
-              removeOrder={removeOrder}
+              addOrder={() =>
+                addOrder({
+                  variables: { productId: res._id },
+                })
+              }
+              removeOrder={() =>
+                removeOrder({
+                  variables: { productId: res._id },
+                })
+              }
               price={res.price}
               quantity={countQuantity(res._id, orders)}
               itemsChildren={
