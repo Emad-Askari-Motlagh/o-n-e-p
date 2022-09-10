@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 import axios from "node_modules/axios/index";
 import PrimaryLayout from "components/Primary-layout";
-import useOrders from "hooks/useOrder";
+import useOrders from "hooks/order.hook";
 import styles from "./orders.module.scss";
 
 import { BiTrash, BiScreenshot } from "react-icons/bi";

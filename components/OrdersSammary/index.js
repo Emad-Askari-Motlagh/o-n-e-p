@@ -2,7 +2,7 @@ import style from "./styles.module.scss";
 import CheckOutBar from "components/CheckOutBar";
 import { useEffect, useRef, useState } from "react";
 import Modal from "components/Modal";
-import useOrders from "hooks/useOrder";
+import useOrders from "hooks/Order.hook.js";
 import SummaryItem from "components/SummaryItem";
 import { useRouter } from "next/router";
 import LinkButton from "components/LinkButton";

@@ -7,14 +7,12 @@ import style from "./style.module.scss";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 // import CheckoutForm from "components/Stripe";
-import useOrders from "hooks/useOrder";
 
-export default function Payment({ isModalOpen, setIsModalOpen }) {
+export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(process.env.STRIPE_KEY)
   );
 
-  const { orders: data } = useOrders();
   const router = useRouter();
   function hasDuplicates(array) {
     return new Set(array).size !== array.length;

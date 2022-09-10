@@ -1,6 +1,6 @@
 import MenuItem from "components/MenuItem";
 import PrimaryLayout from "components/Primary-layout";
-import useOrders from "hooks/useOrder";
+import useOrders from "hooks/Order.hook";
 import { GET_MENU_ITEM_BY_CATREGORY } from "server/graphql/querys/querys.graphql";
 import { useMutation, useQuery } from "@apollo/client";
 import { motion } from "framer-motion";

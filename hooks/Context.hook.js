@@ -32,7 +32,7 @@ export function useProvideAuth(props) {
   const authHdaders = getAuthHeaders();
   const Router = useRouter();
   const client = useApollo();
-  const [signInErro, setSignInError] = useState();
+  const [signInError, setSignInError] = useState();
 
   const getCurrentUser = async () => {
     try {
@@ -94,8 +94,11 @@ export function useProvideAuth(props) {
       variables: { email, password },
     });
     setAuthToken(result.data.SignIn.token);
-
-    return result.data.SignIn.token;
+    if (!result.errors) {
+      return result.data.SignIn.token;
+    } else {
+      setSignInError("Error on signin happend");
+    }
   };
 
   const signUp = async ({ email, password, username }) => {

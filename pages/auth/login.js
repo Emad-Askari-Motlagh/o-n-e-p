@@ -44,14 +44,13 @@ export default function Login() {
           });
           if (token) {
             setLoginSuccesed(true);
-            setTimeout(() => {
-              globalThis.location.href = "/";
-            }, 1000);
+            globalThis.location.href = "/";
           } else {
             setError("Username or Password are incurrect");
           }
         } catch (err) {
           setError(true);
+
           console.log(err);
         } finally {
           resetForm();

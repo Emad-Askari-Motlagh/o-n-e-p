@@ -3,7 +3,7 @@ import Label from "components/Label";
 import SummaryItem from "components/SummaryItem";
 import Payment from "components/Payment";
 import PrimaryLayout from "components/Primary-layout";
-import useOrders from "hooks/useOrder";
+import useOrders from "hooks/Order.hook";
 
 import styles from "./style.module.scss";
 

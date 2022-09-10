@@ -5,7 +5,7 @@ import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
 import { BiSearch, BiTrash } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
-import useOrders from "hooks/useOrder";
+import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
 import Search from "components/Search-form";
