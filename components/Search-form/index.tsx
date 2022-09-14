@@ -3,7 +3,16 @@ import React from "react";
 import Input from "./Input";
 import styles from "./styles.module.scss";
 
-export default function Search_form({ onSubmit, onChange, label }) {
+interface SearchProps {
+  onSubmit?: MouseEvent;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  label: string;
+}
+export default function Search_form({
+  onSubmit,
+  onChange,
+  label,
+}: SearchProps) {
   return (
     <motion.div
       className={styles.container}

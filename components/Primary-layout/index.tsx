@@ -13,8 +13,14 @@ import {
 import { useProvideAuth } from "hooks/Context.hook";
 import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import Sammary from "components/OrdersSammary";
+import type { ReactElement, ReactNode } from "react";
 
-export default function PrimaryLayout({ children, isCurrent }) {
+type LayoutProps = {
+  children: ReactNode;
+  isCurrent: boolean;
+};
+
+export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
   const { isVisible, setIsVisible, ref } = useVisible(false);
   const router = useRouter();
   const userData = useQuery(GET_CURRENT_USER);

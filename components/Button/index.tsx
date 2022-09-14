@@ -1,7 +1,19 @@
 import React from "react";
 import styles from "./styles.module.scss";
 
-export default function Button({ width, style, children, onClick }) {
+type ButtonProps = {
+  width?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+export default function Button({
+  width,
+  style,
+  children,
+  onClick,
+}: ButtonProps) {
   return (
     <div className={styles.container} style={{ width: width }}>
       <button onClick={onClick} className={styles.btn_grad}>

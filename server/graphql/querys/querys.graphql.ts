@@ -51,7 +51,7 @@ export const GET_MENU_CATREGORY = gql`
 export const GET_MENU = gql`
   query Menu($restaurant: String!) {
     Menu(restaurant: $restaurant) {
-      name
+      itemName
     }
   }
 `;
@@ -78,7 +78,9 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
 export const GET_MENU_ITEM_COUNT = gql`
   query MenuItemCount($category: String!, $restaurant: String!) {
     MenuItemCount(category: $category, restaurant: $restaurant) {
-      name
+      product {
+        name
+      }
     }
   }
 `;

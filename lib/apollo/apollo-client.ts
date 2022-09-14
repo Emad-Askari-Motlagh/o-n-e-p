@@ -14,7 +14,7 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 
 const link = `${process.env.SERVER_LINK}`;
-let apolloClient;
+let apolloClient: any;
 //create websocket link
 // const wsLink =
 //   typeof window !== "undefined"
@@ -81,7 +81,7 @@ export function initializeApollo(
   return _apolloClient;
 }
 
-export function useApollo(initialState) {
+export function useApollo(initialState: any) {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 }

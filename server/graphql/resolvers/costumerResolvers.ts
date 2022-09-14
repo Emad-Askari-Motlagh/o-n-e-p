@@ -3,15 +3,16 @@ import { ApolloError } from "apollo-server";
 import stream from "stream";
 import { storeCookie, deleteCookie } from "lib/storeCookie";
 import { Types } from "mongoose";
+import type { Resolvers, CostumerResolvers } from "server/generated/graphql";
 
-const costumerResolvers = {
+const costumerResolvers: Resolvers = {
   Query: {
-    async Costumer(_, __, { costumerId }) {
+    async Costumer(_: any, __: any, { costumerId }: { costumerId: string }) {
       try {
         if (!costumerId) {
           return null;
         }
-        const id = Types.ObjectId(costumerId);
+        const id = new Types.ObjectId(costumerId);
         const costumer = await Costumer.findById(id);
         return costumer;
       } catch (err) {
@@ -21,10 +22,8 @@ const costumerResolvers = {
     },
   },
   Mutation: {
-    async AddCostumer(_, args, context) {
+    async AddCostumer(_: any, { name, table, email }, { res }) {
       try {
-        const { name, table, email } = args;
-
         //check if already there is a user with this email
         const oldCostumer = await Costumer.findOne({ email });
         if (oldCostumer) {
@@ -33,7 +32,7 @@ const costumerResolvers = {
           //store the cookie object which include the id and expiration time for future uses
           await storeCookie(
             [{ costumerId: oldCostumer._id }, { expireTime: 300000 }],
-            context.res,
+            res,
             300000
           );
 
@@ -49,7 +48,7 @@ const costumerResolvers = {
           //if there is any user in db set the cookie with old one
           await storeCookie(
             { costumerId: res._id, expireTime: 300000 },
-            context.res,
+            res,
             300000
           );
 
@@ -68,7 +67,7 @@ const costumerResolvers = {
         if (!costumerId) {
           return null;
         }
-        const id = Types.ObjectId(costumerId);
+        const id = new Types.ObjectId(costumerId);
         const costumer = await Costumer.findOneAndRemove({ _id: id });
 
         return costumer;
@@ -77,22 +76,21 @@ const costumerResolvers = {
       }
     },
     //signOut user
-    async SignOutCostumer(_, __, { res }) {
+    async SignOutCostumer(_: any, __: any, { res }) {
       try {
         //Delete the cookie, we can inject an array in multiple cookie cases
         await deleteCookie(["costumerId", "expireTime"], res);
         return "done";
       } catch (err) {
-        console.log(err);
+        return "Error";
       }
     },
     async CostumerExpiry(_, args, { res }) {
       try {
-        console.log("here");
-        await storeCookie("costumerExpire", "args.time", res, 300000);
-        return "User signed Out";
+        await storeCookie(["costumerExpire", "args.time"], res, 300000);
+        return { message: "Cookie stored" };
       } catch (err) {
-        console.log(err);
+        return { message: "Cookie not stored" };
       }
     },
   },

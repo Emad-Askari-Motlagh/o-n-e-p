@@ -1,3 +1,11 @@
+import {
+  AddOrderMutationFn,
+  AddOrderMutationHookResult,
+  OrdersQueryHookResult,
+  AddOrderMutationOptions,
+  AddOrderMutation,
+  AdminOrdersQueryResult,
+} from "./../server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
   ADD_ORDER,
@@ -7,13 +15,18 @@ import {
 import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
-  NEW_PERSON_FRAGMENT,
 } from "@/server/graphql/querys/querys.graphql";
-import { useMutation, useQuery } from "@apollo/client";
+import { MutationFunctionOptions, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
-const useOrders = () => {
-  const [newUi, setNewUi] = useState([]);
+interface MyTypes {
+  orders: [] | OrdersQueryHookResult;
+  loading: boolean;
+  AdminOrders: AdminOrdersQueryResult | [];
+  getAdminOrders_loading: boolean;
+}
+
+const useOrders = (): MyTypes => {
   const router = useRouter();
   const restaurant = router.query.name;
   const {
@@ -46,14 +59,12 @@ const useOrders = () => {
   });
 
   return {
-    orders: fetchedOrders?.Orders ?? [],
-    addOrder,
-    removeOrder,
+    orders: fetchedOrders?.Orders,
     loading,
     AdminOrders: data?.AdminOrders,
-    newUi: newUi,
     getAdminOrders_loading,
-    orderData,
+    addOrder,
+    removeOrder,
   };
 };
 

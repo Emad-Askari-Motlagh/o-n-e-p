@@ -23,6 +23,7 @@ function SideBar({
   }
   const fetchedUser = user?.data?.CurrentUser;
   const fetchedCostumer = costumerData.data?.Costumer;
+
   return (
     <div className={styles.dropdown}>
       <div className={styles.items_wrapper}>
@@ -53,7 +54,7 @@ function SideBar({
             <DropdownItem
               leftIcon={<MdRestaurantMenu className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${Router.query.name}/menu`}
+              endPoint={`/admin/${fetchedUser.restaurant.name}/menu`}
               itemsLabel="Menu"></DropdownItem>
           </div>
         ) : (

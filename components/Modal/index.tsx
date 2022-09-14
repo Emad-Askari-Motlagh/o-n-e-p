@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { Modal, Button } from "react-bootstrap";
+import { HtmlProps } from "next/dist/shared/lib/html-context";
 
+interface ModalTypes {
+  children: ReactNode;
+  setIsModalOpen: (isOpen: boolean) => void;
+  isModalOpen: boolean;
+  label: string;
+  onExit?: () => void;
+}
 export default function Modall(
-  { children, setIsModalOpen, isModalOpen, label, onExit },
-  props
+  { children, setIsModalOpen, isModalOpen, label, onExit }: ModalTypes,
+  props: HtmlProps
 ) {
   return (
     <>
@@ -18,8 +26,7 @@ export default function Modall(
         contentClassName={styles.content}
         dialogClassName={styles.dialoge}
         className={styles.container}
-        size="lg"
-      >
+        size="lg">
         <div className={styles.modal_cont}>
           <Modal.Header>
             <Modal.Title className={styles.title}>{label}</Modal.Title>
@@ -30,8 +37,7 @@ export default function Modall(
             <AiOutlineCloseCircle
               size={32}
               className={styles.close_icon}
-              onClick={() => setIsModalOpen(false)}
-            ></AiOutlineCloseCircle>
+              onClick={() => setIsModalOpen(false)}></AiOutlineCloseCircle>
           </Modal.Footer>
         </div>
       </Modal>

@@ -19,7 +19,7 @@ import LoginSucceed from "components/Succeed-Message";
 import { useRouter } from "node_modules/next/router";
 
 export default function Login() {
-  const [error, setError] = useState();
+  const [error, setError] = useState<string | null>();
 
   const [loginSuccesed, setLoginSuccesed] = useState(false);
   const { signIn, signOut, user, SigninWithGoogle } = useProvideAuth();
@@ -49,7 +49,7 @@ export default function Login() {
             setError("Username or Password are incurrect");
           }
         } catch (err) {
-          setError(true);
+          setError("Error on login");
 
           console.log(err);
         } finally {
@@ -102,7 +102,7 @@ export default function Login() {
           ) : null}
         </div>
 
-        <Button type="submit" width={"50%"}>
+        <Button onClick={() => console.log("clicked")} width={"50%"}>
           Login
         </Button>
         {loginSuccesed && <LoginSucceed value="Login Succeed" />}
@@ -120,10 +120,7 @@ export default function Login() {
       </div>
       <div className={styles.login_alternatives_container}>
         <div className={styles.auth_buttons} onClick={() => SigninWithGoogle()}>
-          <ImFacebook2
-            style={{ marginRight: "4%" }}
-            color="blue"
-            icon="apple"></ImFacebook2>
+          <ImFacebook2 style={{ marginRight: "4%" }} color="blue"></ImFacebook2>
           <span>Signup With Facebook</span>
         </div>
 

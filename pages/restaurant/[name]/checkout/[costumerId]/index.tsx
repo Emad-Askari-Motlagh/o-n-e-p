@@ -8,14 +8,17 @@ import useOrders from "hooks/Order.hook";
 import styles from "./style.module.scss";
 
 export default function CheckOut() {
-  const { addOrder, removeOrder, orders, loading, newUi } = useOrders();
-
+  const { addOrder, removeOrder, orders, loading } = useOrders();
+  interface currentValue {
+    orderQuantity: number;
+    product: { price: number };
+  }
   //Compute total payment amount
   function countSum() {
     const initialValue = 0;
-    if (orders?.length) {
+    if (Array.isArray(orders)) {
       const sumWithInitial = orders.reduce(
-        (previousValue, currentValue) =>
+        (previousValue: number, currentValue: currentValue) =>
           previousValue +
           currentValue.product.price * currentValue.orderQuantity,
         initialValue
@@ -27,7 +30,7 @@ export default function CheckOut() {
   }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!orders?.length && !loading)
+  if (!Array.isArray(orders) && !loading)
     return (
       <div className={styles.container}>
         <Label label_name={"Checkout"} />
@@ -46,7 +49,7 @@ export default function CheckOut() {
             <span style={{ color: "white" }}>Loading...</span>
           </div>
         )}
-        {orders?.length &&
+        {Array.isArray(orders) &&
           orders?.map((res, i) => {
             return (
               <SummaryItem

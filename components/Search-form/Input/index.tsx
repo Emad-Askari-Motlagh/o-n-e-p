@@ -2,7 +2,18 @@ import React, { useState } from "react";
 import { FaSearchengin } from "react-icons/fa";
 import styles from "./input.module.scss";
 import { AiOutlineSearch } from "react-icons/ai";
+import type { AppProps, AppInitialProps } from "next/app";
 
+interface InputProps {
+  required?: boolean;
+  error?: string;
+  noMargin?: boolean;
+  placeholder?: string;
+  label: string;
+  children?: React.ReactNode;
+  name: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+}
 export default function Input(
   {
     required = true,
@@ -13,8 +24,8 @@ export default function Input(
     children,
     name,
     onChange,
-  },
-  props
+  }: InputProps,
+  props: any
 ) {
   const [focus, setFocus] = useState(false);
 

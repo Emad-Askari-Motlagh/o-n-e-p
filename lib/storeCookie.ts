@@ -77,7 +77,7 @@ const storeCookie = async (
 // };
 
 //Delete the cookie
-const deleteCookie = (name: string, res: NextApiResponse) => {
+const deleteCookie = (name: string | string[], res: NextApiResponse) => {
   //If we want to delete more than one cookie in a time // array of cookies names
   if (Array.isArray(name)) {
     res.setHeader(

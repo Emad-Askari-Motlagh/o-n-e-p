@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import styles from "./orders.module.scss";
 import PrimaryLayout from "components/Primary-layout/index";
@@ -9,11 +15,12 @@ import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
 import Search from "components/Search-form";
+import searchByQuery from "lib/searchByQuery";
 
-const Kontakt = () => {
-  const { query } = useRouter();
+const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState([]);
+  const [searchResult, setSearchResult] = useState<string>();
   const { AdminOrders } = useOrders();
   const date = new Date();
   async function connect_to_socket1() {
@@ -32,13 +39,6 @@ const Kontakt = () => {
       evtSource.onopen = (event) => {
         console.log("open");
       };
-
-      function getRealtimeData(data) {
-        console.log(data);
-        setData(data);
-        // process the data here,
-        // then pass it to state to be rendered
-      }
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +47,16 @@ const Kontakt = () => {
     connect_to_socket1();
   }, []);
 
-  const callApiRouteThatWillEmitEvent = () => {};
+  function searchOverRestaurants(e) {
+    try {
+      e.preventDefault();
+      //Filter the restaurants when user begin to search
+      const query = e.target.value;
+      setSearchResult(query);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const orders = data?.length ? data : AdminOrders;
 
   return (
@@ -60,7 +69,9 @@ const Kontakt = () => {
           date.getDate()}
       </span> */}
       <div className={styles.search_parent} style={{ margin: "20px" }}>
-        <Search placeHolder={"Filter"} label={"Hitta bord"} onChange={""} />
+        <Search
+          label={"Hitta din restaurang"}
+          onChange={searchOverRestaurants}></Search>
       </div>
 
       {Array.isArray(orders) && (
@@ -75,25 +86,34 @@ const Kontakt = () => {
               <TableHeader>View</TableHeader>
             </tr>
             {Array.isArray(orders) &&
-              orders?.map((fact, i) => (
-                <tr key={i}>
-                  <TableData>{fact?.costumer?.table}</TableData>
-                  <TableData>
-                    {captalizeFirstLetter(fact?.product?.name)}
-                  </TableData>
-                  <TableData
-                    color={fact?.orderQuantity <= 1 ? "white" : "tomato"}>
-                    {fact?.orderQuantity}
-                  </TableData>
-                  <TableData>{fact?.product?.price}</TableData>
-                  <TableData>
-                    <BiTrash />
-                  </TableData>
-                  <TableData>
-                    <FiEye />
-                  </TableData>
-                </tr>
-              ))}
+              orders?.map(
+                (
+                  fact: {
+                    costumer: { table: number };
+                    product: { name: string; price: number };
+                    orderQuantity: number;
+                  },
+                  i
+                ) => (
+                  <tr key={i}>
+                    <TableData>{fact?.costumer?.table}</TableData>
+                    <TableData>
+                      {captalizeFirstLetter(fact?.product?.name)}
+                    </TableData>
+                    <TableData
+                      color={fact?.orderQuantity <= 1 ? "white" : "tomato"}>
+                      {fact?.orderQuantity}
+                    </TableData>
+                    <TableData>{fact?.product?.price}</TableData>
+                    <TableData>
+                      <BiTrash />
+                    </TableData>
+                    <TableData>
+                      <FiEye />
+                    </TableData>
+                  </tr>
+                )
+              )}
           </tbody>
         </table>
       )}
@@ -115,13 +135,17 @@ const Kontakt = () => {
     </div>
   );
 };
-const TableData = ({ children, color }) => (
-  <td style={{ color }}>{children}</td>
-);
+const TableData = ({
+  children,
+  color,
+}: {
+  children: ReactNode;
+  color?: string;
+}) => <td style={{ color }}>{children}</td>;
 
-const TableHeader = ({ children }) => (
+const TableHeader = ({ children }: { children: ReactNode }) => (
   <th className={styles.table_header}>{children}</th>
 );
 
-export default Kontakt;
-Kontakt.Layout = PrimaryLayout;
+export default AdminsOrders;
+AdminsOrders.Layout = PrimaryLayout;

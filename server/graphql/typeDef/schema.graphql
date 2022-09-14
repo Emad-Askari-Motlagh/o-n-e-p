@@ -1,5 +1,11 @@
 union CostumerMenuChoises = OrderItem | MenuItem
-
+union SaveCookie = CookieSuccess | CookieError
+type CookieError {
+  message: String!
+}
+type CookieSuccess {
+  message: String
+}
 type Address {
   first: String!
   secound: String!
@@ -165,7 +171,7 @@ type Mutation {
     rating: Int!
     id: String!
   ): Restaurant!
-  AddCostumer(name: String, table: Int, email: String): Costumer
+  AddCostumer(name: String!, table: Int!, email: String!): Costumer
   FetchRestaurantsByQuery(searchQuery: String): [Restaurant]
   AddMenu(category: [MenuParentInput!], restaurant: String!): Menu
   AddMenuItem(
@@ -188,7 +194,7 @@ type Mutation {
   AddOrder(productId: ID!): [AdminOrder]!
   RemoveOrder(productId: ID!): [AdminOrder]!
   GetOrderItem(productId: ID!, restaurant: String!): OrderItem
-  CostumerExpiry: String
+  CostumerExpiry: CookieSuccess
   DeleteCostumer(costumerId: String): Costumer
   EmitSocket: OrderItem
   PostMessage(user: String!, content: String!): ID!

@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import type { ReactElement, ReactNode } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect } from "react";
 import Router from "next/router";
@@ -7,10 +8,18 @@ import styles from "../styles/share.module.scss";
 import lottieJson from "../public/spinner2.json";
 import { AuthProvider } from "hooks/Context.hook";
 import Head from "next/head";
+import type { NextPage } from "next";
+import type { AppProps } from "next/app";
 
-const Noop = ({ children }) => <>{children}</>;
+const Noop = ({ children }: { children: any }) => <>{children}</>;
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  Layout?: (page: ReactElement) => ReactNode;
+};
 
-function MyApp({ Component, pageProps }) {
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [loading, setLoading] = React.useState(false);
 
   const Layout = Component.Layout || Noop;

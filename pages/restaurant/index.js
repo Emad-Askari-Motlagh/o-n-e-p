@@ -17,7 +17,6 @@ const Home = ({ ALL_RESTAURANTS, user }) => {
       e.preventDefault();
       //Filter the restaurants when user begin to search
       const query = e.target.value || "";
-
       setSearchQuery(query);
       const result =
         Array.isArray(ALL_RESTAURANTS) &&
@@ -34,13 +33,14 @@ const Home = ({ ALL_RESTAURANTS, user }) => {
 
   return (
     <>
+      `{" "}
       <Search_form
         placeHolder={"Vilken restaurang letar du efter?"}
         label={"Hitta din restaurang"}
         onChange={searchOverRestaurants}>
         <AiOutlineFork color="white" />
       </Search_form>
-
+      `
       <Home_screen
         ALL_RESTAURANTS={searchQeury ? restaurants : ALL_RESTAURANTS}
       />
