@@ -1,3 +1,7 @@
+import {
+  AddOrderMutationVariables,
+  ResolversParentTypes,
+} from "./../../generated/graphql";
 import Order from "@/server/mongoSchema/orderschema";
 import { ApolloError, ForbiddenError } from "apollo-server";
 import mongoose from "mongoose";
@@ -5,22 +9,26 @@ import { createPubSub } from "@graphql-yoga/node";
 import { GraphQLError } from "graphql";
 
 const pubsub = createPubSub();
-async function fetchOrders(query) {
+async function fetchOrders(query: object) {
   return await Order.find(query).populate("product").populate("costumer");
 }
 
 let i = 0;
 let clients = [];
 let facts = [];
-const subscribers = [];
+const subscribers: void[] = [];
 
-const onMessagesUpdates = (fn) => subscribers.push(fn);
-const messages = [];
+const onMessagesUpdates = (fn: any) => subscribers.push(fn);
+const messages: {
+  id: number;
+  user: string;
+  content: string;
+}[] = [];
 
 const orderResolvers = {
   Query: {
     messages: () => messages,
-    async OrderItems(_, __, { costumerId, user }) {
+    async OrderItems(_: any, __: any, { costumerId }: { costumerId: string }) {
       if (!costumerId) {
         return null;
       }
@@ -30,7 +38,11 @@ const orderResolvers = {
       const output = res.map((result) => result.orderQuantity > 0 && res);
       return output;
     },
-    async Orders(_, { restaurant }, { costumerId }) {
+    async Orders(
+      __: any,
+      { restaurant }: { restaurant: string },
+      { costumerId }: { costumerId: string }
+    ) {
       // if (!userId) {
       //   throw new ForbiddenError("User is not loged in");
       // }
@@ -40,7 +52,7 @@ const orderResolvers = {
       }
 
       try {
-        const id = mongoose.Types.ObjectId(costumerId);
+        const id = new mongoose.Types.ObjectId(costumerId);
 
         const orders = await fetchOrders({ costumer: id, restaurant });
         return orders;
@@ -48,7 +60,7 @@ const orderResolvers = {
         throw new GraphQLError("Error on getting orders");
       }
     },
-    async AdminOrders(_, __) {
+    async AdminOrders() {
       try {
         const AdminOrders = await fetchOrders({});
 
@@ -57,12 +69,16 @@ const orderResolvers = {
         throw new GraphQLError("Error on getting orders");
       }
     },
-    async CostumerOrders(_, { restaurant }, { costumerId }) {
+    async CostumerOrders(
+      __: any,
+      { restaurant }: { restaurant: string },
+      { costumerId }: { costumerId: string }
+    ) {
       if (!costumerId || !restaurant) {
         return null;
       }
       try {
-        const id = mongoose.Types.ObjectId(costumerId);
+        const id = new mongoose.Types.ObjectId(costumerId);
         const orders = await fetchOrders({ costumer: id, restaurant });
 
         return orders;
@@ -123,7 +139,10 @@ const orderResolvers = {
   // },
 
   Mutation: {
-    PostMessage: (parent, { user, content }) => {
+    PostMessage: (
+      _: any,
+      { user, content }: { user: string; content: string }
+    ) => {
       const id = messages.length;
       messages.push({
         id,
@@ -134,14 +153,18 @@ const orderResolvers = {
       return id;
     },
 
-    async AddOrder(parent, { productId }, { costumerId, req }) {
+    async AddOrder(
+      _: any,
+      { productId }: AddOrderMutationVariables,
+      { costumerId }: { costumerId: string }
+    ) {
       try {
         if (!costumerId) {
           return null;
           // throw new ForbiddenError("User is not loged in");
         }
 
-        const id = mongoose.Types.ObjectId(costumerId);
+        const id = new mongoose.Types.ObjectId(costumerId);
         const oldOrder = await Order.findOne({ product: productId });
         if (oldOrder) {
           const newOrder = await Order.findOneAndUpdate(
@@ -177,8 +200,8 @@ const orderResolvers = {
         if (!costumerId) {
           return null;
         }
-        const id = mongoose.Types.ObjectId(costumerId);
-        const proId = mongoose.Types.ObjectId(productId);
+        const id = new mongoose.Types.ObjectId(costumerId);
+        const proId = new mongoose.Types.ObjectId(productId);
 
         const newOrder = await Order.findOneAndUpdate(
           {
@@ -201,22 +224,26 @@ const orderResolvers = {
         throw new ApolloError("There is not any Order", "400");
       }
     },
-    async GetOrderItem(parent, args, { costumerId }) {
+    async GetOrderItem(parent: ResolversParentTypes, args, { costumerId }) {
       if (!costumerId) {
         return null;
       }
-      const id = mongoose.Types.ObjectId(args.productId);
+      const id = new mongoose.Types.ObjectId(args.productId);
       const res = await Order.findOne({ product: id });
 
       return res;
     },
 
-    async GetCostumerOrders(_, { restaurant }, { costumerId }) {
+    async GetCostumerOrders(
+      _: any,
+      { restaurant }: { restaurant: string },
+      { costumerId }: { costumerId: string }
+    ) {
       if (!costumerId || !restaurant) {
         return null;
       }
       try {
-        const id = mongoose.Types.ObjectId(costumerId);
+        const id = new mongoose.Types.ObjectId(costumerId);
         const orders = await Order.find({ costumer: id, restaurant })
           .populate("product")
           .populate("costumer");

@@ -157,7 +157,6 @@ type Mutation {
   SignIn(email: String!, password: String!): Token!
   SignInWithGoogle(email: String!, password: String!): Token!
   UpdateUser(id: String!, email: String!): User!
-  UpdatePassword(id: String!, password: String!): User!
   AddAddress(address: String!): User!
   AddRestaurant(
     name: String!
@@ -204,4 +203,5 @@ type Mutation {
     category: String!
     input: MenuItemInput
   ): MenuItem!
+  UpdatePassword(email: String!, password: String!): User
 }

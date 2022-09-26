@@ -145,7 +145,7 @@ export type Mutation = {
   SignOut?: Maybe<Scalars['String']>;
   SignOutCostumer?: Maybe<Scalars['String']>;
   UpdateMenuItems: MenuItem;
-  UpdatePassword: User;
+  UpdatePassword?: Maybe<User>;
   UpdateUser: User;
 };
 
@@ -265,7 +265,7 @@ export type MutationUpdateMenuItemsArgs = {
 
 
 export type MutationUpdatePasswordArgs = {
-  id: Scalars['String'];
+  email: Scalars['String'];
   password: Scalars['String'];
 };
 
@@ -463,6 +463,14 @@ export type UpdateMenuItemsMutationVariables = Exact<{
 
 
 export type UpdateMenuItemsMutation = { __typename?: 'Mutation', UpdateMenuItems: { __typename?: 'MenuItem', name?: string | null } };
+
+export type UpdatePasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type UpdatePasswordMutation = { __typename?: 'Mutation', UpdatePassword?: { __typename?: 'User', email: string } | null };
 
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -940,6 +948,40 @@ export function useUpdateMenuItemsMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateMenuItemsMutationHookResult = ReturnType<typeof useUpdateMenuItemsMutation>;
 export type UpdateMenuItemsMutationResult = Apollo.MutationResult<UpdateMenuItemsMutation>;
 export type UpdateMenuItemsMutationOptions = Apollo.BaseMutationOptions<UpdateMenuItemsMutation, UpdateMenuItemsMutationVariables>;
+export const UpdatePasswordDocument = gql`
+    mutation UpdatePassword($email: String!, $password: String!) {
+  UpdatePassword(email: $email, password: $password) {
+    email
+  }
+}
+    `;
+export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
+
+/**
+ * __useUpdatePasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdatePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePasswordMutation, { data, loading, error }] = useUpdatePasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
+      }
+export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
+export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
+export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 export const RestaurantsDocument = gql`
     query Restaurants {
   Restaurants {
@@ -1623,7 +1665,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   SignOut?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   SignOutCostumer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   UpdateMenuItems?: Resolver<ResolversTypes['MenuItem'], ParentType, ContextType, RequireFields<MutationUpdateMenuItemsArgs, 'category' | 'restaurant'>>;
-  UpdatePassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'id' | 'password'>>;
+  UpdatePassword?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'email' | 'password'>>;
   UpdateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'email' | 'id'>>;
 };
 

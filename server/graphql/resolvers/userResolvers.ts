@@ -6,26 +6,39 @@ import storeJwt from "lib/storeJwt";
 import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
 
+import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
+import { ResolversParentTypes } from "@/server/generated/graphql";
+
 const userResolvers = {
   Query: {
     //Find the user by id
-    async CurrentUser(_, args, { userId }) {
+    async CurrentUser(
+      _: any,
+      parent: any,
+      { userId }: { userId: string | null }
+    ) {
       if (!userId) {
         return null;
       }
 
-      const id = await mongoose.Types.ObjectId(userId);
+      const id = await new mongoose.Types.ObjectId(userId);
 
       const user = await User.findById(id).populate("restaurant");
-
       return user;
     },
   },
   User: {
-    restaurant: (parent) => parent.restaurant,
+    restaurant: (parent: any) => parent.restaurant,
   },
   Mutation: {
-    async CreateUser(_, { email, password }, { res }) {
+    async CreateUser(
+      __: any,
+      {
+        email,
+        password,
+        username,
+      }: { email: string; password: string; username: string }
+    ) {
       try {
         const oldUser = await User.findOne({ email: email });
         //check if there is a user already
@@ -68,7 +81,11 @@ const userResolvers = {
       }
     },
 
-    async SignIn(_, { email, password }, { res }) {
+    async SignIn(
+      _: any,
+      { email, password }: { email: string; password: string },
+      { res }: { res: NextApiResponse }
+    ) {
       try {
         const lowerCaseEmail = email.toLowerCase();
         //check if there is any user with given email
@@ -107,7 +124,7 @@ const userResolvers = {
         await storeCookie({ token }, res, 60 * 60 * 60);
         //finally return the token
         return { token };
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
         throw new ApolloError(err?.message ? err.message : err);
       }
@@ -123,28 +140,38 @@ const userResolvers = {
     },
     async SignInWithGoogle() {},
 
-    async UpdateUser(parent, args, context) {
+    async UpdateUser(
+      __: any,
+      { username }: { username: string },
+      context: NextPageContext
+    ) {
       const doc = await (
         await User.findById(args.id)
       ).$set({
-        email: args.email,
+        username,
       });
       doc.save();
       if (!context.user) return {};
       return doc;
     },
 
-    async UpdatePassword(parent, args, context) {
-      const doc = await (
-        await User.findById(args.id)
-      ).$set({
-        email: args.email,
+    async UpdatePassword(
+      __: any,
+      { email, password }: { password: string; email: string }
+    ) {
+      //Hash the password
+      const hashedPass = await bcrypt.hash(password, 10);
+      //Create a new user in DB
+      if (!hashedPass) {
+        throw new ApolloError("Error when hashing the password");
+      }
+      const doc = await User.findOne({ email }).set({
+        password: hashedPass,
       });
       doc.save();
-      if (!context.user) return {};
       return doc;
     },
-    async AddAddress(parent, args, context) {
+    async AddAddress(__: any, args, context) {
       try {
         const doc = await User.findById(context.sub);
         await doc.$set({

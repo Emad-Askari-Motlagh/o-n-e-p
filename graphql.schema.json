@@ -1948,7 +1948,7 @@
             "description": null,
             "args": [
               {
-                "name": "id",
+                "name": "email",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -1981,13 +1981,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

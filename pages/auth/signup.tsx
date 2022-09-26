@@ -83,9 +83,8 @@ export default function Signup() {
       <form onSubmit={handleSubmit} onFocus={() => setError(null)}>
         <div className={styles.input_container} onFocus={() => setError(null)}>
           <Input
-            className={styles.logininputs}
             name="email"
-            placeholder="Email"
+            placeholder="Enter your Email"
             type="email"
             value={values.email}
             onChange={handleChange}
@@ -101,13 +100,9 @@ export default function Signup() {
         </div>
         <div className={styles.input_container}>
           <Input
-            className={styles.logininputs}
             name="username"
-            placeholder="Username"
-            autoCorrect="false"
-            autoComplete="false"
+            placeholder="Enter your Username"
             type="text"
-            value={values.username}
             onChange={handleChange}
             width={"80%"}
             label={"Username"}
@@ -120,11 +115,9 @@ export default function Signup() {
         </div>
         <div className={styles.input_container}>
           <Input
-            className={styles.logininputs}
             name="password"
-            placeholder="Password"
+            placeholder="Enter your Password"
             type="password"
-            value={values.password}
             onChange={handleChange}
             width={"80%"}
             label={"Password"}
@@ -137,14 +130,12 @@ export default function Signup() {
         </div>
         <div className={styles.input_container}>
           <Input
-            className={styles.logininputs}
             name="password"
-            placeholder="Password"
+            placeholder="Repeat your Password"
             type="password"
-            value={values.password}
             onChange={handleChange}
             width={"80%"}
-            label={"Password"}
+            label={"Re Password"}
           />
           {touched.password && errors.password ? (
             <Alert style={{ padding: 0 }} variant="danger" className="error">
@@ -152,7 +143,7 @@ export default function Signup() {
             </Alert>
           ) : null}
         </div>
-        <Button width={"60%"} className={styles.submitForm} type="submit">
+        <Button width={"60%"} type="submit">
           Submit
         </Button>
         {loginSuccesed && (
@@ -162,20 +153,17 @@ export default function Signup() {
 
       <div className={styles.forgotPassword_div}>
         <div> Do you already have an account?</div>
-        <Link href="/auth/signup">
+        <Link href="/auth/login">
           <a className={styles.account_recomendation}>Go to login</a>
         </Link>
       </div>
       <div className={styles.login_alternatives_container}>
         <span className={styles.auth_buttons}>
-          <FcGoogle style={{ marginRight: "4%" }} icon="google"></FcGoogle>
+          <FcGoogle style={{ marginRight: "4%" }}></FcGoogle>
           <span>Signup With Google</span>
         </span>
         <span className={styles.auth_buttons}>
-          <ImFacebook2
-            style={{ marginRight: "4%" }}
-            color="blue"
-            icon="apple"></ImFacebook2>
+          <ImFacebook2 style={{ marginRight: "4%" }} color="blue"></ImFacebook2>
           <span>Signup With Facebook</span>
         </span>
       </div>

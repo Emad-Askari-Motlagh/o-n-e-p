@@ -20,20 +20,64 @@ import { FiKey } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useProvideAuth } from "hooks/Context.hook";
 import { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
+import { useMutation } from "@apollo/client";
+import { UPDATE_PASSWORD } from "@/server/graphql/querys/mutations.graphql";
+import {
+  UpdatePasswordMutation,
+  UpdatePasswordMutationVariables,
+} from "@/server/generated/graphql";
+import JWT, { JwtPayload } from "jsonwebtoken";
 
 export default function ResetPass() {
   const [email, setEmail] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
+  const [updatePassword] = useMutation<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >(UPDATE_PASSWORD);
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
   }
-  function formSubmit(event: FormEvent<HTMLFormElement>) {
+  const token = router.query.token as string | undefined;
+  useEffect(() => {
+    if (token) {
+      const decoded = JWT.verify(token, "MY_SECRET");
+      if (decoded) {
+        const { email, password } = decoded as {
+          email: string;
+          password: string;
+        };
+        if (email && password) {
+          updatePassword({
+            variables: {
+              email,
+              password,
+            },
+          });
+        }
+      }
+    }
+  }, [token]);
+
+  async function formSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const formElements = form.elements as typeof form.elements & {
-      usernameInput: { value: string };
-    };
+    try {
+      const form = event.currentTarget;
+      const formElements = form.elements as typeof form.elements & {
+        email: { value: string };
+      };
+      const email = formElements.email.value;
+
+      console.log(email);
+      const res = await axios.post("/api/contact/sendGrid", {
+        email,
+        from: "Alliancecodes",
+      });
+    } catch (err: any) {
+      console.log("Error connecting to backend", err?.message);
+    }
   }
 
   return (
