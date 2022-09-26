@@ -15,11 +15,11 @@ export default function Items() {
   const Router = useRouter();
 
   const {
-    orderData,
     orders,
     removeOrder,
     addOrder,
     loading: orderLoading,
+    AdminOrders,
   } = useOrders();
 
   const { data, loading, error } = useQuery(GET_MENU_ITEM_BY_CATREGORY, {

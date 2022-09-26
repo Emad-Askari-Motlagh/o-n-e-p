@@ -1,4 +1,22 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import {
+  CreateUserMutation,
+  CreateUserMutationVariables,
+  SignInMutation,
+  SignInMutationVariables,
+  SignInWithGoogleMutation,
+  SignInWithGoogleMutationVariables,
+  SignOutMutation,
+  SignOutMutationVariables,
+} from "server/generated/graphql";
+import React, {
+  useState,
+  useContext,
+  createContext,
+  useEffect,
+  Context,
+  ReactNode,
+  useCallback,
+} from "react";
 import { ApolloProvider, useQuery } from "@apollo/client";
 import { initializeApollo, useApollo } from "lib/apollo/apollo-client";
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
@@ -10,40 +28,29 @@ import {
 } from "@/server/graphql/querys/mutations.graphql";
 import { useRouter } from "next/router";
 
-const authContext = createContext();
-
-export function AuthProvider({ children }, props) {
-  const auth = useProvideAuth();
-
-  return (
-    <authContext.Provider value={auth}>
-      <ApolloProvider client={auth.client}>{children}</ApolloProvider>
-    </authContext.Provider>
-  );
-}
+const authContext = createContext({});
 
 export const useAuth = () => {
   return useContext(authContext);
 };
 
-export function useProvideAuth(props) {
-  const [authToken, setAuthToken] = useState(null);
+export function useProvideAuth() {
+  const [authToken, setAuthToken] = useState<string | undefined>();
   const [user, setUser] = useState();
   const authHdaders = getAuthHeaders();
   const Router = useRouter();
-  const client = useApollo();
-  const [signInError, setSignInError] = useState();
+  const client = useApollo({});
+  const [signInError, setSignInError] = useState<string | undefined>();
 
   const getCurrentUser = async () => {
     try {
       const result = await client.query({
         query: GET_CURRENT_USER,
       });
-
       if (result.data) {
         setUser(result.data.CurrentUser);
       }
-    } catch (err) {
+    } catch (err: any) {
       setSignInError(err);
       console.log(err);
     }
@@ -51,7 +58,7 @@ export function useProvideAuth(props) {
 
   useEffect(() => {
     getCurrentUser();
-  }, []);
+  }, [client]);
 
   const isSignedIn = () => {
     if (authToken) {
@@ -68,9 +75,18 @@ export function useProvideAuth(props) {
     };
   }
 
-  const signIn = async ({ email, password }) => {
+  const signIn = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     try {
-      const result = await client.mutate({
+      const result = await client.mutate<
+        SignInMutation,
+        SignInMutationVariables
+      >({
         mutation: LOGIN,
         variables: { email, password },
         refetchQueries: [{ query: GET_CURRENT_USER }, "CurrentUser"],
@@ -88,42 +104,60 @@ export function useProvideAuth(props) {
     }
   };
 
-  const SigninWithGoogle = async ({ email, password }) => {
-    const result = await client.mutate({
+  const SigninWithGoogle = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    const result = await client.mutate<
+      SignInWithGoogleMutation,
+      SignInWithGoogleMutationVariables
+    >({
       mutation: LOGIN_WITH_GOOGLE,
       variables: { email, password },
     });
-    setAuthToken(result.data.SignIn.token);
-    if (!result.errors) {
-      return result.data.SignIn.token;
+    setAuthToken(result.data?.SignInWithGoogle.token);
+    if (!result.errors && result.data) {
+      return result.data.SignInWithGoogle.token;
     } else {
       setSignInError("Error on signin happend");
     }
   };
 
-  const signUp = async ({ email, password, username }) => {
+  const signUp = async ({
+    email,
+    password,
+    username,
+  }: {
+    email: string;
+    password: string;
+    username: string;
+  }) => {
     try {
-      const result = await client.mutate({
+      const result = await client.mutate<
+        CreateUserMutation,
+        CreateUserMutationVariables
+      >({
         mutation: CREATE_USER,
         variables: { email, password, username },
       });
 
-      setAuthToken(result.data.SignIn);
-
-      Router.push("/");
-      return result.data.CreateUser;
-    } catch (err) {
+      Router.push("/auth/login");
+      return result.data?.CreateUser;
+    } catch (err: any) {
       console.log(err?.message ?? err);
     }
   };
 
   const signOut = async () => {
     try {
-      await client.mutate({
+      await client.mutate<SignOutMutation, SignOutMutationVariables>({
         mutation: SIGN_OUT,
       });
       Router.reload();
-    } catch (err) {
+    } catch (err: any) {
       console.log(err?.message ?? err);
     }
   };

@@ -1,0 +1,32 @@
+@import "/styles/breakPoints.scss";
+
+.container {
+    margin-top: 5%;
+    min-height: calc(100vh - 300px);
+    h2 {
+        color: whitesmoke;
+        text-align: center;
+        margin: 2%;
+        font-size: 18px;
+        @include md {
+            font-size: initial;
+        }
+    }
+    h3 {
+        font-size: 12px;
+        color: rgb(224, 208, 208);
+        text-align: center;
+    }
+    .icon_parent {
+        color: whitesmoke;
+        margin: auto;
+        text-align: center;
+        .icon {
+            background-color: tomato;
+            border-radius: 50%;
+            text-align: center;
+            margin: auto;
+            font-size: 44px;
+        }
+    }
+}

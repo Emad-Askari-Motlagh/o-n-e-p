@@ -14,9 +14,7 @@ import PrimaryLayout from "components/Primary-layout";
 import Button from "components/Button";
 import Input from "components/Input";
 import { FaFacebook } from "react-icons/fa";
-
 import LoginSucceed from "components/Succeed-Message";
-import { useRouter } from "node_modules/next/router";
 
 export default function Login() {
   const [error, setError] = useState<string | null>();
@@ -76,7 +74,6 @@ export default function Login() {
             name="email"
             placeholder="email"
             type="text"
-            value={values.email}
             onChange={handleChange}
             label="Email"
           />
@@ -91,7 +88,6 @@ export default function Login() {
             name="password"
             placeholder="password"
             type="password"
-            value={values.password}
             onChange={handleChange}
             label="Password"
           />
@@ -114,7 +110,7 @@ export default function Login() {
       </form>
 
       <div className={styles.forgotPassword_div}>
-        <Link href="/auth/resetpass">
+        <Link href="/auth/resetPass">
           <a>Do you forgot your password?</a>
         </Link>
       </div>

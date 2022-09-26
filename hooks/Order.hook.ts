@@ -4,7 +4,11 @@ import {
   OrdersQueryHookResult,
   AddOrderMutationOptions,
   AddOrderMutation,
+  OrdersQueryVariables,
+  OrdersQueryResult,
+  AdminOrdersQueryVariables,
   AdminOrdersQueryResult,
+  OrdersQuery,
 } from "./../server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
@@ -19,16 +23,18 @@ import {
 import { MutationFunctionOptions, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
-interface MyTypes {
-  orders: [] | OrdersQueryHookResult;
+type MyTypes = {
+  orders: OrdersQueryHookResult;
   loading: boolean;
-  AdminOrders: AdminOrdersQueryResult | [];
+  AdminOrders: AdminOrdersQueryResult;
   getAdminOrders_loading: boolean;
-}
+  addOrder?: undefined;
+  removeOrder?: undefined;
+};
 
-const useOrders = (): MyTypes => {
+const useOrders = () => {
   const router = useRouter();
-  const restaurant = router.query.name;
+  const restaurant = (router.query as { name: string }).name;
   const {
     data,
     error,
@@ -54,14 +60,17 @@ const useOrders = (): MyTypes => {
     ],
   });
 
-  const { data: fetchedOrders, loading } = useQuery(GET_ORDERS_CONSTANTLY, {
+  const { data: fetchedOrders, loading } = useQuery<
+    OrdersQuery,
+    OrdersQueryVariables
+  >(GET_ORDERS_CONSTANTLY, {
     variables: { restaurant },
   });
 
   return {
-    orders: fetchedOrders?.Orders,
+    orders: fetchedOrders,
     loading,
-    AdminOrders: data?.AdminOrders,
+    AdminOrders: data,
     getAdminOrders_loading,
     addOrder,
     removeOrder,

@@ -6,7 +6,7 @@ import Router from "next/router";
 import Lottie from "react-lottie-player";
 import styles from "../styles/share.module.scss";
 import lottieJson from "../public/spinner2.json";
-import { AuthProvider } from "hooks/Context.hook";
+import { AuthProvider } from "../providers/authProvider";
 import Head from "next/head";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";

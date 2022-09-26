@@ -1,9 +1,9 @@
 import { useApollo } from "@/lib/apollo/apollo-client";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { addRestaurant } from "@/server/graphql/querys/mutations";
+import { ADD_ORDER } from "server/graphql/querys/mutations.graphql";
 
-const useRestaurant = (props) => {
+const useRestaurant = () => {
   const client = useApollo({});
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ const useRestaurant = (props) => {
 
   const setRestaurant = async () => {
     const result = await client?.mutate({
-      mutation: AddRestaurant,
+      mutation: ADD_ORDER,
     });
     console.log(result);
     return result;
@@ -21,7 +21,6 @@ const useRestaurant = (props) => {
     data,
     loading,
     error,
-    products,
     setRestaurant,
   };
 };

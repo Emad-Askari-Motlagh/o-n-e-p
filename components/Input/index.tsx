@@ -1,8 +1,25 @@
-import React, { useState } from "react";
-import { FaSearchengin } from "react-icons/fa";
+import React, {
+  ChangeEventHandler,
+  CSSProperties,
+  EventHandler,
+  useState,
+  ChangeEvent,
+} from "react";
 import styles from "./input.module.scss";
-import { AiOutlineSearch } from "react-icons/ai";
 
+type InputProps = {
+  required?: boolean;
+  error?: string;
+  noMargin?: boolean;
+  placeholder?: string;
+  label?: string;
+  name?: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  labelStyle?: CSSProperties;
+  type?: string;
+  width?: number | string;
+  defaultValue?: string;
+};
 export default function Input(
   {
     required = true,
@@ -10,15 +27,14 @@ export default function Input(
     noMargin,
     placeholder,
     label,
-    children,
     name,
     onChange,
     labelStyle,
     type,
     width,
     defaultValue,
-  },
-  props
+  }: InputProps,
+  props: React.ComponentPropsWithRef<"input">
 ) {
   return (
     <div className={styles.container} style={{ width }}>

@@ -5,18 +5,20 @@ type ButtonProps = {
   width?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: string;
 };
 
 export default function Button({
   width,
   style,
   children,
+  type,
   onClick,
 }: ButtonProps) {
   return (
     <div className={styles.container} style={{ width: width }}>
-      <button onClick={onClick} className={styles.btn_grad}>
+      <button type={type} onClick={onClick} className={styles.btn_grad}>
         {children}
       </button>
     </div>

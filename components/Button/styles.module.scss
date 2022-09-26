@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   margin: auto;
+
   .btn_grad {
     background-image: linear-gradient(to right, #16222a 0%, #3a6073 51%, #16222a 100%);
     margin: 10px;
@@ -20,7 +21,7 @@
     display: block;
     border-width: 0;
     font-family: "Paytone One", sans-serif;
-
+    word-spacing: 0.1em;
     &:hover {
       background-position: right center; /* change the direction of the change here */
       color: #fff;

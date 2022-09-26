@@ -19,7 +19,7 @@ export default function useSocketIo(path) {
     });
 
     // update chat on new message dispatched
-    socket.on("message", (message) => {
+    socket.on("message", (message: []) => {
       setData([...message]);
     });
 
