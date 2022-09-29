@@ -5,22 +5,15 @@ import { storeCookie, deleteCookie } from "lib/storeCookie";
 import storeJwt from "lib/storeJwt";
 import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
-
 import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
-import { ResolversParentTypes } from "@/server/generated/graphql";
 
 const userResolvers = {
   Query: {
     //Find the user by id
-    async CurrentUser(
-      _: any,
-      parent: any,
-      { userId }: { userId: string | null }
-    ) {
+    async CurrentUser(_: any, __: any, { userId }: { userId: string | null }) {
       if (!userId) {
         return null;
       }
-
       const id = await new mongoose.Types.ObjectId(userId);
 
       const user = await User.findById(id).populate("restaurant");
@@ -37,7 +30,8 @@ const userResolvers = {
         email,
         password,
         username,
-      }: { email: string; password: string; username: string }
+      }: { email: string; password: string; username: string },
+      { res }: { res: NextApiResponse }
     ) {
       try {
         const oldUser = await User.findOne({ email: email });
@@ -54,7 +48,7 @@ const userResolvers = {
           throw new ApolloError("Error when hashing the password");
         }
         const user = await new User({
-          email: email,
+          email: email.toLowerCase(),
           password: hashedPass,
           name: username,
         });
@@ -65,18 +59,18 @@ const userResolvers = {
         });
 
         // //Set a token to cookie
-        await storeCookie("token", token, res);
+        await storeCookie({ token: token }, res, 30000);
 
         user.token = token;
         //Save it
-        const res = await user.save();
+        const doc = await user.save();
 
         //Get the user that we have created and return it
         return {
-          id: res.id,
-          ...res._doc,
+          id: doc.id,
+          ...doc._doc,
         };
-      } catch (err) {
+      } catch (err: any) {
         throw new ApolloError(err?.message ? err.message : err);
       }
     },
@@ -130,7 +124,7 @@ const userResolvers = {
       }
     },
     //signOut user
-    async SignOut(_, args, { res }) {
+    async SignOut(_: any, __: any, { res }: { res: NextApiResponse }) {
       try {
         await deleteCookie("token", res);
         return "User signed Out";
@@ -142,11 +136,11 @@ const userResolvers = {
 
     async UpdateUser(
       __: any,
-      { username }: { username: string },
-      context: NextPageContext
+      { username, id }: { username: string; id: string },
+      context: NextPageContext & { user: object }
     ) {
       const doc = await (
-        await User.findById(args.id)
+        await User.findById(id)
       ).$set({
         username,
       });
@@ -157,25 +151,47 @@ const userResolvers = {
 
     async UpdatePassword(
       __: any,
-      { email, password }: { password: string; email: string }
+      { token, newPass }: { token: string; newPass: string }
     ) {
+      if (!token || !newPass) {
+        return null;
+      }
+
       //Hash the password
-      const hashedPass = await bcrypt.hash(password, 10);
+      const decoded = JWT.verify(token, "MY_SECRET") as {
+        email: string;
+      };
+
+      if (!decoded) {
+        throw new ApolloError("Token is not valid");
+      }
+      const email = decoded.email.toLowerCase();
+      const user = await User.findOne({ email });
+      const hashedPass = await bcrypt.hash(newPass, 10);
+      console.log(user.token, token);
       //Create a new user in DB
+      // if (user.token !== token) {
+      //   throw new ApolloError("Token is expired");
+      // }
       if (!hashedPass) {
         throw new ApolloError("Error when hashing the password");
       }
-      const doc = await User.findOne({ email }).set({
-        password: hashedPass,
-      });
-      doc.save();
+      const doc = await User.findOneAndUpdate(
+        { email },
+        { password: hashedPass }
+      );
+
       return doc;
     },
-    async AddAddress(__: any, args, context) {
+    async AddAddress(
+      __: any,
+      { address }: { address: string },
+      context: NextPageContext & { sub: string }
+    ) {
       try {
         const doc = await User.findById(context.sub);
         await doc.$set({
-          myArray: [{ name: args.address }],
+          myArray: [{ name: address }],
         });
         await doc.save();
         return doc;

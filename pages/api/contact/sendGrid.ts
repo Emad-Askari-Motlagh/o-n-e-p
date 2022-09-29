@@ -1,18 +1,24 @@
+import storeJwt from "lib/storeJwt";
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 import sgMail from "@sendgrid/mail";
 import JWT from "jsonwebtoken";
+import sendMail from "@/lib/sendMail";
+import User from "@/server/mongoSchema/userSchema";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const api_key: string | undefined = process.env.SENDGRID_API_KEY;
   if (req.method === "POST") {
     try {
       const { email, sender }: { email: string; sender: string } = req.body;
-      var token = JWT.sign({ email }, "MY_SECRET");
-      //  Process a POST request
 
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+      //Create the json web token
+      // var token = storeJwt({ email });
+      const token = JWT.sign({ email }, "MY_SECRET");
+      //  Process a POST request
       const msg = {
         to: email, // Change to your recipient
         from: sender, // Change to your verified sender
@@ -22,13 +28,21 @@ export default async function handler(
           token,
         },
       };
-      await sgMail.send(msg);
 
-      console.log(token);
-      // console.log("Email sent");
+      //Send a mail to the user
+      await sendMail(msg);
+      //Replace the old token with new one
+      // const user = await User.findOneAndUpdate({ email }, { token });
+      // console.log(user);
+
       res.status(200).send("Email sent");
-    } catch (err: any) {
-      res.status(500).send(err.message || "Error from sendgrid server");
+    } catch (error: any) {
+      console.error(error);
+
+      if (error.response) {
+        console.error(error.response.body);
+      }
+      res.status(500).send(error.message || "Error from sendgrid server");
     }
   }
 }

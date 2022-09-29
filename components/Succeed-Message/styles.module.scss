@@ -12,11 +12,14 @@
   .icon {
     color: green;
     font-size: 33px;
+    text-align: center;
+    margin: auto;
   }
   .alert {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin: auto;
   }
 }

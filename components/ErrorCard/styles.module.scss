@@ -1,0 +1,15 @@
+@import "/styles/breakpoints";
+@import "/styles/fonts";
+
+.container {
+    background-color: tomato;
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    box-shadow: #00000026 1.95px 1.95px 2.6px;
+    border-radius: 5px;
+    span {
+        font-family: "Playfair Display", sans-serif;
+        color: black;
+    }
+}

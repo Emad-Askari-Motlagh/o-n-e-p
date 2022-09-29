@@ -13,7 +13,7 @@ import {
 import { useProvideAuth } from "hooks/Context.hook";
 import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import Sammary from "components/OrdersSammary";
-import type { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 
 type LayoutProps = {
   children: ReactNode;

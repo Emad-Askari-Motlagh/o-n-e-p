@@ -104,8 +104,8 @@ export const UPDATE_MENU_ITEMS = gql`
 `;
 
 export const UPDATE_PASSWORD = gql`
-  mutation UpdatePassword($email: String!, $password: String!) {
-    UpdatePassword(email: $email, password: $password) {
+  mutation UpdatePassword($token: String!, $newPass: String!) {
+    UpdatePassword(token: $token, newPass: $newPass) {
       email
     }
   }

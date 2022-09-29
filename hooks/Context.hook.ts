@@ -1,3 +1,4 @@
+import { CurrentUserQueryHookResult } from "./../server/generated/graphql";
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -7,6 +8,9 @@ import {
   SignInWithGoogleMutationVariables,
   SignOutMutation,
   SignOutMutationVariables,
+  CurrentUserQuery,
+  CurrentUserQueryVariables,
+  CurrentUserQueryResult,
 } from "server/generated/graphql";
 import React, {
   useState,
@@ -33,10 +37,15 @@ const authContext = createContext({});
 export const useAuth = () => {
   return useContext(authContext);
 };
-
+interface User {
+  email: string;
+  _id: string;
+  name: string;
+  restaurant: string;
+}
 export function useProvideAuth() {
   const [authToken, setAuthToken] = useState<string | undefined>();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<CurrentUserQuery>();
   const authHdaders = getAuthHeaders();
   const Router = useRouter();
   const client = useApollo({});
@@ -44,12 +53,14 @@ export function useProvideAuth() {
 
   const getCurrentUser = async () => {
     try {
-      const result = await client.query({
+      const result = await client.query<
+        CurrentUserQuery,
+        CurrentUserQueryVariables
+      >({
         query: GET_CURRENT_USER,
       });
-      if (result.data) {
-        setUser(result.data.CurrentUser);
-      }
+
+      setUser(result);
     } catch (err: any) {
       setSignInError(err);
       console.log(err);
@@ -167,7 +178,7 @@ export function useProvideAuth() {
     signIn,
     signOut,
     client,
-    user,
+    user: user?.data?.CurrentUser,
     signUp,
     getCurrentUser,
     SigninWithGoogle,

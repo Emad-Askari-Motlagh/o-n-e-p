@@ -40,7 +40,10 @@ export default function CostumerRegister({ onSubmit }) {
         />
 
         {touched.table && errors.table ? (
-          <Alert style={{ padding: 0 }} variant="danger" className="error">
+          <Alert
+            style={{ padding: "5px 20px" }}
+            variant="danger"
+            className="error">
             {errors.table}
           </Alert>
         ) : null}
@@ -53,7 +56,10 @@ export default function CostumerRegister({ onSubmit }) {
           width={"80%"}
         />
         {touched.name && errors.name ? (
-          <Alert style={{ padding: 0 }} variant="danger" className="error">
+          <Alert
+            style={{ padding: "5px 20px" }}
+            variant="danger"
+            className="error">
             {errors.name}
           </Alert>
         ) : null}
@@ -66,7 +72,10 @@ export default function CostumerRegister({ onSubmit }) {
           width={"80%"}
         />
         {touched.email && errors.email ? (
-          <Alert style={{ padding: 0 }} variant="danger" className="error">
+          <Alert
+            style={{ padding: "5px 20px" }}
+            variant="danger"
+            className="error">
             {errors.email}
           </Alert>
         ) : null}

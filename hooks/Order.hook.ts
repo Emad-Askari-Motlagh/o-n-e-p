@@ -68,7 +68,7 @@ const useOrders = () => {
   });
 
   return {
-    orders: fetchedOrders,
+    orders: fetchedOrders?.Orders || [],
     loading,
     AdminOrders: data,
     getAdminOrders_loading,

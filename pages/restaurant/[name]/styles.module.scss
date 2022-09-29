@@ -50,7 +50,7 @@ $BC_COLOR: #242424;
   background-blend-mode: multiply, screen;
   background-size: cover;
   padding-top: 20px;
-
+  min-height: 80vmin;
   label {
     text-align: center;
     color: whitesmoke;
@@ -74,6 +74,7 @@ $BC_COLOR: #242424;
     width: 100%;
     align-items: center;
     min-height: calc(100vmin - 50vmin);
+
     .item_parent {
       width: 40%;
     }

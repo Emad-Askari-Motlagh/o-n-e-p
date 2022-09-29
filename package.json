@@ -76,6 +76,7 @@
     "nprogress": "^0.2.0",
     "openssl": "^2.0.0",
     "path": "^0.12.7",
+    "pdfreader": "^2.0.0",
     "plaiceholder": "^2.3.0",
     "popmotion": "^9.3.1",
     "prop-types": "^15.7.2",

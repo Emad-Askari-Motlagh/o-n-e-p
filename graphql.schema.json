@@ -1948,7 +1948,7 @@
             "description": null,
             "args": [
               {
-                "name": "email",
+                "name": "newPass",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -1964,7 +1964,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "password",
+                "name": "token",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

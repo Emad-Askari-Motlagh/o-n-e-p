@@ -28,55 +28,73 @@ import {
   UpdatePasswordMutationVariables,
 } from "@/server/generated/graphql";
 import JWT, { JwtPayload } from "jsonwebtoken";
+import Error from "components/ErrorCard";
 
 export default function ResetPass() {
   const [email, setEmail] = useState<string>("");
+  const [newPass, setPassword] = useState<string>("");
+  const [WentThrough, setWentThrough] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [updatePassword] = useMutation<
     UpdatePasswordMutation,
     UpdatePasswordMutationVariables
-  >(UPDATE_PASSWORD);
-  function onChange(e: ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
-  }
+  >(UPDATE_PASSWORD, {
+    onError: (err) => {
+      console.log(err);
+    },
+  });
   const token = router.query.token as string | undefined;
-  useEffect(() => {
+  function onChange(e: ChangeEvent<HTMLInputElement>) {
     if (token) {
-      const decoded = JWT.verify(token, "MY_SECRET");
-      if (decoded) {
-        const { email, password } = decoded as {
-          email: string;
-          password: string;
-        };
-        if (email && password) {
-          updatePassword({
-            variables: {
-              email,
-              password,
-            },
-          });
-        }
-      }
+      setPassword(e.target.value);
+    } else {
+      setEmail(e.target.value);
     }
-  }, [token]);
+  }
 
   async function formSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      const form = event.currentTarget;
-      const formElements = form.elements as typeof form.elements & {
-        email: { value: string };
-      };
-      const email = formElements.email.value;
 
-      console.log(email);
-      const res = await axios.post("/api/contact/sendGrid", {
-        email,
-        from: "Alliancecodes",
-      });
+    const form = event.currentTarget;
+    const formElements = form.elements as typeof form.elements & {
+      email: { value: string };
+      password: { value: string };
+    };
+    try {
+      if (token) {
+        // const formElements = form.elements as typeof form.elements & {
+        //   password: { value: string };
+        // };
+
+        const pass = formElements.password.value;
+        updatePassword({
+          variables: { token, newPass: pass },
+          onError: (err) => {
+            setError(err.message);
+          },
+          onCompleted: () => {
+            setError("");
+            setWentThrough("Your password changed successfuly");
+            setTimeout(() => {
+              router.push("/auth/login");
+            }, 1000);
+          },
+        });
+      } else {
+        const email = formElements.email.value;
+        const res = await axios.post("/api/contact/sendGrid", {
+          email,
+          sender: "kontakt@Alliancecodes.se",
+        });
+        if (res.data) {
+          setWentThrough("Email sent, please check your emails");
+          formElements.email.value = "";
+        }
+      }
     } catch (err: any) {
-      console.log("Error connecting to backend", err?.message);
+      console.log(err?.message);
     }
   }
 
@@ -95,13 +113,25 @@ export default function ResetPass() {
         ref={formRef}
         onSubmit={formSubmit}
         style={{ display: "flex", flexDirection: "column" }}>
-        <Input
-          name="email"
-          placeholder="Enter your email"
-          type="text"
-          width={"80%"}
-          onChange={onChange}
-        />
+        {token ? (
+          <Input
+            name="password"
+            placeholder="Enter your new password"
+            type="password"
+            width={"80%"}
+            onChange={onChange}
+          />
+        ) : (
+          <Input
+            name="email"
+            placeholder="Enter your email"
+            type="text"
+            width={"80%"}
+            onChange={onChange}
+          />
+        )}
+        {error && <Error>Error</Error>}
+        {WentThrough && <Error>{WentThrough}</Error>}
         <Button width="50%" type="submit">
           Send the reset password link
         </Button>

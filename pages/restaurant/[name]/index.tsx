@@ -9,11 +9,18 @@ import Costumer from "server/mongoSchema/costumerSchema";
 import RestaurantSubItem from "components/RestaurantSubItem";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import ErrorCard from "components/ErrorCard";
+import SucceedMessage from "@/components/Succeed-Message";
 
 export default function Restaurant({ COSTUMER }) {
+  const [error, setError] = useState<string | null>("");
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [AddCostumer] = useMutation(ADD_COSTUMER, {
     onError: (err) => {
-      console.log(err);
+      setError("Sorry there is a problem, contact the personal");
+    },
+    onCompleted: () => {
+      setIsRegistered(true);
     },
   });
 
@@ -31,7 +38,7 @@ export default function Restaurant({ COSTUMER }) {
       });
 
       Router.reload();
-    } catch (err) {
+    } catch (err: any) {
       console.log(err.message);
     }
   }
@@ -48,6 +55,8 @@ export default function Restaurant({ COSTUMER }) {
       {!COSTUMER ? (
         <>
           <RegisterForm onSubmit={submitForm} />
+          {error && <ErrorCard>{error}</ErrorCard>}
+          {isRegistered && <SucceedMessage value="Done"></SucceedMessage>}
         </>
       ) : (
         <div className={styles.items_parent}>

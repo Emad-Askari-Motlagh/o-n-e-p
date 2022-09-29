@@ -203,5 +203,5 @@ type Mutation {
     category: String!
     input: MenuItemInput
   ): MenuItem!
-  UpdatePassword(email: String!, password: String!): User
+  UpdatePassword(token: String!, newPass: String!): User
 }

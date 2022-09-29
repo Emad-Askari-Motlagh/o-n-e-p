@@ -1,5 +1,9 @@
-import mongoose, { SchemaTypes } from "mongoose";
+import mongoose, { SchemaTypes, Schema } from "mongoose";
 import restaurangSchema from "./restaurangSchema";
+
+export interface I_UserDocument extends mongoose.Document {
+  restaurant: Schema.Types.ObjectId | typeof restaurangSchema;
+}
 
 var userSchema = new mongoose.Schema(
   {
@@ -10,7 +14,7 @@ var userSchema = new mongoose.Schema(
     id: String,
     restaurant: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "Restaurang",
+      ref: restaurangSchema ?? "Restaurang",
     },
   },
   { timestamps: true }
@@ -30,4 +34,5 @@ var userSchema = new mongoose.Schema(
 //     });
 //   });
 // });
-export default mongoose.models.User || mongoose.model("User", userSchema);
+export default mongoose.models.User ||
+  mongoose.model<I_UserDocument>("User", userSchema);

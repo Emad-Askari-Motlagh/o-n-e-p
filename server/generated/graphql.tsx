@@ -265,8 +265,8 @@ export type MutationUpdateMenuItemsArgs = {
 
 
 export type MutationUpdatePasswordArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  newPass: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -465,8 +465,8 @@ export type UpdateMenuItemsMutationVariables = Exact<{
 export type UpdateMenuItemsMutation = { __typename?: 'Mutation', UpdateMenuItems: { __typename?: 'MenuItem', name?: string | null } };
 
 export type UpdatePasswordMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+  token: Scalars['String'];
+  newPass: Scalars['String'];
 }>;
 
 
@@ -949,8 +949,8 @@ export type UpdateMenuItemsMutationHookResult = ReturnType<typeof useUpdateMenuI
 export type UpdateMenuItemsMutationResult = Apollo.MutationResult<UpdateMenuItemsMutation>;
 export type UpdateMenuItemsMutationOptions = Apollo.BaseMutationOptions<UpdateMenuItemsMutation, UpdateMenuItemsMutationVariables>;
 export const UpdatePasswordDocument = gql`
-    mutation UpdatePassword($email: String!, $password: String!) {
-  UpdatePassword(email: $email, password: $password) {
+    mutation UpdatePassword($token: String!, $newPass: String!) {
+  UpdatePassword(token: $token, newPass: $newPass) {
     email
   }
 }
@@ -970,8 +970,8 @@ export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMut
  * @example
  * const [updatePasswordMutation, { data, loading, error }] = useUpdatePasswordMutation({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
+ *      token: // value for 'token'
+ *      newPass: // value for 'newPass'
  *   },
  * });
  */
@@ -1665,7 +1665,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   SignOut?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   SignOutCostumer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   UpdateMenuItems?: Resolver<ResolversTypes['MenuItem'], ParentType, ContextType, RequireFields<MutationUpdateMenuItemsArgs, 'category' | 'restaurant'>>;
-  UpdatePassword?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'email' | 'password'>>;
+  UpdatePassword?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'newPass' | 'token'>>;
   UpdateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'email' | 'id'>>;
 };
 

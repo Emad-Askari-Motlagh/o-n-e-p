@@ -132,11 +132,11 @@ const orderResolvers = {
   //     },
   //   },
   // },
-  // OrderItem: {
-  //   product: (parent) => parent.product,
-  //   costumer: (parent) => parent.costumer,
-  //   restaurant: (parent) => parent.restaurant,
-  // },
+  OrderItem: {
+    product: (parent) => parent.product,
+    costumer: (parent) => parent.costumer,
+    restaurant: (parent) => parent.restaurant,
+  },
 
   Mutation: {
     PostMessage: (
