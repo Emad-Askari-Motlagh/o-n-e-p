@@ -22,10 +22,12 @@ export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
       data.reduce((acc, item) => acc + item.orderQuantity, 0)) ||
     0;
 
-  const sum = data.reduce((acc, item) => {
-    const quantity = item.orderQuantity;
-    return (acc + item.product.price) * quantity;
-  }, 0);
+  const sum =
+    Array.isArray(data) &&
+    data.reduce((acc, item) => {
+      const quantity = item.orderQuantity;
+      return (acc + item.product.price) * quantity;
+    }, 0);
 
   return (
     <div className={style.checkout_perent}>
