@@ -6,7 +6,7 @@ import Modal from "../Modal";
 import style from "./style.module.scss";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-// import CheckoutForm from "components/Stripe";
+import CheckoutForm from "components/Stripe";
 
 export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
   const [stripePromise, setStripePromise] = useState(() =>
@@ -18,7 +18,9 @@ export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
     return new Set(array).size !== array.length;
   }
   const cartLength =
-    (data && data.reduce((acc, item) => acc + item.orderQuantity, 0)) || 0;
+    (Array.isArray(data) &&
+      data.reduce((acc, item) => acc + item.orderQuantity, 0)) ||
+    0;
 
   const sum = data.reduce((acc, item) => {
     const quantity = item.orderQuantity;
@@ -32,9 +34,9 @@ export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
           setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
           label="Payment">
-          {/* <Elements stripe={stripePromise}>
+          <Elements stripe={stripePromise}>
             <CheckoutForm orders={data} sum={sum} quantity={cartLength} />
-          </Elements> */}
+          </Elements>
         </Modal>
       )}
 

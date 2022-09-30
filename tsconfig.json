@@ -59,5 +59,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/_app.js", "components/Search-form/index.js"  ]
+, "pages/_app.js", "components/Search-form/index.js", "pages/restaurant/[name]/menu/[item]/index.js"  ]
 }

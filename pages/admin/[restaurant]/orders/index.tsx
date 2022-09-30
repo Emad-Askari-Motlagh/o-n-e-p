@@ -16,6 +16,7 @@ import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
 import Search from "components/Search-form";
 import searchByQuery from "lib/searchByQuery";
+import ErrorCard from "components/ErrorCard";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -23,6 +24,7 @@ const AdminsOrders = () => {
   const [searchResult, setSearchResult] = useState<string>();
   const { AdminOrders } = useOrders();
   const date = new Date();
+
   async function connect_to_socket1() {
     try {
       const evtSource = new EventSource(
@@ -74,63 +76,56 @@ const AdminsOrders = () => {
           onChange={searchOverRestaurants}></Search>
       </div>
 
-      {Array.isArray(orders) && (
-        <table>
-          <tbody>
-            <tr style={{ backgroundColor: "tomato" }}>
-              <TableHeader>Table</TableHeader>
-              <TableHeader>Name</TableHeader>
-              <TableHeader>quantity</TableHeader>
-              <TableHeader>price</TableHeader>
-              <TableHeader>Description</TableHeader>
-              <TableHeader>View</TableHeader>
-            </tr>
-            {Array.isArray(orders) &&
-              orders?.map(
-                (
-                  fact: {
-                    costumer: { table: number };
-                    product: { name: string; price: number };
-                    orderQuantity: number;
-                  },
-                  i
-                ) => (
-                  <tr key={i}>
-                    <TableData>{fact?.costumer?.table}</TableData>
-                    <TableData>
-                      {captalizeFirstLetter(fact?.product?.name)}
-                    </TableData>
-                    <TableData
-                      color={fact?.orderQuantity <= 1 ? "white" : "tomato"}>
-                      {fact?.orderQuantity}
-                    </TableData>
-                    <TableData>{fact?.product?.price}</TableData>
-                    <TableData>
-                      <BiTrash />
-                    </TableData>
-                    <TableData>
-                      <FiEye />
-                    </TableData>
-                  </tr>
-                )
-              )}
-          </tbody>
-        </table>
-      )}
+      <table>
+        <tbody>
+          <tr style={{ backgroundColor: "tomato" }}>
+            <TableHeader>Table</TableHeader>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>quantity</TableHeader>
+            <TableHeader>price</TableHeader>
+            <TableHeader>Description</TableHeader>
+            <TableHeader>View</TableHeader>
+          </tr>
+          {Array.isArray(orders) &&
+            orders.map((fact, i) => {
+              return (
+                <tr key={i}>
+                  {" "}
+                  <TableData>{fact?.costumer?.table}</TableData>
+                  <TableData>
+                    {captalizeFirstLetter(fact?.product?.name as string)}
+                  </TableData>
+                  <TableData
+                    color={
+                      (fact?.orderQuantity as number) <= 1 ? "white" : "tomato"
+                    }>
+                    {fact?.orderQuantity}
+                  </TableData>
+                  <TableData>{fact?.product?.price}</TableData>
+                  <TableData>
+                    <BiTrash />
+                  </TableData>
+                  <TableData>
+                    <FiEye />
+                  </TableData>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+
       <div>
-        {true && (
-          <Modal
-            setIsModalOpen={setShowAlert}
-            isModalOpen={showAlert}
-            button_label="Let`s see the orders">
-            <div>
-              <span style={{ color: "wheat" }}>New order</span>
-              <audio autoPlay>
-                <source src="/alert2.mp3" type="audio/mpeg" />
-              </audio>
-            </div>
-          </Modal>
-        )}
+        <Modal
+          setIsModalOpen={setShowAlert}
+          isModalOpen={showAlert}
+          button_label="Let`s see the orders">
+          <div>
+            <span style={{ color: "wheat" }}>New order</span>
+            <audio autoPlay>
+              <source src="/alert2.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+        </Modal>
       </div>
     </div>
   );

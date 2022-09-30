@@ -7,6 +7,10 @@ import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys.graphql";
 import dbInit from "lib/dbInit";
 import Search_form from "components/Search-form";
 import { AiOutlineFork } from "react-icons/ai";
+import {
+  RestaurantsQuery,
+  RestaurantsQueryVariables,
+} from "@/server/generated/graphql";
 
 const Home = ({ ALL_RESTAURANTS, user }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -56,14 +60,17 @@ export async function getServerSideProps({ req }) {
 
     // //Init Apollo client
     const apolloClient = await initializeApollo();
-    const res = await apolloClient.query({
+    const res = await apolloClient.query<
+      RestaurantsQuery,
+      RestaurantsQueryVariables
+    >({
       query: FETCH_ALL_RESTAURANTS,
     });
 
     //Get the cookie from the req
     return {
       props: {
-        ALL_RESTAURANTS: res.data?.Restaurants ?? [],
+        ALL_RESTAURANTS: res.data?.Restaurants,
       },
     };
   } catch (err) {

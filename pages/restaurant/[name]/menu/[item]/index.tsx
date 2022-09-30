@@ -58,6 +58,7 @@ export default function Items() {
         className={styles.header}>
         {Router.query?.item}
       </motion.label>
+
       <div className={styles.items_container}>
         {Array.isArray(data?.MenuItemByCategory) &&
           !loading &&

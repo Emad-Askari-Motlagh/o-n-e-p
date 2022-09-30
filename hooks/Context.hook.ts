@@ -1,4 +1,3 @@
-import { CurrentUserQueryHookResult } from "./../server/generated/graphql";
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -10,7 +9,10 @@ import {
   SignOutMutationVariables,
   CurrentUserQuery,
   CurrentUserQueryVariables,
-  CurrentUserQueryResult,
+  CostumerQuery,
+  CostumerQueryVariables,
+  SignOutCostumerMutation,
+  SignOutCostumerMutationVariables,
 } from "server/generated/graphql";
 import React, {
   useState,
@@ -21,15 +23,19 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { ApolloProvider, useQuery } from "@apollo/client";
+import { ApolloProvider, useMutation, useQuery } from "@apollo/client";
 import { initializeApollo, useApollo } from "lib/apollo/apollo-client";
-import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
+import {
+  GET_COSTUMER,
+  GET_CURRENT_USER,
+} from "server/graphql/querys/querys.graphql";
 import {
   LOGIN,
   SIGN_OUT,
   CREATE_USER,
   LOGIN_WITH_GOOGLE,
-} from "@/server/graphql/querys/mutations.graphql";
+  SIGN_OUT_COSTUMER,
+} from "server/graphql/querys/mutations.graphql";
 import { useRouter } from "next/router";
 
 const authContext = createContext({});
@@ -50,26 +56,14 @@ export function useProvideAuth() {
   const Router = useRouter();
   const client = useApollo({});
   const [signInError, setSignInError] = useState<string | undefined>();
-
-  const getCurrentUser = async () => {
-    try {
-      const result = await client.query<
-        CurrentUserQuery,
-        CurrentUserQueryVariables
-      >({
-        query: GET_CURRENT_USER,
-      });
-
-      setUser(result);
-    } catch (err: any) {
-      setSignInError(err);
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getCurrentUser();
-  }, [client]);
+  const costumerData = useQuery<CostumerQuery, CostumerQueryVariables>(
+    GET_COSTUMER
+  );
+  const [signOutCostumer] = useMutation<
+    SignOutCostumerMutation,
+    SignOutCostumerMutationVariables
+  >(SIGN_OUT_COSTUMER);
+  const userData = useQuery<CurrentUserQuery>(GET_CURRENT_USER);
 
   const isSignedIn = () => {
     if (authToken) {
@@ -177,11 +171,12 @@ export function useProvideAuth() {
     isSignedIn,
     signIn,
     signOut,
+    signOutCostumer,
     client,
-    user: user?.data?.CurrentUser,
+    user: userData,
     signUp,
-    getCurrentUser,
     SigninWithGoogle,
     token: authToken,
+    costumerData,
   };
 }

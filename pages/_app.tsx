@@ -10,6 +10,8 @@ import { AuthProvider } from "../providers/authProvider";
 import Head from "next/head";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "@/lib/apollo/apollo-client";
 
 const Noop = ({ children }: { children: any }) => <>{children}</>;
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -21,7 +23,7 @@ type AppPropsWithLayout = AppProps & {
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [loading, setLoading] = React.useState(false);
-
+  const client = useApollo({});
   const Layout = Component.Layout || Noop;
 
   React.useEffect(() => {
@@ -50,27 +52,31 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       {loading ? (
-        <AuthProvider>
-          <Layout>
-            <div className={styles.container}>
-              <div className={styles.spinner}>
-                <h3 className={styles.loading_h5}>Loading...</h3>
-                <Lottie
-                  loop
-                  animationData={lottieJson}
-                  play
-                  style={{ width: 200, height: 200, margin: "auto" }}
-                />
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <Layout>
+              <div className={styles.container}>
+                <div className={styles.spinner}>
+                  <h3 className={styles.loading_h5}>Loading...</h3>
+                  <Lottie
+                    loop
+                    animationData={lottieJson}
+                    play
+                    style={{ width: 200, height: 200, margin: "auto" }}
+                  />
+                </div>
               </div>
-            </div>
-          </Layout>
-        </AuthProvider>
+            </Layout>
+          </AuthProvider>
+        </ApolloProvider>
       ) : (
-        <AuthProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </AuthProvider>
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </AuthProvider>
+        </ApolloProvider>
       )}
     </>
   );

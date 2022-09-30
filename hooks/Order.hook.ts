@@ -9,7 +9,8 @@ import {
   AdminOrdersQueryVariables,
   AdminOrdersQueryResult,
   OrdersQuery,
-} from "./../server/generated/graphql";
+  AdminOrdersQuery,
+} from "server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
   ADD_ORDER,
@@ -19,7 +20,7 @@ import {
 import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
-} from "@/server/graphql/querys/querys.graphql";
+} from "server/graphql/querys/querys.graphql";
 import { MutationFunctionOptions, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -34,30 +35,27 @@ type MyTypes = {
 
 const useOrders = () => {
   const router = useRouter();
+
   const restaurant = (router.query as { name: string }).name;
   const {
     data,
     error,
     loading: getAdminOrders_loading,
-  } = useQuery(GET_ADMIN_ORDERS);
+  } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS);
+  const refetchTask = [
+    { query: GET_ADMIN_ORDERS },
+    "AdminOrders",
+    { query: GET_ORDERS_CONSTANTLY },
+    "Orders",
+  ];
   const [addOrder, { data: orderData, loading: ooo }] = useMutation(ADD_ORDER, {
     fetchPolicy: "network-only",
-    refetchQueries: [
-      { query: GET_ADMIN_ORDERS },
-      "AdminOrders",
-      { query: GET_ORDERS_CONSTANTLY },
-      "Orders",
-    ],
+    refetchQueries: refetchTask,
   });
 
   const [removeOrder] = useMutation(REMOVE_ORDER, {
     fetchPolicy: "network-only",
-    refetchQueries: [
-      { query: GET_ADMIN_ORDERS },
-      "AdminOrders",
-      { query: GET_ORDERS_CONSTANTLY },
-      "Orders",
-    ],
+    refetchQueries: refetchTask,
   });
 
   const { data: fetchedOrders, loading } = useQuery<
@@ -68,9 +66,9 @@ const useOrders = () => {
   });
 
   return {
-    orders: fetchedOrders?.Orders || [],
+    orders: fetchedOrders?.Orders,
     loading,
-    AdminOrders: data,
+    AdminOrders: data?.AdminOrders,
     getAdminOrders_loading,
     addOrder,
     removeOrder,

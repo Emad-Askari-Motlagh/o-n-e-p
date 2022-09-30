@@ -23,17 +23,13 @@ type LayoutProps = {
 export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
   const { isVisible, setIsVisible, ref } = useVisible(false);
   const router = useRouter();
-  const userData = useQuery(GET_CURRENT_USER);
-
-  const costumerData = useQuery(GET_COSTUMER);
-  const [signOutCostumer] = useMutation(SIGN_OUT_COSTUMER);
-  const { signOut, user } = useProvideAuth();
+  const { signOut, user, costumerData, signOutCostumer } = useProvideAuth();
 
   return (
     <div className={style.layout}>
       <header className={style.header}>
         <HeaderScreen
-          user={userData}
+          user={user}
           isVisible={isVisible}
           setIsVisible={setIsVisible}
           costumer={costumerData}
@@ -47,23 +43,25 @@ export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
         <Sidebar
           isCurrent={isCurrent}
           isVisible={isVisible}
-          restaurant={user ? user.restaurant.name : router.query?.name}
+          restaurant={
+            user ? user.data?.CurrentUser?.restaurant.name : router.query?.name
+          }
           setIsVisible={setIsVisible}
           elementRef={ref}
           signOut={user ? signOut : signOutCostumer}
-          isAdmin={user ? true : null}
-          costumerData={costumerData}
-          user={userData}
+          isAdmin={user ? true : false}
+          costumerData={costumerData.data}
+          user={user.data?.CurrentUser}
         />
       </aside>
 
       <main className={style.main}>
         <div style={{ width: "100%" }}>
-          <RouteBar user={userData?.data?.CurrentUser} />
+          <RouteBar user={user} />
         </div>
         {children}
-        {costumerData?.data?.Costumer && router.query.name && (
-          <Sammary costumerData={costumerData} />
+        {costumerData?.data && router.query.name && (
+          <Sammary costumerData={costumerData.data} />
         )}
       </main>
 

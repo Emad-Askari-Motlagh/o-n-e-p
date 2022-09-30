@@ -8,6 +8,16 @@ import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
+import { CostumerQuery } from "@/server/generated/graphql";
+
+interface SidebarProps {
+  signOut: () => void;
+  isCurrent?: boolean;
+  restaurant?: string;
+  isAdmin?: boolean;
+  costumerData: any;
+  user: { _id: number; restaurant: { name: string } };
+}
 function SideBar({
   signOut,
   isCurrent,
@@ -15,14 +25,15 @@ function SideBar({
   isAdmin,
   costumerData,
   user,
-}) {
+}: SidebarProps) {
   const Router = useRouter();
   async function SignOutByCostumer() {
     await signOut();
     Router.reload();
   }
-  const fetchedUser = user?.data?.CurrentUser;
-  const fetchedCostumer = costumerData.data?.Costumer;
+
+  const fetchedUser = user;
+  const fetchedCostumer = costumerData?.Costumer;
 
   return (
     <div className={styles.dropdown}>
@@ -44,7 +55,7 @@ function SideBar({
           rightIcon={null}
           endPoint="/auth/login"
           itemsLabel="Dashboard"></DropdownItem>
-        {isAdmin ? (
+        {user ? (
           <div>
             <DropdownItem
               leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
@@ -54,7 +65,7 @@ function SideBar({
             <DropdownItem
               leftIcon={<MdRestaurantMenu className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${fetchedUser.restaurant.name}/menu`}
+              endPoint={`/admin/${fetchedUser?.restaurant.name}/menu`}
               itemsLabel="Menu"></DropdownItem>
           </div>
         ) : (
@@ -73,7 +84,7 @@ function SideBar({
           rightIcon={null}
           endPoint="/om"
           itemsLabel="Om"></DropdownItem>
-        {costumerData.data?.Costumer && Router.query?.name && (
+        {costumerData?.Costumer && (
           <DropdownItem
             leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
             rightIcon={null}
@@ -81,13 +92,11 @@ function SideBar({
             itemsLabel="Reservations"></DropdownItem>
         )}
 
-        {
+        {(user || costumerData) && (
           <button className={styles.logout_button} onClick={SignOutByCostumer}>
-            {isAdmin
-              ? "Logout"
-              : costumerData.data?.Costumer && "Close the table"}
+            {isAdmin ? "Logout" : costumerData?.Costumer && "Close the table"}
           </button>
-        }
+        )}
       </div>
     </div>
   );
