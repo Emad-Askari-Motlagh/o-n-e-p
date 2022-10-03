@@ -1,3 +1,4 @@
+import { NextApiResponse } from "next";
 import Costumer from "server/mongoSchema/costumerSchema";
 import { ApolloError } from "apollo-server";
 import stream from "stream";
@@ -76,10 +77,10 @@ const costumerResolvers: Resolvers = {
       }
     },
     //signOut user
-    async SignOutCostumer(_: any, __: any, { res }) {
+    async SignOutCostumer(_: any, __: any, { res }: { res: NextApiResponse }) {
       try {
         //Delete the cookie, we can inject an array in multiple cookie cases
-        await deleteCookie(["costumerId", "expireTime"], res);
+        await deleteCookie("costumerId", res);
         return "done";
       } catch (err) {
         return "Error";

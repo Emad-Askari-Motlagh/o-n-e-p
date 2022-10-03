@@ -12,13 +12,33 @@ import { UPDATE_MENU_ITEMS } from "server/graphql/querys/mutations.graphql";
 import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
 import Search from "components/Search-form";
+import {
+  MenuItemByCategoryQuery,
+  MenuItemByCategoryQueryVariables,
+  UpdateMenuItemsMutation,
+  UpdateMenuItemsMutationVariables,
+} from "@/server/generated/graphql";
 
 export default function Category() {
   const { query } = useRouter();
 
-  const [save] = useMutation(UPDATE_MENU_ITEMS);
-  const { data, loading, error } = useQuery(GET_MENU_ITEM_BY_CATREGORY, {
-    variables: { category: query.category, restaurant: query.restaurant },
+  const [save] = useMutation<
+    UpdateMenuItemsMutation,
+    UpdateMenuItemsMutationVariables
+  >(UPDATE_MENU_ITEMS, {
+    refetchQueries: [
+      { query: GET_MENU_ITEM_BY_CATREGORY }, // DocumentNode object parsed with gql
+      "MenuItemByCategory", // Query name
+    ],
+  });
+  const { data, loading, error } = useQuery<
+    MenuItemByCategoryQuery,
+    MenuItemByCategoryQueryVariables
+  >(GET_MENU_ITEM_BY_CATREGORY, {
+    variables: {
+      category: query.category as string,
+      restaurant: query.restaurant as string,
+    },
   });
 
   return (
@@ -29,7 +49,7 @@ export default function Category() {
       <Search placeHolder={"Filter"} label={"Hitta bord"} onChange={""} />
       <div className={styles.items_parent}>
         {Array.isArray(data?.MenuItemByCategory) &&
-          data.MenuItemByCategory.map((res, i) => (
+          data?.MenuItemByCategory.map((res, i) => (
             <div key={i}>
               <MenuEditor
                 restaurant={query.restaurant}

@@ -18,6 +18,7 @@ var MenuItemSchema = new mongoose.Schema(
     description: String,
     quantity: mongoose.SchemaTypes.Number,
     availability: Boolean,
+    images: [],
   },
   { timestamps: true }
 );

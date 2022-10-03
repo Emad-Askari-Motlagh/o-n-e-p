@@ -21,8 +21,11 @@ import { useRouter } from "next/router";
 import { useProvideAuth } from "hooks/Context.hook";
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import { useMutation } from "@apollo/client";
-import { UPDATE_PASSWORD } from "@/server/graphql/querys/mutations.graphql";
+import { ApolloError, useMutation } from "@apollo/client";
+import {
+  SEND_RESET_PASSWORD,
+  UPDATE_PASSWORD,
+} from "@/server/graphql/querys/mutations.graphql";
 import {
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
@@ -37,6 +40,7 @@ export default function ResetPass() {
   const [error, setError] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
+
   const [updatePassword] = useMutation<
     UpdatePasswordMutation,
     UpdatePasswordMutationVariables
@@ -45,7 +49,13 @@ export default function ResetPass() {
       console.log(err);
     },
   });
+  const [sendResetPass] = useMutation(SEND_RESET_PASSWORD, {
+    onError: (err) => {
+      console.log(err);
+    },
+  });
   const token = router.query.token as string | undefined;
+  const uId = router.query.uId as number | undefined;
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     if (token) {
       setPassword(e.target.value);
@@ -70,8 +80,8 @@ export default function ResetPass() {
 
         const pass = formElements.password.value;
         updatePassword({
-          variables: { token, newPass: pass },
-          onError: (err) => {
+          variables: { token, newPass: pass, userId: uId },
+          onError: (err: ApolloError) => {
             setError(err.message);
           },
           onCompleted: () => {
@@ -84,14 +94,16 @@ export default function ResetPass() {
         });
       } else {
         const email = formElements.email.value;
-        const res = await axios.post("/api/contact/sendGrid", {
-          email,
-          sender: "kontakt@Alliancecodes.se",
+        sendResetPass({
+          variables: { email },
+          onCompleted: (res) => {
+            setWentThrough("Email sent, please check your emails");
+            formElements.email.value = "";
+          },
+          onError: (err: ApolloError) => {
+            console.log(err.cause, err.message, err.extraInfo, "erroorrr");
+          },
         });
-        if (res.data) {
-          setWentThrough("Email sent, please check your emails");
-          formElements.email.value = "";
-        }
       }
     } catch (err: any) {
       console.log(err?.message);
@@ -130,7 +142,7 @@ export default function ResetPass() {
             onChange={onChange}
           />
         )}
-        {error && <Error>Error</Error>}
+        {error && <Error>{error}</Error>}
         {WentThrough && <Error>{WentThrough}</Error>}
         <Button width="50%" type="submit">
           Send the reset password link

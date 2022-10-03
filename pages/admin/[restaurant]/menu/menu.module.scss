@@ -64,6 +64,7 @@
     .add_button {
       font-size: 44px;
       color: white;
+      cursor: pointer;
     }
   }
   .parent {
@@ -78,10 +79,12 @@
     border-radius: 10px;
     .category_parent {
       width: 30%;
-      min-width: 300px;
-
+      box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
       @include md {
         width: 70%;
+      }
+      .edit_button {
+        cursor: pointer;
       }
     }
     label {

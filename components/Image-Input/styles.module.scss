@@ -1,0 +1,12 @@
+.container {
+    input {
+        display: none;
+    }
+    label {
+        color: white;
+        cursor: pointer;
+        border: 2px solid lightcyan;
+        padding: 0.1em 0.5em;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    }
+}

@@ -8,17 +8,24 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useId } from "react";
 import styles from "./menu.module.scss";
+import {
+  MenuByCategoryQuery,
+  MenuByCategoryQueryVariables,
+} from "server/generated/graphql";
 
 export default function Menu() {
   const Router = useRouter();
-  const { data, error, loading } = useQuery(GET_MENU_CATREGORY, {
-    variables: { restaurant: Router.query?.name },
+  const { data, error, loading } = useQuery<
+    MenuByCategoryQuery,
+    MenuByCategoryQueryVariables
+  >(GET_MENU_CATREGORY, {
+    variables: { restaurant: Router.query?.name as string },
   });
-  const [id] = useId();
+
   return (
     <div className={styles.container}>
       {error ? (
-        <ErrorCard />
+        <ErrorCard>Couldn`t find any item</ErrorCard>
       ) : (
         <>
           <motion.label
@@ -27,18 +34,19 @@ export default function Menu() {
             {Router.query?.name}
           </motion.label>
           <div className={styles.items_parent}>
-            {(data ? data?.MenuByCategory : Array(6).fill(1)).map(
-              (res, index) => (
-                <div key={index} className={styles.item_parent}>
-                  <RestaurantSubItem
-                    label={res.itemName}
-                    endPoint={res.itemName}
-                    image={"/2.webp"}
-                    id={res?.id}
-                  />
-                </div>
-              )
-            )}
+            {(data?.MenuByCategory
+              ? data?.MenuByCategory
+              : Array(6).fill(1)
+            ).map((res, index) => (
+              <div key={index} className={styles.item_parent}>
+                <RestaurantSubItem
+                  key={index}
+                  label={res.itemName}
+                  endPoint={res.itemName}
+                  image={"/2.webp"}
+                />
+              </div>
+            ))}
           </div>
         </>
       )}

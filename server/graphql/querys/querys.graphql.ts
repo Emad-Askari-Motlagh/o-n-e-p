@@ -45,6 +45,8 @@ export const GET_MENU_CATREGORY = gql`
     MenuByCategory(restaurant: $restaurant) {
       itemName
       collectionType
+      _id
+      image
     }
   }
 `;
@@ -65,6 +67,7 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
         description
         price
         quantity
+        images
         _id
       }
       __typename

@@ -1,0 +1,25 @@
+.container {
+    width: 100%;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    label {
+        color: whitesmoke;
+        margin-bottom: 0.4em;
+    }
+    select {
+        // Additional resets for further consistency
+        background-color: wheat;
+        border: none;
+
+        height: 2em;
+        margin-right: auto;
+        width: 90%;
+        font-family: inherit;
+        font-size: inherit;
+        cursor: inherit;
+        line-height: inherit;
+    }
+}

@@ -4,8 +4,9 @@ import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
 import { ApolloError } from "apollo-server";
 import Order from "server/mongoSchema/orderschema";
-import { Types } from "mongoose";
+import mongoose, { SchemaType, Types } from "mongoose";
 import Menu from "server/mongoSchema/MenuItemSchema";
+import userSchema from "@/server/mongoSchema/userSchema";
 
 const menuResolvers = {
   CostumerMenuChoises: {
@@ -211,23 +212,51 @@ const menuResolvers = {
     async UpdateMenuItems(_, args, { userId }) {
       //Check if user is logedIn
       try {
-        console.log("here");
         //Filter by category and restaurant name
-        const { category, restaurant, input } = args;
+        const { productId, restaurant, category, input } = args;
+        const id = new Types.ObjectId(productId);
+
         //Find and update
-        console.log(input);
         const newMenu = await Menu.findOneAndUpdate(
-          { restaurant, category },
+          { restaurant, category, _id: id },
           {
             name: input.name,
             price: input.price,
             description: input.description,
+            images: input.images,
           }
         );
         return newMenu;
       } catch (err) {
         console.log(err);
       }
+    },
+    async UpdateCategory(
+      _: any,
+      {
+        category,
+        image,
+        categoryId,
+      }: { category: string; image: string; categoryId: string },
+      { userId }: { userId: string }
+    ) {
+      if (!userId) {
+        return null;
+      }
+      // const id = new mongoose.Types.ObjectId(categoryId);
+      const user = await userSchema.findById(userId).populate("restaurant");
+
+      //Find and update
+      const newMenu = await menuCategorySchema.findOneAndUpdate(
+        { restaurant: user.restaurant.name, _id: categoryId },
+        {
+          itemName: category,
+          image: image,
+        },
+        { upsert: true }
+      );
+
+      return newMenu;
     },
   },
 };

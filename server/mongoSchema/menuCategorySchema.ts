@@ -7,7 +7,7 @@ var MenutCategorySchema = new mongoose.Schema(
       type: String,
       ref: restaurangSchema,
     },
-
+    image: { type: String },
     itemName: String,
     collectionType: String,
   },

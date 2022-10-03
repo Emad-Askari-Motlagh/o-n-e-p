@@ -19,6 +19,7 @@ import {
 // const pubsub = new PubSub();
 const schema = makeExecutableSchema({
   typeDefs,
+
   resolvers,
 });
 

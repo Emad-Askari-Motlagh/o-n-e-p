@@ -59,6 +59,8 @@ export function useProvideAuth() {
   const costumerData = useQuery<CostumerQuery, CostumerQueryVariables>(
     GET_COSTUMER
   );
+
+  //Try to use hooks
   const [signOutCostumer] = useMutation<
     SignOutCostumerMutation,
     SignOutCostumerMutationVariables
@@ -80,6 +82,7 @@ export function useProvideAuth() {
     };
   }
 
+  //Use mutate functions
   const signIn = async ({
     email,
     password,

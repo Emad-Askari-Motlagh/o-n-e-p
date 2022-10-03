@@ -27,7 +27,7 @@ function SideBar({
   user,
 }: SidebarProps) {
   const Router = useRouter();
-  async function SignOutByCostumer() {
+  async function SignOut() {
     await signOut();
     Router.reload();
   }
@@ -93,8 +93,8 @@ function SideBar({
         )}
 
         {(user || costumerData) && (
-          <button className={styles.logout_button} onClick={SignOutByCostumer}>
-            {isAdmin ? "Logout" : costumerData?.Costumer && "Close the table"}
+          <button className={styles.logout_button} onClick={SignOut}>
+            {user ? "Logout" : costumerData && "Close the table"}
           </button>
         )}
       </div>

@@ -89,11 +89,13 @@ export const GET_COSTUMER_ORDERS = gql`
 
 export const UPDATE_MENU_ITEMS = gql`
   mutation UpdateMenuItems(
+    $productId: ID!
     $restaurant: String!
     $category: String!
     $input: MenuItemInput
   ) {
     UpdateMenuItems(
+      productId: $productId
       restaurant: $restaurant
       category: $category
       input: $input
@@ -102,11 +104,48 @@ export const UPDATE_MENU_ITEMS = gql`
     }
   }
 `;
-
+export const ADD_MENU_ITEM = gql`
+  mutation AddMenuItem(
+    $restaurant: String!
+    $category: String!
+    $input: MenuItemInput
+  ) {
+    AddMenuItem(restaurant: $restaurant, category: $category, input: $input) {
+      name
+    }
+  }
+`;
 export const UPDATE_PASSWORD = gql`
-  mutation UpdatePassword($token: String!, $newPass: String!) {
-    UpdatePassword(token: $token, newPass: $newPass) {
+  mutation UpdatePassword(
+    $token: String!
+    $newPass: String!
+    $userId: String!
+  ) {
+    UpdatePassword(token: $token, newPass: $newPass, userId: $userId) {
       email
+    }
+  }
+`;
+
+export const SEND_RESET_PASSWORD = gql`
+  mutation SendResetPassword($email: String!) {
+    SendResetPassword(email: $email) {
+      token
+    }
+  }
+`;
+export const UPDATE_CATEGORY = gql`
+  mutation UpdateCategory(
+    $category: String!
+    $image: String!
+    $categoryId: String!
+  ) {
+    UpdateCategory(
+      category: $category
+      image: $image
+      categoryId: $categoryId
+    ) {
+      itemName
     }
   }
 `;

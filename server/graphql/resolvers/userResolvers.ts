@@ -1,3 +1,4 @@
+import { sendMail } from "@/lib/sendMail";
 import User from "server/mongoSchema/userSchema";
 import bcrypt from "bcrypt";
 import { ApolloError } from "apollo-server";
@@ -6,6 +7,7 @@ import storeJwt from "lib/storeJwt";
 import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
 import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
+import sgMail from "@sendgrid/mail";
 
 const userResolvers = {
   Query: {
@@ -17,6 +19,7 @@ const userResolvers = {
       const id = await new mongoose.Types.ObjectId(userId);
 
       const user = await User.findById(id).populate("restaurant");
+
       return user;
     },
   },
@@ -151,11 +154,17 @@ const userResolvers = {
 
     async UpdatePassword(
       __: any,
-      { token, newPass }: { token: string; newPass: string }
+      {
+        token,
+        newPass,
+        userId,
+      }: { token: string; newPass: string; userId: string },
+      { req }: { req: NextApiRequest }
     ) {
-      if (!token || !newPass) {
+      if (!token || !newPass || !userId) {
         return null;
       }
+      const user = await User.findOne({ _id: userId, token });
 
       //Hash the password
       const decoded = JWT.verify(token, "MY_SECRET") as {
@@ -166,13 +175,10 @@ const userResolvers = {
         throw new ApolloError("Token is not valid");
       }
       const email = decoded.email.toLowerCase();
-      const user = await User.findOne({ email });
+
       const hashedPass = await bcrypt.hash(newPass, 10);
-      console.log(user.token, token);
       //Create a new user in DB
-      // if (user.token !== token) {
-      //   throw new ApolloError("Token is expired");
-      // }
+
       if (!hashedPass) {
         throw new ApolloError("Error when hashing the password");
       }
@@ -180,8 +186,44 @@ const userResolvers = {
         { email },
         { password: hashedPass }
       );
-
+      user.token = null;
+      user.save();
       return doc;
+    },
+
+    async SendResetPassword(_: any, { email }: { email: string }) {
+      try {
+        const doc = await User.findOne({ email: email.toLowerCase() });
+        if (!doc) {
+          return null;
+        }
+        const token = JWT.sign({ email }, "MY_SECRET");
+
+        const sender = "kontakt@alliancecodes.se";
+        //  Process a POST request
+        const msg = {
+          to: email, // Change to your recipient
+          from: sender, // Change to your verified sender
+          subject: "Costumer request",
+          templateId: "d-a67f652d66a84353abe2760295691596",
+          dynamicTemplateData: {
+            id: doc._id,
+            token,
+          },
+        };
+
+        //Send a mail to the user
+
+        const api_key: string | undefined = process.env.SENDGRID_API_KEY;
+
+        sgMail.setApiKey(api_key as string);
+        await sgMail.send(msg);
+        doc.token = token;
+        doc.save();
+        return doc;
+      } catch (err) {
+        throw new ApolloError("Couldnt save the address");
+      }
     },
     async AddAddress(
       __: any,

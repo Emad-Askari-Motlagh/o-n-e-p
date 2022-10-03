@@ -1,0 +1,69 @@
+@import "/styles/breakpoints";
+
+@mixin button_style {
+  background-color: tomato;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: rgba(68, 2, 250, 0.15) 1.95px 1.95px 2.6px;
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  align-items: center;
+  color: wheat;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  padding: 0 1%;
+  @include md {
+    width: 100%;
+    margin: 10px 4px;
+  }
+  .description {
+    label {
+      min-width: 30%;
+    }
+  }
+  .checkout_button {
+    color: red;
+  }
+  .orders_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+
+    width: 100%;
+  }
+
+  .quantity_parent {
+    display: flex;
+    width: 20%;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: rgba(202, 120, 120, 0.24) 0px 3px 8px;
+    padding: 0 10px;
+    .minus_button {
+      @include button_style;
+    }
+    .plus_button {
+      @include button_style;
+    }
+  }
+  span {
+    color: wheat;
+    @include md {
+      font-size: 10px;
+    }
+  }
+}

@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from "react";
-import Input from "components/Input";
 import { AiOutlineEdit } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import Inputs from "./Inputs";
 import Modal from "components/Modal";
+import MenuItem from "../MenuItem";
+import MenuUpdater from "../MenuUpdater";
 
 export default function MenuEditor({ data, submit, restaurant, category }) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className={styles.container}>
       <div className={styles.parent}>
-        <Image
-          alt={data?.name}
-          src={"/1.webp"}
-          width={"100px"}
-          height={"100px"}
-        />
-        <label>Name</label>
-        <span>{data.name}</span>
-        <span>{data.price}</span>
+        {data.images?.length &&
+          data.images.map((res, i) => {
+            return (
+              <div key={i} className={styles.image_container}>
+                <Image
+                  alt={res}
+                  src={res}
+                  className={styles.image}
+                  width={"100px"}
+                  height={"100px"}
+                />
+              </div>
+            );
+          })}
+        <MenuUpdater name={data.name} price={data.price} />
 
         <AiOutlineEdit
           className={styles.edit_button}

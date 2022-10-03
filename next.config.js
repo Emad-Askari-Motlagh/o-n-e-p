@@ -5,6 +5,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
   async redirects() {
     return [
       {
@@ -27,6 +28,7 @@ const nextConfig = {
 
     return config;
   },
+  images: { domains: ["res.cloudinary.com"] },
   env: {
     CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID,
     CONTENTFUL_ACCESS_TOKEN: process.env.CONTENTFUL_ACCESS_TOKEN,
@@ -37,6 +39,9 @@ const nextConfig = {
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     SECRET: process.env.SECRET,
     STRIPE_KEY: process.env.STRIPE_KEY,
+    CLOUDINARY_URL: process.env.CLOUDINARY_URL,
+    CLOUDINARY_API: process.env.CLOUDINARY_API,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   },
 };
 

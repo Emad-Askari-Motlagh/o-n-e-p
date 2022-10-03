@@ -48,7 +48,7 @@ export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
           }
           setIsVisible={setIsVisible}
           elementRef={ref}
-          signOut={user ? signOut : signOutCostumer}
+          signOut={user.data?.CurrentUser ? signOut : signOutCostumer}
           isAdmin={user ? true : false}
           costumerData={costumerData.data}
           user={user.data?.CurrentUser}

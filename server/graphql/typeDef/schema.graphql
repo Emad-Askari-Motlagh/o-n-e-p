@@ -3,6 +3,7 @@ union SaveCookie = CookieSuccess | CookieError
 type CookieError {
   message: String!
 }
+
 type CookieSuccess {
   message: String
 }
@@ -10,7 +11,11 @@ type Address {
   first: String!
   secound: String!
 }
-
+type UploadedFileResponse {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
 type Message {
   content: String
   id: ID
@@ -89,12 +94,15 @@ type MenuItem {
   restaurant: String
   category: String
   orderQuantity: Int
+  images: [String]
 }
 type MenuParent {
   itemName: String
   collectionType: String
   item: [MenuItem]
   restaurant: Restaurant
+  image: String
+  _id: ID
 }
 type AdminOrder {
   orderQuantity: Int
@@ -128,6 +136,7 @@ input MenuItemInput {
   price: Int
   description: String
   name: String
+  images: [String]
 }
 
 # type Subscription {
@@ -174,14 +183,9 @@ type Mutation {
   FetchRestaurantsByQuery(searchQuery: String): [Restaurant]
   AddMenu(category: [MenuParentInput!], restaurant: String!): Menu
   AddMenuItem(
-    category: String!
     restaurant: String!
-    name: String!
-    itemsType: String!
-    price: Int!
-    description: String!
-    quantity: Int!
-    availability: Boolean!
+    category: String!
+    input: MenuItemInput
   ): MenuItem
   SignOut: String
   SignOutCostumer: String
@@ -199,9 +203,16 @@ type Mutation {
   PostMessage(user: String!, content: String!): ID!
   GetCostumerOrders(restaurant: String!): [OrderItem]!
   UpdateMenuItems(
+    productId: ID!
     restaurant: String!
     category: String!
     input: MenuItemInput
   ): MenuItem!
-  UpdatePassword(token: String!, newPass: String!): User
+  UpdatePassword(token: String!, newPass: String!, userId: String!): User!
+  SendResetPassword(email: String!): User!
+  UpdateCategory(
+    category: String
+    image: String
+    categoryId: String!
+  ): MenuParent!
 }
