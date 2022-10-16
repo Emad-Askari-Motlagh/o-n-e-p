@@ -8,6 +8,7 @@ import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
+import { GoSettings } from "react-icons/go";
 
 interface SidebarProps {
   signOut: () => void;
@@ -48,14 +49,13 @@ function SideBar({
           </span>
         </div>
 
-        <DropdownItem
-          isCurrent={isCurrent}
-          leftIcon={<RiDashboard2Fill className={styles.nav_item_icons} />}
-          rightIcon={null}
-          endPoint="/auth/login"
-          itemsLabel="Dashboard"></DropdownItem>
         {user ? (
           <div>
+            <DropdownItem
+              leftIcon={<RiDashboard2Fill className={styles.nav_item_icons} />}
+              rightIcon={null}
+              endPoint={`/admin/${user.restaurant.name}`}
+              itemsLabel="Dashboard"></DropdownItem>
             <DropdownItem
               leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
               rightIcon={null}
@@ -66,6 +66,11 @@ function SideBar({
               rightIcon={null}
               endPoint={`/admin/${fetchedUser?.restaurant.name}/menu`}
               itemsLabel="Menu"></DropdownItem>
+            <DropdownItem
+              leftIcon={<GoSettings className={styles.nav_item_icons} />}
+              rightIcon={null}
+              endPoint={`/admin/${fetchedUser?.restaurant.name}/setting`}
+              itemsLabel="Setting"></DropdownItem>
           </div>
         ) : (
           fetchedCostumer &&
