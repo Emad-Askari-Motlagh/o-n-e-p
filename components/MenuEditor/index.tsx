@@ -6,8 +6,15 @@ import Inputs from "./Inputs";
 import Modal from "components/Modal";
 import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
+import SucceedMessage from "../Succeed-Message";
 
-export default function MenuEditor({ data, submit, restaurant, category }) {
+export default function MenuEditor({
+  data,
+  submit,
+  restaurant,
+  category,
+  isSaved,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

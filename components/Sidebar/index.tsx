@@ -8,7 +8,6 @@ import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
-import { CostumerQuery } from "@/server/generated/graphql";
 
 interface SidebarProps {
   signOut: () => void;

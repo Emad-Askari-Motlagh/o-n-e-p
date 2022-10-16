@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "components/Modal";
 import MenuUpdater from "components/MenuUpdater";
 import SucceedMessage from "../Succeed-Message";
@@ -11,14 +11,22 @@ import SelectInput from "../SelectInput";
 import { AiOutlineEdit } from "react-icons/ai";
 import MenuSubItem from "components/RestaurantSubItem";
 
+interface CategoryProps {
+  name: string;
+  image: string;
+  submit: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (e: ChangeEvent) => void;
+  onChangeImage: (e: ChangeEvent) => void;
+  submited: boolean;
+}
 export default function CategoryEditor({
   name,
   image,
   submit,
   onChange,
   onChangeImage,
-}) {
-  const [submited, setIsSubmited] = useState(false);
+  submited,
+}: CategoryProps) {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,11 +54,12 @@ export default function CategoryEditor({
                 height={100}
                 src={newName ? newName : image}></Image>
             )}
-            <input
-              type="file"
+            <FileInput
+              label="Upload Image"
               onChange={(e) => {
-                onChangeImage(e),
-                  setNewName(URL.createObjectURL(e.target.files[0]));
+                if (e.target.files)
+                  onChangeImage(e),
+                    setNewName(URL.createObjectURL(e.target.files[0]));
               }}
             />
           </div>

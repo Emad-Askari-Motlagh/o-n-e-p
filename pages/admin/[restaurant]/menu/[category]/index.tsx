@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryLayout from "components/Primary-layout";
 import MenuEditor from "components/MenuEditor";
 import {
@@ -21,7 +21,7 @@ import {
 
 export default function Category() {
   const { query } = useRouter();
-
+  const [documentSaved, setDocumentSaved] = useState(false);
   const [save] = useMutation<
     UpdateMenuItemsMutation,
     UpdateMenuItemsMutationVariables
@@ -30,6 +30,10 @@ export default function Category() {
       { query: GET_MENU_ITEM_BY_CATREGORY }, // DocumentNode object parsed with gql
       "MenuItemByCategory", // Query name
     ],
+
+    onCompleted: () => {
+      setDocumentSaved(true);
+    },
   });
   const { data, loading, error } = useQuery<
     MenuItemByCategoryQuery,
@@ -55,7 +59,8 @@ export default function Category() {
                 restaurant={query.restaurant}
                 category={query.category}
                 submit={save}
-                data={res}></MenuEditor>
+                data={res}
+                isSaved={documentSaved}></MenuEditor>
             </div>
           ))}
       </div>

@@ -11,18 +11,23 @@ import {
   MenuByCategoryQuery,
   MenuByCategoryQueryVariables,
 } from "@/server/generated/graphql";
+import { IoMdAddCircle } from "react-icons/io";
 
 export default function MenuItems() {
   const { user } = useProvideAuth();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const [submited, setIsSubmited] = useState(false);
   const { data: restaurantCategorysData, refetch } = useQuery<
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
     variables: {
       restaurant: user.data?.CurrentUser?.restaurant.name as string,
+    },
+    onCompleted: () => {
+      setIsSubmited(true);
     },
   });
 
@@ -33,7 +38,9 @@ export default function MenuItems() {
   return (
     <div className={styles.container}>
       <h2>Restaurant Menu</h2>
-      <div className={styles.add_button_parent}></div>
+      <div className={styles.add_button_parent}>
+        <IoMdAddCircle className={styles.add_button} />
+      </div>
 
       <div className={styles.parent}>
         {Array.isArray(restaurantCategorysData?.MenuByCategory) &&
@@ -41,7 +48,12 @@ export default function MenuItems() {
             <div key={res?._id} className={styles.category_parent}>
               <CategoryEditor
                 onChangeImage={uploadImage}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) =>
+                  setCategory(
+                    (e.target as typeof e.target & { value: any }).value
+                  )
+                }
+                submited={submited}
                 name={res?.collectionType}
                 image={ChosenImage ? ChosenImage : res?.image}
                 submit={(e: ChangeEvent<HTMLSelectElement>) => {

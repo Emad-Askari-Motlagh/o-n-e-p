@@ -4,17 +4,23 @@ import { useRouter } from "node_modules/next/router";
 import { useEffect, useState } from "react";
 import styles from "./sidebar.module.scss";
 
+interface Props {
+  endPoint: string;
+  itemsLabel: string;
+  leftIcon: any;
+  rightIcon: any;
+}
 export default function SideBarItem({
   endPoint,
   itemsLabel,
   leftIcon,
   rightIcon,
-}) {
+}: Props) {
   const [sideBarClassName, setSideBarClassName] = useState("sideBar1");
   const { asPath } = useRouter();
 
   useEffect(() => {
-    asPath === endPoint
+    decodeURI(asPath).includes(endPoint)
       ? setSideBarClassName("sideBar1WithIndicator")
       : setSideBarClassName("sideBar1");
   }, [asPath, endPoint]);

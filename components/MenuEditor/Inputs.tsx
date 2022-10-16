@@ -15,16 +15,27 @@ import useUpload from "hooks/upload.hook";
 import Image from "next/image";
 import SucceedMessage from "../Succeed-Message";
 
-export default function Inputs({ data, submit, restaurant, category }) {
-  const [name, setName] = useState();
-  const [price, setPrice] = useState();
-  const [description, setDescription] = useState();
+interface InputsTypes {
+  data: any;
+  submit: () => void;
+  restaurant: string;
+  category: string;
+}
+export default function Inputs({
+  data,
+  submit,
+  restaurant,
+  category,
+}: InputsTypes) {
+  const [name, setName] = useState<string>();
+  const [price, setPrice] = useState<number>();
+  const [description, setDescription] = useState<string>();
   const [file, setFile] = useState();
   const { uploadImage, setImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );
   const [submited, setIsSubmited] = useState(false);
-
+  const [newName, setNewName] = useState<File>();
   function Submit(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     submit({
@@ -53,8 +64,17 @@ export default function Inputs({ data, submit, restaurant, category }) {
           alt="ok"
           width={100}
           height={100}
-          src={data?.images[0]}></Image>
-        <FileInput label="Upload Image" onSubmit={uploadImage} />
+          src={
+            newName ? URL.createObjectURL(newName) : data?.images[0]
+          }></Image>
+        <FileInput
+          label="Upload Image"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files?.[0]) {
+              uploadImage(e), setNewName(e.target.files[0]);
+            }
+          }}
+        />
         <Input
           placeholder={data.name}
           label={"Name"}
@@ -76,19 +96,9 @@ export default function Inputs({ data, submit, restaurant, category }) {
           defaultValue={data.description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <label className={styles.image_selector} htmlFor="image-input">
-          Select a image
-        </label>
-        <input
-          style={{ display: "none" }}
-          type="file"
-          placeholder={"name"}
-          label={"Image"}
-          id="image-input"
-          onChange={(res) => setFile(res.target.value)}
-        />
+
         {submited && <SucceedMessage>Item Changed Successfuly</SucceedMessage>}
-        <Button onClick={Submit}>Save</Button>
+        <Button onClick={Submit as () => void}>Save</Button>
       </form>
     </div>
   );

@@ -7,7 +7,7 @@ export default function FileInput({
   onChange,
 }: {
   label: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => MouseEvent;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   const [items, setItems] = useState([]);
 
