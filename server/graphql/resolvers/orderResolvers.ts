@@ -7,15 +7,31 @@ import { ApolloError, ForbiddenError } from "apollo-server";
 import mongoose from "mongoose";
 import { createPubSub } from "@graphql-yoga/node";
 import { GraphQLError } from "graphql";
+// import { loadStripe } from "@stripe/stripe-js";
+
+// import Stripe from "stripe";
 
 const pubsub = createPubSub();
 async function fetchOrders(query: object) {
   return await Order.find(query).populate("product").populate("costumer");
 }
+// const stripe = new Stripe(process.env.STRIPE_KEY as string, {
+//   apiVersion: "2022-08-01",
+// });
 
 let i = 0;
 let clients = [];
 let facts = [];
+
+// const createCustomer = async () => {
+//   const params: Stripe.CustomerCreateParams = {
+//     description: "test customer",
+//   };
+
+//   const customer: Stripe.Customer = await stripe.customers.create(params);
+
+//   return customer.id;
+// };
 const subscribers: void[] = [];
 
 const onMessagesUpdates = (fn: any) => subscribers.push(fn);
@@ -86,6 +102,9 @@ const orderResolvers = {
         throw new ApolloError("Error during fetching the orders");
       }
     },
+    // async createCheckoutSession() {
+    //   await Stripe;
+    // },
   },
 
   // Subscription: {
@@ -253,6 +272,16 @@ const orderResolvers = {
         throw new ApolloError("Error during fetching the orders");
       }
     },
+    // async Pay(
+    //   _: any,
+    //   { restaurant, price }: { restaurant: string; price: number },
+    //   { costumerId }: { costumerId: string }
+    // ) {
+    //   try {
+    //     const id = await createCustomer();
+    //     return id;
+    //   } catch (err: any) {}
+    // },
   },
 };
 export default orderResolvers;

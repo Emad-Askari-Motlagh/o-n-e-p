@@ -106,7 +106,7 @@
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.1",
     "stream": "^0.0.2",
-    "stripe": "^8.137.0",
+    "stripe": "^10.14.0",
     "styled-components": "^5.3.5",
     "styled-jsx": "^5.0.2",
     "subscriptions-transport-ws": "^0.11.0",

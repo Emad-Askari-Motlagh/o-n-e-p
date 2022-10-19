@@ -1,5 +1,11 @@
 import Head from "next/head";
-import React, { Suspense, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  Suspense,
+  useEffect,
+  useState,
+} from "react";
 import Home_screen from "screens/Home.Screen";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import PrimaryLayout from "components/Primary-layout";
@@ -11,12 +17,16 @@ import {
   RestaurantsQuery,
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
+import { NextApiRequest } from "next";
 
-const Home = ({ ALL_RESTAURANTS, user }) => {
+interface HomeProps {
+  ALL_RESTAURANTS: string[];
+}
+const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
   const [restaurants, setRestaurants] = useState([]);
-  const [searchQeury, setSearchQuery] = useState();
+  const [searchQeury, setSearchQuery] = useState<string>();
 
-  function searchOverRestaurants(e) {
+  function searchOverRestaurants(e: ChangeEvent<HTMLInputElement>) {
     try {
       e.preventDefault();
       //Filter the restaurants when user begin to search
@@ -24,7 +34,7 @@ const Home = ({ ALL_RESTAURANTS, user }) => {
       setSearchQuery(query);
       const result =
         Array.isArray(ALL_RESTAURANTS) &&
-        ALL_RESTAURANTS.filter((res) => {
+        ALL_RESTAURANTS.filter((res: {}) => {
           if (res?.name.toLowerCase().includes(query)) {
             return res;
           }
@@ -37,14 +47,13 @@ const Home = ({ ALL_RESTAURANTS, user }) => {
 
   return (
     <>
-      `{" "}
       <Search_form
         placeHolder={"Vilken restaurang letar du efter?"}
         label={"Hitta din restaurang"}
         onChange={searchOverRestaurants}>
         <AiOutlineFork color="white" />
       </Search_form>
-      `
+
       <Home_screen
         ALL_RESTAURANTS={searchQeury ? restaurants : ALL_RESTAURANTS}
       />
@@ -52,7 +61,7 @@ const Home = ({ ALL_RESTAURANTS, user }) => {
   );
 };
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     //Init mongoDb
 

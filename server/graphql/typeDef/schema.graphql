@@ -215,4 +215,5 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
+  # Pay(restaurant: String, price: Int): ID
 }

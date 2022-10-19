@@ -145,7 +145,15 @@ export const UPDATE_CATEGORY = gql`
       image: $image
       categoryId: $categoryId
     ) {
-      itemName
+      itemName§
     }
   }
 `;
+
+// export const PAY_STRIPE = gql`
+//   mutation Pay($restaurant: String, $price: Int) {
+//     Pay(restaurant: $restaurant, proce: $price) {
+//       id
+//     }
+//   }
+// `;

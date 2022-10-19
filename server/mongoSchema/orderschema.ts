@@ -25,6 +25,15 @@ var OrderSchema = new mongoose.Schema(
     orderQuantity: {
       type: mongoose.SchemaTypes.Number,
     },
+    date: {
+      type: Date,
+      // `Date.now()` returns the current unix timestamp as a number
+      default: Date.now
+    },
+    isPaid: {
+      type: Boolean,
+      default:false
+    }
   },
   { timestamps: true }
 );
