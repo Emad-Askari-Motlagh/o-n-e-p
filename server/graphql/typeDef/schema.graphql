@@ -1,5 +1,8 @@
 union CostumerMenuChoises = OrderItem | MenuItem
 union SaveCookie = CookieSuccess | CookieError
+
+scalar Date
+
 type CookieError {
   message: String!
 }
@@ -30,7 +33,14 @@ type OrderItem {
   restaurant: String
   _id: ID
 }
-
+type PayedItem {
+  costumer: Costumer
+  product: MenuItem
+  restaurant: String
+  date: String
+  _id: ID
+  createdAt: Date
+}
 type MenuSubItem {
   _id: MenuItem
 }
@@ -126,6 +136,20 @@ type Menu {
   category: [MenuParent]
   _id: ID
 }
+type CostumerAddress {
+  title: String
+  city: String
+  region: String
+  postNumber: Int
+  address: String
+}
+input CostumerAddressInput {
+  title: String
+  city: String
+  region: String
+  postNumber: Int
+  address: String
+}
 input MenuParentInput {
   id: Int!
   itemName: String!
@@ -159,6 +183,8 @@ type Query {
   Orders(restaurant: String!): [OrderItem]!
   CostumerOrders(restaurant: String!): [OrderItem]!
   AdminOrders: [AdminOrder]!
+  Address: CostumerAddress
+  PayedOrders(restaurant: String!): [PayedItem]!
 }
 
 type Mutation {
@@ -215,5 +241,6 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  # Pay(restaurant: String, price: Int): ID
+  Pay(restaurant: String, products: [String]): [PayedItem]!
+  AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
 }

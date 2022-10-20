@@ -21,6 +21,22 @@ const costumerResolvers: Resolvers = {
         throw new ApolloError("Couldn`t find any costumer");
       }
     },
+    async Address(_: any, __: any, { costumerId }: { costumerId: string }) {
+      if (!costumerId) {
+        return null;
+      }
+
+      try {
+        const id = new Types.ObjectId(costumerId);
+        const costumer = await Costumer.findById(id);
+        if (!costumer?.address) {
+          return null;
+        }
+        return costumer?.address;
+      } catch (e) {
+        console.log("Error getting address");
+      }
+    },
   },
   Mutation: {
     async AddCostumer(_: any, { name, table, email }, { res }) {
@@ -92,6 +108,24 @@ const costumerResolvers: Resolvers = {
         return { message: "Cookie stored" };
       } catch (err) {
         return { message: "Cookie not stored" };
+      }
+    },
+    async AddCostumerAddress(_, { address }, { costumerId, res }) {
+      if (!costumerId) {
+        return null;
+      }
+
+      try {
+        const id = new Types.ObjectId(costumerId);
+        const costumer = await Costumer.findOneAndUpdate({ _id: id, address });
+        const fetchedAddress = costumer?.address;
+        if (fetchedAddress) {
+          return fetchedAddress;
+        } else {
+          return null;
+        }
+      } catch (e) {
+        console.log("Could`nt save address");
       }
     },
   },

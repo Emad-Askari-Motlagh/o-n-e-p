@@ -7,8 +7,15 @@ import style from "./style.module.scss";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "components/Stripe";
+import Addresses from "screens/adressScreen";
 
-export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
+export default function Payment({
+  isModalOpen,
+  setIsModalOpen,
+  orders: data,
+  address,
+  pay,
+}) {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(process.env.STRIPE_KEY)
   );
@@ -36,9 +43,17 @@ export default function Payment({ isModalOpen, setIsModalOpen, orders: data }) {
           setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
           label="Payment">
-          <Elements stripe={stripePromise}>
-            <CheckoutForm orders={data} sum={sum} quantity={cartLength} />
-          </Elements>
+          <div style={{ color: "white" }}>
+            <Addresses mydata={address} />
+            <Elements stripe={stripePromise}>
+              <CheckoutForm
+                orders={data}
+                sum={sum}
+                quantity={cartLength}
+                pay={pay}
+              />
+            </Elements>
+          </div>
         </Modal>
       )}
 

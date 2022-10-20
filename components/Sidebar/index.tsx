@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./sidebar.module.scss";
-import { BiBookAdd, BiCode } from "react-icons/bi";
+import { BiBasket, BiBookAdd, BiCode } from "react-icons/bi";
 import { IoIosArrowDropright, IoLogoBitcoin } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
 import { RiContactsLine, RiDashboard2Fill, RiUser2Fill } from "react-icons/ri";
@@ -45,7 +45,9 @@ function SideBar({
             <BiCode size={24} className={styles.user_icon} />
           )}
           <span className={styles.restaurant_name}>
-            {restaurant ? restaurant : "Alliance Codes AB"}
+            {restaurant || Router.query?.name
+              ? restaurant || Router.query?.name
+              : "Alliance Codes AB"}
           </span>
         </div>
 
@@ -75,19 +77,21 @@ function SideBar({
         ) : (
           fetchedCostumer &&
           Router.query.name && (
-            <DropdownItem
-              leftIcon={<FcAbout className={styles.nav_item_icons} />}
-              rightIcon={null}
-              endPoint={`/restaurant/${Router.query.name}/checkout/22`}
-              itemsLabel="Orders"></DropdownItem>
+            <>
+              <DropdownItem
+                leftIcon={<BiBasket className={styles.nav_item_icons} />}
+                rightIcon={null}
+                endPoint={`/restaurant/${Router.query.name}/checkout/22`}
+                itemsLabel="Orders"></DropdownItem>
+              <DropdownItem
+                leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
+                rightIcon={null}
+                endPoint={`/restaurant/${Router.query.name}/orderHistory/${costumerData?.Costumer?._id}`}
+                itemsLabel="Orders History"></DropdownItem>
+            </>
           )
         )}
 
-        <DropdownItem
-          leftIcon={<BiBookAdd className={styles.nav_item_icons} />}
-          rightIcon={null}
-          endPoint="/om"
-          itemsLabel="Om"></DropdownItem>
         {costumerData?.Costumer && (
           <DropdownItem
             leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
@@ -95,7 +99,11 @@ function SideBar({
             endPoint={`/restaurant/${Router.query.name}/reservation`}
             itemsLabel="Reservations"></DropdownItem>
         )}
-
+        <DropdownItem
+          leftIcon={<BiBookAdd className={styles.nav_item_icons} />}
+          rightIcon={null}
+          endPoint="/om"
+          itemsLabel="Om"></DropdownItem>
         {(user || costumerData) && (
           <button className={styles.logout_button} onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}

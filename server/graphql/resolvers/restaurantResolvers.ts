@@ -2,7 +2,7 @@ import Restaurant from "server/mongoSchema/restaurangSchema";
 
 const productResolvers = {
   Query: {
-    async Restaurants(parent, args, context) {
+    async Restaurants() {
       const res = await Restaurant.find({});
       return res;
     },

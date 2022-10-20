@@ -1,3 +1,4 @@
+import { CostumerAddressInput } from "./../../generated/graphql";
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
@@ -145,15 +146,32 @@ export const UPDATE_CATEGORY = gql`
       image: $image
       categoryId: $categoryId
     ) {
-      itemName§
+      itemName
     }
   }
 `;
 
-// export const PAY_STRIPE = gql`
-//   mutation Pay($restaurant: String, $price: Int) {
-//     Pay(restaurant: $restaurant, proce: $price) {
-//       id
-//     }
-//   }
-// `;
+export const PAY_STRIPE = gql`
+  mutation Pay($restaurant: String, $orders: [OrderItem]) {
+    Pay(restaurant: $restaurant, orders: $price)
+  }
+`;
+
+export const ADD_CUSTOMER_ADDRESS = gql`
+  mutation AddCostumerAddress($address: CostumerAddressInput) {
+    AddCostumerAddress(address: $address) {
+      title
+      city
+      region
+      postNumber
+      address
+    }
+  }
+`;
+export const PAY = gql`
+  mutation Pay($restaurant: String, $products: [String]) {
+    Pay(restaurant: $restaurant, products: $products) {
+      _id
+    }
+  }
+`;

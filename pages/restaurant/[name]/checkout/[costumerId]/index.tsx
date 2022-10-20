@@ -6,23 +6,60 @@ import PrimaryLayout from "components/Primary-layout";
 import useOrders from "hooks/Order.hook";
 
 import styles from "./style.module.scss";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  COSTUMER_ADDRESS,
+  GET_ORDERS_CONSTANTLY,
+  GET_PAYED_ORDERS,
+} from "@/server/graphql/querys/querys.graphql";
+import { PAY } from "@/server/graphql/querys/mutations.graphql";
+import { useRouter } from "next/router";
 
 export default function CheckOut() {
   const { addOrder, removeOrder, orders, loading } = useOrders();
-  interface currentValue {
-    orderQuantity: number;
-    product: { price: number };
+  const { data } = useQuery(COSTUMER_ADDRESS);
+  const router = useRouter();
+  const [pay] = useMutation(PAY, {
+    onCompleted: () => {
+      router.push(`/restaurant/${router.query.name}`);
+    },
+    refetchQueries: [
+      {
+        query: GET_ORDERS_CONSTANTLY,
+        //Make sure that variables are the same ones as the ones you used to get GET_USER_CART data. If it is different, it wont work. Check if your variables are the same on useQuery you called before and this query
+        variables: { restaurant: router.query.name },
+      },
+      {
+        query: GET_PAYED_ORDERS,
+        //Make sure that variables are the same ones as the ones you used to get GET_USER_CART data. If it is different, it wont work. Check if your variables are the same on useQuery you called before and this query
+        variables: { restaurant: router.query.name },
+      },
+    ],
+  });
+  interface CurrentValue {
+    orderQuantity?: number;
+    product?: { price: number };
   }
+  useEffect(() => {
+    console.log(orders);
+  }, [orders]);
+
   //Compute total payment amount
   function countSum() {
+    if (!orders) {
+      return;
+    }
     const initialValue = 0;
     if (Array.isArray(orders)) {
-      const sumWithInitial = orders.reduce(
-        (previousValue: number, currentValue: currentValue) =>
-          previousValue +
-          currentValue.product.price * currentValue.orderQuantity,
-        initialValue
-      );
+      const sumWithInitial = orders?.reduce((previousValue, currentValue) => {
+        if (currentValue) {
+          return (
+            previousValue +
+              currentValue.product.price * currentValue.orderQuantity,
+            initialValue
+          );
+        }
+      });
       return sumWithInitial;
     } else {
       return "...";
@@ -30,7 +67,7 @@ export default function CheckOut() {
   }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!Array.isArray(orders) && !loading)
+  if (!orders?.length)
     return (
       <div className={styles.container}>
         <Label label_name={"Checkout"} />
@@ -66,14 +103,18 @@ export default function CheckOut() {
             );
           })}{" "}
       </div>
-      <span
-        className={
-          styles.total_amount
-        }>{`Total Amount : ${countSum()},00 kr`}</span>
+      {orders && orders?.length && (
+        <span
+          className={
+            styles.total_amount
+          }>{`Total Amount : ${countSum()},00 kr`}</span>
+      )}
       <Payment
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         orders={orders}
+        address={data?.Address}
+        pay={pay}
       />
     </div>
   );

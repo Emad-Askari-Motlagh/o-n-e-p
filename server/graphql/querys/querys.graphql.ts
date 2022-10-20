@@ -170,3 +170,29 @@ export const GET_COSTUMER_ORDERS = gql`
     }
   }
 `;
+
+export const COSTUMER_ADDRESS = gql`
+  query Address {
+    Address {
+      title
+      city
+      region
+      postNumber
+      address
+    }
+  }
+`;
+export const GET_PAYED_ORDERS = gql`
+  query PayedOrders($restaurant: String!) {
+    PayedOrders(restaurant: $restaurant) {
+      _id
+      date
+      createdAt
+      product {
+        name
+        itemsType
+        price
+      }
+    }
+  }
+`;

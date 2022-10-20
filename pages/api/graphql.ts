@@ -1,85 +1,65 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 // import { createServer } from "@graphql-yoga/node";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "@/server/graphql/typeDef/schema.graphql";
 import resolvers from "@/server/graphql/resolvers";
 import dbInit from "@/lib/dbInit";
-import JWT, { Secret, JwtPayload } from "jsonwebtoken";
-import { AuthenticationError } from "apollo-server";
-import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  PreviewData,
-} from "next";
+import JWT, { JwtPayload } from "jsonwebtoken";
+// const pubsub = new PubSub();
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
 import {
   createServer,
   createPubSub,
   GraphQLYogaError,
 } from "@graphql-yoga/node";
-// const pubsub = new PubSub();
-const schema = makeExecutableSchema({
-  typeDefs,
+import { useDepthLimit } from "@envelop/depth-limit";
+import { AuthenticationError } from "apollo-server-core";
 
-  resolvers,
-});
-
-let serverCleanup = null;
+interface ReturnContext {
+  id: string;
+}
+const pubSub = createPubSub();
 
 const server = createServer({
-  // cors: {
-  //   origin: [
-  //     "https://order-app-graphql-mongo.vercel.app",
-  //     "http://localhost:3000",
-  //   ],
-  //   credentials: true,
-  //   allowedHeaders: ["X-Custom-Header"],
-  //   methods: ["POST"],
-  // },
-  cors: false,
-  plugins: [
-    {
-      // async serverWillStart() {
-      //   return {
-      //     async drainServer() {
-      //       await serverCleanup?.dispose();
-      //     },
-      //   };
-      // },
-    },
-  ],
+  cors: {
+    credentials: true,
+    origin: ["http://localhost:3000"], // your frontend url.
+  },
 
-  context: async ({
-    req,
-    res,
-  }: {
-    req: NextApiRequest;
-    res: NextApiResponse;
-  }) => {
-    // const pubsub = await createPubSub();
-    await dbInit();
+  plugins: [],
 
-    let { token, costumerId, costumerExpire } = req.cookies;
+  context: async ({ req }: { req: NextApiRequest }) => {
+    const db = await dbInit();
+    let { token, costumerId } = req.cookies;
+
     // 1. Find optional visitor id
-    let id = null;
-    let user = null;
-    if (token) {
-      try {
-        let obj = JWT.verify(token, "MY_SECRET");
+    let id: string | number | null = null;
+    let user: object | null = null;
 
-        id = (obj as { id: string }).id;
-      } catch (err) {
-        console.error("error on apollo server", err); // expired token, invalid token
-        // TODO try apollo-link-error on the client
-        throw new AuthenticationError(
-          "Authentication token is invalid, please log in"
-        );
+    try {
+      if (token) {
+        let obj = JWT.verify(token, "MY_SECRET");
+        id = (obj as ReturnContext).id;
       }
+    } catch (err) {
+      console.error("error on apollo server", err); // expired token, invalid token
+      // TODO try apollo-link-error on the client
+      throw new AuthenticationError(
+        "Authentication token is invalid, please log in"
+      );
     }
+
     return {
       userId: id,
       costumerId,
       user,
-      // pubsub,
+
+      pubSub,
     };
   },
   schema,

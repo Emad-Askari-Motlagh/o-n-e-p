@@ -8,12 +8,15 @@ import mongoose from "mongoose";
 import { createPubSub } from "@graphql-yoga/node";
 import { GraphQLError } from "graphql";
 // import { loadStripe } from "@stripe/stripe-js";
-
+import PayedItem from "server/mongoSchema/payedItemSchema";
 // import Stripe from "stripe";
 
 const pubsub = createPubSub();
 async function fetchOrders(query: object) {
   return await Order.find(query).populate("product").populate("costumer");
+}
+async function fetchPayedOrders(query: object) {
+  return await PayedItem.find(query).populate("product").populate("costumer");
 }
 // const stripe = new Stripe(process.env.STRIPE_KEY as string, {
 //   apiVersion: "2022-08-01",
@@ -70,19 +73,39 @@ const orderResolvers = {
       try {
         const id = new mongoose.Types.ObjectId(costumerId);
 
-        const orders = await fetchOrders({ costumer: id, restaurant });
+        const orders = await fetchOrders({
+          costumer: id,
+          restaurant,
+        });
         return orders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
       }
     },
-    async AdminOrders() {
+    async AdminOrders(__: any) {
       try {
         const AdminOrders = await fetchOrders({});
 
         return AdminOrders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
+      }
+    },
+    async PayedOrders(
+      __: any,
+      { restaurant }: { restaurant: string },
+      { costumerId }: { costumerId: string }
+    ) {
+      if (!costumerId) {
+        return null;
+      }
+      try {
+        const id = new mongoose.Types.ObjectId(costumerId);
+        const orders = await fetchPayedOrders({ costumer: id, restaurant });
+        console.log(orders);
+        return orders;
+      } catch (err) {
+        console.log(err);
       }
     },
     async CostumerOrders(
@@ -95,7 +118,10 @@ const orderResolvers = {
       }
       try {
         const id = new mongoose.Types.ObjectId(costumerId);
-        const orders = await fetchOrders({ costumer: id, restaurant });
+        const orders = await fetchOrders({
+          costumer: id,
+          restaurant,
+        });
 
         return orders;
       } catch (err) {
@@ -156,7 +182,11 @@ const orderResolvers = {
     costumer: (parent) => parent.costumer,
     restaurant: (parent) => parent.restaurant,
   },
-
+  PayedItem: {
+    product: (parent) => parent.product,
+    costumer: (parent) => parent.costumer,
+    restaurant: (parent) => parent.restaurant,
+  },
   Mutation: {
     PostMessage: (
       _: any,
@@ -272,16 +302,32 @@ const orderResolvers = {
         throw new ApolloError("Error during fetching the orders");
       }
     },
-    // async Pay(
-    //   _: any,
-    //   { restaurant, price }: { restaurant: string; price: number },
-    //   { costumerId }: { costumerId: string }
-    // ) {
-    //   try {
-    //     const id = await createCustomer();
-    //     return id;
-    //   } catch (err: any) {}
-    // },
+    async Pay(
+      _: any,
+      { restaurant, products }: { restaurant: string; products: [string] },
+      { costumerId }: { costumerId: string }
+    ) {
+      try {
+        const cosId = new mongoose.Types.ObjectId(costumerId);
+        const orders = products.map(async (res) => {
+          const id = new mongoose.Types.ObjectId(res);
+          const order = await Order.findById(id);
+          const payedOrder = await new PayedItem({
+            restaurant: restaurant,
+            costumer: cosId,
+            product: order.product,
+          });
+
+          await payedOrder.save();
+
+          await Order.findOneAndRemove({ _id: id });
+          return payedOrder;
+        });
+        return orders;
+      } catch (err: any) {
+        console.log(err);
+      }
+    },
   },
 };
 export default orderResolvers;

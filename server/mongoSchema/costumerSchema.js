@@ -5,6 +5,13 @@ var costumerSchema = new mongoose.Schema(
     name: { type: String },
     email: { type: String, unique: true },
     table: { type: mongoose.SchemaTypes.Number, required: true },
+    address: {
+      title: String,
+      city: String,
+      region: String,
+      postNumber: Number,
+      address: String,
+    },
   },
   { timestamps: true }
 );

@@ -7,12 +7,13 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
-
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   .header {
     display: flex;
     font-family: "Paytone One", sans-serif;
     font-weight: 900;
-
+    display: flex;
+    justify-content: space-around;
     h4 {
       margin: 0;
       margin-bottom: 5px;
@@ -23,6 +24,10 @@
 
   .addressContainer {
     font-size: 14px;
+    p {
+      display: flex;
+      justify-content: space-around;
+    }
   }
 
   .buttons {

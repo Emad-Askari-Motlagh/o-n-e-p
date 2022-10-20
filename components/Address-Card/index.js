@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Button";
 import styles from "./address-card.module.scss";
 import UpdateAddress from "./update-address";
 
 export default function AddressCard({ data }) {
   const [toggleModal, setModal] = useState(false);
-  const { id, title, full_address, zipcode, region, city } = data;
+  const { address, city, postNumber, region, title } = data;
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h4>{title || "Title"}</h4>
-      </div>
+      <h4 className={styles.header}>
+        <span>Address</span>
+      </h4>
       <hr />
       <div className={styles.addressContainer}>
-        <p>{full_address || "Full address"}</p>
-        <p>{city + " / " + zipcode || "City / Zipcode"}</p>
-        <p>{region || "Region"}</p>
+        <p>
+          <span>Full address</span>
+          <span>{address}</span>
+        </p>
+        <p>
+          {" "}
+          <span>Region</span>
+          <span>{region}</span>
+        </p>
+        <p>
+          {" "}
+          <span>Post number</span>
+          <span>{postNumber}</span>
+        </p>
       </div>
       <div className={styles.buttons}>
         <Button width={"40%"} className={styles.delete} onClick={() => null}>
@@ -25,8 +36,7 @@ export default function AddressCard({ data }) {
         <Button
           width={"40%"}
           className={styles.update}
-          onClick={() => setModal(true)}
-        >
+          onClick={() => setModal(true)}>
           Update
         </Button>
       </div>
