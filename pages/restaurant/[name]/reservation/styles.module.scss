@@ -1,0 +1,101 @@
+@import "styles/fonts.scss";
+@import "styles/breakpoints.scss";
+
+//Variables//
+$ITEM_BORDERS: 40px;
+$ITEMS_WIDTH: 40%;
+$ITEMS_HEIGHT: 400px;
+$BC_COLOR: #242424;
+//mixings//
+
+.container {
+  .calandar_container {
+    max-width: 70%;
+    background-color: whitesmoke;
+    color: black;
+    font-family: "playfair" sans-serif;
+    margin: 40px auto;
+    height: max-content;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 20%;
+    box-shadow: rgba(194, 14, 14, 0.695) 0px 4px 12px;
+    border-top-left-radius: 21px 140px;
+    border-top-right-radius: 23px 130px;
+    border-bottom-left-radius: 110px 19px;
+    border-bottom-right-radius: 120px 24px;
+    background-color: #e5e5f7;
+
+    background-image: radial-gradient(#444df768 0.5px, #e5e5f7 0.5px);
+    background-size: 10px 10px;
+    display: block;
+    position: relative;
+    border: double 3px #45464b8e;
+    padding: 40px 60px;
+    max-width: 800px;
+    width: 70%;
+
+    font-size: 17px;
+    line-height: 28px;
+    transform: rotate(-1deg);
+    box-shadow: 3px 15px 8px -10px rgba(0, 0, 0, 0.3);
+    transition: all 0.13s ease-in;
+  }
+  .first_row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1em;
+  }
+  h2 {
+    font-size: 23px;
+    margin: auto;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(to bottom, #3838383c 0%, #242424 100%);
+    border-bottom: 4px solid rgba(93, 47, 47, 0.2);
+    border-radius: 30px;
+    padding-bottom: 100px;
+    padding-top: 1em;
+    position: relative;
+    color: #fff;
+    font: 900 30px Montserrat;
+    text-shadow: 0 10px 25px rgba(0, 0, 0);
+  }
+  label {
+    color: black;
+  }
+
+  .calander {
+    margin: auto;
+    margin-top: 4%;
+    border-radius: 10px;
+  }
+  input,
+  textarea {
+    color: rgb(22, 19, 19);
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    background-color: aliceblue;
+    transition: background-color 0.2s ease-in;
+    padding: 10px 15px;
+    border-width: 0;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+
+      &::placeholder {
+        color: whitesmoke;
+        font-size: 14px;
+        caret-color: red;
+      }
+    }
+    &::placeholder {
+      font-size: 14px;
+      color: black;
+      opacity: 0.5;
+    }
+  }
+}

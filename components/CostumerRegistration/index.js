@@ -19,11 +19,10 @@ export default function CostumerRegister({ onSubmit }) {
         .email("Invalid email address")
         .required("Please enter email"),
       name: yup.string().required("Please choose a name"),
-      table: yup.number().required("You need a table name to continue!"),
+      table: yup.number().required("You need a table number to continue!"),
     }),
     async onSubmit(values) {
       onSubmit({ name: values.name, table: values.table, email: values.email });
-      console.log(values);
     },
   });
 
@@ -39,7 +38,7 @@ export default function CostumerRegister({ onSubmit }) {
           width={"80%"}
         />
 
-        {touched.table && errors.table ? (
+        {errors.table ? (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
@@ -55,7 +54,7 @@ export default function CostumerRegister({ onSubmit }) {
           onChange={handleChange}
           width={"80%"}
         />
-        {touched.name && errors.name ? (
+        {errors.name ? (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"

@@ -11,33 +11,56 @@ import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import ErrorCard from "components/ErrorCard";
 import SucceedMessage from "@/components/Succeed-Message";
+import { NextApiRequest } from "next";
+import { I_CostumerDocument } from "server/mongoSchema/costumerSchema";
+import {
+  AddCostumerMutation,
+  AddCostumerMutationVariables,
+} from "@/server/generated/graphql";
+import getApolloErrors from "@/utils/getApolloErrors";
 
-export default function Restaurant({ COSTUMER }) {
+export default function Restaurant({
+  COSTUMER,
+}: {
+  COSTUMER: I_CostumerDocument;
+}) {
   const [error, setError] = useState<string | null>("");
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const [AddCostumer] = useMutation(ADD_COSTUMER, {
+
+  const [AddCostumer] = useMutation<
+    AddCostumerMutation,
+    AddCostumerMutationVariables
+  >(ADD_COSTUMER, {
     onError: (err) => {
-      setError("Sorry there is a problem, contact the personal");
+      setError(getApolloErrors(err));
     },
     onCompleted: () => {
       setIsRegistered(true);
+      setError(null);
+      setTimeout(() => {
+        Router.reload();
+      }, 1000);
     },
   });
 
   const Router = useRouter();
 
-  async function submitForm(values) {
+  async function submitForm(values: {
+    email: string;
+    table: number;
+    name: string;
+  }) {
     try {
       const { email, table, name } = values;
       await AddCostumer({
         variables: {
-          name,
           email,
           table,
+          name,
         },
       });
 
-      Router.reload();
+      // Router.reload();
     } catch (err: any) {
       console.log(err.message);
     }
@@ -56,7 +79,7 @@ export default function Restaurant({ COSTUMER }) {
         <>
           <RegisterForm onSubmit={submitForm} />
           {error && <ErrorCard>{error}</ErrorCard>}
-          {isRegistered && <SucceedMessage value="Done"></SucceedMessage>}
+          {isRegistered && <SucceedMessage>Costumer Registered</SucceedMessage>}
         </>
       ) : (
         <div className={styles.items_parent}>
@@ -84,7 +107,7 @@ export default function Restaurant({ COSTUMER }) {
 
 Restaurant.Layout = PrimaryLayout;
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     //Init mongoDb
     await dbInit();
