@@ -25,7 +25,6 @@ $BC_COLOR: #242424;
     border-bottom-left-radius: 110px 19px;
     border-bottom-right-radius: 120px 24px;
     background-color: #e5e5f7;
-
     background-image: radial-gradient(#444df768 0.5px, #e5e5f7 0.5px);
     background-size: 10px 10px;
     display: block;
@@ -34,12 +33,14 @@ $BC_COLOR: #242424;
     padding: 40px 60px;
     max-width: 800px;
     width: 70%;
-
     font-size: 17px;
     line-height: 28px;
     transform: rotate(-1deg);
     box-shadow: 3px 15px 8px -10px rgba(0, 0, 0, 0.3);
     transition: all 0.13s ease-in;
+    @include md {
+      width: 95%;
+    }
   }
   .first_row {
     display: flex;

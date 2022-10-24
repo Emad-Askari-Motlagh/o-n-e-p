@@ -7,7 +7,12 @@ import BlurImage from "../BlurImage";
 import CategoryEditor from "../CategoryEditor";
 import Modal from "../Modal";
 
-function RestaurantSubItem({ label, image, endPoint }) {
+interface RestaurantSubItemProps {
+  label: string;
+  image: string;
+  endPoint: string;
+}
+function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
   const Router = useRouter();
 
   return (

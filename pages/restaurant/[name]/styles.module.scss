@@ -75,13 +75,13 @@ $BC_COLOR: #242424;
     align-items: center;
     min-height: calc(100vmin - 50vmin);
 
-    .item_parent {
-      width: 40%;
-    }
     @include md {
+      width: 90%;
       min-height: inherit;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
+      margin: auto;
     }
   }
 }
