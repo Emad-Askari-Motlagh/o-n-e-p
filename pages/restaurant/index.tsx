@@ -2,7 +2,6 @@ import Head from "next/head";
 import React, {
   ChangeEvent,
   ChangeEventHandler,
-  Suspense,
   useEffect,
   useState,
 } from "react";
@@ -18,6 +17,7 @@ import {
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
 import { NextApiRequest } from "next";
+import axios from "axios";
 
 interface HomeProps {
   ALL_RESTAURANTS: string[];
@@ -44,7 +44,10 @@ const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
       console.log(err);
     }
   }
-
+  async function find() {
+    const res = await axios.get("/api/test");
+    console.log(res.data);
+  }
   return (
     <>
       <Search_form

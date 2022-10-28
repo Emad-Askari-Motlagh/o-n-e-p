@@ -9,7 +9,7 @@ const restaurangSchema = new mongoose.Schema(
     reviews: [String],
     type: String,
     location: {
-      mytype: {
+      type: {
         type: String,
         required: true,
         default: "Point",
