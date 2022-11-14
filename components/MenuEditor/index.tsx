@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import Image from "next/image";
-import Inputs from "./Inputs";
+import Inputs from "./MenuItem";
 import Modal from "components/Modal";
 import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
-import SucceedMessage from "../Succeed-Message";
 
+
+interface MenuEditor{
+  data:{images:[string],name:string,price:number},
+  submit: (e: ChangeEvent<HTMLSelectElement>) => void;
+  restaurant:string,
+  category:string,
+  isSaved:boolean,
+}
 export default function MenuEditor({
   data,
   submit,
   restaurant,
   category,
   isSaved,
-}) {
+}:MenuEditor) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -44,14 +51,14 @@ export default function MenuEditor({
 
       <Modal
         isModalOpen={isOpen}
-        setIsModalOpen={setIsOpen}
-        style={{ width: "80%", margin: "auto" }}>
+        setIsModalOpen={setIsOpen}>
         <Inputs
           category={category}
           restaurant={restaurant}
           data={data}
           submit={submit}
         />
+        {isSaved&&}
       </Modal>
     </div>
   );

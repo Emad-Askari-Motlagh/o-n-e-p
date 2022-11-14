@@ -48,11 +48,7 @@ export default function CategoryEditor({
         <form onSubmit={submit}>
           <div className={styles.image}>
             {image && (
-              <Image
-                alt="ok"
-                width={100}
-                height={100}
-                src={newName ? newName : image}></Image>
+              <Image alt="ok" width={100} height={100} src={image}></Image>
             )}
             <FileInput
               label="Upload Image"

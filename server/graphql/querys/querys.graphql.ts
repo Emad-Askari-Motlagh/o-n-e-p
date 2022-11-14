@@ -6,6 +6,9 @@ export const FETCH_ALL_RESTAURANTS = gql`
       name
       owner
       description
+      location {
+        coordinates
+      }
       numReviews
       reviews
       type

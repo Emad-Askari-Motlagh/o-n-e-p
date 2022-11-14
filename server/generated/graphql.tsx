@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
 };
 
 export type Address = {
@@ -72,8 +73,8 @@ export type CostumerMenuChoises = MenuItem | OrderItem;
 
 export type Location = {
   __typename?: 'Location';
-  coordinates?: Maybe<Array<Scalars['Int']>>;
-  mytype: Scalars['String'];
+  coordinates?: Maybe<Array<Scalars['Float']>>;
+  type: Scalars['String'];
 };
 
 export type LocationInput = {
@@ -160,7 +161,6 @@ export type Mutation = {
   FetchRestaurantsByQuery?: Maybe<Array<Maybe<Restaurant>>>;
   GetCostumerOrders: Array<Maybe<OrderItem>>;
   GetOrderItem?: Maybe<OrderItem>;
-  Pay?: Maybe<Scalars['String']>;
   PostMessage: Scalars['ID'];
   RemoveOrder: Array<Maybe<AdminOrder>>;
   SendResetPassword: User;
@@ -199,9 +199,8 @@ export type MutationAddMenuArgs = {
 
 
 export type MutationAddMenuCategoryArgs = {
-  collectionType: Scalars['String'];
-  itemName: Scalars['String'];
-  restaurant: Scalars['String'];
+  image: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
@@ -256,12 +255,6 @@ export type MutationGetCostumerOrdersArgs = {
 export type MutationGetOrderItemArgs = {
   productId: Scalars['ID'];
   restaurant: Scalars['String'];
-};
-
-
-export type MutationPayArgs = {
-  price?: InputMaybe<Scalars['Int']>;
-  restaurant?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -330,6 +323,16 @@ export type OrderItem = {
   restaurant?: Maybe<Scalars['String']>;
 };
 
+export type PayedItem = {
+  __typename?: 'PayedItem';
+  _id?: Maybe<Scalars['ID']>;
+  costumer?: Maybe<Costumer>;
+  createdAt?: Maybe<Scalars['Date']>;
+  date?: Maybe<Scalars['String']>;
+  product?: Maybe<MenuItem>;
+  restaurant?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   Address?: Maybe<CostumerAddress>;
@@ -343,6 +346,7 @@ export type Query = {
   MenuItemCount?: Maybe<OrderItem>;
   OrderItems?: Maybe<OrderItem>;
   Orders: Array<Maybe<OrderItem>>;
+  PayedOrders: Array<Maybe<PayedItem>>;
   Restaurants?: Maybe<Array<Maybe<Restaurant>>>;
   messages?: Maybe<Array<Message>>;
 };
@@ -376,6 +380,11 @@ export type QueryMenuItemCountArgs = {
 
 
 export type QueryOrdersArgs = {
+  restaurant: Scalars['String'];
+};
+
+
+export type QueryPayedOrdersArgs = {
   restaurant: Scalars['String'];
 };
 
@@ -552,14 +561,6 @@ export type UpdateCategoryMutationVariables = Exact<{
 
 export type UpdateCategoryMutation = { __typename?: 'Mutation', UpdateCategory: { __typename?: 'MenuParent', itemName?: string | null } };
 
-export type PayMutationVariables = Exact<{
-  restaurant?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type PayMutation = { __typename?: 'Mutation', Pay?: string | null };
-
 export type AddCostumerAddressMutationVariables = Exact<{
   address?: InputMaybe<CostumerAddressInput>;
 }>;
@@ -567,10 +568,18 @@ export type AddCostumerAddressMutationVariables = Exact<{
 
 export type AddCostumerAddressMutation = { __typename?: 'Mutation', AddCostumerAddress?: { __typename?: 'CostumerAddress', title?: string | null, city?: string | null, region?: string | null, postNumber?: number | null, address?: string | null } | null };
 
+export type AddMenuCategoryMutationVariables = Exact<{
+  name: Scalars['String'];
+  image: Scalars['String'];
+}>;
+
+
+export type AddMenuCategoryMutation = { __typename?: 'Mutation', AddMenuCategory?: { __typename?: 'MenuParent', itemName?: string | null } | null };
+
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, _id?: string | null } | null> | null };
+export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, _id?: string | null, location?: { __typename?: 'Location', coordinates?: Array<number> | null } | null } | null> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -635,6 +644,18 @@ export type CostumerOrdersQueryVariables = Exact<{
 
 
 export type CostumerOrdersQuery = { __typename?: 'Query', CostumerOrders: Array<{ __typename?: 'OrderItem', orderQuantity?: number | null, _id?: string | null, product?: { __typename?: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null } | null> };
+
+export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddressQuery = { __typename?: 'Query', Address?: { __typename?: 'CostumerAddress', title?: string | null, city?: string | null, region?: string | null, postNumber?: number | null, address?: string | null } | null };
+
+export type PayedOrdersQueryVariables = Exact<{
+  restaurant: Scalars['String'];
+}>;
+
+
+export type PayedOrdersQuery = { __typename?: 'Query', PayedOrders: Array<{ __typename?: 'PayedItem', _id?: string | null, date?: string | null, createdAt?: any | null, product?: { __typename?: 'MenuItem', name?: string | null, itemsType?: string | null, price?: number | null } | null } | null> };
 
 
 export const SignInDocument = gql`
@@ -1187,38 +1208,6 @@ export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
-export const PayDocument = gql`
-    mutation Pay($restaurant: String, $price: Int) {
-  Pay(restaurant: $restaurant, price: $price)
-}
-    `;
-export type PayMutationFn = Apollo.MutationFunction<PayMutation, PayMutationVariables>;
-
-/**
- * __usePayMutation__
- *
- * To run a mutation, you first call `usePayMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePayMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [payMutation, { data, loading, error }] = usePayMutation({
- *   variables: {
- *      restaurant: // value for 'restaurant'
- *      price: // value for 'price'
- *   },
- * });
- */
-export function usePayMutation(baseOptions?: Apollo.MutationHookOptions<PayMutation, PayMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PayMutation, PayMutationVariables>(PayDocument, options);
-      }
-export type PayMutationHookResult = ReturnType<typeof usePayMutation>;
-export type PayMutationResult = Apollo.MutationResult<PayMutation>;
-export type PayMutationOptions = Apollo.BaseMutationOptions<PayMutation, PayMutationVariables>;
 export const AddCostumerAddressDocument = gql`
     mutation AddCostumerAddress($address: CostumerAddressInput) {
   AddCostumerAddress(address: $address) {
@@ -1256,12 +1245,49 @@ export function useAddCostumerAddressMutation(baseOptions?: Apollo.MutationHookO
 export type AddCostumerAddressMutationHookResult = ReturnType<typeof useAddCostumerAddressMutation>;
 export type AddCostumerAddressMutationResult = Apollo.MutationResult<AddCostumerAddressMutation>;
 export type AddCostumerAddressMutationOptions = Apollo.BaseMutationOptions<AddCostumerAddressMutation, AddCostumerAddressMutationVariables>;
+export const AddMenuCategoryDocument = gql`
+    mutation AddMenuCategory($name: String!, $image: String!) {
+  AddMenuCategory(name: $name, image: $image) {
+    itemName
+  }
+}
+    `;
+export type AddMenuCategoryMutationFn = Apollo.MutationFunction<AddMenuCategoryMutation, AddMenuCategoryMutationVariables>;
+
+/**
+ * __useAddMenuCategoryMutation__
+ *
+ * To run a mutation, you first call `useAddMenuCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddMenuCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addMenuCategoryMutation, { data, loading, error }] = useAddMenuCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      image: // value for 'image'
+ *   },
+ * });
+ */
+export function useAddMenuCategoryMutation(baseOptions?: Apollo.MutationHookOptions<AddMenuCategoryMutation, AddMenuCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddMenuCategoryMutation, AddMenuCategoryMutationVariables>(AddMenuCategoryDocument, options);
+      }
+export type AddMenuCategoryMutationHookResult = ReturnType<typeof useAddMenuCategoryMutation>;
+export type AddMenuCategoryMutationResult = Apollo.MutationResult<AddMenuCategoryMutation>;
+export type AddMenuCategoryMutationOptions = Apollo.BaseMutationOptions<AddMenuCategoryMutation, AddMenuCategoryMutationVariables>;
 export const RestaurantsDocument = gql`
     query Restaurants {
   Restaurants {
     name
     owner
     description
+    location {
+      coordinates
+    }
     numReviews
     reviews
     type
@@ -1703,6 +1729,86 @@ export function useCostumerOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type CostumerOrdersQueryHookResult = ReturnType<typeof useCostumerOrdersQuery>;
 export type CostumerOrdersLazyQueryHookResult = ReturnType<typeof useCostumerOrdersLazyQuery>;
 export type CostumerOrdersQueryResult = Apollo.QueryResult<CostumerOrdersQuery, CostumerOrdersQueryVariables>;
+export const AddressDocument = gql`
+    query Address {
+  Address {
+    title
+    city
+    region
+    postNumber
+    address
+  }
+}
+    `;
+
+/**
+ * __useAddressQuery__
+ *
+ * To run a query within a React component, call `useAddressQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAddressQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddressQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddressQuery(baseOptions?: Apollo.QueryHookOptions<AddressQuery, AddressQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddressQuery, AddressQueryVariables>(AddressDocument, options);
+      }
+export function useAddressLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddressQuery, AddressQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddressQuery, AddressQueryVariables>(AddressDocument, options);
+        }
+export type AddressQueryHookResult = ReturnType<typeof useAddressQuery>;
+export type AddressLazyQueryHookResult = ReturnType<typeof useAddressLazyQuery>;
+export type AddressQueryResult = Apollo.QueryResult<AddressQuery, AddressQueryVariables>;
+export const PayedOrdersDocument = gql`
+    query PayedOrders($restaurant: String!) {
+  PayedOrders(restaurant: $restaurant) {
+    _id
+    date
+    createdAt
+    product {
+      name
+      itemsType
+      price
+    }
+  }
+}
+    `;
+
+/**
+ * __usePayedOrdersQuery__
+ *
+ * To run a query within a React component, call `usePayedOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePayedOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePayedOrdersQuery({
+ *   variables: {
+ *      restaurant: // value for 'restaurant'
+ *   },
+ * });
+ */
+export function usePayedOrdersQuery(baseOptions: Apollo.QueryHookOptions<PayedOrdersQuery, PayedOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PayedOrdersQuery, PayedOrdersQueryVariables>(PayedOrdersDocument, options);
+      }
+export function usePayedOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PayedOrdersQuery, PayedOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PayedOrdersQuery, PayedOrdersQueryVariables>(PayedOrdersDocument, options);
+        }
+export type PayedOrdersQueryHookResult = ReturnType<typeof usePayedOrdersQuery>;
+export type PayedOrdersLazyQueryHookResult = ReturnType<typeof usePayedOrdersLazyQuery>;
+export type PayedOrdersQueryResult = Apollo.QueryResult<PayedOrdersQuery, PayedOrdersQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1781,6 +1887,8 @@ export type ResolversTypes = {
   CostumerAddress: ResolverTypeWrapper<CostumerAddress>;
   CostumerAddressInput: CostumerAddressInput;
   CostumerMenuChoises: ResolversTypes['MenuItem'] | ResolversTypes['OrderItem'];
+  Date: ResolverTypeWrapper<Scalars['Date']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
@@ -1794,6 +1902,7 @@ export type ResolversTypes = {
   Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
+  PayedItem: ResolverTypeWrapper<PayedItem>;
   Query: ResolverTypeWrapper<{}>;
   RegisterInput: RegisterInput;
   Restaurant: ResolverTypeWrapper<Restaurant>;
@@ -1816,6 +1925,8 @@ export type ResolversParentTypes = {
   CostumerAddress: CostumerAddress;
   CostumerAddressInput: CostumerAddressInput;
   CostumerMenuChoises: ResolversParentTypes['MenuItem'] | ResolversParentTypes['OrderItem'];
+  Date: Scalars['Date'];
+  Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Location: Location;
@@ -1829,6 +1940,7 @@ export type ResolversParentTypes = {
   Message: Message;
   Mutation: {};
   OrderItem: OrderItem;
+  PayedItem: PayedItem;
   Query: {};
   RegisterInput: RegisterInput;
   Restaurant: Restaurant;
@@ -1887,9 +1999,13 @@ export type CostumerMenuChoisesResolvers<ContextType = any, ParentType extends R
   __resolveType: TypeResolveFn<'MenuItem' | 'OrderItem', ParentType, ContextType>;
 };
 
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
+
 export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
-  coordinates?: Resolver<Maybe<Array<ResolversTypes['Int']>>, ParentType, ContextType>;
-  mytype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  coordinates?: Resolver<Maybe<Array<ResolversTypes['Float']>>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1943,7 +2059,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   AddCostumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType, RequireFields<MutationAddCostumerArgs, 'email' | 'name' | 'table'>>;
   AddCostumerAddress?: Resolver<Maybe<ResolversTypes['CostumerAddress']>, ParentType, ContextType, Partial<MutationAddCostumerAddressArgs>>;
   AddMenu?: Resolver<Maybe<ResolversTypes['Menu']>, ParentType, ContextType, RequireFields<MutationAddMenuArgs, 'restaurant'>>;
-  AddMenuCategory?: Resolver<Maybe<ResolversTypes['MenuParent']>, ParentType, ContextType, RequireFields<MutationAddMenuCategoryArgs, 'collectionType' | 'itemName' | 'restaurant'>>;
+  AddMenuCategory?: Resolver<Maybe<ResolversTypes['MenuParent']>, ParentType, ContextType, RequireFields<MutationAddMenuCategoryArgs, 'image' | 'name'>>;
   AddMenuItem?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationAddMenuItemArgs, 'category' | 'restaurant'>>;
   AddOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationAddOrderArgs, 'productId'>>;
   AddRestaurant?: Resolver<ResolversTypes['Restaurant'], ParentType, ContextType, RequireFields<MutationAddRestaurantArgs, 'description' | 'id' | 'location' | 'name' | 'numReviews' | 'owner' | 'rating' | 'type'>>;
@@ -1954,7 +2070,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   FetchRestaurantsByQuery?: Resolver<Maybe<Array<Maybe<ResolversTypes['Restaurant']>>>, ParentType, ContextType, Partial<MutationFetchRestaurantsByQueryArgs>>;
   GetCostumerOrders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<MutationGetCostumerOrdersArgs, 'restaurant'>>;
   GetOrderItem?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<MutationGetOrderItemArgs, 'productId' | 'restaurant'>>;
-  Pay?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<MutationPayArgs>>;
   PostMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationPostMessageArgs, 'content' | 'user'>>;
   RemoveOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationRemoveOrderArgs, 'productId'>>;
   SendResetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendResetPasswordArgs, 'email'>>;
@@ -1978,6 +2093,16 @@ export type OrderItemResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PayedItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayedItem'] = ResolversParentTypes['PayedItem']> = {
+  _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType>;
+  restaurant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   Address?: Resolver<Maybe<ResolversTypes['CostumerAddress']>, ParentType, ContextType>;
   AdminOrders?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType>;
@@ -1990,6 +2115,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   MenuItemCount?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<QueryMenuItemCountArgs, 'category' | 'restaurant'>>;
   OrderItems?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   Orders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<QueryOrdersArgs, 'restaurant'>>;
+  PayedOrders?: Resolver<Array<Maybe<ResolversTypes['PayedItem']>>, ParentType, ContextType, RequireFields<QueryPayedOrdersArgs, 'restaurant'>>;
   Restaurants?: Resolver<Maybe<Array<Maybe<ResolversTypes['Restaurant']>>>, ParentType, ContextType>;
   messages?: Resolver<Maybe<Array<ResolversTypes['Message']>>, ParentType, ContextType>;
 };
@@ -2048,6 +2174,7 @@ export type Resolvers<ContextType = any> = {
   Costumer?: CostumerResolvers<ContextType>;
   CostumerAddress?: CostumerAddressResolvers<ContextType>;
   CostumerMenuChoises?: CostumerMenuChoisesResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   Location?: LocationResolvers<ContextType>;
   Menu?: MenuResolvers<ContextType>;
   MenuItem?: MenuItemResolvers<ContextType>;
@@ -2056,6 +2183,7 @@ export type Resolvers<ContextType = any> = {
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
+  PayedItem?: PayedItemResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Restaurant?: RestaurantResolvers<ContextType>;
   SaveCookie?: SaveCookieResolvers<ContextType>;

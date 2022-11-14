@@ -9,7 +9,7 @@ interface MenuUpdater {
   price: number;
   quantity: number;
 }
-const MenuUpdater = ({ name, ImageSrc, id, price, quantity }: MenuUpdater) => {
+const MenuUpdater = ({ name, ImageSrc, price, quantity }: MenuUpdater) => {
   const sum = price * quantity;
   return (
     <div className={styles.container}>

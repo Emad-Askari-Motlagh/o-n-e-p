@@ -151,11 +151,11 @@ export const UPDATE_CATEGORY = gql`
   }
 `;
 
-export const PAY_STRIPE = gql`
-  mutation Pay($restaurant: String, $orders: [OrderItem]) {
-    Pay(restaurant: $restaurant, orders: $price)
-  }
-`;
+// export const PAY_STRIPE = gql`
+//   mutation Pay($restaurant: String, $orders: [OrderItem]) {
+//     Pay(restaurant: $restaurant, orders: $price)
+//   }
+// `;
 
 export const ADD_CUSTOMER_ADDRESS = gql`
   mutation AddCostumerAddress($address: CostumerAddressInput) {
@@ -168,10 +168,11 @@ export const ADD_CUSTOMER_ADDRESS = gql`
     }
   }
 `;
-export const PAY = gql`
-  mutation Pay($restaurant: String, $products: [String]) {
-    Pay(restaurant: $restaurant, products: $products) {
-      _id
+
+export const ADD_MENU_CATEGORY = gql`
+  mutation AddMenuCategory($name: String!, $image: String!) {
+    AddMenuCategory(name: $name, image: $image) {
+      itemName
     }
   }
 `;

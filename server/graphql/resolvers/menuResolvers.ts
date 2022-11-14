@@ -170,27 +170,43 @@ const menuResolvers = {
         console.log(err);
       }
     },
+    async AddMenuCategory(_, { name, image }, { userId }) {
+      try {
+        if (!userId) {
+          return null;
+        }
+        console.log(name, image);
+        const id = new Types.ObjectId(userId);
+        const user = await userSchema.findById(id).populate("restaurant");
+        const newCategory = await new menuCategorySchema({
+          collectionType: name,
+          itemName: name,
+          image,
+          restaurant: user.restaurant.name,
+        });
+        await newCategory.save();
+        return newCategory;
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async AddMenuItem(_, args) {
       try {
         const {
           category,
           restaurant,
-          name,
-          itemsType,
-          price,
-          description,
-          quantity,
-          availability,
+          input: { name, description, price, images },
         } = args;
         const res = await new MenuItem({
           category,
           restaurant,
           name,
-          itemsType,
           price,
           description,
-          quantity,
-          availability,
+          images: images,
+          itemsType: name,
+          quantity: 1,
+          availibility: true,
         });
 
         const menuItem = await res.save();
@@ -199,16 +215,7 @@ const menuResolvers = {
         console.log(err);
       }
     },
-    async AddMenuCategory(_, args) {
-      const { itemName, collectionType, restaurant } = args;
-      const menuCategory = await new menuCategorySchema({
-        itemName,
-        collectionType,
-        restaurant,
-      });
-      const res = await menuCategory.save();
-      return res;
-    },
+
     async UpdateMenuItems(_, args, { userId }) {
       //Check if user is logedIn
       try {

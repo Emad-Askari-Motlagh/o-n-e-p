@@ -1,10 +1,11 @@
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import Menu from "../Menu";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import BlurImage from "../BlurImage";
 import { motion } from "framer-motion";
+import { IoNavigateCircle } from "react-icons/io5";
 
 export default function Restaurant({
   name,
@@ -12,6 +13,7 @@ export default function Restaurant({
   children,
   images,
   description,
+  location,
 }) {
   return (
     <div className={styles.container}>
@@ -23,22 +25,29 @@ export default function Restaurant({
               width={600}
               height={600}
               layout="responsive"
-              alt={name}
-            ></Image>
+              alt={name}></Image>
           </div>
 
           <div className={styles.descriptions_wrapper}>
             <motion.h3
               className={styles.restaurant_label}
               initial={{ opacity: 0, y: -200 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+              animate={{ opacity: 1, y: 0 }}>
               {name}
             </motion.h3>
             <span className={styles.restaurant_description}>{description}</span>
             <span className={styles.restaurant_openTime}>
               Closes in 5 hours 30 min | 10AM - 10PM Everyday
             </span>
+
+            <div className={styles.map_parent}>
+              <a
+                href={`/map?name=${name}&lat=${location[0]}&lng=${location[1]}`}>
+                <IoNavigateCircle className={styles.icon} />
+                <span>Find on map</span>
+              </a>
+            </div>
+
             <Link scroll={false} href={endPoint}>
               <a className={styles.btn_grad}>Borja att bestella</a>
             </Link>
@@ -51,8 +60,7 @@ export default function Restaurant({
               width={600}
               height={600}
               layout="responsive"
-              alt={name}
-            ></Image>
+              alt={name}></Image>
           </div>
           <div className={styles.images}>
             <Image
@@ -60,8 +68,7 @@ export default function Restaurant({
               width={600}
               height={600}
               layout="responsive"
-              alt={name}
-            ></Image>
+              alt={name}></Image>
           </div>
         </section>
       </div>

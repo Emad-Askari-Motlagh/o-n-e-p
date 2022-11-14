@@ -16,13 +16,11 @@ import Image from "next/image";
 import SucceedMessage from "../Succeed-Message";
 
 interface InputsTypes {
-  data: any;
   submit: () => void;
   restaurant: string;
   category: string;
 }
-export default function Inputs({
-  data,
+export default function MenuAdder({
   submit,
   restaurant,
   category,
@@ -40,18 +38,14 @@ export default function Inputs({
     e.preventDefault();
     submit({
       variables: {
-        productId: data?._id,
         restaurant,
         category,
         input: {
-          name: name ? name : data.name,
-          description: description ? description : data.description,
-          price: price ? price : data.price,
-          images: image?.url,
+          images: [image.url],
+          name,
+          description,
+          price,
         },
-      },
-      onCompleted: () => {
-        setIsSubmited(true);
       },
     });
   }
@@ -65,8 +59,9 @@ export default function Inputs({
           width={100}
           height={100}
           src={
-            newName ? URL.createObjectURL(newName) : data?.images[0]
+            newName ? URL.createObjectURL(newName) : "/blur_image.webp"
           }></Image>
+
         <FileInput
           label="Upload Image"
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -76,28 +71,27 @@ export default function Inputs({
           }}
         />
         <Input
-          placeholder={data.name}
+          placeholder={"Item`s name"}
           label={"Name"}
           type="text"
-          defaultValue={data.name}
+          defaultValue={name}
           onChange={(e) => setName(e.target.value)}
         />
         <Input
-          placeholder={`${data.price}.00 kr`}
+          placeholder={`Price`}
           type="number"
           label={"Price"}
-          defaultValue={`${data.price} . 00`}
+          defaultValue={`${price} . 00`}
           onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
         <Input
-          placeholder={data.description}
+          placeholder={"Description"}
           label={"Description"}
           type="text"
-          defaultValue={data.description}
+          defaultValue={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        {submited && <SucceedMessage>Item Changed Successfuly</SucceedMessage>}
         <Button onClick={Submit as () => void}>Save</Button>
       </form>
     </div>

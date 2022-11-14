@@ -1,33 +1,61 @@
 import { useMutation, useQuery } from "@apollo/client";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { GET_MENU_CATREGORY } from "server/graphql/querys/querys.graphql";
+import {
+  GET_MENU_CATREGORY,
+  GET_MENU_ITEM_BY_CATREGORY,
+} from "server/graphql/querys/querys.graphql";
 import PrimaryLayout from "components/Primary-layout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
 import { useAuth, useProvideAuth } from "hooks/Context.hook";
-import { UPDATE_CATEGORY } from "@/server/graphql/querys/mutations.graphql";
 import {
+  ADD_MENU_CATEGORY,
+  ADD_MENU_ITEM,
+  UPDATE_CATEGORY,
+} from "@/server/graphql/querys/mutations.graphql";
+import {
+  AddMenuCategoryMutation,
+  AddMenuCategoryMutationVariables,
   MenuByCategoryQuery,
   MenuByCategoryQueryVariables,
 } from "@/server/generated/graphql";
 import { IoMdAddCircle } from "react-icons/io";
+import Modall from "@/components/Modal";
+import AddCategory from "@/components/AddCategory";
 
 export default function MenuItems() {
   const { user } = useProvideAuth();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
   const [submited, setIsSubmited] = useState(false);
+
+  const [addCategory, { data: addCategoryData }] = useMutation<
+    AddMenuCategoryMutation,
+    AddMenuCategoryMutationVariables
+  >(ADD_MENU_CATEGORY, {
+    refetchQueries: [
+      { query: GET_MENU_CATREGORY }, // DocumentNode object parsed with gql
+
+      "MenuByCategory", // Query name
+    ],
+    onCompleted: () => {
+      setShowModal(false);
+
+      setTimeout(() => {
+        setIsSubmited(true);
+      }, 1000);
+    },
+  });
+
   const { data: restaurantCategorysData, refetch } = useQuery<
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
     variables: {
       restaurant: user.data?.CurrentUser?.restaurant.name as string,
-    },
-    onCompleted: () => {
-      setIsSubmited(true);
     },
   });
 
@@ -39,7 +67,22 @@ export default function MenuItems() {
     <div className={styles.container}>
       <h2>Restaurant Menu</h2>
       <div className={styles.add_button_parent}>
-        <IoMdAddCircle className={styles.add_button} />
+        <IoMdAddCircle
+          className={styles.add_button}
+          onClick={() => setShowModal(true)}
+        />
+        <Modall
+          isModalOpen={showModal}
+          setIsModalOpen={setShowModal}
+          label="Add new menu item">
+          <AddCategory
+            restaurant={user.data?.CurrentUser?.restaurant}
+            submit={addCategory}
+            onChangeImage={uploadImage}
+            fetchedImage={image}
+            isAdded={addCategoryData ? true : false}
+          />
+        </Modall>
       </div>
 
       <div className={styles.parent}>

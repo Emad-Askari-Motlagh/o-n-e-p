@@ -72,8 +72,8 @@ type Restaurant {
 }
 
 type Location {
-  mytype: String!
-  coordinates: [Int!]
+  type: String!
+  coordinates: [Float!]
 }
 input LocationInput {
   mytype: String!
@@ -215,11 +215,7 @@ type Mutation {
   ): MenuItem
   SignOut: String
   SignOutCostumer: String
-  AddMenuCategory(
-    restaurant: String!
-    itemName: String!
-    collectionType: String!
-  ): MenuParent
+  AddMenuCategory(name: String!, image: String!): MenuParent
   AddOrder(productId: ID!): [AdminOrder]!
   RemoveOrder(productId: ID!): [AdminOrder]!
   GetOrderItem(productId: ID!, restaurant: String!): OrderItem
@@ -241,6 +237,6 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  Pay(restaurant: String, products: [String]): [PayedItem]!
+  # Pay(restaurant: String, products: [String]): [PayedItem]!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
 }

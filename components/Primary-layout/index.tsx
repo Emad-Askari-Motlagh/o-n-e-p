@@ -14,16 +14,23 @@ import { useProvideAuth } from "hooks/Context.hook";
 import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import Sammary from "components/OrdersSammary";
 import { ReactElement, ReactNode, useEffect } from "react";
-
+import WithHigherOrder from "../../Hoc/withState";
 type LayoutProps = {
   children: ReactNode;
   isCurrent: boolean;
 };
 
-export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
+function PrimaryLayout({
+  children,
+  isCurrent,
+  emi,
+  signOut,
+  user,
+  costumerData,
+  signOutCostumer,
+}: LayoutProps) {
   const { isVisible, setIsVisible, ref } = useVisible(false);
   const router = useRouter();
-  const { signOut, user, costumerData, signOutCostumer } = useProvideAuth();
 
   return (
     <div className={style.layout}>
@@ -71,3 +78,5 @@ export default function PrimaryLayout({ children, isCurrent }: LayoutProps) {
     </div>
   );
 }
+
+export default WithHigherOrder(PrimaryLayout);

@@ -9,11 +9,13 @@ export default function HomeScreen({ ALL_RESTAURANTS }) {
   if (!ALL_RESTAURANTS?.length) {
     return null;
   }
+
   return (
     <div className={styles.container}>
       {ALL_RESTAURANTS.map((res) => (
         <Restaurant
           setId={setId}
+          location={res.location.coordinates}
           key={res._id ?? id}
           name={res?.name ?? placeHolder}
           type={res?.type ?? placeHolder}
