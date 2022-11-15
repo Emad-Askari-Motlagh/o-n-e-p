@@ -14,7 +14,10 @@
   font-family: "Playfair Display", serif;
   padding: 1%;
   color: wheat;
-
+  @include sm {
+    width: 80%;
+    margin: auto;
+  }
   .extraParent {
     position: absolute;
     overflow: hidden;

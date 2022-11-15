@@ -64,7 +64,7 @@ $BC_COLOR: #242424;
   @include xl {
     border-radius: 0;
   }
-  label {
+  .label {
     text-align: center;
     color: whitesmoke;
     margin: auto;
@@ -78,21 +78,24 @@ $BC_COLOR: #242424;
     border: 4px solid #333;
     font-size: 44px;
     width: fit-content;
+    @include md {
+      font-size: 38px;
+    }
+    @include sm {
+      font-size: 32px;
+    }
   }
   .items_parent {
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    gap: 2em;
+    margin: auto;
     flex-wrap: wrap;
-    .item_parent {
-      width: 40%;
-
-      @include md {
-        width: 80%;
-      }
-    }
+    min-width: 300px;
     @include md {
+      width: 90%;
       display: flex;
       flex-wrap: wrap;
       min-height: inherit;

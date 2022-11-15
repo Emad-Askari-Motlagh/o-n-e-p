@@ -1,4 +1,5 @@
 @import "styles/fonts.scss";
+@import "styles/breakpoints.scss";
 
 .container {
   width: 100%;
@@ -29,6 +30,9 @@
     align-items: center;
     flex-wrap: wrap;
     margin: auto;
+    @include sm {
+      flex-direction: column;
+    }
   }
   .checkOutBar_perent {
     .orders_label {
