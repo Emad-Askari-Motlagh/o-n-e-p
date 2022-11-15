@@ -151,11 +151,11 @@ export const UPDATE_CATEGORY = gql`
   }
 `;
 
-// export const PAY_STRIPE = gql`
-//   mutation Pay($restaurant: String, $orders: [OrderItem]) {
-//     Pay(restaurant: $restaurant, orders: $price)
-//   }
-// `;
+export const PAY = gql`
+  mutation Pay($restaurant: String, $orders: [OrderItem]) {
+    Pay(restaurant: $restaurant, orders: $price)
+  }
+`;
 
 export const ADD_CUSTOMER_ADDRESS = gql`
   mutation AddCostumerAddress($address: CostumerAddressInput) {
