@@ -1,0 +1,57 @@
+@import "styles/fonts.scss";
+@import "styles/breakpoints.scss";
+
+.dash_container {
+    color: whitesmoke;
+    min-height: 100vmin;
+    font-family: "playfair";
+    h1 {
+        font-weight: 900;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "playfair", sans-serif;
+        text-shadow: 1px 1px 1px rgb(13, 0, 0);
+        margin-top: 3%;
+    }
+    .info_container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        span {
+            opacity: 0.5;
+            font-family: "playfair", sans-serif;
+        }
+    }
+    .rapport_container {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 5%;
+        gap: 1em;
+        flex-wrap: wrap;
+        .rapport_item {
+            text-align: center;
+            width: 30%;
+            height: 300px;
+            overflow: visible;
+            background-color: #383838;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: url("/calc.gif") center center no-repeat;
+            object-fit: contain;
+            background-size: cover;
+            color: #383838;
+            letter-spacing: 0.3em;
+            border: 3px double lightcoral;
+            min-width: 350px;
+
+            cursor: pointer;
+
+            @include md {
+                width: 90%;
+            }
+        }
+    }
+}

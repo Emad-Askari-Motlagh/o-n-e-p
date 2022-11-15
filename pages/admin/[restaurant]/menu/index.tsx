@@ -74,7 +74,7 @@ export default function MenuItems() {
         <Modall
           isModalOpen={showModal}
           setIsModalOpen={setShowModal}
-          label="Add new menu item">
+          label="Add new category">
           <AddCategory
             restaurant={user.data?.CurrentUser?.restaurant}
             submit={addCategory}

@@ -7,13 +7,12 @@ import Modal from "components/Modal";
 import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
 
-
-interface MenuEditor{
-  data:{images:[string],name:string,price:number},
+interface MenuEditor {
+  data: { images: [string]; name: string; price: number };
   submit: (e: ChangeEvent<HTMLSelectElement>) => void;
-  restaurant:string,
-  category:string,
-  isSaved:boolean,
+  restaurant: string;
+  category: string;
+  isSaved: boolean;
 }
 export default function MenuEditor({
   data,
@@ -21,7 +20,7 @@ export default function MenuEditor({
   restaurant,
   category,
   isSaved,
-}:MenuEditor) {
+}: MenuEditor) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -51,14 +50,14 @@ export default function MenuEditor({
 
       <Modal
         isModalOpen={isOpen}
-        setIsModalOpen={setIsOpen}>
+        setIsModalOpen={setIsOpen}
+        label="Edit menu item">
         <Inputs
           category={category}
           restaurant={restaurant}
           data={data}
           submit={submit}
         />
-        {isSaved&&}
       </Modal>
     </div>
   );

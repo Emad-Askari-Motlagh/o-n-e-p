@@ -56,7 +56,7 @@ function SideBar({
             <DropdownItem
               leftIcon={<RiDashboard2Fill className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${user.restaurant.name}`}
+              endPoint={`/admin/${user.restaurant.name}/dashboard`}
               itemsLabel="Dashboard"></DropdownItem>
             <DropdownItem
               leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
