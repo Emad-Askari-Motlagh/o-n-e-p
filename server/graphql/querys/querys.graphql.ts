@@ -14,6 +14,9 @@ export const FETCH_ALL_RESTAURANTS = gql`
       type
       images
       rating
+      openTimes
+      address
+      foodTypes
       _id
     }
   }
@@ -27,6 +30,9 @@ export const GET_CURRENT_USER = gql`
       _id
       restaurant {
         name
+        openTimes
+        address
+        foodTypes
       }
     }
   }

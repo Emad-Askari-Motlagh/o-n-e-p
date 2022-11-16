@@ -161,6 +161,7 @@ export type Mutation = {
   FetchRestaurantsByQuery?: Maybe<Array<Maybe<Restaurant>>>;
   GetCostumerOrders: Array<Maybe<OrderItem>>;
   GetOrderItem?: Maybe<OrderItem>;
+  Pay: Array<Maybe<PayedItem>>;
   PostMessage: Scalars['ID'];
   RemoveOrder: Array<Maybe<AdminOrder>>;
   SendResetPassword: User;
@@ -255,6 +256,12 @@ export type MutationGetCostumerOrdersArgs = {
 export type MutationGetOrderItemArgs = {
   productId: Scalars['ID'];
   restaurant: Scalars['String'];
+};
+
+
+export type MutationPayArgs = {
+  products?: InputMaybe<Array<InputMaybe<MenuItemInput>>>;
+  restaurant?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -401,6 +408,7 @@ export type Restaurant = {
   location?: Maybe<Location>;
   name?: Maybe<Scalars['String']>;
   numReviews?: Maybe<Scalars['Int']>;
+  openTimes?: Maybe<Scalars['String']>;
   owner?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Int']>;
   reviews?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -561,6 +569,14 @@ export type UpdateCategoryMutationVariables = Exact<{
 
 export type UpdateCategoryMutation = { __typename?: 'Mutation', UpdateCategory: { __typename?: 'MenuParent', itemName?: string | null } };
 
+export type PayMutationVariables = Exact<{
+  restaurant?: InputMaybe<Scalars['String']>;
+  products?: InputMaybe<Array<InputMaybe<MenuItemInput>> | InputMaybe<MenuItemInput>>;
+}>;
+
+
+export type PayMutation = { __typename?: 'Mutation', Pay: Array<{ __typename?: 'PayedItem', product?: { __typename?: 'MenuItem', name?: string | null } | null } | null> };
+
 export type AddCostumerAddressMutationVariables = Exact<{
   address?: InputMaybe<CostumerAddressInput>;
 }>;
@@ -579,7 +595,7 @@ export type AddMenuCategoryMutation = { __typename?: 'Mutation', AddMenuCategory
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, _id?: string | null, location?: { __typename?: 'Location', coordinates?: Array<number> | null } | null } | null> | null };
+export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, openTimes?: string | null, _id?: string | null, location?: { __typename?: 'Location', coordinates?: Array<number> | null } | null } | null> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1208,6 +1224,42 @@ export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+export const PayDocument = gql`
+    mutation Pay($restaurant: String, $products: [MenuItemInput]) {
+  Pay(restaurant: $restaurant, products: $products) {
+    product {
+      name
+    }
+  }
+}
+    `;
+export type PayMutationFn = Apollo.MutationFunction<PayMutation, PayMutationVariables>;
+
+/**
+ * __usePayMutation__
+ *
+ * To run a mutation, you first call `usePayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payMutation, { data, loading, error }] = usePayMutation({
+ *   variables: {
+ *      restaurant: // value for 'restaurant'
+ *      products: // value for 'products'
+ *   },
+ * });
+ */
+export function usePayMutation(baseOptions?: Apollo.MutationHookOptions<PayMutation, PayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayMutation, PayMutationVariables>(PayDocument, options);
+      }
+export type PayMutationHookResult = ReturnType<typeof usePayMutation>;
+export type PayMutationResult = Apollo.MutationResult<PayMutation>;
+export type PayMutationOptions = Apollo.BaseMutationOptions<PayMutation, PayMutationVariables>;
 export const AddCostumerAddressDocument = gql`
     mutation AddCostumerAddress($address: CostumerAddressInput) {
   AddCostumerAddress(address: $address) {
@@ -1293,6 +1345,7 @@ export const RestaurantsDocument = gql`
     type
     images
     rating
+    openTimes
     _id
   }
 }
@@ -2070,6 +2123,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   FetchRestaurantsByQuery?: Resolver<Maybe<Array<Maybe<ResolversTypes['Restaurant']>>>, ParentType, ContextType, Partial<MutationFetchRestaurantsByQueryArgs>>;
   GetCostumerOrders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<MutationGetCostumerOrdersArgs, 'restaurant'>>;
   GetOrderItem?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<MutationGetOrderItemArgs, 'productId' | 'restaurant'>>;
+  Pay?: Resolver<Array<Maybe<ResolversTypes['PayedItem']>>, ParentType, ContextType, Partial<MutationPayArgs>>;
   PostMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationPostMessageArgs, 'content' | 'user'>>;
   RemoveOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationRemoveOrderArgs, 'productId'>>;
   SendResetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendResetPasswordArgs, 'email'>>;
@@ -2127,6 +2181,7 @@ export type RestaurantResolvers<ContextType = any, ParentType extends ResolversP
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   numReviews?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  openTimes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   rating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   reviews?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;

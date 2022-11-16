@@ -5,25 +5,27 @@ import PageTwo from "components/Footer";
 import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";
 import { useRouter } from "next/router";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  GET_CURRENT_USER,
-  GET_COSTUMER,
-} from "server/graphql/querys/querys.graphql";
-import { useProvideAuth } from "hooks/Context.hook";
-import { SIGN_OUT_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import Sammary from "components/OrdersSammary";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import WithHigherOrder from "../../Hoc/withState";
+import {
+  CostumerQueryResult,
+  CurrentUserQueryResult,
+  SignOutCostumerMutationFn,
+  SignOutMutationFn,
+} from "@/server/generated/graphql";
 type LayoutProps = {
   children: ReactNode;
   isCurrent: boolean;
+  signOut: SignOutMutationFn;
+  user: CurrentUserQueryResult;
+  costumerData: CostumerQueryResult;
+  signOutCostumer: SignOutCostumerMutationFn;
 };
 
 function PrimaryLayout({
   children,
   isCurrent,
-  emi,
   signOut,
   user,
   costumerData,

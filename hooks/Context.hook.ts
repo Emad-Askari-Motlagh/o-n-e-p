@@ -14,17 +14,9 @@ import {
   SignOutCostumerMutation,
   SignOutCostumerMutationVariables,
 } from "server/generated/graphql";
-import React, {
-  useState,
-  useContext,
-  createContext,
-  useEffect,
-  Context,
-  ReactNode,
-  useCallback,
-} from "react";
-import { ApolloProvider, useMutation, useQuery } from "@apollo/client";
-import { initializeApollo, useApollo } from "lib/apollo/apollo-client";
+import React, { useState, useContext, createContext } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useApollo } from "lib/apollo/apollo-client";
 import {
   GET_COSTUMER,
   GET_CURRENT_USER,

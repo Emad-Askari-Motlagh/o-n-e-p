@@ -7,6 +7,8 @@ const restaurangSchema = new mongoose.Schema(
     description: String,
     numReviews: mongoose.SchemaTypes.Number,
     reviews: [String],
+    openTimes: String,
+    address: String,
     type: String,
     location: {
       type: {

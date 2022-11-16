@@ -1,6 +1,6 @@
 union CostumerMenuChoises = OrderItem | MenuItem
 union SaveCookie = CookieSuccess | CookieError
-
+union InfoItem = User | Restaurant
 scalar Date
 
 type CookieError {
@@ -69,6 +69,9 @@ type Restaurant {
   rating: Int
   location: Location
   _id: ID
+  openTimes: String
+  address: String
+  foodTypes: String
 }
 
 type Location {
@@ -237,6 +240,12 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  Pay(restaurant: String, products: [String]): [PayedItem]!
+  Pay(restaurant: String, products: [MenuItemInput]): [PayedItem]!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
+  EditUserInfoItem(name: String!, value: String!): User
+  EditRestaurantInfoItem(
+    restaurant: String
+    name: String!
+    value: String!
+  ): Restaurant
 }

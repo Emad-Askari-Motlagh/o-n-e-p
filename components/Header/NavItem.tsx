@@ -6,8 +6,7 @@ export default function NavItem(props) {
     <li
       className={styles.nav_item}
       onClick={props.onClick}
-      onPointerLeave={props.onPointerLeave}
-    >
+      onPointerLeave={props.onPointerLeave}>
       {props.children}
       {props.icon}
       <span>{props.header_label}</span>

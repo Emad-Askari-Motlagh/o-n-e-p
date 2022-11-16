@@ -1,3 +1,5 @@
+import userSchema from "@/server/mongoSchema/userSchema";
+import { mongoose } from "mongoose";
 import Restaurant from "server/mongoSchema/restaurangSchema";
 
 const productResolvers = {
@@ -57,6 +59,18 @@ const productResolvers = {
         id,
         location,
       };
+    },
+    async EditRestaurantInfoItem(_, { restaurant, name, value }, { userId }) {
+      if (!userId) {
+        return null;
+      }
+      const user = await userSchema.findById(userId).populate("restaurant");
+
+      const res = await Restaurant.findOneAndUpdate(
+        { name: user.restaurant.name },
+        { $set: { name: value } }
+      );
+      return res;
     },
   },
 };

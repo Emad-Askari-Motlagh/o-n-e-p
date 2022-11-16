@@ -82,7 +82,7 @@ export default function Header(props) {
         <NavItem
           header_label=""
           icon={
-            <Link href="/auth/login">
+            <Link href={userData ? "/profile" : "/auth/login"}>
               <div>
                 {" "}
                 <CgProfile className={styles.icons} color="tomato" />

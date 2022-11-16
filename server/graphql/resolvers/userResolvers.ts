@@ -241,6 +241,17 @@ const userResolvers = {
         throw new ApolloError("Couldnt save the address");
       }
     },
+    async EditUserInfoItem(_: any, { name, value }, { userId }) {
+      if (!userId) {
+        return null;
+      }
+      const id = await new mongoose.Types.ObjectId(userId);
+      const user = await User.findOneAndUpdate(
+        { _id: id },
+        { $set: { name: value } }
+      );
+      return user;
+    },
   },
 };
 

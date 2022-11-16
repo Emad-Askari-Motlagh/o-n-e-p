@@ -44,10 +44,7 @@ const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
       console.log(err);
     }
   }
-  async function find() {
-    const res = await axios.get("/api/test");
-    console.log(res.data);
-  }
+
   return (
     <>
       <Search_form

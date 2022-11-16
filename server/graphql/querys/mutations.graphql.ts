@@ -152,8 +152,12 @@ export const UPDATE_CATEGORY = gql`
 `;
 
 export const PAY = gql`
-  mutation Pay($restaurant: String, $orders: [OrderItem]) {
-    Pay(restaurant: $restaurant, orders: $price)
+  mutation Pay($restaurant: String, $products: [MenuItemInput]) {
+    Pay(restaurant: $restaurant, products: $products) {
+      product {
+        name
+      }
+    }
   }
 `;
 
@@ -173,6 +177,29 @@ export const ADD_MENU_CATEGORY = gql`
   mutation AddMenuCategory($name: String!, $image: String!) {
     AddMenuCategory(name: $name, image: $image) {
       itemName
+    }
+  }
+`;
+
+export const EDIT_USER_INFO_ITEM = gql`
+  mutation EditUserInfoItem($name: String!, $value: String!) {
+    EditUserInfoItem(name: $name, value: $value) {
+      name
+    }
+  }
+`;
+export const EDIT_RESTAURANT_INFO_ITEM = gql`
+  mutation EditRestaurantInfoItem(
+    $restaurant: String!
+    $name: String!
+    $value: String!
+  ) {
+    EditRestaurantInfoItem(
+      restaurant: $restaurant
+      name: $name
+      value: $value
+    ) {
+      name
     }
   }
 `;
