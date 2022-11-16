@@ -21,6 +21,18 @@ $box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
         width: 100%;
         color: whitesmoke;
     }
+    .info_section {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & > * {
+            @include md {
+                font-size: 15px;
+            }
+        }
+    }
     .edit_icon {
         color: tomato;
         font-size: 22px;

@@ -23,7 +23,7 @@ const InfoItem = ({
   return (
     <div className={styles.info_parent}>
       <div className={styles.parent}>
-        <div>
+        <div className={styles.info_section}>
           <label>{label}</label>
           <span>{value}</span>
         </div>

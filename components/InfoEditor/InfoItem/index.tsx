@@ -4,11 +4,18 @@ import React, { useState } from "react";
 import styles from "./style.module.scss";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import SucceedMessage from "@/components/Succeed-Message";
 
 const InfoEditor = ({ label, placeHolder, changeItem, type }) => {
   const [value, setValue] = useState();
+  const [changedSuccess, setChangedSuccess] = useState(false);
   function change() {
-    changeItem({ variables: { name: label, value } });
+    changeItem({
+      variables: { name: label, value },
+      onCompleted: () => {
+        setChangedSuccess(true);
+      },
+    });
   }
   return (
     <div className={styles.info_editor}>
@@ -18,6 +25,7 @@ const InfoEditor = ({ label, placeHolder, changeItem, type }) => {
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeHolder}></Input>
         <Button onClick={change}>Submit your change</Button>
+        {changedSuccess && <SucceedMessage>The item changed</SucceedMessage>}
       </div>
     </div>
   );
