@@ -4,9 +4,10 @@ import restaurangtResolver from "./restaurantResolvers";
 import userResolvers from "./userResolvers";
 import menuResolvers from "./menuResolvers";
 import costumerSchema from "./costumerResolvers";
-import orderResolvers from "./orderResolvers";
+import sellResolvers from "./sellResolver";
 import paymentResolvers from "./paymentResolvers";
-import kontaktResolvers from "./kontaktResolvers"
+import kontaktResolvers from "./kontaktResolvers";
+import orderResolvers from "./orderResolvers";
 //Merge all resolvers before send to apollo
 const resolvers = [
   userResolvers,
@@ -15,7 +16,8 @@ const resolvers = [
   costumerSchema,
   orderResolvers,
   paymentResolvers,
-  kontaktResolvers
+  kontaktResolvers,
+  sellResolvers,
 ];
 
 export default mergeResolvers(resolvers);

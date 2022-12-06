@@ -1,10 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  CSSProperties,
-  EventHandler,
-  useState,
-  ChangeEvent,
-} from "react";
+import React, { CSSProperties, ChangeEvent } from "react";
 import styles from "./input.module.scss";
 
 type InputProps = {
@@ -34,7 +28,7 @@ export default function Input(
     width,
     defaultValue,
   }: InputProps,
-  props: React.ComponentPropsWithRef<"input">
+  props: React.ComponentPropsWithRef<any>
 ) {
   return (
     <div className={styles.container} style={{ width }}>

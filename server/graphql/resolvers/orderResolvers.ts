@@ -4,7 +4,7 @@ import {
 } from "./../../generated/graphql";
 import Order from "@/server/mongoSchema/orderschema";
 import { ApolloError, ForbiddenError } from "apollo-server";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { createPubSub } from "@graphql-yoga/node";
 import { GraphQLError } from "graphql";
 // import { loadStripe } from "@stripe/stripe-js";
@@ -309,21 +309,38 @@ const orderResolvers = {
     ) {
       try {
         const cosId = new mongoose.Types.ObjectId(costumerId);
-        const orders = products.map(async (res) => {
-          const id = new mongoose.Types.ObjectId(res);
-          const order = await Order.findById(id);
-          const payedOrder = await new PayedItem({
-            restaurant: restaurant,
-            costumer: cosId,
-            product: order.product,
-          });
 
-          await payedOrder.save();
+        const idsArray = products.map((res) => {
+          const id = new Types.ObjectId(res);
 
-          await Order.findOneAndRemove({ _id: id });
-          return payedOrder;
+          return id;
         });
-        return orders;
+
+        const initialValue = 0;
+        const sumWithInitial = await products?.reduce(
+          async (accumulator, currentValue) => {
+            const id = new Types.ObjectId(currentValue);
+            const ff = await Order.findById(id).populate("product");
+            return (accumulator + ff.product.price) as Number;
+          },
+          initialValue
+        );
+
+        const payedOrder = await new PayedItem({
+          restaurant: restaurant,
+          costumer: cosId,
+          product: idsArray,
+          price: sumWithInitial,
+        });
+
+        const payed = await payedOrder.save();
+        products.map(async (res) => {
+          const id = new Types.ObjectId(res);
+          await Order.findOneAndRemove({ _id: id });
+          return id;
+        });
+
+        return payed;
       } catch (err: any) {
         console.log(err);
       }

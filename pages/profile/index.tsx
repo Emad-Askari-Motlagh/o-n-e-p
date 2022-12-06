@@ -8,14 +8,20 @@ import {
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
 import { useProvideAuth } from "hooks/Context.hook";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styles from "./style.module.scss";
+import { CgProfile } from "react-icons/cg";
 
 export default function Profile() {
+  //   interface Emi{
+  //     name<T>:string
+  // };
+
   const { user } = useProvideAuth();
   const userInfo = user.data?.CurrentUser;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
-
+  const router = useRouter();
   const [changeUserInfo, { data: userEditData }] = useMutation(
     EDIT_USER_INFO_ITEM,
     refetch
@@ -24,10 +30,17 @@ export default function Profile() {
     EDIT_RESTAURANT_INFO_ITEM,
     refetch
   );
-
+  if (!user.data?.CurrentUser) {
+    router.push("/auth/login");
+  }
   return (
     <div className={styles.container}>
-      <h1>Profile</h1>
+      <div className={styles.header_container}>
+        <span>
+          <CgProfile className={styles.icon} />
+        </span>
+        <h1>Profile</h1>
+      </div>
       <InfoParent type="user" header="User information">
         <InfoItem
           label="Name"
@@ -44,25 +57,21 @@ export default function Profile() {
       </InfoParent>
       <InfoParent type="restaurant" header="Restaurant information">
         <InfoItem
-          type="restaurant"
           label="Name"
           value={userInfo?.restaurant.name as string}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
           label="Open times"
-          type="restaurant"
           value={userInfo?.restaurant.openTimes as string}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
           label="Address"
-          type="restaurant"
           value={userInfo?.restaurant.address as string}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
-          type="restaurant"
           label="Food types"
           value={"userInfo?.name"}
           changeItem={changeRestaurantInfo}

@@ -109,6 +109,7 @@
     "react-use-websocket": "^4.2.0",
     "react-visibility-sensor": "^5.1.1",
     "realm-web": "^1.6.0",
+    "recharts": "^2.1.16",
     "sass": "^1.32.8",
     "sentiment": "^5.0.2",
     "socket.io": "^4.5.1",

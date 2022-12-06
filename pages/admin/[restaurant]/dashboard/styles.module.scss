@@ -1,6 +1,25 @@
 @import "styles/fonts.scss";
 @import "styles/breakpoints.scss";
+@mixin rapport_item {
+    text-align: center;
+    width: 30%;
+    height: 300px;
+    overflow: visible;
+    background-color: #383838;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 12px;
+    font-weight: 700;
 
+    object-fit: contain;
+    background-size: contain;
+    color: #383838;
+    letter-spacing: 0.3em;
+    border: 3px double lightcoral;
+    min-width: 350px;
+    @include md {
+        width: 90%;
+    }
+}
 .dash_container {
     color: whitesmoke;
     min-height: 100vmin;
@@ -30,28 +49,20 @@
         margin-top: 5%;
         gap: 1em;
         flex-wrap: wrap;
+        .rapport_item,
+        .rapport_item1,
+        .rapport_item2 {
+            @include rapport_item;
+        }
         .rapport_item {
-            text-align: center;
-            width: 30%;
-            height: 300px;
-            overflow: visible;
-            background-color: #383838;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            background: url("/calc.gif") center center no-repeat;
-            object-fit: contain;
-            background-size: cover;
-            color: #383838;
-            letter-spacing: 0.3em;
-            border: 3px double lightcoral;
-            min-width: 350px;
-
+            background-image: url("/calc.gif");
+        }
+        .rapport_item1 {
             cursor: pointer;
-
-            @include md {
-                width: 90%;
-            }
+            background-image: url("/rapport.png");
+        }
+        .rapport_item2 {
+            background-image: url("/calc.gif");
         }
     }
 }

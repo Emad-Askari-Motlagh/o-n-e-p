@@ -6,7 +6,7 @@ const rservationSchema = new mongoose.Schema(
   {
     costumer: String,
     description: String,
-    date: { type: mongoose.SchemaTypes.Date, required: true },
+    date: { type: mongoose.SchemaTypes.Date },
     restaurant: {
       type: String,
       ref: restaurangSchema ?? "Restaurang",

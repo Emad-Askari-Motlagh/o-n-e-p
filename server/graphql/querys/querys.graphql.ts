@@ -205,3 +205,15 @@ export const GET_PAYED_ORDERS = gql`
     }
   }
 `;
+
+export const GET_ANALISTICS = gql`
+  query GetAnalistics {
+    GetAnalistics {
+      month
+      year
+      day
+      sum
+      dayOfYear
+    }
+  }
+`;

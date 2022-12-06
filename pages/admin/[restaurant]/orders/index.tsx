@@ -63,13 +63,13 @@ const AdminsOrders = () => {
 
   return (
     <div className={styles.container}>
-      {/* <span style={{ marginLeft: "20px" }}>
+      <span style={{ marginLeft: "20px" }}>
         {date.getFullYear() +
           "-" +
           (date.getMonth() + 1) +
           "-" +
           date.getDate()}
-      </span> */}
+      </span>
       <div className={styles.search_parent} style={{ margin: "20px" }}>
         <Search
           label={"Hitta din restaurang"}
@@ -83,7 +83,7 @@ const AdminsOrders = () => {
             <TableHeader>Name</TableHeader>
             <TableHeader>quantity</TableHeader>
             <TableHeader>price</TableHeader>
-            <TableHeader>Description</TableHeader>
+            <TableHeader>Order Time</TableHeader>
             <TableHeader>View</TableHeader>
           </tr>
           {Array.isArray(orders) &&
@@ -103,7 +103,7 @@ const AdminsOrders = () => {
                   </TableData>
                   <TableData>{fact?.product?.price}</TableData>
                   <TableData>
-                    <BiTrash />
+                    <time>2/3/3</time>
                   </TableData>
                   <TableData>
                     <FiEye />

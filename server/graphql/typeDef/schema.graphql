@@ -125,6 +125,20 @@ type AdminOrder {
   restaurant: String
   _id: ID
 }
+type Analistic {
+  _id: ID
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minutes: Int
+  seconds: Int
+  milliseconds: Int
+  dayOfYear: Int
+  dayOfWeek: Int
+  week: Int
+  sum: Int
+}
 input MenuItemInput {
   name: String
   itemsType: String
@@ -146,6 +160,14 @@ type CostumerAddress {
   postNumber: Int
   address: String
 }
+
+type SellInfo {
+  sum: Float
+  Restaurant: Restaurant
+  date: Date
+  items: [MenuItem]
+  costumer: Costumer
+}
 input CostumerAddressInput {
   title: String
   city: String
@@ -160,6 +182,7 @@ input MenuParentInput {
   item: [MenuItemInput!]
 }
 input MenuItemInput {
+  id: String
   price: Int
   description: String
   name: String
@@ -188,6 +211,7 @@ type Query {
   AdminOrders: [AdminOrder]!
   Address: CostumerAddress
   PayedOrders(restaurant: String!): [PayedItem]!
+  GetAnalistics: [Analistic]
 }
 
 type Mutation {
@@ -240,7 +264,7 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  Pay(restaurant: String, products: [MenuItemInput]): [PayedItem]!
+  Pay(restaurant: String, products: [String]): PayedItem!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
   EditUserInfoItem(name: String!, value: String!): User
   EditRestaurantInfoItem(
@@ -248,4 +272,5 @@ type Mutation {
     name: String!
     value: String!
   ): Restaurant
+  AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
 }

@@ -23,6 +23,9 @@ export default function CheckOut() {
     onCompleted: () => {
       router.push(`/restaurant/${router.query.name}`);
     },
+    onError: (err) => {
+      console.log(err);
+    },
     refetchQueries: [
       {
         query: GET_ORDERS_CONSTANTLY,
@@ -40,9 +43,6 @@ export default function CheckOut() {
     orderQuantity?: number;
     product?: { price: number };
   }
-  useEffect(() => {
-    console.log(orders);
-  }, [orders]);
 
   //Compute total payment amount
   function countSum() {

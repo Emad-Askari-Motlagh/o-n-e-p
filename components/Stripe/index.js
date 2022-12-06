@@ -36,17 +36,20 @@ export default function Stripe({ amount, sum, quantity, orders, pay }) {
       card: cardElement,
     });
     if (error) {
-      console.log("[error]", error);
       setError(error.message);
     } else {
       try {
         const { id } = paymentMethod;
+        console.log("payment id", id);
         if (id) {
           orders?.map((res) => console.log(res?._id)), setSuccess(true);
           pay({
             variables: {
               restaurant: router.query.name,
               products: orders?.map((res) => res?._id),
+            },
+            onError: (err) => {
+              console.log(err);
             },
           });
         }

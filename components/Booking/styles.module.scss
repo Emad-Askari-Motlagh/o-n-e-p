@@ -10,7 +10,6 @@
     text-decoration: underline;
   }
   .calendar {
-    border: 1px solid lightblue;
     width: 50%;
     margin: 20px auto;
     padding: 15px;
@@ -50,7 +49,7 @@
       background-color: rgba(255, 99, 71, 0.425);
       border-radius: 10px;
       padding: 10px;
-      border: 1px solid rgb(170, 156, 156);
+
       margin: 10px;
       min-width: 300px;
       font-family: "Amaranth", sans-serif;
@@ -85,7 +84,6 @@
     }
   }
   .book_item {
-    border: 2px solid white;
     width: 90%;
     padding: 1% 4%;
     display: flex;

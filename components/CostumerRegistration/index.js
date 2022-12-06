@@ -38,14 +38,14 @@ export default function CostumerRegister({ onSubmit }) {
           width={"80%"}
         />
 
-        {errors.table ? (
+        {touched.table && errors.table && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
             className="error">
             {errors.table}
           </Alert>
-        ) : null}
+        )}
         <Input
           placeholder="Name"
           name={"name"}
@@ -54,14 +54,14 @@ export default function CostumerRegister({ onSubmit }) {
           onChange={handleChange}
           width={"80%"}
         />
-        {errors.name ? (
+        {touched.name && errors.name && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
             className="error">
             {errors.name}
           </Alert>
-        ) : null}
+        )}
         <Input
           placeholder="Email"
           name={"email"}
@@ -70,14 +70,14 @@ export default function CostumerRegister({ onSubmit }) {
           onChange={handleChange}
           width={"80%"}
         />
-        {touched.email && errors.email ? (
+        {touched.email && errors.email && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
             className="error">
             {errors.email}
           </Alert>
-        ) : null}
+        )}
         <Button type="submit" width={"80%"}>
           Register
         </Button>

@@ -5,9 +5,15 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
     label {
         color: whitesmoke;
         margin-bottom: 0.4em;
+        width: 90%;
+        margin: auto;
     }
     select {
         // Additional resets for further consistency
@@ -17,6 +23,7 @@
         height: 2em;
         margin-right: auto;
         width: 90%;
+        margin: auto;
         font-family: inherit;
         font-size: inherit;
         cursor: inherit;

@@ -29,7 +29,16 @@ $box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     @include lg {
         width: 90%;
     }
-
+    .header_container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 30%;
+        .icon {
+            font-size: 44px;
+            color: tomato;
+        }
+    }
     .header_parent {
         display: flex;
         justify-content: space-between;
