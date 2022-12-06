@@ -1,3 +1,5 @@
+@import "/styles/fonts";
+
 .container {
     width: 100%;
     margin: 1em;
@@ -5,21 +7,22 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
+    font-family: "playfair", sans-serif;
     margin: auto;
     margin-top: 1em;
     margin-bottom: 1em;
     label {
-        color: whitesmoke;
+        color: lightsteelblue;
         margin-bottom: 0.4em;
         width: 90%;
         margin: auto;
+        opacity: 0.5;
+        margin-bottom: 0.3em;
     }
     select {
         // Additional resets for further consistency
         background-color: wheat;
         border: none;
-
         height: 2em;
         margin-right: auto;
         width: 90%;
@@ -28,5 +31,8 @@
         font-size: inherit;
         cursor: inherit;
         line-height: inherit;
+        option {
+            opacity: 0.4;
+        }
     }
 }
