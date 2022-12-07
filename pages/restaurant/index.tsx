@@ -18,13 +18,27 @@ import {
 } from "@/server/generated/graphql";
 import { NextApiRequest } from "next";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   ALL_RESTAURANTS: string[];
+  adminIsOnline: boolean;
+  costumerIsOnline: boolean;
 }
-const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
+const Home = ({
+  ALL_RESTAURANTS,
+  adminIsOnline,
+  costumerIsOnline,
+}: HomeProps) => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQeury, setSearchQuery] = useState<string>();
+  const router = useRouter();
+  // useEffect(() => {
+  //   console.log(adminIsOnline);
+  //   if (adminIsOnline) {
+  //     router.push("/admin/dashboard");
+  //   }
+  // }, [adminIsOnline, costumerIsOnline, router.pathname]);
 
   function searchOverRestaurants(e: ChangeEvent<HTMLInputElement>) {
     try {
@@ -80,6 +94,8 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     return {
       props: {
         ALL_RESTAURANTS: res.data?.Restaurants,
+        adminIsOnline: req.cookies?.["token"] ? true : false,
+        costumerIsOnline: req.cookies?.["costumerId"] ? true : false,
       },
     };
   } catch (err) {

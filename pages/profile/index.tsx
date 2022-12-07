@@ -8,7 +8,6 @@ import {
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
 import { useProvideAuth } from "hooks/Context.hook";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
@@ -21,7 +20,7 @@ export default function Profile() {
   const { user } = useProvideAuth();
   const userInfo = user.data?.CurrentUser;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
-  const router = useRouter();
+
   const [changeUserInfo, { data: userEditData }] = useMutation(
     EDIT_USER_INFO_ITEM,
     refetch
@@ -31,7 +30,7 @@ export default function Profile() {
     refetch
   );
   if (!user.data?.CurrentUser) {
-    router.push("/auth/login");
+    return null;
   }
   return (
     <div className={styles.container}>
