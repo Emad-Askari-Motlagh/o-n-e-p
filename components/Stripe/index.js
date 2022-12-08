@@ -28,7 +28,7 @@ export default function Stripe({ amount, sum, quantity, orders, pay }) {
     if (!stripe || !elements || !orders.length) {
       return;
     }
-    console.log(orders);
+
     const cardElement = elements.getElement(CardElement);
     // Use your card Element with other Stripe.js APIs
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -42,7 +42,7 @@ export default function Stripe({ amount, sum, quantity, orders, pay }) {
         const { id } = paymentMethod;
         console.log("payment id", id);
         if (id) {
-          orders?.map((res) => console.log(res?._id)), setSuccess(true);
+          setSuccess(true);
           pay({
             variables: {
               restaurant: router.query.name,

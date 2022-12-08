@@ -5,12 +5,11 @@ const sellResolvers = {
   Query: {},
   Mutation: {
     async AddSellInfo(_: any, { restaurant, price, items }, { costumerId }) {
-      console.log(costumerId);
       if (!costumerId) {
         return null;
       }
       const costumer_id = new Types.ObjectId(costumerId);
-      const rr = items.map((res) => {
+      const itemsArr = items.map((res) => {
         const id = new Types.ObjectId(res);
         return id;
       });
@@ -19,7 +18,7 @@ const sellResolvers = {
         const res = await new Sell({
           sum: price,
           restaurant,
-          items: rr,
+          items: itemsArr,
           costumer: costumer_id,
         });
         const sell = await res.save();

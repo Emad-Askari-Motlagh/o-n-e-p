@@ -9,6 +9,7 @@ import { createPubSub } from "@graphql-yoga/node";
 import { GraphQLError } from "graphql";
 // import { loadStripe } from "@stripe/stripe-js";
 import PayedItem from "server/mongoSchema/payedItemSchema";
+import sellSchema from "server/mongoSchema/sellSchema";
 // import Stripe from "stripe";
 
 const pubsub = createPubSub();
@@ -102,7 +103,7 @@ const orderResolvers = {
       try {
         const id = new mongoose.Types.ObjectId(costumerId);
         const orders = await fetchPayedOrders({ costumer: id, restaurant });
-        console.log(orders);
+
         return orders;
       } catch (err) {
         console.log(err);
@@ -308,32 +309,31 @@ const orderResolvers = {
       { costumerId }: { costumerId: string }
     ) {
       try {
+        if (!costumerId) {
+          return null;
+        }
         const cosId = new mongoose.Types.ObjectId(costumerId);
-
-        const idsArray = products.map((res) => {
-          const id = new Types.ObjectId(res);
-
+        const eee = products.map((res) => {
+          const id = new mongoose.Types.ObjectId(res);
           return id;
         });
 
         const initialValue = 0;
-        const sumWithInitial = await products?.reduce(
-          async (accumulator, currentValue) => {
-            const id = new Types.ObjectId(currentValue);
-            const ff = await Order.findById(id).populate("product");
-            return (accumulator + ff.product.price) as Number;
-          },
-          initialValue
-        );
 
         const payedOrder = await new PayedItem({
           restaurant: restaurant,
           costumer: cosId,
-          product: idsArray,
-          price: sumWithInitial,
+          product: eee,
         });
-
+        const sell = await new sellSchema({
+          restaurant: restaurant,
+          costumer: cosId,
+          items: eee,
+          sum: Math.floor(Math.random() * 2000 + 10),
+        });
+        await sell.save();
         const payed = await payedOrder.save();
+
         products.map(async (res) => {
           const id = new Types.ObjectId(res);
           await Order.findOneAndRemove({ _id: id });

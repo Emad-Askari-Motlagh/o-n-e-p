@@ -14,6 +14,7 @@ const InfoItem = ({
   changeItem,
   type,
   children,
+  myR,
 }: {
   label: string;
   value: string;
@@ -21,7 +22,7 @@ const InfoItem = ({
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className={styles.info_parent}>
+    <div className={styles.info_parent} ref={myR}>
       <div className={styles.parent}>
         <div className={styles.info_section}>
           <label>{label}</label>

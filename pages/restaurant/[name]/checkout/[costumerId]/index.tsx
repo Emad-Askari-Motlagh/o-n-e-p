@@ -49,17 +49,15 @@ export default function CheckOut() {
     if (!orders) {
       return;
     }
+
     const initialValue = 0;
     if (Array.isArray(orders)) {
-      const sumWithInitial = orders?.reduce((previousValue, currentValue) => {
-        if (currentValue) {
-          return (
-            previousValue +
-              currentValue.product.price * currentValue.orderQuantity,
-            initialValue
-          );
-        }
-      });
+      const sumWithInitial = orders?.reduce(
+        (accumulator, currentValue) =>
+          accumulator + currentValue.product.price * currentValue.orderQuantity,
+        initialValue
+      );
+      console.log(sumWithInitial);
       return sumWithInitial;
     } else {
       return "...";
@@ -115,6 +113,7 @@ export default function CheckOut() {
         orders={orders}
         address={data?.Address}
         pay={pay}
+        price={countSum()}
       />
     </div>
   );

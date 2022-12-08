@@ -1,3 +1,4 @@
+import { orderschema } from "@/server/mongoSchema/orderschema";
 import mongoose, { Types, SchemaTypes, Document, Schema } from "mongoose";
 import costumerSchema from "./costumerSchema";
 import restaurangSchema from "./restaurangSchema";
@@ -19,9 +20,10 @@ var sellSchema = new mongoose.Schema(
     items: [
       {
         type: Schema.Types.ObjectId,
-        ref: restaurangSchema ?? "Restaurang",
+        ref: orderschema ?? "Order",
       },
     ],
+
     sum: Number,
     costumer: {
       type: Schema.Types.ObjectId,

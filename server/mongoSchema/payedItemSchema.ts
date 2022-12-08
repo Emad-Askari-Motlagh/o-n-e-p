@@ -1,3 +1,4 @@
+import orderschema from "@/server/mongoSchema/orderschema";
 import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 import mongoose, { Schema, PopulatedDoc, ObjectId } from "mongoose";
 import CostumerSchema from "./costumerSchema";
@@ -15,10 +16,12 @@ var PayedItem = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: CostumerSchema ?? "Costumer",
     },
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: MenuItemSchema ?? "MenuItem",
-    },
+    product: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: orderschema ?? "Order",
+      },
+    ],
     restaurant: { type: String },
     // description: { type: String, unique: true, required: true },
 

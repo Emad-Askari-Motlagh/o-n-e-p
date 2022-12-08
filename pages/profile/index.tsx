@@ -8,7 +8,7 @@ import {
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
 import { useProvideAuth } from "hooks/Context.hook";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
 
@@ -29,6 +29,7 @@ export default function Profile() {
     EDIT_RESTAURANT_INFO_ITEM,
     refetch
   );
+
   if (!user.data?.CurrentUser) {
     return null;
   }

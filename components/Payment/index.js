@@ -15,6 +15,7 @@ export default function Payment({
   orders: data,
   address,
   pay,
+  price,
 }) {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(process.env.STRIPE_KEY)
@@ -48,7 +49,7 @@ export default function Payment({
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 orders={data}
-                sum={sum}
+                sum={price}
                 quantity={cartLength}
                 pay={pay}
               />
