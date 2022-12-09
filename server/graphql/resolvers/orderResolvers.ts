@@ -305,19 +305,34 @@ const orderResolvers = {
     },
     async Pay(
       _: any,
-      { restaurant, products }: { restaurant: string; products: [string] },
+      {
+        restaurant,
+        products,
+        price,
+      }: { restaurant: string; products: [string]; price: number },
       { costumerId }: { costumerId: string }
     ) {
       try {
         if (!costumerId) {
           return null;
         }
+        console.log(price);
         const cosId = new mongoose.Types.ObjectId(costumerId);
         const eee = products.map((res) => {
           const id = new mongoose.Types.ObjectId(res);
           return id;
         });
-
+        // await Order.aggregate([
+        //   {
+        //     $group: {
+        //       _id: { month: { $month: "$date" }, year: { $year: "$date" } },
+        //       totalAmount: {
+        //         $sum: { $multiply: ["$price", "$orderQuantity"] },
+        //       },
+        //       count: { $sum: 1 },
+        //     },
+        //   },
+        // ]);
         const initialValue = 0;
 
         const payedOrder = await new PayedItem({
@@ -329,7 +344,7 @@ const orderResolvers = {
           restaurant: restaurant,
           costumer: cosId,
           items: eee,
-          sum: Math.floor(Math.random() * 2000 + 10),
+          sum: price,
         });
         await sell.save();
         const payed = await payedOrder.save();

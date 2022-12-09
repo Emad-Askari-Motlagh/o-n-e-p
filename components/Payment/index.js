@@ -15,7 +15,7 @@ export default function Payment({
   orders: data,
   address,
   pay,
-  price,
+  sum,
 }) {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(process.env.STRIPE_KEY)
@@ -30,13 +30,6 @@ export default function Payment({
       data.reduce((acc, item) => acc + item.orderQuantity, 0)) ||
     0;
 
-  const sum =
-    Array.isArray(data) &&
-    data.reduce((acc, item) => {
-      const quantity = item.orderQuantity;
-      return (acc + item.product.price) * quantity;
-    }, 0);
-
   return (
     <div className={style.checkout_perent}>
       {isModalOpen && (
@@ -49,7 +42,7 @@ export default function Payment({
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 orders={data}
-                sum={price}
+                sum={sum}
                 quantity={cartLength}
                 pay={pay}
               />

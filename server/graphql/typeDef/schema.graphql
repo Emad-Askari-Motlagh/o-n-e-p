@@ -264,7 +264,7 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  Pay(restaurant: String, products: [String]): PayedItem!
+  Pay(restaurant: String!, products: [String!], price: Float!): PayedItem!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
   EditUserInfoItem(name: String!, value: String!): User
   EditRestaurantInfoItem(

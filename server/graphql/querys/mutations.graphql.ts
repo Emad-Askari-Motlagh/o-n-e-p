@@ -152,11 +152,9 @@ export const UPDATE_CATEGORY = gql`
 `;
 
 export const PAY = gql`
-  mutation Pay($restaurant: String, $products: [String]) {
-    Pay(restaurant: $restaurant, products: $products) {
-      product {
-        name
-      }
+  mutation Pay($restaurant: String!, $products: [String!], $price: Float!) {
+    Pay(restaurant: $restaurant, products: $products, price: $price) {
+      _id
     }
   }
 `;

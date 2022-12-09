@@ -24,7 +24,9 @@ export default function CheckOut() {
       router.push(`/restaurant/${router.query.name}`);
     },
     onError: (err) => {
-      console.log(err);
+      err.graphQLErrors.map((res) => {
+        console.log(res.cause);
+      });
     },
     refetchQueries: [
       {
@@ -43,7 +45,12 @@ export default function CheckOut() {
     orderQuantity?: number;
     product?: { price: number };
   }
-
+  const sum =
+    Array.isArray(data) &&
+    data.reduce((acc, item) => {
+      const quantity = item.orderQuantity;
+      return (acc + item.product.price) * quantity;
+    }, 0);
   //Compute total payment amount
   function countSum() {
     if (!orders) {
@@ -113,7 +120,7 @@ export default function CheckOut() {
         orders={orders}
         address={data?.Address}
         pay={pay}
-        price={countSum()}
+        sum={sum}
       />
     </div>
   );

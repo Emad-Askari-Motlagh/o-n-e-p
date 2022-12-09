@@ -10,11 +10,9 @@ import style from "./stripe.module.scss";
 import { Alert } from "react-bootstrap";
 import Button from "components/Button";
 import { useRouter } from "next/router";
-import { useMutation } from "@apollo/client";
-import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import SucceedMessage from "../Succeed-Message";
 
-export default function Stripe({ amount, sum, quantity, orders, pay }) {
+export default function Stripe({ sum, quantity, orders, pay }) {
   const stripe = useStripe();
   const elements = useElements();
   const [success, setSuccess] = useState(false);
@@ -28,7 +26,12 @@ export default function Stripe({ amount, sum, quantity, orders, pay }) {
     if (!stripe || !elements || !orders.length) {
       return;
     }
-
+    // const sum =
+    //   Array.isArray(data) &&
+    //   data.reduce((acc, item) => {
+    //     const quantity = item.orderQuantity;
+    //     return (acc + item.product.price) * quantity;
+    //   }, 0);
     const cardElement = elements.getElement(CardElement);
     // Use your card Element with other Stripe.js APIs
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -47,9 +50,7 @@ export default function Stripe({ amount, sum, quantity, orders, pay }) {
             variables: {
               restaurant: router.query.name,
               products: orders?.map((res) => res?._id),
-            },
-            onError: (err) => {
-              console.log(err);
+              price: sum,
             },
           });
         }
