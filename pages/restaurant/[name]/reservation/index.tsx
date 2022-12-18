@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Calendar } from "react-calendar";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/Primary-layout";
 import DatePicker from "react-datepicker";

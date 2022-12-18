@@ -127,16 +127,6 @@ type AdminOrder {
 }
 type Analistic {
   _id: ID
-  year: Int
-  month: Int
-  day: Int
-  hour: Int
-  minutes: Int
-  seconds: Int
-  milliseconds: Int
-  dayOfYear: Int
-  dayOfWeek: Int
-  week: Int
   sum: Int
 }
 input MenuItemInput {
@@ -211,7 +201,6 @@ type Query {
   AdminOrders: [AdminOrder]!
   Address: CostumerAddress
   PayedOrders(restaurant: String!): [PayedItem]!
-  GetAnalistics: [Analistic]
 }
 
 type Mutation {
@@ -273,4 +262,5 @@ type Mutation {
     value: String!
   ): Restaurant
   AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
+  GetAnalistics(year: Int): [Analistic]
 }

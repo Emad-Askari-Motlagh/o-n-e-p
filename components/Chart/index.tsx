@@ -42,14 +42,7 @@ const mounths = [
 
 export default function Chart({ data, sortType }) {
   const dat = data?.GetAnalistics;
-  const dataa =
-    dat?.length &&
-    dat?.flatMap((res) => [
-      { ...res, sum: (res.sum / dat.length) * Math.random() },
-      { ...res, sum: res.sum / dat.length },
-      { ...res, sum: res.sum / dat.length },
-      { ...res, sum: (res.sum / dat.length) * Math.random() },
-    ]);
+  const dataa = dat?.length && dat?.flatMap((res) => [res]);
   return (
     <div>
       <ResponsiveContainer width="100%" height={400}>
@@ -68,23 +61,7 @@ export default function Chart({ data, sortType }) {
             fill="url(#color)"
           />
 
-          <XAxis
-            dataKey={() => {
-              switch (sortType) {
-                case "year":
-                  return dataa.map((res: { year: string }) => res.year);
-
-                case "month":
-                  return dataa.map((res: { month: string }) => res.month);
-                case "day":
-                  return dataa.map((res: { day: string }) => res.day);
-                default:
-                  break;
-              }
-            }}
-            axisLine={false}
-            tickLine={false}
-          />
+          <XAxis dataKey="_id" axisLine={false} tickLine={false} />
 
           <YAxis axisLine={true} tickLine={true} tickCount={50} dataKey="sum" />
 

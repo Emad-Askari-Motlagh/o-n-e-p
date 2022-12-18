@@ -3,33 +3,55 @@ import { useAuth, useProvideAuth } from "hooks/Context.hook";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Chart from "components/Chart";
-import { useQuery } from "@apollo/client";
-import { GET_ANALISTICS } from "@/server/graphql/querys/querys.graphql";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ANALISTICS } from "@/server/graphql/querys/mutations.graphql";
 import SelectInput from "@/components/SelectInput";
+import React_Calendar from "components/Calendar";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
-  const [sortType, setSortType] = useState("year");
+  const [sortType, setSortType] = useState(new Date().getFullYear());
+  const router = useRouter();
   const {
     user: { data: userData },
   } = useProvideAuth();
-  const { data: analisticsData, refetch } = useQuery(GET_ANALISTICS, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+
+  const [getAnalistics, { data: analisticsData }] = useMutation(
+    GET_ANALISTICS,
+    {
+      onCompleted: (data) => {
+        console.log(data);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
   useEffect(() => {
-    refetch();
+    getAnalistics({
+      variables: { year: parseInt(sortType) },
+      onCompleted: (e) => console.log(e),
+    });
   }, [sortType]);
 
   return (
     <div className={styles.dash_container}>
       <h1>Dashboard</h1>
+      <div className={styles.calendar_parent}>
+        <React_Calendar
+          label="Choose A Year"
+          onChange={(e) => setSortType(new Date(e.target.value)?.getFullYear())}
+        />
+      </div>
+
       <SelectInput
         name="Sort result"
         label="Sort by..."
         placeholder="Choose a sort method"
-        value={["year", "month", "day"]}
+        value={[2022, 2021, 2023]}
         onSelect={(e) => setSortType(e.target.value)}></SelectInput>
+
       <div className={styles.info_container}>
         <div>
           <span>Oppen times: 12 - 14</span>
@@ -50,9 +72,15 @@ export default function Dashboard() {
       <Chart data={analisticsData} sortType={sortType} />
 
       <div className={styles.rapport_container}>
-        <div className={styles.rapport_item}>Z-Rapport</div>
-        <div className={styles.rapport_item1}>X-Rapport</div>
-        <div className={styles.rapport_item2}>Tottal-Grand</div>
+        <Link href={`/admin/${router.query.restaurant}/rapport`}>
+          <a className={styles.rapport_item}>Z-Rapport</a>
+        </Link>
+        <Link href={`/admin/${router.query.restaurant}/rapport`}>
+          <a className={styles.rapport_item1}>X-Rapport</a>
+        </Link>
+        <Link href={`/admin/${router.query.restaurant}/rapport`}>
+          <a className={styles.rapport_item2}>Tottal-Grand</a>
+        </Link>
       </div>
     </div>
   );

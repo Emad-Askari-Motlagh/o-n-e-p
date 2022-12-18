@@ -201,3 +201,11 @@ export const EDIT_RESTAURANT_INFO_ITEM = gql`
     }
   }
 `;
+export const GET_ANALISTICS = gql`
+  mutation GetAnalistics($year: Int) {
+    GetAnalistics(year: $year) {
+      sum
+      _id
+    }
+  }
+`;

@@ -24,6 +24,7 @@ export default function CheckOut() {
       router.push(`/restaurant/${router.query.name}`);
     },
     onError: (err) => {
+      console.log(err.message);
       err.graphQLErrors.map((res) => {
         console.log(res.cause);
       });

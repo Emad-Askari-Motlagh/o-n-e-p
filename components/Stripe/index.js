@@ -26,12 +26,12 @@ export default function Stripe({ sum, quantity, orders, pay }) {
     if (!stripe || !elements || !orders.length) {
       return;
     }
-    // const sum =
-    //   Array.isArray(data) &&
-    //   data.reduce((acc, item) => {
-    //     const quantity = item.orderQuantity;
-    //     return (acc + item.product.price) * quantity;
-    //   }, 0);
+    const sum =
+      Array.isArray(orders) &&
+      orders.reduce((acc, item) => {
+        const quantity = item.orderQuantity;
+        return (acc + item.product.price) * quantity;
+      }, 0);
     const cardElement = elements.getElement(CardElement);
     // Use your card Element with other Stripe.js APIs
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -46,6 +46,11 @@ export default function Stripe({ sum, quantity, orders, pay }) {
         console.log("payment id", id);
         if (id) {
           setSuccess(true);
+          console.log({
+            restaurant: router.query.name,
+            products: orders?.map((res) => res?._id),
+            price: sum,
+          });
           pay({
             variables: {
               restaurant: router.query.name,

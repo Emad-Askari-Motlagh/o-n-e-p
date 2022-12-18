@@ -8,7 +8,7 @@ export default function SelectInput({
   name,
   placeholder,
 }: {
-  value: string[];
+  value: string[] | Number[];
   label: string;
   onSelect: (e: ChangeEvent<HTMLSelectElement>) => void;
   placeholder: string;
