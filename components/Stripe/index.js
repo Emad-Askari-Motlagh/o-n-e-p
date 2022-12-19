@@ -26,12 +26,7 @@ export default function Stripe({ sum, quantity, orders, pay }) {
     if (!stripe || !elements || !orders.length) {
       return;
     }
-    const sum =
-      Array.isArray(orders) &&
-      orders.reduce((acc, item) => {
-        const quantity = item.orderQuantity;
-        return (acc + item.product.price) * quantity;
-      }, 0);
+
     const cardElement = elements.getElement(CardElement);
     // Use your card Element with other Stripe.js APIs
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -72,7 +67,7 @@ export default function Stripe({ sum, quantity, orders, pay }) {
         <form onSubmit={handleSubmit} className={style.stripeForm}>
           <div className={style.price_container}>
             <label>{`Quantity:  ${quantity}`}</label>
-            <span>{`Price:   ${sum}.00 kr`} </span>
+            <span>{`Price:${sum}.00 kr`} </span>
           </div>
 
           <div style={{ marginBottom: "4%" }}>

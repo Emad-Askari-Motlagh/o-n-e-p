@@ -129,6 +129,7 @@ export const GET_ADMIN_ORDERS = gql`
       __typename
       _id
       orderQuantity
+      date
       product {
         __typename
         name
@@ -196,8 +197,8 @@ export const GET_PAYED_ORDERS = gql`
     PayedOrders(restaurant: $restaurant) {
       _id
       date
-      createdAt
-      product {
+      price
+      products {
         name
         itemsType
         price

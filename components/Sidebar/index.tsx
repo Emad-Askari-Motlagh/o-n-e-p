@@ -9,6 +9,7 @@ import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
+import Button from "../Button";
 
 interface SidebarProps {
   signOut: () => void;
@@ -105,9 +106,9 @@ function SideBar({
           endPoint="/om"
           itemsLabel="Om"></DropdownItem>
         {(user || costumerData) && (
-          <button className={styles.logout_button} onClick={SignOut}>
+          <Button width="80%" onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
-          </button>
+          </Button>
         )}
       </div>
     </div>

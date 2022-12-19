@@ -51,7 +51,7 @@ const SummaryItem = ({
         </span>
       </div>
       <div className={styles.price_cont}>
-        <span>{`${sum > 0 ? sum : 0},00 kr`}</span>
+        <span>{`${sum},00 kr`}</span>
       </div>
     </div>
   );

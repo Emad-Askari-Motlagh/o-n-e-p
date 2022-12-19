@@ -37,9 +37,19 @@ type PayedItem {
   costumer: Costumer
   product: MenuItem
   restaurant: String
-  date: String
+  date: Date
   _id: ID
   createdAt: Date
+  orderQuantity: Int
+}
+type OrderHistory {
+  costumer: Costumer
+  products: [MenuItem]
+  restaurant: String
+  date: Date
+  _id: ID
+  createdAt: Date
+  price: Float
 }
 type MenuSubItem {
   _id: MenuItem
@@ -124,6 +134,7 @@ type AdminOrder {
   product: MenuItem
   restaurant: String
   _id: ID
+  date: Date
 }
 type Analistic {
   _id: ID
@@ -152,8 +163,9 @@ type CostumerAddress {
 }
 
 type SellInfo {
+  _id: ID
   sum: Float
-  Restaurant: Restaurant
+  restaurant: Restaurant
   date: Date
   items: [MenuItem]
   costumer: Costumer
@@ -200,7 +212,7 @@ type Query {
   CostumerOrders(restaurant: String!): [OrderItem]!
   AdminOrders: [AdminOrder]!
   Address: CostumerAddress
-  PayedOrders(restaurant: String!): [PayedItem]!
+  PayedOrders(restaurant: String!): [OrderHistory]!
 }
 
 type Mutation {
@@ -253,7 +265,7 @@ type Mutation {
     image: String
     categoryId: String!
   ): MenuParent!
-  Pay(restaurant: String!, products: [String!], price: Float!): PayedItem!
+  Pay(restaurant: String!, products: [String!], price: Float!): SellInfo!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
   EditUserInfoItem(name: String!, value: String!): User
   EditRestaurantInfoItem(

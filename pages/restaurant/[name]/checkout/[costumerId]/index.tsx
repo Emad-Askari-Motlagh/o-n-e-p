@@ -14,21 +14,13 @@ import {
 } from "@/server/graphql/querys/querys.graphql";
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import { useRouter } from "next/router";
+import Warning from "@/components/Warning";
 
 export default function CheckOut() {
   const { addOrder, removeOrder, orders, loading } = useOrders();
   const { data } = useQuery(COSTUMER_ADDRESS);
   const router = useRouter();
   const [pay] = useMutation(PAY, {
-    onCompleted: () => {
-      router.push(`/restaurant/${router.query.name}`);
-    },
-    onError: (err) => {
-      console.log(err.message);
-      err.graphQLErrors.map((res) => {
-        console.log(res.cause);
-      });
-    },
     refetchQueries: [
       {
         query: GET_ORDERS_CONSTANTLY,
@@ -47,42 +39,16 @@ export default function CheckOut() {
     product?: { price: number };
   }
   const sum =
-    Array.isArray(data) &&
-    data.reduce((acc, item) => {
+    Array.isArray(orders) &&
+    orders.reduce((acc, item) => {
       const quantity = item.orderQuantity;
       return (acc + item.product.price) * quantity;
     }, 0);
-  //Compute total payment amount
-  function countSum() {
-    if (!orders) {
-      return;
-    }
 
-    const initialValue = 0;
-    if (Array.isArray(orders)) {
-      const sumWithInitial = orders?.reduce(
-        (accumulator, currentValue) =>
-          accumulator + currentValue.product.price * currentValue.orderQuantity,
-        initialValue
-      );
-      console.log(sumWithInitial);
-      return sumWithInitial;
-    } else {
-      return "...";
-    }
-  }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!orders?.length)
-    return (
-      <div className={styles.container}>
-        <Label label_name={"Checkout"} />
-        <div className={styles.error_Parent}>
-          <span style={{ color: "white" }}>OBS!</span>
-          <span style={{ color: "white" }}>You have not any orders</span>
-        </div>
-      </div>
-    );
+    return <Warning label="Checkout" message="You have not any orders" />;
   return (
     <div className={styles.container}>
       <Label label_name={"Checkout"} />
@@ -105,15 +71,14 @@ export default function CheckOut() {
                 removeOrder={removeOrder}
                 addOrder={addOrder}
                 price={res?.product.price}
+                sum={sum}
               />
             );
           })}{" "}
       </div>
       {orders && orders?.length && (
         <span
-          className={
-            styles.total_amount
-          }>{`Total Amount : ${countSum()},00 kr`}</span>
+          className={styles.total_amount}>{`Total Amount : ${sum},00 kr`}</span>
       )}
       <Payment
         isModalOpen={isModalOpen}

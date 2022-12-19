@@ -15,8 +15,7 @@ import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
 import Search from "components/Search-form";
-import searchByQuery from "lib/searchByQuery";
-import ErrorCard from "components/ErrorCard";
+import Warning from "@/components/Warning";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -60,7 +59,8 @@ const AdminsOrders = () => {
     }
   }
   const orders = data?.length ? data : AdminOrders;
-
+  if (!orders?.length)
+    return <Warning label="Orders" message="You have not any orders" />;
   return (
     <div className={styles.container}>
       <span style={{ marginLeft: "20px" }}>
@@ -90,7 +90,6 @@ const AdminsOrders = () => {
             orders.map((fact, i) => {
               return (
                 <tr key={i}>
-                  {" "}
                   <TableData>{fact?.costumer?.table}</TableData>
                   <TableData>
                     {captalizeFirstLetter(fact?.product?.name as string)}
@@ -102,9 +101,7 @@ const AdminsOrders = () => {
                     {fact?.orderQuantity}
                   </TableData>
                   <TableData>{fact?.product?.price}</TableData>
-                  <TableData>
-                    <time>2/3/3</time>
-                  </TableData>
+                  <TableData>{new Date(fact?.date).toLocaleString()}</TableData>
                   <TableData>
                     <FiEye />
                   </TableData>

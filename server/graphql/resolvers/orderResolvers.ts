@@ -10,6 +10,8 @@ import { GraphQLError } from "graphql";
 // import { loadStripe } from "@stripe/stripe-js";
 import PayedItem from "server/mongoSchema/payedItemSchema";
 import sellSchema from "server/mongoSchema/sellSchema";
+import costumerHistory from "@/server/mongoSchema/costumerHistory";
+import payedItemSchema from "server/mongoSchema/payedItemSchema";
 // import Stripe from "stripe";
 
 const pubsub = createPubSub();
@@ -17,8 +19,12 @@ async function fetchOrders(query: object) {
   return await Order.find(query).populate("product").populate("costumer");
 }
 async function fetchPayedOrders(query: object) {
-  return await PayedItem.find(query).populate("product").populate("costumer");
+  return await payedItemSchema
+    .find(query)
+    .populate("product")
+    .populate("costumer");
 }
+
 // const stripe = new Stripe(process.env.STRIPE_KEY as string, {
 //   apiVersion: "2022-08-01",
 // });
@@ -85,8 +91,7 @@ const orderResolvers = {
     },
     async AdminOrders(__: any) {
       try {
-        const AdminOrders = await fetchOrders({});
-
+        const AdminOrders = await fetchPayedOrders({});
         return AdminOrders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
@@ -97,12 +102,15 @@ const orderResolvers = {
       { restaurant }: { restaurant: string },
       { costumerId }: { costumerId: string }
     ) {
-      if (!costumerId) {
-        return null;
-      }
+      // if (!costumerId) {
+      //   return null;
+      // }
       try {
         const id = new mongoose.Types.ObjectId(costumerId);
-        const orders = await fetchPayedOrders({ costumer: id, restaurant });
+        const orders = await costumerHistory
+          .find({})
+          .populate("products")
+          .populate("costumer");
 
         return orders;
       } catch (err) {
@@ -313,15 +321,11 @@ const orderResolvers = {
       { costumerId }: { costumerId: string }
     ) {
       try {
-        if (!costumerId) {
-          return null;
-        }
-        console.log(price);
+        // if (!costumerId) {
+        //   return null;
+        // }
+
         const cosId = new mongoose.Types.ObjectId(costumerId);
-        const eee = products.map((res) => {
-          const id = new mongoose.Types.ObjectId(res);
-          return id;
-        });
         // await Order.aggregate([
         //   {
         //     $group: {
@@ -333,29 +337,38 @@ const orderResolvers = {
         //     },
         //   },
         // ]);
-        const initialValue = 0;
 
-        const payedOrder = await new PayedItem({
+        const items = await Order.distinct("product");
+
+        await products.map(async (res) => {
+          const id = new Types.ObjectId(res);
+          const order = await Order.findById(id);
+          const payedOrder = await new PayedItem({
+            restaurant: restaurant,
+            costumer: cosId,
+            product: order?.product,
+          });
+
+          await payedOrder.save();
+          // await Order.findOneAndRemove({ _id: id });
+          return order;
+        });
+
+        const cosHistoryDocument = await new costumerHistory({
           restaurant: restaurant,
           costumer: cosId,
-          product: eee,
+          products: items,
+          price: price,
         });
+        await cosHistoryDocument.save();
         const sell = await new sellSchema({
           restaurant: restaurant,
           costumer: cosId,
-          items: eee,
+          items: items,
           sum: price,
         });
         await sell.save();
-        const payed = await payedOrder.save();
-
-        products.map(async (res) => {
-          const id = new Types.ObjectId(res);
-          await Order.findOneAndRemove({ _id: id });
-          return id;
-        });
-
-        return payed;
+        return sell;
       } catch (err: any) {
         console.log(err);
       }

@@ -1,6 +1,6 @@
 import dbInit from "@/lib/dbInit";
-import Orders from "@/server/mongoSchema/orderschema";
-import NextCors from "nextjs-cors";
+import Orders from "@/server/mongoSchema/payedItemSchema";
+
 let i = 0;
 let clients = [];
 const myOrders = [];
@@ -9,6 +9,7 @@ const orderFetcher = async () =>
   await Orders.find({})
     .populate({ path: "costumer", model: "Costumer" })
     .populate("product");
+
 function sendEventsToAll(newFact, orders) {
   clients.forEach((client) =>
     client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)

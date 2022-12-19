@@ -3,25 +3,27 @@ import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 import mongoose, { Schema, PopulatedDoc, ObjectId } from "mongoose";
 import CostumerSchema from "./costumerSchema";
 
-export interface I_PayedItemDocument extends mongoose.Document {
+export interface I_CostumerHistoryDocument extends mongoose.Document {
   costumer: Schema.Types.ObjectId | typeof CostumerSchema;
-  product: Schema.Types.ObjectId | typeof MenuItemSchema;
+  products: Schema.Types.ObjectId[] | typeof MenuItemSchema[];
   restaurant: string;
   date: Date;
+  price: number;
 }
 
-var PayedItem = new mongoose.Schema(
+var CostumerHistory = new mongoose.Schema(
   {
     costumer: {
       type: Schema.Types.ObjectId,
       ref: CostumerSchema ?? "Costumer",
     },
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: MenuItemSchema ?? "MenuItem",
-    },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: MenuItemSchema ?? "MenuItem",
+      },
+    ],
     restaurant: { type: String },
-    orderQuantity: Number,
     // description: { type: String, unique: true, required: true },
 
     date: {
@@ -29,8 +31,9 @@ var PayedItem = new mongoose.Schema(
       // `Date.now()` returns the current unix timestamp as a number
       default: Date.now,
     },
+    price: Number,
   },
   { timestamps: true }
 );
-export default mongoose.models.PayedItem ||
-  mongoose.model<I_PayedItemDocument>("PayedItem", PayedItem);
+export default mongoose.models.CostumerHistory ||
+  mongoose.model<I_CostumerHistoryDocument>("CostumerHistory", CostumerHistory);

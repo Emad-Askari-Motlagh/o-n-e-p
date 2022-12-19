@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
-import { BiSearch, BiTrash } from "react-icons/bi";
+import { MdOutlineExpandMore } from "react-icons/md";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
@@ -25,9 +25,12 @@ const AdminsOrders = () => {
   const router = useRouter();
   const [searchResult, setSearchResult] = useState<string>();
   const { data } = useQuery(GET_PAYED_ORDERS, {
-    variables: { restaurant: router.query.name },
+    variables: { restaurant: "Göteburgare" },
     onCompleted: (res) => {
       console.log(res);
+    },
+    onError: (err) => {
+      console.log(err);
     },
   });
 
@@ -54,13 +57,13 @@ const AdminsOrders = () => {
     );
   return (
     <div className={styles.container}>
-      {/* <span style={{ marginLeft: "20px" }}>
-        {date.getFullYear() +
+      <span style={{ marginLeft: "20px" }}>
+        {new Date().getFullYear() +
           "-" +
-          (date.getMonth() + 1) +
+          (new Date().getMonth() + 1) +
           "-" +
-          date.getDate()}
-      </span> */}
+          new Date().getDate()}
+      </span>
       <div className={styles.search_parent} style={{ margin: "20px" }}>
         <Search
           label={"Hitta din restaurang"}
@@ -71,8 +74,7 @@ const AdminsOrders = () => {
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>
             <TableHeader>Date</TableHeader>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>quantity</TableHeader>
+            <TableHeader>Payement_Id</TableHeader>
             <TableHeader>price</TableHeader>
             <TableHeader>Description</TableHeader>
           </tr>
@@ -80,19 +82,13 @@ const AdminsOrders = () => {
             orders.map((fact, i) => {
               return (
                 <tr key={i}>
-                  <TableData>{fact.createdAt.toLocaleString()}</TableData>
+                  <TableData>{new Date(fact.date).toLocaleString()}</TableData>
                   <TableData>
-                    {captalizeFirstLetter(fact?.product?.name as string)}
+                    {captalizeFirstLetter(fact?._id as string)}
                   </TableData>
-                  <TableData
-                    color={
-                      (fact?.orderQuantity as number) <= 1 ? "white" : "tomato"
-                    }>
-                    {fact?.orderQuantity}
-                  </TableData>
-                  <TableData>{fact?.product?.price}</TableData>
+                  <TableData>{fact?.price}</TableData>
                   <TableData>
-                    <BiTrash />
+                    <MdOutlineExpandMore />
                   </TableData>
                 </tr>
               );

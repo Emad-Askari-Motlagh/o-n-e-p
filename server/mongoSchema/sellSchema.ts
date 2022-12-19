@@ -1,4 +1,6 @@
-import { orderschema } from "@/server/mongoSchema/orderschema";
+import orderschema from "@/server/mongoSchema/orderschema";
+import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
+
 import mongoose, { Types, SchemaTypes, Document, Schema } from "mongoose";
 import costumerSchema from "./costumerSchema";
 import restaurangSchema from "./restaurangSchema";
@@ -20,7 +22,7 @@ var sellSchema = new mongoose.Schema(
     items: [
       {
         type: Schema.Types.ObjectId,
-        ref: orderschema ?? "Order",
+        ref: MenuItemSchema ?? "MenuItem",
       },
     ],
 
