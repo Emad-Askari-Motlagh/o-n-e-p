@@ -275,4 +275,5 @@ type Mutation {
   ): Restaurant
   AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
   GetAnalistics(year: Int): [Analistic]
+  GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
 }

@@ -1,7 +1,8 @@
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 import Reservation from "@/server/mongoSchema/reservationSchrma";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
+
 export const config = {
   api: {
     bodyParser: true,
@@ -11,12 +12,12 @@ export const config = {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const costumerId = req.cookies["costumerId"];
   const id = new Types.ObjectId(costumerId);
+  const restaurantName = req.query.restaurantName;
   if (req.method === "POST") {
     // const { date } = req.body;
-    console.log(req.body);
 
     const reservation = await new Reservation({
-      restaurant: req.query.id,
+      restaurant: restaurantName,
       costumer: id,
       date: new Date(),
       desription: "okkokok",
@@ -28,16 +29,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle any other HTTP method
 
     const oldReservation = await Reservation.find({
-      restaurant: req.query.id,
+      restaurant: restaurantName,
       costumer: id,
-    });
-    oldReservation.map((res) => date.push(res.date));
+    }).populate("costumer");
 
-    if (date.length) {
-      res.status(200).send(date);
+    if (oldReservation.length) {
+      res.status(200).send(oldReservation);
     } else {
       res.status(200).send([]);
     }
+  } else if (req.method === "DELETE") {
+    await Reservation.findByIdAndDelete({ _id: req.query.bookId });
+
+    res.status(200).end();
+  } else {
+    res.end();
+    return false;
   }
 };
 export default handler;

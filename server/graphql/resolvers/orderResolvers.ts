@@ -350,7 +350,7 @@ const orderResolvers = {
           });
 
           await payedOrder.save();
-          // await Order.findOneAndRemove({ _id: id });
+          await Order.findOneAndRemove({ _id: id });
           return order;
         });
 
@@ -372,6 +372,13 @@ const orderResolvers = {
       } catch (err: any) {
         console.log(err);
       }
+    },
+    async GetBillInfo(_, { restaurant, recieptId }) {
+      const res = await costumerHistory
+        .findById(recieptId)
+        .populate("products");
+
+      return res;
     },
   },
 };

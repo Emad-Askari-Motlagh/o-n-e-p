@@ -10,30 +10,40 @@ import styles from "./styles.module.scss";
 import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
 import { MdOutlineExpandMore } from "react-icons/md";
-import { FiEye } from "react-icons/fi";
-import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
-import Modal from "components/WarningModal";
 import Search from "components/Search-form";
 import searchByQuery from "lib/searchByQuery";
 import ErrorCard from "components/ErrorCard";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_PAYED_ORDERS } from "@/server/graphql/querys/querys.graphql";
+import { GET_BILL_INFO } from "@/server/graphql/querys/mutations.graphql";
+import RecieptItem from "@/components/RecieptItem";
+import Modall from "@/components/Modal";
+import {
+  GetBillInfoMutation,
+  GetBillInfoMutationVariables,
+  PayedOrdersQuery,
+  PayedOrdersQueryVariables,
+} from "@/server/generated/graphql";
+import TableData from "@/components/Table/TableData";
+import TableHeader from "@/components/Table/TableHeader";
+import HistoryItem from "@/components/HistoryItem";
 
 const AdminsOrders = () => {
-  const [showAlert, setShowAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [BillData, setBillData] = useState();
   const router = useRouter();
   const [searchResult, setSearchResult] = useState<string>();
-  const { data } = useQuery(GET_PAYED_ORDERS, {
+  const { data, loading } = useQuery<
+    PayedOrdersQuery,
+    PayedOrdersQueryVariables
+  >(GET_PAYED_ORDERS, {
     variables: { restaurant: "Göteburgare" },
-    onCompleted: (res) => {
-      console.log(res);
-    },
-    onError: (err) => {
-      console.log(err);
-    },
   });
-
+  const [getInfo, { data: billInfoData }] = useMutation<
+    GetBillInfoMutation,
+    GetBillInfoMutationVariables
+  >(GET_BILL_INFO);
   function searchOverRestaurants(e) {
     try {
       e.preventDefault();
@@ -44,17 +54,30 @@ const AdminsOrders = () => {
       console.log(err);
     }
   }
+
+  function onClick(id: string) {
+    setShowModal(!showModal);
+    getInfo({
+      variables: {
+        restaurant: router.query.name as string,
+        recieptId: id,
+      },
+    });
+  }
+
   const orders = data?.PayedOrders;
-  if (!orders?.length)
+
+  if (!orders?.length && !loading)
     return (
       <ErrorCard>
         <div className={styles.error_card}>
           <span style={{ fontWeight: 900 }}>OBS!</span>
           <br />
-          <span>There isn`t any orther in history</span>
+          <span>There isn`t any order in history</span>
         </div>
       </ErrorCard>
     );
+
   return (
     <div className={styles.container}>
       <span style={{ marginLeft: "20px" }}>
@@ -81,34 +104,36 @@ const AdminsOrders = () => {
           {Array.isArray(orders) &&
             orders.map((fact, i) => {
               return (
-                <tr key={i}>
-                  <TableData>{new Date(fact.date).toLocaleString()}</TableData>
-                  <TableData>
-                    {captalizeFirstLetter(fact?._id as string)}
-                  </TableData>
-                  <TableData>{fact?.price}</TableData>
-                  <TableData>
-                    <MdOutlineExpandMore />
-                  </TableData>
-                </tr>
+                <React.Fragment key={fact?._id}>
+                  <tr>
+                    <TableData>
+                      {new Date(fact?.date).toLocaleString()}
+                    </TableData>
+                    <TableData>
+                      {captalizeFirstLetter(fact?._id as string)}
+                    </TableData>
+                    <TableData>{fact?.price}</TableData>
+                    <TableData>
+                      <MdOutlineExpandMore
+                        style={{ cursor: "pointer" }}
+                        onClick={() => onClick(fact?._id as string)}
+                      />
+                    </TableData>
+                  </tr>
+                </React.Fragment>
               );
             })}
         </tbody>
       </table>
+      <Modall
+        label="Factor Info"
+        setIsModalOpen={setShowModal}
+        isModalOpen={showModal}>
+        <HistoryItem billInfo={billInfoData?.GetBillInfo} />
+      </Modall>
     </div>
   );
 };
-const TableData = ({
-  children,
-  color,
-}: {
-  children: ReactNode;
-  color?: string;
-}) => <td style={{ color }}>{children}</td>;
-
-const TableHeader = ({ children }: { children: ReactNode }) => (
-  <th className={styles.table_header}>{children}</th>
-);
 
 export default AdminsOrders;
 AdminsOrders.Layout = PrimaryLayout;

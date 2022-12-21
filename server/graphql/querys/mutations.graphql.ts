@@ -209,3 +209,17 @@ export const GET_ANALISTICS = gql`
     }
   }
 `;
+export const GET_BILL_INFO = gql`
+  mutation GetBillInfo($restaurant: String!, $recieptId: String!) {
+    GetBillInfo(restaurant: $restaurant, recieptId: $recieptId) {
+      _id
+      date
+      price
+      products {
+        name
+        price
+        _id
+      }
+    }
+  }
+`;

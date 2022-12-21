@@ -1,0 +1,15 @@
+@import "styles/breakpoints.scss";
+@import "styles/fonts.scss";
+
+.table_header {
+    text-align: center;
+    span {
+        vertical-align: baseline;
+    }
+}
+.table_data {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0 2.6px;
+    text-align: center;
+    margin: auto;
+    padding: 20px 0;
+}

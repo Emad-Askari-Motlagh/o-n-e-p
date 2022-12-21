@@ -6,6 +6,7 @@ import Image from "next/image";
 import BlurImage from "../BlurImage";
 import { motion } from "framer-motion";
 import { IoNavigateCircle } from "react-icons/io5";
+import LinkButton from "../LinkButton";
 
 export default function Restaurant({
   name,
@@ -48,9 +49,9 @@ export default function Restaurant({
               </a>
             </div>
 
-            <Link scroll={false} href={endPoint}>
-              <a className={styles.btn_grad}>Borja att bestella</a>
-            </Link>
+            <LinkButton width="80%" scroll={false} href={endPoint}>
+              Borja att bestella
+            </LinkButton>
           </div>
         </section>
         <section className={styles.right_card}>

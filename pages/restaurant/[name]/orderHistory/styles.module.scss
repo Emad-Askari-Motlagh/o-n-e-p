@@ -122,3 +122,11 @@
         }
     }
 }
+.bill_info_container {
+    .price_parent {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        color: #ffffff;
+    }
+}

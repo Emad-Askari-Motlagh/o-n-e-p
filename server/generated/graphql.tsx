@@ -28,10 +28,17 @@ export type AdminOrder = {
   __typename?: 'AdminOrder';
   _id?: Maybe<Scalars['ID']>;
   costumer?: Maybe<Costumer>;
+  date?: Maybe<Scalars['Date']>;
   id?: Maybe<Scalars['ID']>;
   orderQuantity?: Maybe<Scalars['Int']>;
   product?: Maybe<MenuItem>;
   restaurant?: Maybe<Scalars['String']>;
+};
+
+export type Analistic = {
+  __typename?: 'Analistic';
+  _id?: Maybe<Scalars['ID']>;
+  sum?: Maybe<Scalars['Int']>;
 };
 
 export type CookieError = {
@@ -71,6 +78,8 @@ export type CostumerAddressInput = {
 
 export type CostumerMenuChoises = MenuItem | OrderItem;
 
+export type InfoItem = Restaurant | User;
+
 export type Location = {
   __typename?: 'Location';
   coordinates?: Maybe<Array<Scalars['Float']>>;
@@ -108,6 +117,7 @@ export type MenuItem = {
 export type MenuItemInput = {
   availability?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   itemsType?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -154,14 +164,19 @@ export type Mutation = {
   AddMenuItem?: Maybe<MenuItem>;
   AddOrder: Array<Maybe<AdminOrder>>;
   AddRestaurant: Restaurant;
+  AddSellInfo: SellInfo;
   CostumerExpiry?: Maybe<CookieSuccess>;
   CreateUser: User;
   DeleteCostumer?: Maybe<Costumer>;
+  EditRestaurantInfoItem?: Maybe<Restaurant>;
+  EditUserInfoItem?: Maybe<User>;
   EmitSocket?: Maybe<OrderItem>;
   FetchRestaurantsByQuery?: Maybe<Array<Maybe<Restaurant>>>;
+  GetAnalistics?: Maybe<Array<Maybe<Analistic>>>;
+  GetBillInfo: OrderHistory;
   GetCostumerOrders: Array<Maybe<OrderItem>>;
   GetOrderItem?: Maybe<OrderItem>;
-  Pay: Array<Maybe<PayedItem>>;
+  Pay: SellInfo;
   PostMessage: Scalars['ID'];
   RemoveOrder: Array<Maybe<AdminOrder>>;
   SendResetPassword: User;
@@ -231,6 +246,13 @@ export type MutationAddRestaurantArgs = {
 };
 
 
+export type MutationAddSellInfoArgs = {
+  items: Array<InputMaybe<Scalars['String']>>;
+  price: Scalars['Float'];
+  restaurant: Scalars['String'];
+};
+
+
 export type MutationCreateUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -243,8 +265,32 @@ export type MutationDeleteCostumerArgs = {
 };
 
 
+export type MutationEditRestaurantInfoItemArgs = {
+  name: Scalars['String'];
+  restaurant?: InputMaybe<Scalars['String']>;
+  value: Scalars['String'];
+};
+
+
+export type MutationEditUserInfoItemArgs = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+};
+
+
 export type MutationFetchRestaurantsByQueryArgs = {
   searchQuery?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationGetAnalisticsArgs = {
+  year?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MutationGetBillInfoArgs = {
+  recieptId: Scalars['String'];
+  restaurant: Scalars['String'];
 };
 
 
@@ -260,8 +306,9 @@ export type MutationGetOrderItemArgs = {
 
 
 export type MutationPayArgs = {
-  products?: InputMaybe<Array<InputMaybe<MenuItemInput>>>;
-  restaurant?: InputMaybe<Scalars['String']>;
+  price: Scalars['Float'];
+  products?: InputMaybe<Array<Scalars['String']>>;
+  restaurant: Scalars['String'];
 };
 
 
@@ -320,6 +367,17 @@ export type MutationUpdateUserArgs = {
   id: Scalars['String'];
 };
 
+export type OrderHistory = {
+  __typename?: 'OrderHistory';
+  _id?: Maybe<Scalars['ID']>;
+  costumer?: Maybe<Costumer>;
+  createdAt?: Maybe<Scalars['Date']>;
+  date?: Maybe<Scalars['Date']>;
+  price?: Maybe<Scalars['Float']>;
+  products?: Maybe<Array<Maybe<MenuItem>>>;
+  restaurant?: Maybe<Scalars['String']>;
+};
+
 export type OrderItem = {
   __typename?: 'OrderItem';
   _id?: Maybe<Scalars['ID']>;
@@ -335,7 +393,8 @@ export type PayedItem = {
   _id?: Maybe<Scalars['ID']>;
   costumer?: Maybe<Costumer>;
   createdAt?: Maybe<Scalars['Date']>;
-  date?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['Date']>;
+  orderQuantity?: Maybe<Scalars['Int']>;
   product?: Maybe<MenuItem>;
   restaurant?: Maybe<Scalars['String']>;
 };
@@ -353,7 +412,7 @@ export type Query = {
   MenuItemCount?: Maybe<OrderItem>;
   OrderItems?: Maybe<OrderItem>;
   Orders: Array<Maybe<OrderItem>>;
-  PayedOrders: Array<Maybe<PayedItem>>;
+  PayedOrders: Array<Maybe<OrderHistory>>;
   Restaurants?: Maybe<Array<Maybe<Restaurant>>>;
   messages?: Maybe<Array<Message>>;
 };
@@ -403,7 +462,9 @@ export type RegisterInput = {
 export type Restaurant = {
   __typename?: 'Restaurant';
   _id?: Maybe<Scalars['ID']>;
+  address?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  foodTypes?: Maybe<Scalars['String']>;
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
   location?: Maybe<Location>;
   name?: Maybe<Scalars['String']>;
@@ -416,6 +477,16 @@ export type Restaurant = {
 };
 
 export type SaveCookie = CookieError | CookieSuccess;
+
+export type SellInfo = {
+  __typename?: 'SellInfo';
+  _id?: Maybe<Scalars['ID']>;
+  costumer?: Maybe<Costumer>;
+  date?: Maybe<Scalars['Date']>;
+  items?: Maybe<Array<Maybe<MenuItem>>>;
+  restaurant?: Maybe<Restaurant>;
+  sum?: Maybe<Scalars['Float']>;
+};
 
 export type Token = {
   __typename?: 'Token';
@@ -570,12 +641,13 @@ export type UpdateCategoryMutationVariables = Exact<{
 export type UpdateCategoryMutation = { __typename?: 'Mutation', UpdateCategory: { __typename?: 'MenuParent', itemName?: string | null } };
 
 export type PayMutationVariables = Exact<{
-  restaurant?: InputMaybe<Scalars['String']>;
-  products?: InputMaybe<Array<InputMaybe<MenuItemInput>> | InputMaybe<MenuItemInput>>;
+  restaurant: Scalars['String'];
+  products?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  price: Scalars['Float'];
 }>;
 
 
-export type PayMutation = { __typename?: 'Mutation', Pay: Array<{ __typename?: 'PayedItem', product?: { __typename?: 'MenuItem', name?: string | null } | null } | null> };
+export type PayMutation = { __typename?: 'Mutation', Pay: { __typename?: 'SellInfo', _id?: string | null } };
 
 export type AddCostumerAddressMutationVariables = Exact<{
   address?: InputMaybe<CostumerAddressInput>;
@@ -592,15 +664,47 @@ export type AddMenuCategoryMutationVariables = Exact<{
 
 export type AddMenuCategoryMutation = { __typename?: 'Mutation', AddMenuCategory?: { __typename?: 'MenuParent', itemName?: string | null } | null };
 
+export type EditUserInfoItemMutationVariables = Exact<{
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type EditUserInfoItemMutation = { __typename?: 'Mutation', EditUserInfoItem?: { __typename?: 'User', name: string } | null };
+
+export type EditRestaurantInfoItemMutationVariables = Exact<{
+  restaurant: Scalars['String'];
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type EditRestaurantInfoItemMutation = { __typename?: 'Mutation', EditRestaurantInfoItem?: { __typename?: 'Restaurant', name?: string | null } | null };
+
+export type GetAnalisticsMutationVariables = Exact<{
+  year?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetAnalisticsMutation = { __typename?: 'Mutation', GetAnalistics?: Array<{ __typename?: 'Analistic', sum?: number | null, _id?: string | null } | null> | null };
+
+export type GetBillInfoMutationVariables = Exact<{
+  restaurant: Scalars['String'];
+  recieptId: Scalars['String'];
+}>;
+
+
+export type GetBillInfoMutation = { __typename?: 'Mutation', GetBillInfo: { __typename?: 'OrderHistory', _id?: string | null, date?: any | null, price?: number | null, products?: Array<{ __typename?: 'MenuItem', name?: string | null, price?: number | null, _id?: string | null } | null> | null } };
+
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, openTimes?: string | null, _id?: string | null, location?: { __typename?: 'Location', coordinates?: Array<number> | null } | null } | null> | null };
+export type RestaurantsQuery = { __typename?: 'Query', Restaurants?: Array<{ __typename?: 'Restaurant', name?: string | null, owner?: string | null, description?: string | null, numReviews?: number | null, reviews?: Array<string | null> | null, type?: string | null, images?: Array<string | null> | null, rating?: number | null, openTimes?: string | null, address?: string | null, foodTypes?: string | null, _id?: string | null, location?: { __typename?: 'Location', coordinates?: Array<number> | null } | null } | null> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', CurrentUser?: { __typename?: 'User', name: string, email: string, _id: string, restaurant: { __typename?: 'Restaurant', name?: string | null } } | null };
+export type CurrentUserQuery = { __typename?: 'Query', CurrentUser?: { __typename?: 'User', name: string, email: string, _id: string, restaurant: { __typename?: 'Restaurant', name?: string | null, openTimes?: string | null, address?: string | null, foodTypes?: string | null } } | null };
 
 export type CostumerQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -652,7 +756,7 @@ export type OrdersQuery = { __typename?: 'Query', Orders: Array<{ __typename?: '
 export type AdminOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AdminOrdersQuery = { __typename?: 'Query', AdminOrders: Array<{ __typename: 'AdminOrder', _id?: string | null, orderQuantity?: number | null, product?: { __typename: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, costumer?: { __typename: 'Costumer', table?: number | null, _id?: string | null } | null } | null> };
+export type AdminOrdersQuery = { __typename?: 'Query', AdminOrders: Array<{ __typename: 'AdminOrder', _id?: string | null, orderQuantity?: number | null, date?: any | null, product?: { __typename: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, costumer?: { __typename: 'Costumer', table?: number | null, _id?: string | null } | null } | null> };
 
 export type CostumerOrdersQueryVariables = Exact<{
   restaurant: Scalars['String'];
@@ -671,7 +775,7 @@ export type PayedOrdersQueryVariables = Exact<{
 }>;
 
 
-export type PayedOrdersQuery = { __typename?: 'Query', PayedOrders: Array<{ __typename?: 'PayedItem', _id?: string | null, date?: string | null, createdAt?: any | null, product?: { __typename?: 'MenuItem', name?: string | null, itemsType?: string | null, price?: number | null } | null } | null> };
+export type PayedOrdersQuery = { __typename?: 'Query', PayedOrders: Array<{ __typename?: 'OrderHistory', _id?: string | null, date?: any | null, price?: number | null, products?: Array<{ __typename?: 'MenuItem', name?: string | null, itemsType?: string | null, price?: number | null } | null> | null } | null> };
 
 
 export const SignInDocument = gql`
@@ -1225,11 +1329,9 @@ export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCatego
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const PayDocument = gql`
-    mutation Pay($restaurant: String, $products: [MenuItemInput]) {
-  Pay(restaurant: $restaurant, products: $products) {
-    product {
-      name
-    }
+    mutation Pay($restaurant: String!, $products: [String!], $price: Float!) {
+  Pay(restaurant: $restaurant, products: $products, price: $price) {
+    _id
   }
 }
     `;
@@ -1250,6 +1352,7 @@ export type PayMutationFn = Apollo.MutationFunction<PayMutation, PayMutationVari
  *   variables: {
  *      restaurant: // value for 'restaurant'
  *      products: // value for 'products'
+ *      price: // value for 'price'
  *   },
  * });
  */
@@ -1331,6 +1434,150 @@ export function useAddMenuCategoryMutation(baseOptions?: Apollo.MutationHookOpti
 export type AddMenuCategoryMutationHookResult = ReturnType<typeof useAddMenuCategoryMutation>;
 export type AddMenuCategoryMutationResult = Apollo.MutationResult<AddMenuCategoryMutation>;
 export type AddMenuCategoryMutationOptions = Apollo.BaseMutationOptions<AddMenuCategoryMutation, AddMenuCategoryMutationVariables>;
+export const EditUserInfoItemDocument = gql`
+    mutation EditUserInfoItem($name: String!, $value: String!) {
+  EditUserInfoItem(name: $name, value: $value) {
+    name
+  }
+}
+    `;
+export type EditUserInfoItemMutationFn = Apollo.MutationFunction<EditUserInfoItemMutation, EditUserInfoItemMutationVariables>;
+
+/**
+ * __useEditUserInfoItemMutation__
+ *
+ * To run a mutation, you first call `useEditUserInfoItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditUserInfoItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editUserInfoItemMutation, { data, loading, error }] = useEditUserInfoItemMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useEditUserInfoItemMutation(baseOptions?: Apollo.MutationHookOptions<EditUserInfoItemMutation, EditUserInfoItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditUserInfoItemMutation, EditUserInfoItemMutationVariables>(EditUserInfoItemDocument, options);
+      }
+export type EditUserInfoItemMutationHookResult = ReturnType<typeof useEditUserInfoItemMutation>;
+export type EditUserInfoItemMutationResult = Apollo.MutationResult<EditUserInfoItemMutation>;
+export type EditUserInfoItemMutationOptions = Apollo.BaseMutationOptions<EditUserInfoItemMutation, EditUserInfoItemMutationVariables>;
+export const EditRestaurantInfoItemDocument = gql`
+    mutation EditRestaurantInfoItem($restaurant: String!, $name: String!, $value: String!) {
+  EditRestaurantInfoItem(restaurant: $restaurant, name: $name, value: $value) {
+    name
+  }
+}
+    `;
+export type EditRestaurantInfoItemMutationFn = Apollo.MutationFunction<EditRestaurantInfoItemMutation, EditRestaurantInfoItemMutationVariables>;
+
+/**
+ * __useEditRestaurantInfoItemMutation__
+ *
+ * To run a mutation, you first call `useEditRestaurantInfoItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditRestaurantInfoItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editRestaurantInfoItemMutation, { data, loading, error }] = useEditRestaurantInfoItemMutation({
+ *   variables: {
+ *      restaurant: // value for 'restaurant'
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useEditRestaurantInfoItemMutation(baseOptions?: Apollo.MutationHookOptions<EditRestaurantInfoItemMutation, EditRestaurantInfoItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditRestaurantInfoItemMutation, EditRestaurantInfoItemMutationVariables>(EditRestaurantInfoItemDocument, options);
+      }
+export type EditRestaurantInfoItemMutationHookResult = ReturnType<typeof useEditRestaurantInfoItemMutation>;
+export type EditRestaurantInfoItemMutationResult = Apollo.MutationResult<EditRestaurantInfoItemMutation>;
+export type EditRestaurantInfoItemMutationOptions = Apollo.BaseMutationOptions<EditRestaurantInfoItemMutation, EditRestaurantInfoItemMutationVariables>;
+export const GetAnalisticsDocument = gql`
+    mutation GetAnalistics($year: Int) {
+  GetAnalistics(year: $year) {
+    sum
+    _id
+  }
+}
+    `;
+export type GetAnalisticsMutationFn = Apollo.MutationFunction<GetAnalisticsMutation, GetAnalisticsMutationVariables>;
+
+/**
+ * __useGetAnalisticsMutation__
+ *
+ * To run a mutation, you first call `useGetAnalisticsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetAnalisticsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getAnalisticsMutation, { data, loading, error }] = useGetAnalisticsMutation({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetAnalisticsMutation(baseOptions?: Apollo.MutationHookOptions<GetAnalisticsMutation, GetAnalisticsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetAnalisticsMutation, GetAnalisticsMutationVariables>(GetAnalisticsDocument, options);
+      }
+export type GetAnalisticsMutationHookResult = ReturnType<typeof useGetAnalisticsMutation>;
+export type GetAnalisticsMutationResult = Apollo.MutationResult<GetAnalisticsMutation>;
+export type GetAnalisticsMutationOptions = Apollo.BaseMutationOptions<GetAnalisticsMutation, GetAnalisticsMutationVariables>;
+export const GetBillInfoDocument = gql`
+    mutation GetBillInfo($restaurant: String!, $recieptId: String!) {
+  GetBillInfo(restaurant: $restaurant, recieptId: $recieptId) {
+    _id
+    date
+    price
+    products {
+      name
+      price
+      _id
+    }
+  }
+}
+    `;
+export type GetBillInfoMutationFn = Apollo.MutationFunction<GetBillInfoMutation, GetBillInfoMutationVariables>;
+
+/**
+ * __useGetBillInfoMutation__
+ *
+ * To run a mutation, you first call `useGetBillInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetBillInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getBillInfoMutation, { data, loading, error }] = useGetBillInfoMutation({
+ *   variables: {
+ *      restaurant: // value for 'restaurant'
+ *      recieptId: // value for 'recieptId'
+ *   },
+ * });
+ */
+export function useGetBillInfoMutation(baseOptions?: Apollo.MutationHookOptions<GetBillInfoMutation, GetBillInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetBillInfoMutation, GetBillInfoMutationVariables>(GetBillInfoDocument, options);
+      }
+export type GetBillInfoMutationHookResult = ReturnType<typeof useGetBillInfoMutation>;
+export type GetBillInfoMutationResult = Apollo.MutationResult<GetBillInfoMutation>;
+export type GetBillInfoMutationOptions = Apollo.BaseMutationOptions<GetBillInfoMutation, GetBillInfoMutationVariables>;
 export const RestaurantsDocument = gql`
     query Restaurants {
   Restaurants {
@@ -1346,6 +1593,8 @@ export const RestaurantsDocument = gql`
     images
     rating
     openTimes
+    address
+    foodTypes
     _id
   }
 }
@@ -1385,6 +1634,9 @@ export const CurrentUserDocument = gql`
     _id
     restaurant {
       name
+      openTimes
+      address
+      foodTypes
     }
   }
 }
@@ -1698,6 +1950,7 @@ export const AdminOrdersDocument = gql`
     __typename
     _id
     orderQuantity
+    date
     product {
       __typename
       name
@@ -1825,8 +2078,8 @@ export const PayedOrdersDocument = gql`
   PayedOrders(restaurant: $restaurant) {
     _id
     date
-    createdAt
-    product {
+    price
+    products {
       name
       itemsType
       price
@@ -1933,6 +2186,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Address: ResolverTypeWrapper<Address>;
   AdminOrder: ResolverTypeWrapper<AdminOrder>;
+  Analistic: ResolverTypeWrapper<Analistic>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CookieError: ResolverTypeWrapper<CookieError>;
   CookieSuccess: ResolverTypeWrapper<CookieSuccess>;
@@ -1943,6 +2197,7 @@ export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  InfoItem: ResolversTypes['Restaurant'] | ResolversTypes['User'];
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
   LocationInput: LocationInput;
@@ -1954,12 +2209,14 @@ export type ResolversTypes = {
   MenuSubItem: ResolverTypeWrapper<MenuSubItem>;
   Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
+  OrderHistory: ResolverTypeWrapper<OrderHistory>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   PayedItem: ResolverTypeWrapper<PayedItem>;
   Query: ResolverTypeWrapper<{}>;
   RegisterInput: RegisterInput;
   Restaurant: ResolverTypeWrapper<Restaurant>;
   SaveCookie: ResolversTypes['CookieError'] | ResolversTypes['CookieSuccess'];
+  SellInfo: ResolverTypeWrapper<SellInfo>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Token: ResolverTypeWrapper<Token>;
   UploadedFileResponse: ResolverTypeWrapper<UploadedFileResponse>;
@@ -1971,6 +2228,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Address: Address;
   AdminOrder: AdminOrder;
+  Analistic: Analistic;
   Boolean: Scalars['Boolean'];
   CookieError: CookieError;
   CookieSuccess: CookieSuccess;
@@ -1981,6 +2239,7 @@ export type ResolversParentTypes = {
   Date: Scalars['Date'];
   Float: Scalars['Float'];
   ID: Scalars['ID'];
+  InfoItem: ResolversParentTypes['Restaurant'] | ResolversParentTypes['User'];
   Int: Scalars['Int'];
   Location: Location;
   LocationInput: LocationInput;
@@ -1992,12 +2251,14 @@ export type ResolversParentTypes = {
   MenuSubItem: MenuSubItem;
   Message: Message;
   Mutation: {};
+  OrderHistory: OrderHistory;
   OrderItem: OrderItem;
   PayedItem: PayedItem;
   Query: {};
   RegisterInput: RegisterInput;
   Restaurant: Restaurant;
   SaveCookie: ResolversParentTypes['CookieError'] | ResolversParentTypes['CookieSuccess'];
+  SellInfo: SellInfo;
   String: Scalars['String'];
   Token: Token;
   UploadedFileResponse: UploadedFileResponse;
@@ -2014,10 +2275,17 @@ export type AddressResolvers<ContextType = any, ParentType extends ResolversPare
 export type AdminOrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminOrder'] = ResolversParentTypes['AdminOrder']> = {
   _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   orderQuantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType>;
   restaurant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AnalisticResolvers<ContextType = any, ParentType extends ResolversParentTypes['Analistic'] = ResolversParentTypes['Analistic']> = {
+  _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  sum?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2055,6 +2323,10 @@ export type CostumerMenuChoisesResolvers<ContextType = any, ParentType extends R
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
+
+export type InfoItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['InfoItem'] = ResolversParentTypes['InfoItem']> = {
+  __resolveType: TypeResolveFn<'Restaurant' | 'User', ParentType, ContextType>;
+};
 
 export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
   coordinates?: Resolver<Maybe<Array<ResolversTypes['Float']>>, ParentType, ContextType>;
@@ -2116,14 +2388,19 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   AddMenuItem?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationAddMenuItemArgs, 'category' | 'restaurant'>>;
   AddOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationAddOrderArgs, 'productId'>>;
   AddRestaurant?: Resolver<ResolversTypes['Restaurant'], ParentType, ContextType, RequireFields<MutationAddRestaurantArgs, 'description' | 'id' | 'location' | 'name' | 'numReviews' | 'owner' | 'rating' | 'type'>>;
+  AddSellInfo?: Resolver<ResolversTypes['SellInfo'], ParentType, ContextType, RequireFields<MutationAddSellInfoArgs, 'items' | 'price' | 'restaurant'>>;
   CostumerExpiry?: Resolver<Maybe<ResolversTypes['CookieSuccess']>, ParentType, ContextType>;
   CreateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password' | 'username'>>;
   DeleteCostumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType, Partial<MutationDeleteCostumerArgs>>;
+  EditRestaurantInfoItem?: Resolver<Maybe<ResolversTypes['Restaurant']>, ParentType, ContextType, RequireFields<MutationEditRestaurantInfoItemArgs, 'name' | 'value'>>;
+  EditUserInfoItem?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationEditUserInfoItemArgs, 'name' | 'value'>>;
   EmitSocket?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   FetchRestaurantsByQuery?: Resolver<Maybe<Array<Maybe<ResolversTypes['Restaurant']>>>, ParentType, ContextType, Partial<MutationFetchRestaurantsByQueryArgs>>;
+  GetAnalistics?: Resolver<Maybe<Array<Maybe<ResolversTypes['Analistic']>>>, ParentType, ContextType, Partial<MutationGetAnalisticsArgs>>;
+  GetBillInfo?: Resolver<ResolversTypes['OrderHistory'], ParentType, ContextType, RequireFields<MutationGetBillInfoArgs, 'recieptId' | 'restaurant'>>;
   GetCostumerOrders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<MutationGetCostumerOrdersArgs, 'restaurant'>>;
   GetOrderItem?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<MutationGetOrderItemArgs, 'productId' | 'restaurant'>>;
-  Pay?: Resolver<Array<Maybe<ResolversTypes['PayedItem']>>, ParentType, ContextType, Partial<MutationPayArgs>>;
+  Pay?: Resolver<ResolversTypes['SellInfo'], ParentType, ContextType, RequireFields<MutationPayArgs, 'price' | 'restaurant'>>;
   PostMessage?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationPostMessageArgs, 'content' | 'user'>>;
   RemoveOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationRemoveOrderArgs, 'productId'>>;
   SendResetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendResetPasswordArgs, 'email'>>;
@@ -2135,6 +2412,17 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   UpdateMenuItems?: Resolver<ResolversTypes['MenuItem'], ParentType, ContextType, RequireFields<MutationUpdateMenuItemsArgs, 'category' | 'productId' | 'restaurant'>>;
   UpdatePassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'newPass' | 'token' | 'userId'>>;
   UpdateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'email' | 'id'>>;
+};
+
+export type OrderHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderHistory'] = ResolversParentTypes['OrderHistory']> = {
+  _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuItem']>>>, ParentType, ContextType>;
+  restaurant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type OrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem']> = {
@@ -2151,7 +2439,8 @@ export type PayedItemResolvers<ContextType = any, ParentType extends ResolversPa
   _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  orderQuantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType>;
   restaurant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2169,14 +2458,16 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   MenuItemCount?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<QueryMenuItemCountArgs, 'category' | 'restaurant'>>;
   OrderItems?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   Orders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<QueryOrdersArgs, 'restaurant'>>;
-  PayedOrders?: Resolver<Array<Maybe<ResolversTypes['PayedItem']>>, ParentType, ContextType, RequireFields<QueryPayedOrdersArgs, 'restaurant'>>;
+  PayedOrders?: Resolver<Array<Maybe<ResolversTypes['OrderHistory']>>, ParentType, ContextType, RequireFields<QueryPayedOrdersArgs, 'restaurant'>>;
   Restaurants?: Resolver<Maybe<Array<Maybe<ResolversTypes['Restaurant']>>>, ParentType, ContextType>;
   messages?: Resolver<Maybe<Array<ResolversTypes['Message']>>, ParentType, ContextType>;
 };
 
 export type RestaurantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Restaurant'] = ResolversParentTypes['Restaurant']> = {
   _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  foodTypes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2191,6 +2482,16 @@ export type RestaurantResolvers<ContextType = any, ParentType extends ResolversP
 
 export type SaveCookieResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaveCookie'] = ResolversParentTypes['SaveCookie']> = {
   __resolveType: TypeResolveFn<'CookieError' | 'CookieSuccess', ParentType, ContextType>;
+};
+
+export type SellInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['SellInfo'] = ResolversParentTypes['SellInfo']> = {
+  _id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuItem']>>>, ParentType, ContextType>;
+  restaurant?: Resolver<Maybe<ResolversTypes['Restaurant']>, ParentType, ContextType>;
+  sum?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
@@ -2224,12 +2525,14 @@ export type MyArrayResolvers<ContextType = any, ParentType extends ResolversPare
 export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>;
   AdminOrder?: AdminOrderResolvers<ContextType>;
+  Analistic?: AnalisticResolvers<ContextType>;
   CookieError?: CookieErrorResolvers<ContextType>;
   CookieSuccess?: CookieSuccessResolvers<ContextType>;
   Costumer?: CostumerResolvers<ContextType>;
   CostumerAddress?: CostumerAddressResolvers<ContextType>;
   CostumerMenuChoises?: CostumerMenuChoisesResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  InfoItem?: InfoItemResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
   Menu?: MenuResolvers<ContextType>;
   MenuItem?: MenuItemResolvers<ContextType>;
@@ -2237,11 +2540,13 @@ export type Resolvers<ContextType = any> = {
   MenuSubItem?: MenuSubItemResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  OrderHistory?: OrderHistoryResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
   PayedItem?: PayedItemResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Restaurant?: RestaurantResolvers<ContextType>;
   SaveCookie?: SaveCookieResolvers<ContextType>;
+  SellInfo?: SellInfoResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   UploadedFileResponse?: UploadedFileResponseResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

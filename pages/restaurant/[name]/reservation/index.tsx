@@ -9,42 +9,98 @@ import Button from "@/components/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useProvideAuth } from "hooks/Context.hook";
-
+import { BiTrash } from "react-icons/bi";
+import SucceedMessage from "@/components/Succeed-Message";
 export default function Reservation() {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);
   const [refetch, setRefetch] = useState(true);
   const { costumerData } = useProvideAuth();
   const { query } = useRouter();
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const url = `/api/reservation/${query.name}`;
+
   useEffect(() => {
     fetchReservations();
     async function fetchReservations() {
-      const res = await axios.get(`/api/reservation/${query.name}`);
+      const res = await axios.get(url);
       setOldRes(res.data);
     }
-  }, [refetch, query]);
+  }, [refetch, query, url]);
   async function reserve() {
     if (!costumerData.data?.Costumer) {
       return;
     }
-    const data = await axios.post(`/api/reservation/${query.name}`, {
+    const data = await axios.post(url, {
       date: startDate,
     });
-    setRefetch(!refetch);
+    if (data) {
+      setIsSaved(true);
+      setTimeout(() => {
+        setRefetch(!refetch);
+        globalThis.location.reload();
+      }, 1000);
+    }
   }
-
+  async function deleteTheBook(id) {
+    const res = await axios.delete(url, { params: { bookId: id } });
+    if (res.status === 200) {
+      setIsDeleted(true);
+      setTimeout(() => {
+        setRefetch(!refetch);
+        globalThis.location.reload();
+        setIsDeleted(false);
+      }, 1000);
+    }
+  }
   return (
     <div className={styles.container}>
       <div className={styles.calandar_container}>
         <h2>Make your Reservation</h2>
-        <div>
-          <h3>Old Reservations:</h3>
-          {oldDate?.length &&
-            oldDate?.map((res, i) => (
-              <div style={{ color: "wheat" }} key={i}>
-                {res}
-              </div>
-            ))}
+        <div className={styles.table_container}>
+          {oldDate.length ? (
+            <>
+              <h3>Old Reservations:</h3>
+              <table className={styles.old_reserved_date}>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {oldDate?.map((res, i) => (
+                    <tr key={i}>
+                      <td>
+                        <span className={styles.date}>
+                          {new Date(res?.date).toLocaleString()}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={styles.name}>
+                          {res?.costumer?.name}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={styles.quantity}>4 Persons</span>
+                      </td>
+                      <td>
+                        <span className={styles.quantity}>
+                          <BiTrash onClick={() => deleteTheBook(res?._id)} />
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {isDeleted && (
+                <SucceedMessage>Your Booking Is Deleted</SucceedMessage>
+              )}
+            </>
+          ) : null}
         </div>
 
         <div className={styles.first_row}>
@@ -68,6 +124,7 @@ export default function Reservation() {
           Description
           <textarea placeholder="Description"></textarea>
         </div>
+        {isSaved && <SucceedMessage>Your Booking Is Accepted</SucceedMessage>}
         <Button onClick={reserve}>Reserve</Button>
       </div>
     </div>

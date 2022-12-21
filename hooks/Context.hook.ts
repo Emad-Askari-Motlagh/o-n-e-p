@@ -49,12 +49,7 @@ export function useProvideAuth() {
   const client = useApollo({});
   const [signInError, setSignInError] = useState<string | undefined>();
   const costumerData = useQuery<CostumerQuery, CostumerQueryVariables>(
-    GET_COSTUMER,
-    {
-      onCompleted: (data) => {
-        console.log(data);
-      },
-    }
+    GET_COSTUMER
   );
 
   //Try to use hooks
