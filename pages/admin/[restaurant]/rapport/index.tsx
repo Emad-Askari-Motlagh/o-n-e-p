@@ -3,8 +3,8 @@ import { useAuth, useProvideAuth } from "hooks/Context.hook";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Chart from "components/Chart";
-import { useQuery } from "@apollo/client";
-import { GET_ANALISTICS } from "@/server/graphql/querys/querys.graphql";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ANALISTICS } from "@/server/graphql/querys/mutations.graphql";
 import SelectInput from "@/components/SelectInput";
 import React_Calendar from "components/Calendar";
 
@@ -13,13 +13,22 @@ export default function Dashboard() {
   const {
     user: { data: userData },
   } = useProvideAuth();
-  const { data: analisticsData, refetch } = useQuery(GET_ANALISTICS, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+  const [getAnalistics, { data: analisticsData }] = useMutation(
+    GET_ANALISTICS,
+    {
+      onCompleted: (data) => {
+        console.log(data);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
   useEffect(() => {
-    refetch();
+    getAnalistics({
+      variables: { year: parseInt(sortType) },
+      onCompleted: (e) => console.log(e),
+    });
   }, [sortType]);
 
   return (
