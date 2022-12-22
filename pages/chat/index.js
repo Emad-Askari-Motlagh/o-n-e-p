@@ -89,11 +89,6 @@ const Chat = () => {
             onChange={(e) => {
               setMsg(e.target.value);
             }}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                sendMessage();
-              }
-            }}
           />
         </Col>
         <Col xs={2} style={{ padding: 0 }}>
@@ -107,12 +102,12 @@ const Chat = () => {
       </Row>
       {data.length ? (
         data.map((chat, i) => (
-          <div key={"msg_" + i} tw="mt-1">
+          <div key={"msg_" + i}>
             <span>{chat.user === user ? "Me" : chat.user}</span>: {chat.msg}
           </div>
         ))
       ) : (
-        <div tw="text-sm text-center text-gray-400 py-6">No chat messages</div>
+        <div>No chat messages</div>
       )}
     </Container>
   );
