@@ -1,4 +1,4 @@
-.container {
+.button_con {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,6 +21,7 @@
     text-decoration: none;
     font-weight: 700;
     cursor: pointer;
+    background-color: inherit;
     &:hover {
       background-position: right center; /* change the direction of the change here */
       color: #fff;

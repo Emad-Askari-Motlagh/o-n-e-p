@@ -209,6 +209,24 @@ export const GET_ANALISTICS = gql`
     }
   }
 `;
+export const GET_RAPPORT = gql`
+  mutation GetRapport($beginDate: String, $finishDate: String) {
+    GetRapport(beginDate: $beginDate, finishDate: $finishDate) {
+      categorizedByName {
+        _id
+        sum
+      }
+      categorizedByTags {
+        _id
+        sum
+      }
+      categorizedByDate {
+        _id
+        sum
+      }
+    }
+  }
+`;
 export const GET_BILL_INFO = gql`
   mutation GetBillInfo($restaurant: String!, $recieptId: String!) {
     GetBillInfo(restaurant: $restaurant, recieptId: $recieptId) {

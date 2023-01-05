@@ -56,7 +56,7 @@ export default function Chart({ data, sortType }) {
 
           <Area
             type="monotone"
-            dataKey={`sum`}
+            dataKey="sum"
             stroke="#2451B7"
             fill="url(#color)"
           />

@@ -8,6 +8,7 @@ $item_color: rgb(202, 196, 196);
   flex-direction: column;
   width: 100%;
   margin: 2em;
+  background-color: #383838;
   & * {
     color: $item_color;
   }

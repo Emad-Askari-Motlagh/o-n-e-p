@@ -22,6 +22,7 @@ export default function HomeScreen({ ALL_RESTAURANTS }) {
           description={res?.description ?? placeHolder}
           images={res?.images}
           endPoint={`/restaurant/${res?.name}`}
+          buttonLabel="Begin to order"
         />
       ))}
     </div>

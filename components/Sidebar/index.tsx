@@ -72,7 +72,7 @@ function SideBar({
             <DropdownItem
               leftIcon={<GoSettings className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${fetchedUser?.restaurant.name}/setting`}
+              endPoint={`/admin/${fetchedUser?.restaurant.name}`}
               itemsLabel="Setting"></DropdownItem>
           </div>
         ) : (

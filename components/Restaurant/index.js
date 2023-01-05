@@ -15,6 +15,7 @@ export default function Restaurant({
   images,
   description,
   location,
+  buttonLabel,
 }) {
   return (
     <div className={styles.container}>
@@ -50,7 +51,7 @@ export default function Restaurant({
             </div>
 
             <LinkButton width="80%" scroll={false} href={endPoint}>
-              Borja att bestella
+              {buttonLabel}
             </LinkButton>
           </div>
         </section>

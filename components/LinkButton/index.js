@@ -5,10 +5,9 @@ import styles from "./styles.module.scss";
 export default function LinkButton({ width, style, children, onClick, href }) {
   return (
     <div
-      className={styles.container}
+      className={styles.button_con}
       style={{ width: width }}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       <Link href={href}>
         <a className={styles.btn_grad}>{children}</a>
       </Link>

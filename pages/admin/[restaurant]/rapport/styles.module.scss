@@ -23,7 +23,7 @@
 .dash_container {
     color: whitesmoke;
     min-height: 100vmin;
-    font-family: "playfair";
+
     h1 {
         font-weight: 900;
         display: flex;
@@ -32,11 +32,55 @@
         font-family: "playfair", sans-serif;
         text-shadow: 1px 1px 1px rgb(13, 0, 0);
         margin-top: 3%;
+        font-size: xx-large;
+    }
+    .rapport {
     }
     .calendar_parent {
         display: flex;
-        justify-content: center;
-        align-items: center;
+    }
+    .rapport_container {
+        width: 500px;
+        margin: auto;
+        background-color: #ffff;
+        color: black;
+        padding: 3rem 1rem;
+        margin-bottom: 2rem;
+        border: 2px solid black;
+        .date_description {
+            font-size: 10px;
+        }
+        .rapport_wraper {
+            width: 80%;
+
+            .rapport_row {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+
+                margin: auto;
+                border-bottom: 1px dashed rgba(155, 148, 148, 0.626);
+
+                & * {
+                    width: 30%;
+                    margin: 1rem;
+                    font-size: 10px;
+                    font-family: "playfair";
+                    font-weight: 700;
+                    white-space: nowrap;
+                }
+                .sell_item {
+                    display: flex;
+                }
+            }
+        }
+        .rapport_row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            min-width: 100%;
+        }
     }
     .info_container {
         display: flex;
@@ -45,6 +89,8 @@
         span {
             opacity: 0.5;
             font-family: "playfair", sans-serif;
+            word-break: keep-all;
+            font-size: 10px;
         }
     }
     .rapport_container {

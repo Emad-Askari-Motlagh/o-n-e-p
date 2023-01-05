@@ -11,29 +11,19 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Dashboard() {
-  const [sortType, setSortType] = useState(new Date().getFullYear());
+  const [sortType, setSortType] = useState(new Date());
   const router = useRouter();
   const {
     user: { data: userData },
   } = useProvideAuth();
 
-  const [getAnalistics, { data: analisticsData }] = useMutation(
-    GET_ANALISTICS,
-    {
-      onCompleted: (data) => {
-        console.log(data);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    }
-  );
+  const [getAnalistics, { data: analisticsData }] = useMutation(GET_ANALISTICS);
   useEffect(() => {
     getAnalistics({
-      variables: { year: parseInt(sortType) },
+      variables: { year: sortType?.$y },
       onCompleted: (e) => console.log(e),
     });
-  }, [sortType]);
+  }, [sortType, getAnalistics]);
 
   return (
     <div className={styles.dash_container}>
@@ -41,16 +31,10 @@ export default function Dashboard() {
       <div className={styles.calendar_parent}>
         <React_Calendar
           label="Choose A Year"
-          onChange={(e) => setSortType(new Date(e.target.value)?.getFullYear())}
+          handleChange={(value) => setSortType(value)}
+          value={sortType}
         />
       </div>
-
-      <SelectInput
-        name="Sort result"
-        label="Sort by..."
-        placeholder="Choose a sort method"
-        value={[2022, 2021, 2023]}
-        onSelect={(e) => setSortType(e.target.value)}></SelectInput>
 
       <div className={styles.info_container}>
         <div>

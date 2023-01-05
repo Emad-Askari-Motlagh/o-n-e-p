@@ -140,6 +140,17 @@ type Analistic {
   _id: ID
   sum: Int
 }
+
+type Category {
+  _id: String
+  sum: Int
+}
+type CategoryParent {
+  categorizedByTags: [Category]
+  categorizedByName: [Category]
+  categorizedByDate: [Category]
+}
+
 input MenuItemInput {
   name: String
   itemsType: String
@@ -275,5 +286,6 @@ type Mutation {
   ): Restaurant
   AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
   GetAnalistics(year: Int): [Analistic]
+  GetRapport(beginDate: String, finishDate: String): [CategoryParent]
   GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
 }

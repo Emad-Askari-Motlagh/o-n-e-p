@@ -21,7 +21,7 @@ var sellSchema = new mongoose.Schema(
     },
     items: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: MenuItemSchema ?? "MenuItem",
       },
     ],

@@ -18,12 +18,15 @@ export default function SideBarItem({
 }: Props) {
   const [sideBarClassName, setSideBarClassName] = useState("sideBar1");
   const { asPath } = useRouter();
-
+  const pathArray = decodeURI(asPath).split("/");
+  const endpointArray = decodeURI(endPoint).split("/");
   useEffect(() => {
-    decodeURI(asPath).includes(endPoint)
+    pathArray[pathArray.length - 1].includes(
+      endpointArray[endpointArray.length - 1]
+    )
       ? setSideBarClassName("sideBar1WithIndicator")
       : setSideBarClassName("sideBar1");
-  }, [asPath, endPoint]);
+  }, [asPath, endPoint, pathArray, endpointArray]);
 
   return (
     <div className={styles.menu_item}>
