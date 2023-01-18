@@ -1,0 +1,75 @@
+@import "styles/breakpoints.scss";
+
+//Variables//
+$ITEM_BORDERS: 40px;
+$ITEMS_WIDTH: 30%;
+$ITEMS_HEIGHT: 400px;
+$BC_COLOR: #242424;
+
+@mixin ITEMS_AFTER {
+  position: absolute;
+  content: "";
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  border: 3px solid wheat;
+  border-left-width: 0;
+}
+@mixin ITEMS_STYLE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 35px;
+  width: max-content;
+  margin: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  color: tomato;
+  font-family: "Archivo Black", sans-serif;
+  backdrop-filter: blur(2px);
+  padding: 4px 10px;
+  text-shadow: 1px 1px 2px red, 0 0 2px blue, 0 0 0.2px blue;
+  mask-image: linear-gradient(to right, red, black);
+  &::after {
+    @include ITEMS_AFTER;
+  }
+  @include xl {
+    font-size: 30px;
+  }
+}
+.items_card_container {
+  position: relative;
+  transition: all 0.2s ease-in;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: $ITEM_BORDERS;
+  border: 0.1px solid gray;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+  margin: 4% 0;
+  max-width: 400px;
+  @include md {
+    max-width: initial;
+  }
+  .image_con {
+    position: relative;
+
+    .image {
+      position: absolute;
+    }
+  }
+  .item {
+    span {
+      @include ITEMS_STYLE;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: rgba(20, 20, 21, 0.063) 0px 7px 12px 0px;
+  }
+}

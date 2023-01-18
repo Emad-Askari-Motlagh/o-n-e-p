@@ -19,7 +19,7 @@ export default function Menu() {
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
-    variables: { restaurant: Router.query?.name as string },
+    variables: { restaurant: "Göteburgare" },
   });
 
   return (
@@ -37,17 +37,20 @@ export default function Menu() {
           <div className={styles.items_parent}>
             {(data?.MenuByCategory
               ? data?.MenuByCategory
-              : Array(6).fill(1)
-            ).map((res, index) => (
-              <div key={index} className={styles.item_parent}>
-                <RestaurantSubItem
-                  key={index}
-                  label={res.itemName}
-                  endPoint={res.itemName}
-                  image={"/2.webp"}
-                />
-              </div>
-            ))}
+              : Array(data?.MenuByCategory?.length).fill(1)
+            ).map((res, index) => {
+              return (
+                <div key={index} className={styles.item_parent}>
+                  <RestaurantSubItem
+                    key={index}
+                    label={res.itemName}
+                    endPoint={res.itemName}
+                    subCat={res.subCategory}
+                    image={"/2.webp"}
+                  />
+                </div>
+              );
+            })}
           </div>
         </>
       )}

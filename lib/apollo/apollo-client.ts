@@ -8,10 +8,8 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import merge from "deepmerge";
-import { getMainDefinition } from "apollo-utilities";
 import SSELink from "@/lib/sse";
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
+
 
 const link = `${process.env.SERVER_LINK}`;
 let apolloClient: any;

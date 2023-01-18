@@ -20,7 +20,8 @@ export default function Login() {
   const [error, setError] = useState<string | null>();
 
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-  const { signIn, signOut, user, SigninWithGoogle } = useProvideAuth();
+  const { signIn, signOut, user, SigninWithGoogle, signInError } =
+    useProvideAuth();
   const { handleChange, handleSubmit, values, touched, errors, setErrors } =
     useFormik({
       initialValues: {
@@ -42,9 +43,11 @@ export default function Login() {
           });
           if (token) {
             setLoginSuccesed(true);
-            globalThis.location.href = "/";
+            setTimeout(() => {
+              globalThis.location.href = `/admin/${user.data?.CurrentUser?.restaurant.name}`;
+            }, 1500);
           } else {
-            setError("Username or Password are incurrect");
+            setError(signInError);
           }
         } catch (err) {
           setError("Error on login");
@@ -98,10 +101,10 @@ export default function Login() {
           ) : null}
         </div>
 
-        <Button onClick={() => console.log("clicked")} width={"50%"}>
+        <Button type="submit" width={"50%"}>
           Login
         </Button>
-        {loginSuccesed && <LoginSucceed value="Login Succeed" />}
+        {loginSuccesed && <LoginSucceed>Login Succeed</LoginSucceed>}
         {error && (
           <Alert variant="danger" className={styles.error_message}>
             {error}

@@ -96,9 +96,11 @@ $BC_COLOR: #242424;
     font: 900 30px Montserrat;
     text-shadow: 0 10px 25px rgba(0, 0, 0);
   }
+
   label {
     color: "white";
     opacity: "0.5";
+    font-size: 12px;
   }
 
   .calander {
@@ -111,9 +113,9 @@ $BC_COLOR: #242424;
     width: 100%;
     border-radius: 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    background-color: aliceblue;
+
     transition: background-color 0.2s ease-in;
-    padding: 10px 15px;
+
     border-width: 0;
     font-size: 16px;
     color: "white";

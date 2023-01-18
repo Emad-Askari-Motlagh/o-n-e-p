@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/Primary-layout";
-import DatePicker from "react-datepicker";
+import DatePicker from "@/components/Calendar";
 import "react-datepicker/dist/react-datepicker.css";
 import Head from "next/head";
 import Input from "@/components/Input";
@@ -108,20 +108,17 @@ export default function Reservation() {
             <Input type="text" placeholder="Name" label="Customer`s name" />
           </div>
 
-          <div>
-            <label>Choose a date</label>
-            <DatePicker
-              className={styles.date_picker}
-              selected={startDate}
-              onDayMouseEnter={(date: Date) => setStartDate(date)}
-            />
-          </div>
+          <DatePicker
+            label="Choose a date"
+            value={startDate}
+            handleChange={(date: Date) => setStartDate(date)}
+          />
         </div>
         <div className={styles.parent}>
           <Input type="text" placeholder="Antal" label="For how many?" />
         </div>
         <div className={styles.parent}>
-          Description
+          <label>Description</label>
           <textarea placeholder="Description"></textarea>
         </div>
         {isSaved && <SucceedMessage>Your Booking Is Accepted</SucceedMessage>}

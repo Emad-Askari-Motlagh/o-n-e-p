@@ -56,9 +56,25 @@ export const GET_MENU_CATREGORY = gql`
       collectionType
       _id
       image
+      subCategory
+      parent
     }
   }
 `;
+
+export const GET_MENU_BY_SUB_CATEGORY = gql`
+  query MenuBySubCategory($restaurant: String!, $subCategory: String!) {
+    MenuBySubCategory(restaurant: $restaurant, subCategory: $subCategory) {
+      itemName
+      collectionType
+      image
+      _id
+      subCategory
+      parent
+    }
+  }
+`;
+
 export const GET_MENU = gql`
   query Menu($restaurant: String!) {
     Menu(restaurant: $restaurant) {
@@ -78,6 +94,8 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
         quantity
         images
         _id
+        category
+        subCat
       }
       __typename
       ... on OrderItem {

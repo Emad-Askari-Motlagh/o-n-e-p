@@ -89,6 +89,7 @@ export function useProvideAuth() {
       >({
         mutation: LOGIN,
         variables: { email, password },
+
         refetchQueries: [{ query: GET_CURRENT_USER }, "CurrentUser"],
       });
       const token = result.data?.SignIn.token;
@@ -100,6 +101,7 @@ export function useProvideAuth() {
         return null;
       }
     } catch (err) {
+      setSignInError("Error on signin happend");
       console.log("Error during the signin", err);
     }
   };
@@ -173,5 +175,6 @@ export function useProvideAuth() {
     SigninWithGoogle,
     token: authToken,
     costumerData,
+    signInError,
   };
 }

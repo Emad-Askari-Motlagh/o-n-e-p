@@ -27,7 +27,7 @@ export default function MenuEditor({
     <div className={styles.container}>
       <div className={styles.parent}>
         {data.images?.length &&
-          data.images.map((res, i) => {
+          data.images?.map((res, i) => {
             return (
               <div key={i} className={styles.image_container}>
                 <Image

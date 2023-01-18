@@ -172,10 +172,26 @@ export const ADD_CUSTOMER_ADDRESS = gql`
 `;
 
 export const ADD_MENU_CATEGORY = gql`
-  mutation AddMenuCategory($name: String!, $image: String!) {
-    AddMenuCategory(name: $name, image: $image) {
+  mutation AddMenuCategory(
+    $name: String!
+    $image: String!
+    $restaurant: String!
+    $parent: String!
+  ) {
+    AddMenuCategory(
+      name: $name
+      image: $image
+      restaurant: $restaurant
+      parent: $parent
+    ) {
       itemName
+      parent
     }
+  }
+`;
+export const DELETE_CATEGORY = gql`
+  mutation DeleteMenuCategory($categoryId: String!, $restaurant: String!) {
+    DeleteMenuCategory(categoryId: $categoryId, restaurant: $restaurant)
   }
 `;
 

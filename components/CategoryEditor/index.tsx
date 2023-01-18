@@ -8,16 +8,23 @@ import FileInput from "components/Image-Input";
 import Input from "components/Input";
 import Button from "../Button";
 import SelectInput from "../SelectInput";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 import MenuSubItem from "components/RestaurantSubItem";
+import {
+  DeleteMenuCategoryMutationFn,
+  UpdateCategoryMutationFn,
+} from "@/server/generated/graphql";
 
 interface CategoryProps {
   name: string;
   image: string;
-  submit: (e: ChangeEvent<HTMLSelectElement>) => void;
+  submit: UpdateCategoryMutationFn;
   onChange: (e: ChangeEvent) => void;
-  onChangeImage: (e: ChangeEvent) => void;
+  onChangeImage: (e: ChangeEvent<HTMLInputElement>) => void;
   submited: boolean;
+  deleteCategory: DeleteMenuCategoryMutationFn;
+  id: string;
+  restaurant: string;
 }
 export default function CategoryEditor({
   name,
@@ -26,6 +33,9 @@ export default function CategoryEditor({
   onChange,
   onChangeImage,
   submited,
+  deleteCategory,
+  id,
+  restaurant,
 }: CategoryProps) {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -45,10 +55,27 @@ export default function CategoryEditor({
         isModalOpen={isOpen}
         setIsModalOpen={setIsOpen}
         label="Category Editor">
-        <form onSubmit={submit}>
-          <div className={styles.image}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
+          }}>
+          <div
+            className={styles.image}
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}>
             {image && (
-              <Image alt="ok" width={100} height={100} src={image}></Image>
+              <Image
+                style={{
+                  color: "white",
+                }}
+                alt="ok"
+                width={100}
+                height={100}
+                src={image}></Image>
             )}
             <FileInput
               label="Upload Image"
@@ -58,13 +85,18 @@ export default function CategoryEditor({
                     setNewName(URL.createObjectURL(e.target.files[0]));
               }}
             />
+            <AiFillDelete
+              onClick={() =>
+                deleteCategory({ variables: { categoryId: id, restaurant } })
+              }
+              style={{
+                color: "white",
+                justifySelf: "flex-start",
+              }}
+            />
           </div>
 
-          <SelectInput
-            name={"cat"}
-            label="Choose a category"
-            value={["main course", "drink", "starter"]}
-            onSelect={onChange}></SelectInput>
+          <Input placeholder={name} name={name} onChange={onChange}></Input>
           {submited && (
             <SucceedMessage>Item Changed Successfuly</SucceedMessage>
           )}

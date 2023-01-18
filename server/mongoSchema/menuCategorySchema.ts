@@ -10,6 +10,8 @@ var MenutCategorySchema = new mongoose.Schema(
     image: { type: String },
     itemName: String,
     collectionType: String,
+    subCategory: { type: [String] },
+    parent: String,
   },
   { timestamps: true }
 );

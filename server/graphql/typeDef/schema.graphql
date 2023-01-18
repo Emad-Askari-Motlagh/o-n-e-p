@@ -118,6 +118,7 @@ type MenuItem {
   category: String
   orderQuantity: Int
   images: [String]
+  subCat: [String]
 }
 type MenuParent {
   itemName: String
@@ -126,6 +127,8 @@ type MenuParent {
   restaurant: Restaurant
   image: String
   _id: ID
+  subCategory: [String]
+  parent: String
 }
 type AdminOrder {
   orderQuantity: Int
@@ -213,6 +216,7 @@ type Query {
   Costumer: Costumer
   Menu(restaurant: String!): [MenuParent]
   MenuByCategory(restaurant: String!): [MenuParent]
+  MenuBySubCategory(restaurant: String!, subCategory: String): [MenuParent]
   MenuItemByCategory(
     category: String!
     restaurant: String!
@@ -254,7 +258,12 @@ type Mutation {
   ): MenuItem
   SignOut: String
   SignOutCostumer: String
-  AddMenuCategory(name: String!, image: String!): MenuParent
+  AddMenuCategory(
+    name: String!
+    image: String!
+    restaurant: String!
+    parent: String!
+  ): MenuParent
   AddOrder(productId: ID!): [AdminOrder]!
   RemoveOrder(productId: ID!): [AdminOrder]!
   GetOrderItem(productId: ID!, restaurant: String!): OrderItem
@@ -288,4 +297,5 @@ type Mutation {
   GetAnalistics(year: Int): [Analistic]
   GetRapport(beginDate: String, finishDate: String): [CategoryParent]
   GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
+  DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
 }

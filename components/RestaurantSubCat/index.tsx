@@ -22,17 +22,15 @@ function RestaurantSubItem({
   const Router = useRouter();
 
   return (
-    <Link href={`${Router.asPath}/${endPoint?.toLowerCase()}`}>
+    <Link href={`${endPoint?.toLowerCase()}`}>
       <div className={styles.items_card_container}>
-        {image && (
-          <Image
-            alt="Sub Item"
-            className={styles.image}
-            width="800"
-            height="800"
-            src={image}
-            layout="intrinsic"></Image>
-        )}
+        <Image
+          alt="Sub Item"
+          className={styles.image}
+          width="800"
+          height="800"
+          src={image}
+          layout="intrinsic"></Image>
         <div className={styles.item}>
           <span>{label}</span>
         </div>

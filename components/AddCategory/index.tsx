@@ -12,6 +12,7 @@ export default function AddCategory({
   onChangeImage,
   fetchedImage,
   isAdded,
+  parent,
 }) {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
@@ -44,7 +45,14 @@ export default function AddCategory({
         onClick={() =>
           name &&
           fetchedImage &&
-          submit({ variables: { name, image: fetchedImage.url } })
+          submit({
+            variables: {
+              name,
+              image: fetchedImage.url,
+              parent,
+              restaurant,
+            },
+          })
         }>
         Add new category
       </Button>

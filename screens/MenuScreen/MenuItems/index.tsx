@@ -10,12 +10,8 @@ import styles from "./styles.module.scss";
 import Form from "components/MenuItem/Form";
 import ChoisesCard from "components/MenuItem/ChoisesCard";
 import Selection from "components/Selection";
-import {
-  MenuItemByCategoryQuery,
-  MenuItemByCategoryQueryVariables,
-} from "@/server/generated/graphql";
 
-export default function Items() {
+export default function Items({ items }) {
   const Router = useRouter();
 
   const {
@@ -26,14 +22,7 @@ export default function Items() {
     AdminOrders,
   } = useOrders();
 
-  const item = Router.query?.item;
   const restaurant = Router.query?.name;
-  const { data, loading, error } = useQuery<
-    MenuItemByCategoryQuery,
-    MenuItemByCategoryQueryVariables
-  >(GET_MENU_ITEM_BY_CATREGORY, {
-    variables: { category: item as string, restaurant: restaurant as string },
-  });
 
   //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
@@ -52,17 +41,9 @@ export default function Items() {
 
   return (
     <div className={styles.container}>
-      <motion.label
-        initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={styles.header}>
-        {Router.query?.item}
-      </motion.label>
-
       <div className={styles.items_container}>
-        {Array.isArray(data?.MenuItemByCategory) &&
-          !loading &&
-          data?.MenuItemByCategory.map((res, i) => (
+        {Array.isArray(items) &&
+          items.map((res, i) => (
             <MenuItem
               key={res?._id || i}
               id={res?._id}
