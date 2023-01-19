@@ -1,6 +1,6 @@
 @import "styles/breakpoints.scss";
 @import "styles/fonts";
-$font: "Paytone One", sans-serif;
+$font: "Playfair", sans-serif;
 
 $font_size: 12px;
 
@@ -230,11 +230,11 @@ $font_size: 12px;
 .account_recomendation {
   width: max-content;
   margin-left: auto;
-  padding: 22px 22px;
-
+  padding: 10px 10px;
+  margin-right: 4%;
   cursor: pointer;
   font-size: calc(0.6vw + 5px);
-  margin-top: 5vw;
+
   text-decoration: underline;
 }
 .account_recomendation h3 {

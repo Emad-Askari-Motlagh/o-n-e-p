@@ -30,19 +30,21 @@
       padding: 10px 15px;
       border-width: 0;
       font-size: 16px;
+
       &:focus {
         outline: none;
 
         &::placeholder {
           color: rgba(29, 26, 26, 0.486);
-          font-size: 14px;
           caret-color: red;
+          font-weight: 700;
         }
       }
       &::placeholder {
-        font-size: 14px;
+        font-size: 12px;
         color: #130e0e;
         opacity: 0.5;
+        font-weight: 900;
       }
     }
   }

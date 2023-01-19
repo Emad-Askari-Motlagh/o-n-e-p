@@ -9,10 +9,14 @@ export const LOGIN = gql`
   }
 `;
 export const LOGIN_WITH_GOOGLE = gql`
-  mutation SignInWithGoogle($email: String!, $password: String!) {
-    SignInWithGoogle(email: $email, password: $password) {
-      token
-    }
+  mutation SignInWithGoogle {
+    SignInWithGoogle
+  }
+`;
+
+export const SIGN_UP_WITH_GOOGLE = gql`
+  mutation SignUpWithGoogle {
+    email
   }
 `;
 export const ADD_COSTUMER = gql`
@@ -24,6 +28,7 @@ export const ADD_COSTUMER = gql`
     }
   }
 `;
+
 export const CREATE_USER = gql`
   mutation CreateUser($email: String!, $password: String!, $username: String!) {
     CreateUser(email: $email, password: $password, username: $username) {

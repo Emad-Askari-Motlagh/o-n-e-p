@@ -1,13 +1,10 @@
 import Restaurant from "server/mongoSchema/restaurangSchema";
 import MenuItem from "server/mongoSchema/MenuItemSchema";
-import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
 import { ApolloError } from "apollo-server";
-import Order from "server/mongoSchema/orderschema";
 import mongoose, { SchemaType, Types } from "mongoose";
 import Menu from "server/mongoSchema/MenuItemSchema";
 import userSchema from "@/server/mongoSchema/userSchema";
-import { FaQq } from "react-icons/fa";
 
 const menuResolvers = {
   CostumerMenuChoises: {
@@ -22,6 +19,7 @@ const menuResolvers = {
       return null;
     },
   },
+
   Query: {
     async Menu(_, args, context) {
       const res = await Menu.aggregate([
@@ -106,12 +104,14 @@ const menuResolvers = {
         );
       }
     },
+
     async MenuItemByCategory(_, args, { costumerId }) {
       try {
         const {
           category,
           restaurant,
         }: { category: string; restaurant: string } = args;
+
         const res1 = await Menu.aggregate([
           { $match: { restaurant: restaurant } },
 
@@ -275,7 +275,6 @@ const menuResolvers = {
         return null;
       }
       // const id = new mongoose.Types.ObjectId(categoryId);
-  
 
       //Find and update
       const newMenu = await menuCategorySchema.findOneAndUpdate(

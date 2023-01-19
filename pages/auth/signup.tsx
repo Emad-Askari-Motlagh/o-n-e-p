@@ -18,14 +18,8 @@ import LoginSucceed from "components/Succeed-Message";
 
 export default function Signup() {
   const [error, setError] = useState(null);
-  const { signUp } = useProvideAuth();
+  const { signUp, signUpWithGoogle } = useProvideAuth();
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-
-  // useEffect(() => {
-  //   if (router.query?.email) {
-  //     setUsername(router.query?.email);
-  //   }
-  // }, [router?.query]);
 
   const { handleChange, handleSubmit, values, touched, errors } = useFormik({
     initialValues: {
@@ -59,17 +53,9 @@ export default function Signup() {
       }
     },
   });
-  // useEffect(() => {
-  //   if (signupError) {
-  //     setError(signupError);
-  //   } else {
-  //     setError(null);
-  //   }
-  // }, [signupError]);
-  // const deleteOnFocus = () => {
-  //   dispatch(setRegisterError(null));
-  // };
-
+  async function signUpGoogle() {
+    await signUpWithGoogle();
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: -200 }}
@@ -158,13 +144,9 @@ export default function Signup() {
         </Link>
       </div>
       <div className={styles.login_alternatives_container}>
-        <span className={styles.auth_buttons}>
+        <span onClick={signUpGoogle} className={styles.auth_buttons}>
           <FcGoogle style={{ marginRight: "4%" }}></FcGoogle>
           <span>Signup With Google</span>
-        </span>
-        <span className={styles.auth_buttons}>
-          <ImFacebook2 style={{ marginRight: "4%" }} color="blue"></ImFacebook2>
-          <span>Signup With Facebook</span>
         </span>
       </div>
       {error && (

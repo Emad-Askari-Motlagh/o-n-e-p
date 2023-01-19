@@ -1,3 +1,4 @@
+import { SIGN_UP_WITH_GOOGLE } from "./../server/graphql/querys/mutations.graphql";
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -29,18 +30,19 @@ import {
   SIGN_OUT_COSTUMER,
 } from "server/graphql/querys/mutations.graphql";
 import { useRouter } from "next/router";
+import { signOut as signOutWithGoogle } from "next-auth/react";
 
 const authContext = createContext({});
-
-export const useAuth = () => {
-  return useContext(authContext);
-};
 interface User {
   email: string;
   _id: string;
   name: string;
   restaurant: string;
 }
+export const useAuth = () => {
+  return useContext(authContext);
+};
+
 export function useProvideAuth() {
   const [authToken, setAuthToken] = useState<string | undefined>();
   const [user, setUser] = useState<CurrentUserQuery>();
@@ -106,19 +108,12 @@ export function useProvideAuth() {
     }
   };
 
-  const SigninWithGoogle = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const SigninWithGoogle = async () => {
     const result = await client.mutate<
       SignInWithGoogleMutation,
       SignInWithGoogleMutationVariables
     >({
       mutation: LOGIN_WITH_GOOGLE,
-      variables: { email, password },
     });
     setAuthToken(result.data?.SignInWithGoogle.token);
     if (!result.errors && result.data) {
@@ -158,12 +153,22 @@ export function useProvideAuth() {
       await client.mutate<SignOutMutation, SignOutMutationVariables>({
         mutation: SIGN_OUT,
       });
+      await signOutWithGoogle();
       Router.reload();
     } catch (err: any) {
       console.log(err?.message ?? err);
     }
   };
 
+  const signUpWithGoogle = async () => {
+    try {
+      await client.mutate({
+        mutation: SIGN_UP_WITH_GOOGLE,
+      });
+    } catch (err: any) {
+      console.log(err?.message ?? err);
+    }
+  };
   return {
     isSignedIn,
     signIn,
@@ -176,5 +181,6 @@ export function useProvideAuth() {
     token: authToken,
     costumerData,
     signInError,
+    signUpWithGoogle,
   };
 }

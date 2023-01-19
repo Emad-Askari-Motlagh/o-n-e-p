@@ -13,15 +13,28 @@ import { useAuth, useProvideAuth } from "hooks/Context.hook";
 import PrimaryLayout from "components/Primary-layout";
 import Button from "components/Button";
 import Input from "components/Input";
-import { FaFacebook } from "react-icons/fa";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 import LoginSucceed from "components/Succeed-Message";
+import { useMutation } from "@apollo/client";
+import { LOGIN_WITH_GOOGLE } from "@/server/graphql/querys/mutations.graphql";
+import { signIn as signInWithGoogle } from "next-auth/react";
 
 export default function Login() {
   const [error, setError] = useState<string | null>();
 
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-  const { signIn, signOut, user, SigninWithGoogle, signInError } =
-    useProvideAuth();
+  const { signIn, signOut, user, signInError } = useProvideAuth();
+
+  const onSuccess = async () => {
+    try {
+      await signInWithGoogle("google", {
+        ...values,
+        redirect: false,
+      });
+    } catch (err) {
+      setError(err.message);
+    }
+  };
   const { handleChange, handleSubmit, values, touched, errors, setErrors } =
     useFormik({
       initialValues: {
@@ -118,13 +131,8 @@ export default function Login() {
         </Link>
       </div>
       <div className={styles.login_alternatives_container}>
-        <div className={styles.auth_buttons} onClick={() => SigninWithGoogle()}>
-          <ImFacebook2 style={{ marginRight: "4%" }} color="blue"></ImFacebook2>
-          <span>Signup With Facebook</span>
-        </div>
-
-        <div onClick={() => SigninWithGoogle()} className={styles.auth_buttons}>
-          <FaFacebook className={styles.icons} icon="google"></FaFacebook>
+        <div onClick={onSuccess} className={styles.auth_buttons}>
+          <FaGoogle className={styles.icons}></FaGoogle>
           <span> Signin with Google</span>
         </div>
       </div>

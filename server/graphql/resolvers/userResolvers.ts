@@ -1,13 +1,18 @@
 import { sendMail } from "@/lib/sendMail";
 import User from "server/mongoSchema/userSchema";
 import bcrypt from "bcrypt";
-import { ApolloError } from "apollo-server";
+import { ApolloError, AuthenticationError } from "apollo-server";
 import { storeCookie, deleteCookie } from "lib/storeCookie";
 import storeJwt from "lib/storeJwt";
 import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
 import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
 import sgMail from "@sendgrid/mail";
+import Realm from "realm";
+import { google } from "googleapis";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { signIn } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth";
 
 const userResolvers = {
   Query: {
@@ -129,14 +134,42 @@ const userResolvers = {
     //signOut user
     async SignOut(_: any, __: any, { res }: { res: NextApiResponse }) {
       try {
-        await deleteCookie("token", res);
+        await deleteCookie(["token"], res);
         return "User signed Out";
       } catch (err) {
         console.log(err);
       }
     },
-    async SignInWithGoogle() {},
+    async SignInWithGoogle(
+      _: any,
+      __: any,
+      { req }: { req: NextApiRequest }
+    ) {},
+    async SignUpWithGoogle(
+      _: any,
+      __: any,
+      { req, res }: { req: NextApiRequest; res: NextApiResponse }
+    ) {
+      try {
+        const session = await unstable_getServerSession(req, res, authOptions);
 
+        if (session) {
+          const user = await new User({
+            email: session.user?.email,
+            name: session.user?.name,
+          });
+
+          // //Set a token to cookie
+
+          //Save it
+          const doc = await user.save();
+          console.log(session, doc);
+          return doc;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async UpdateUser(
       __: any,
       { username, id }: { username: string; id: string },

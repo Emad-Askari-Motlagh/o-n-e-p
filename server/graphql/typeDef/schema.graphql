@@ -233,7 +233,8 @@ type Query {
 type Mutation {
   CreateUser(email: String!, password: String!, username: String!): User!
   SignIn(email: String!, password: String!): Token!
-  SignInWithGoogle(email: String!, password: String!): Token!
+  SignInWithGoogle: String
+  SignUpWithGoogle: User
   UpdateUser(id: String!, email: String!): User!
   AddAddress(address: String!): User!
   AddRestaurant(

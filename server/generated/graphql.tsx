@@ -199,9 +199,10 @@ export type Mutation = {
   RemoveOrder: Array<Maybe<AdminOrder>>;
   SendResetPassword: User;
   SignIn: Token;
-  SignInWithGoogle: Token;
+  SignInWithGoogle?: Maybe<Scalars['String']>;
   SignOut?: Maybe<Scalars['String']>;
   SignOutCostumer?: Maybe<Scalars['String']>;
+  SignUpWithGoogle: User;
   UpdateCategory: MenuParent;
   UpdateMenuItems: MenuItem;
   UpdatePassword: User;
@@ -366,9 +367,8 @@ export type MutationSignInArgs = {
 };
 
 
-export type MutationSignInWithGoogleArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+export type MutationSignUpWithGoogleArgs = {
+  username?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -563,13 +563,17 @@ export type SignInMutationVariables = Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', SignIn: { __typename?: 'Token', token: string } };
 
-export type SignInWithGoogleMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+export type SignInWithGoogleMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SignInWithGoogleMutation = { __typename?: 'Mutation', SignInWithGoogle?: string | null };
+
+export type SignUpWithGoogleMutationVariables = Exact<{
+  username: Scalars['String'];
 }>;
 
 
-export type SignInWithGoogleMutation = { __typename?: 'Mutation', SignInWithGoogle: { __typename?: 'Token', token: string } };
+export type SignUpWithGoogleMutation = { __typename?: 'Mutation', SignUpWithGoogle: { __typename?: 'User', email: string } };
 
 export type AddCostumerMutationVariables = Exact<{
   name: Scalars['String'];
@@ -878,10 +882,8 @@ export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
 export const SignInWithGoogleDocument = gql`
-    mutation SignInWithGoogle($email: String!, $password: String!) {
-  SignInWithGoogle(email: $email, password: $password) {
-    token
-  }
+    mutation SignInWithGoogle {
+  SignInWithGoogle
 }
     `;
 export type SignInWithGoogleMutationFn = Apollo.MutationFunction<SignInWithGoogleMutation, SignInWithGoogleMutationVariables>;
@@ -899,8 +901,6 @@ export type SignInWithGoogleMutationFn = Apollo.MutationFunction<SignInWithGoogl
  * @example
  * const [signInWithGoogleMutation, { data, loading, error }] = useSignInWithGoogleMutation({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
  *   },
  * });
  */
@@ -911,6 +911,39 @@ export function useSignInWithGoogleMutation(baseOptions?: Apollo.MutationHookOpt
 export type SignInWithGoogleMutationHookResult = ReturnType<typeof useSignInWithGoogleMutation>;
 export type SignInWithGoogleMutationResult = Apollo.MutationResult<SignInWithGoogleMutation>;
 export type SignInWithGoogleMutationOptions = Apollo.BaseMutationOptions<SignInWithGoogleMutation, SignInWithGoogleMutationVariables>;
+export const SignUpWithGoogleDocument = gql`
+    mutation SignUpWithGoogle($username: String!) {
+  SignUpWithGoogle(username: $username) {
+    email
+  }
+}
+    `;
+export type SignUpWithGoogleMutationFn = Apollo.MutationFunction<SignUpWithGoogleMutation, SignUpWithGoogleMutationVariables>;
+
+/**
+ * __useSignUpWithGoogleMutation__
+ *
+ * To run a mutation, you first call `useSignUpWithGoogleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpWithGoogleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpWithGoogleMutation, { data, loading, error }] = useSignUpWithGoogleMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useSignUpWithGoogleMutation(baseOptions?: Apollo.MutationHookOptions<SignUpWithGoogleMutation, SignUpWithGoogleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignUpWithGoogleMutation, SignUpWithGoogleMutationVariables>(SignUpWithGoogleDocument, options);
+      }
+export type SignUpWithGoogleMutationHookResult = ReturnType<typeof useSignUpWithGoogleMutation>;
+export type SignUpWithGoogleMutationResult = Apollo.MutationResult<SignUpWithGoogleMutation>;
+export type SignUpWithGoogleMutationOptions = Apollo.BaseMutationOptions<SignUpWithGoogleMutation, SignUpWithGoogleMutationVariables>;
 export const AddCostumerDocument = gql`
     mutation AddCostumer($name: String!, $email: String!, $table: Int!) {
   AddCostumer(name: $name, email: $email, table: $table) {
@@ -2622,9 +2655,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   RemoveOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationRemoveOrderArgs, 'productId'>>;
   SendResetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendResetPasswordArgs, 'email'>>;
   SignIn?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
-  SignInWithGoogle?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInWithGoogleArgs, 'email' | 'password'>>;
+  SignInWithGoogle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   SignOut?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   SignOutCostumer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  SignUpWithGoogle?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationSignUpWithGoogleArgs>>;
   UpdateCategory?: Resolver<ResolversTypes['MenuParent'], ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'categoryId'>>;
   UpdateMenuItems?: Resolver<ResolversTypes['MenuItem'], ParentType, ContextType, RequireFields<MutationUpdateMenuItemsArgs, 'category' | 'productId' | 'restaurant'>>;
   UpdatePassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'newPass' | 'token' | 'userId'>>;

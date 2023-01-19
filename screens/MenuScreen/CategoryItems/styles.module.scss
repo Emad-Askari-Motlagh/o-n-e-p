@@ -1,0 +1,19 @@
+@import "/styles/breakpoints";
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+}
+.item_parent {
+    min-width: 250px;
+    @include md {
+        width: 50%;
+    }
+    @include sm {
+        width: 80%;
+        margin: auto;
+    }
+}

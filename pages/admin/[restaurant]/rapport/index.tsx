@@ -16,6 +16,10 @@ import Button from "@/components/Button";
 import TableHeader from "@/components/Table/TableHeader";
 import TableData from "@/components/Table/TableData";
 import { TableBody } from "@mui/material";
+import {
+  GetRapportMutation,
+  GetRapportMutationVariables,
+} from "@/server/generated/graphql";
 
 export default function Rapport() {
   const [sortType, setSortType] = useState("year");
@@ -29,7 +33,10 @@ export default function Rapport() {
   const {
     user: { data: userData },
   } = useProvideAuth();
-  const [getAnalistics, { data: raportData }] = useMutation(GET_RAPPORT);
+  const [getAnalistics, { data: raportData }] = useMutation<
+    GetRapportMutation,
+    GetRapportMutationVariables
+  >(GET_RAPPORT);
 
   useEffect(() => {
     getAnalistics({
@@ -85,17 +92,19 @@ export default function Rapport() {
           <div>
             <h3>{userData?.CurrentUser?.restaurant.name}</h3>
             <br />
-            <div className={styles.date_description}>
-              <span>{`From: ${beginDate?.toLocaleString()}  `}</span>
-              <br />
-              <span>{`Untill: ${finishDate?.toLocaleString()}`}</span>
-            </div>
+            {typeof beginDate === new Date() && (
+              <div className={styles.date_description}>
+                <span>{`From: ${beginDate?.toLocaleString()}`}</span>
+                <br />
+                <span>{`Untill: ${finishDate?.toDateString()}`}</span>
+              </div>
+            )}
           </div>
 
           {raportData?.GetRapport.flatMap((res, i) => {
             return (
               <div className={styles.rapport_wraper} key={i}>
-                {res.categorizedByName.map((re, i) => (
+                {res.categorizedByTags.map((re, i) => (
                   <RapportItem
                     key={re._id}
                     val={re._id}
@@ -104,7 +113,7 @@ export default function Rapport() {
                   />
                 ))}
 
-                {res.categorizedByTags.map((re, i) => (
+                {res.categorizedByName.map((re, i) => (
                   <RapportItem
                     key={re._id}
                     val={re._id}

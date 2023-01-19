@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/Primary-layout";
-import DatePicker from "@/components/Calendar";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "@/components/DatePicker";
 import Head from "next/head";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
@@ -11,6 +10,7 @@ import { useRouter } from "next/router";
 import { useProvideAuth } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
+
 export default function Reservation() {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);

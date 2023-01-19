@@ -1,3 +1,4 @@
+import userSchema from "@/server/mongoSchema/userSchema";
 import { NextApiRequest } from "next";
 // import { createServer } from "@graphql-yoga/node";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -5,6 +6,7 @@ import typeDefs from "@/server/graphql/typeDef/schema.graphql";
 import resolvers from "@/server/graphql/resolvers";
 import dbInit from "@/lib/dbInit";
 import JWT, { JwtPayload } from "jsonwebtoken";
+
 // const pubsub = new PubSub();
 
 const schema = makeExecutableSchema({
@@ -17,12 +19,13 @@ import {
   createPubSub,
   GraphQLYogaError,
 } from "@graphql-yoga/node";
-import { useDepthLimit } from "@envelop/depth-limit";
 import { AuthenticationError } from "apollo-server-core";
+import { getSession } from "next-auth/react";
 
 interface ReturnContext {
   id: string;
 }
+
 const pubSub = createPubSub();
 
 const server = createServer({
@@ -34,8 +37,11 @@ const server = createServer({
   plugins: [],
 
   context: async ({ req }: { req: NextApiRequest }) => {
-    const db = await dbInit();
+    await dbInit();
     let { token, costumerId } = req.cookies;
+    const session = await getSession({
+      req,
+    });
 
     // 1. Find optional visitor id
     let id: string | number | null = null;
@@ -45,6 +51,10 @@ const server = createServer({
       if (token) {
         let obj = JWT.verify(token, "MY_SECRET");
         id = (obj as ReturnContext).id;
+      }
+
+      if (session) {
+        id = session?._id;
       }
     } catch (err) {
       console.error("error on apollo server", err); // expired token, invalid token
@@ -58,7 +68,6 @@ const server = createServer({
       userId: id,
       costumerId,
       user,
-
       pubSub,
     };
   },

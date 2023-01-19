@@ -47,6 +47,11 @@ const nextConfig = {
     CLOUDINARY_URL: process.env.CLOUDINARY_URL,
     CLOUDINARY_API: process.env.CLOUDINARY_API,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    REALM_PUBLIC_KEY: process.env.REALM_PUBLIC_KEY,
+    REALM_PRIVATE_KEY: process.env.REALM_PRIVATE_KEY,
+    REALM_APP_ID: process.env.REALM_APP_ID,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
 };
 

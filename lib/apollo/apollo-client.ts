@@ -10,7 +10,6 @@ import {
 import merge from "deepmerge";
 import SSELink from "@/lib/sse";
 
-
 const link = `${process.env.SERVER_LINK}`;
 let apolloClient: any;
 //create websocket link
