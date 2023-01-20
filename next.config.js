@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
+const runtimeCaching = require("next-pwa/cache");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV !== "development",
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -52,7 +56,16 @@ const nextConfig = {
     REALM_APP_ID: process.env.REALM_APP_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    DISABLE_ESLINT_PLUGIN: process.env.DISABLE_ESLINT_PLUGIN,
   },
 };
 
-module.exports = nextConfig;
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  runtimeCaching,
+  buildExcludes: [/middleware-manifest.json$/],
+});
+
+module.exports = withPWA(nextConfig);

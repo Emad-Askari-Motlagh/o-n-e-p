@@ -6,6 +6,14 @@ import Input from "../Input";
 import SucceedMessage from "../Succeed-Message";
 import styles from "./styles.module.scss";
 
+interface AddCategoryProps {
+  restaurant: { name: string };
+  submit: any;
+  onChangeImage: () => void;
+  fetchedImage: { url: string };
+  isAdded: boolean;
+  parent: string;
+}
 export default function AddCategory({
   restaurant,
   submit,
@@ -13,7 +21,7 @@ export default function AddCategory({
   fetchedImage,
   isAdded,
   parent,
-}) {
+}: AddCategoryProps) {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
 
@@ -38,7 +46,7 @@ export default function AddCategory({
         label="Upload Image"
         onChange={(e) => {
           if (e.target.files)
-            onChangeImage(e), setImage(URL.createObjectURL(e.target.files[0]));
+            onChangeImage(), setImage(URL.createObjectURL(e.target.files[0]));
         }}
       />
       <Button

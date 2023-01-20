@@ -18,7 +18,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <div className={styles.container} style={{ width: width }}>
-      <button type={type} onClick={onClick} className={styles.btn_grad}>
+      <button onClick={onClick} className={styles.btn_grad}>
         {children}
       </button>
     </div>
