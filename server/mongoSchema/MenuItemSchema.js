@@ -18,7 +18,7 @@ var MenuItemSchema = new mongoose.Schema(
     description: String,
     quantity: mongoose.SchemaTypes.Number,
     availability: Boolean,
-    subCat: { type: String, default: null },
+    subCat: { type: [String], default: [] },
     images: [],
   },
   { timestamps: true }

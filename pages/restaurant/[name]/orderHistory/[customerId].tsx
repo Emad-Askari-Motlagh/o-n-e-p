@@ -112,8 +112,12 @@ const AdminsOrders = () => {
                     <TableData>
                       {captalizeFirstLetter(fact?._id as string)}
                     </TableData>
-                    <TableData>{fact?.price}</TableData>
-                    <TableData>
+                    <TableData
+                      style={{
+                        tableLayout: "auto",
+                        width: "15%",
+                      }}>{`${fact?.price},kr`}</TableData>
+                    <TableData style={{ tableLayout: "auto", width: "10%" }}>
                       <MdOutlineExpandMore
                         style={{ cursor: "pointer" }}
                         onClick={() => onClick(fact?._id as string)}

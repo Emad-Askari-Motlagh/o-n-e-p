@@ -142,7 +142,7 @@ const menuResolvers = {
           },
         ]);
 
-        return res1.filter((res) => res.subCat.length > 0);
+        return res1.filter((res) => res.subCat?.length > 0);
       } catch (err) {
         console.log(err);
         throw new ApolloError("Couldn`t find any item", "400");
@@ -209,6 +209,12 @@ const menuResolvers = {
           restaurant,
         });
         await newCategory.save();
+        const res = await menuCategorySchema.updateOne(
+          { itemName: parent },
+          { $push: { subCategory: name } },
+          { upsert: true }
+        );
+
         return newCategory;
       } catch (err) {
         console.log(err);
@@ -219,6 +225,7 @@ const menuResolvers = {
         const {
           category,
           restaurant,
+          subCat,
           input: { name, description, price, images },
         } = args;
         const res = await new MenuItem({
@@ -231,9 +238,11 @@ const menuResolvers = {
           itemsType: name,
           quantity: 1,
           availibility: true,
+          subCat,
         });
 
         const menuItem = await res.save();
+
         return menuItem;
       } catch (err) {
         console.log(err);
@@ -305,6 +314,29 @@ const menuResolvers = {
       });
 
       return categoryId;
+    },
+    async AddSubCategory(
+      _: any,
+      { id, restaurant, cat }: { id: string; restaurant: string; cat: string },
+      { userId }: { userId: string }
+    ) {
+      const catId = new Types.ObjectId(id);
+      const catL = await menuCategorySchema.findOne({ _id: catId });
+      const res = await menuCategorySchema.updateOne(
+        { _id: catId },
+        { $push: { subCategory: cat } },
+        { upsert: true }
+      );
+
+      const newCategory = await new menuCategorySchema({
+        collectionType: cat,
+        itemName: cat,
+        image: "",
+        parent: catL.collectionType,
+        restaurant,
+      });
+      await newCategory.save();
+      return res;
     },
   },
 };

@@ -11,7 +11,7 @@ const deleteCookieOptions = {
 };
 
 // Store the token in cookie // solution 1
-const storeCookie = async (
+const storeCookie = (
   value: object | [],
   res: NextApiResponse,
   expireTime: number
@@ -34,7 +34,7 @@ const storeCookie = async (
   }
 
   //Set the cookie header
-  res.setHeader(
+  res?.setHeader(
     "Set-Cookie",
     cookieArray.map((res: string[]) => [
       cookie.serialize(res[0], res[1], cookieOptions),

@@ -25,6 +25,8 @@ interface CategoryProps {
   deleteCategory: DeleteMenuCategoryMutationFn;
   id: string;
   restaurant: string;
+  subCats: string[];
+  addSubcategory: () => void;
 }
 export default function CategoryEditor({
   name,
@@ -36,6 +38,8 @@ export default function CategoryEditor({
   deleteCategory,
   id,
   restaurant,
+  subCats,
+  addSubcategory,
 }: CategoryProps) {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +60,11 @@ export default function CategoryEditor({
         setIsModalOpen={setIsOpen}
         label="Category Editor">
         <form
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
           onSubmit={(e) => {
             e.preventDefault();
             submit();
@@ -85,22 +94,29 @@ export default function CategoryEditor({
                     setNewName(URL.createObjectURL(e.target.files[0]));
               }}
             />
+
             <AiFillDelete
               onClick={() =>
                 deleteCategory({ variables: { categoryId: id, restaurant } })
               }
+              className="icons"
               style={{
                 color: "white",
                 justifySelf: "flex-start",
+                cursor: "pointer",
               }}
             />
           </div>
-
-          <Input placeholder={name} name={name} onChange={onChange}></Input>
+          <Input
+            placeholder={"Category`s name"}
+            name={name}
+            onChange={onChange}></Input>
           {submited && (
             <SucceedMessage>Item Changed Successfuly</SucceedMessage>
           )}
-          <Button type="submit">Save</Button>
+          <Button width="80%" type="submit">
+            Save
+          </Button>
         </form>
       </Modal>
     </div>

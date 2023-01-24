@@ -1,5 +1,9 @@
 import React, { CSSProperties, ChangeEvent } from "react";
-import styles from "./input.module.scss";
+import style from "./input.module.scss";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Mui_Theme from "../../Hoc/withMuiTheme";
+import Input from "@mui/material/Input";
 
 type InputProps = {
   required?: boolean;
@@ -13,38 +17,40 @@ type InputProps = {
   type?: string;
   width?: number | string;
   defaultValue?: string;
+  multiline?: boolean;
+  maxRows?: number;
 };
-export default function Input(
-  {
-    required = true,
-    error,
-    noMargin,
-    placeholder,
-    label,
-    name,
-    onChange,
-    labelStyle,
-    type,
-    width,
-    defaultValue,
-  }: InputProps,
-  props: React.ComponentPropsWithRef<any>
-) {
+function InputComponent({
+  required = true,
+  error,
+  noMargin,
+  placeholder,
+  label,
+  name,
+  onChange,
+  labelStyle,
+  type,
+  width,
+  defaultValue,
+  multiline,
+  maxRows,
+}: InputProps) {
   return (
-    <div className={styles.container} style={{ width }}>
-      <div className={styles.input_container}>
-        <label style={labelStyle}>{label}</label>
-        <input
-          className={styles.input}
-          placeholder={placeholder}
-          autoFocus={false}
-          onChange={onChange}
-          name={name}
-          type={type}
-          defaultValue={defaultValue}
-          {...props}
-        />
-      </div>
-    </div>
+    <TextField
+      helperText={`Please enter your ${placeholder}`}
+      id="demo-helper-text-misaligned"
+      label={name}
+      placeholder={placeholder}
+      autoFocus={false}
+      onChange={onChange}
+      name={name}
+      type={type}
+      defaultValue={defaultValue}
+      multiline={multiline}
+      InputProps={{
+        className: style.container,
+      }}
+    />
   );
 }
+export default Mui_Theme(InputComponent);

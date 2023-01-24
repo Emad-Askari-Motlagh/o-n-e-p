@@ -16,6 +16,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_MENU_ITEMS,
   DELETE_CATEGORY,
+  ADD_MENU_SUB_CATEGORY,
 } from "server/graphql/querys/mutations.graphql";
 import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
@@ -51,8 +52,12 @@ export default function Category() {
   const { user } = useProvideAuth();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
-
+  const [actionType, setActionType] = useState();
+  const { uploadImage, image } = useUpload(
+    "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
+  );
   const currentCat = query?.category?.[query?.category?.length - 1];
+
   const [updateCategory] = useMutation<
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables
@@ -72,6 +77,17 @@ export default function Category() {
     },
   });
 
+  const [addSubCategory] = useMutation<
+    UpdateCategoryMutation,
+    UpdateCategoryMutationVariables
+  >(ADD_MENU_SUB_CATEGORY, {
+    refetchQueries: [
+      { query: GET_MENU_BY_SUB_CATEGORY }, // DocumentNode object parsed with gql
+
+      "MenuBySubCategory", // Query name
+    ],
+  });
+
   const { data, error, loading } = useQuery<
     MenuBySubCategoryQuery,
     MenuBySubCategoryQueryVariables
@@ -87,12 +103,13 @@ export default function Category() {
     AddMenuItemMutationVariables
   >(ADD_MENU_ITEM, {
     refetchQueries: [
-      { query: GET_MENU_ITEM_BY_CATREGORY }, // DocumentNode object parsed with gql
+      { query: GET_MENU_BY_SUB_CATEGORY }, // DocumentNode object parsed with gql
 
-      "MenuItem", // Query name
+      "MenuBySubCategory", // Query name
     ],
-    onCompleted: (err) => {
+    onCompleted: () => {
       setIsItemSaved(true);
+      reload();
     },
   });
   const [addCategory, { data: addCategoryData }] = useMutation<
@@ -112,6 +129,11 @@ export default function Category() {
         reload();
       }, 1500);
     },
+    onError: (err) => {
+      err.graphQLErrors.map((re) => {
+        console.log(re.extensions);
+      });
+    },
   });
   const [save] = useMutation<
     UpdateMenuItemsMutation,
@@ -122,7 +144,7 @@ export default function Category() {
       "MenuItemByCategory", // Query name
     ],
 
-    onCompleted: () => {
+    onCompleted: (r) => {
       setDocumentSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
@@ -138,7 +160,7 @@ export default function Category() {
       "MenuBySubCategory", // Query name
     ],
 
-    onCompleted: () => {
+    onCompleted: (r) => {
       setDocumentSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
@@ -158,36 +180,45 @@ export default function Category() {
       },
     }
   );
-  const { uploadImage, image } = useUpload(
-    "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
-  );
+
   return (
     <div className={styles.container}>
       <div className={styles.add_button_parent}>
-        <IoMdAddCircle
-          className={styles.add_button}
-          onClick={() => setIsModalOpen(true)}
-        />
+        <div>
+          <label style={{ color: "white" }}>Create Category and MenuItem</label>
+          <IoMdAddCircle
+            className={styles.add_button}
+            onClick={() => setIsModalOpen(true)}
+          />
+        </div>
+
         <Modall
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          label="Create new item">
-          {!data?.MenuBySubCategory?.length ? (
-            <MenuAdder
-              submit={addMenuItem}
-              restaurant={query.restaurant as string}
-              category={query.category as string}></MenuAdder>
-          ) : (
+          label="Create new category">
+          <select onChange={(e) => setActionType(e.target.value)}>
+            <option>Choose an action</option>
+            <option value="category">Add Category</option>
+            <option value="item">Add Item</option>
+          </select>
+          {actionType === "category" && (
             <AddCategory
               restaurant={query?.restaurant}
               submit={addCategory}
-              onChangeImage={uploadImage}
-              fetchedImage={image}
               isAdded={addCategoryData ? true : false}
               parent={currentCat}
             />
           )}
 
+          {actionType === "item" && !data?.MenuBySubCategory?.length && (
+            <MenuAdder
+              submit={addMenuItem}
+              restaurant={query.restaurant as string}
+              category={query.category?.[0] as string}
+              subCat={query?.category}
+              image={image}
+              uploadImage={uploadImage}></MenuAdder>
+          )}
           {errorOnSavingItem && (
             <ErrorCard>There was an error during creation</ErrorCard>
           )}
@@ -198,10 +229,11 @@ export default function Category() {
       <div className={styles.items_parent}>
         {data?.MenuBySubCategory?.length
           ? data?.MenuBySubCategory.map((res, i) => (
-              <div key={i}>
-                <div key={res?._id} className={styles.category_parent}>
+              <div key={res?._id}>
+                <div className={styles.category_parent}>
                   <CategoryEditor
                     onChangeImage={uploadImage}
+                    subCats={res?.subCategory}
                     onChange={(e) =>
                       setCategory(
                         (e.target as typeof e.target & { value: any }).value
@@ -221,6 +253,7 @@ export default function Category() {
                         },
                       })
                     }
+                    addSubCategory={addSubCategory}
                     restaurant={query.restaurant}
                   />
                 </div>

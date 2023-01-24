@@ -1,12 +1,18 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import styles from "./styles.module.scss";
 
 const TableData = ({
   children,
+  style,
   color,
 }: {
   children: ReactNode;
   color?: string;
-}) => <td className={styles.table_data}>{children}</td>;
+  style?: CSSProperties;
+}) => (
+  <td style={style} className={styles.table_data}>
+    {children}
+  </td>
+);
 
 export default TableData;

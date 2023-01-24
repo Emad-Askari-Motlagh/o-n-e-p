@@ -115,8 +115,14 @@ export const ADD_MENU_ITEM = gql`
     $restaurant: String!
     $category: String!
     $input: MenuItemInput
+    $subCat: [String]
   ) {
-    AddMenuItem(restaurant: $restaurant, category: $category, input: $input) {
+    AddMenuItem(
+      restaurant: $restaurant
+      category: $category
+      input: $input
+      subCat: $subCat
+    ) {
       name
     }
   }
@@ -259,6 +265,15 @@ export const GET_BILL_INFO = gql`
         price
         _id
       }
+    }
+  }
+`;
+export const ADD_MENU_SUB_CATEGORY = gql`
+  mutation AddSubCategory($id: String!, $cat: String!, $restaurant: String!) {
+    AddSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+      itemName
+      subCategory
+      parent
     }
   }
 `;

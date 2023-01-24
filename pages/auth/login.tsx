@@ -21,7 +21,6 @@ import { signIn as signInWithGoogle } from "next-auth/react";
 
 export default function Login() {
   const [error, setError] = useState<string | null>();
-
   const [loginSuccesed, setLoginSuccesed] = useState(false);
   const { signIn, signOut, user, signInError } = useProvideAuth();
 

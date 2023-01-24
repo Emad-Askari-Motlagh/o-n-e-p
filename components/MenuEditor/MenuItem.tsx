@@ -58,15 +58,13 @@ export default function MenuItem({
 
   return (
     <div className={styles.input_container}>
-      <form>
-        <Image
-          className={styles.image}
-          alt="ok"
-          width={100}
-          height={100}
-          src={
-            newName ? URL.createObjectURL(newName) : data?.images[0]
-          }></Image>
+      <Image
+        className={styles.image}
+        alt="ok"
+        width={100}
+        height={100}
+        src={newName ? URL.createObjectURL(newName) : data?.images[0]}></Image>
+      <form style={{ display: "flex", flexDirection: "column" }}>
         <FileInput
           label="Upload Image"
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +96,9 @@ export default function MenuItem({
         />
 
         {submited && <SucceedMessage>Item Changed Successfuly</SucceedMessage>}
-        <Button onClick={Submit as () => void}>Save</Button>
+        <Button width="80%" onClick={Submit as () => void}>
+          Save
+        </Button>
       </form>
     </div>
   );

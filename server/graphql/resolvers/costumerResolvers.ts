@@ -47,7 +47,7 @@ const costumerResolvers: Resolvers = {
           //if there is any user in db set the cookie with old one
 
           //store the cookie object which include the id and expiration time for future uses
-          await storeCookie(
+          storeCookie(
             [{ costumerId: oldCostumer._id }, { expireTime: 300000 }],
             res,
             300000
@@ -63,11 +63,7 @@ const costumerResolvers: Resolvers = {
           });
           const res = await costumer.save();
           //if there is any user in db set the cookie with old one
-          await storeCookie(
-            { costumerId: res._id, expireTime: 300000 },
-            res,
-            300000
-          );
+          storeCookie({ costumerId: res._id, expireTime: 300000 }, res, 300000);
 
           return res;
         }
@@ -104,7 +100,7 @@ const costumerResolvers: Resolvers = {
     },
     async CostumerExpiry(_, args, { res }) {
       try {
-        await storeCookie(["costumerExpire", "args.time"], res, 300000);
+        storeCookie(["costumerExpire", "args.time"], res, 300000);
         return { message: "Cookie stored" };
       } catch (err) {
         return { message: "Cookie not stored" };

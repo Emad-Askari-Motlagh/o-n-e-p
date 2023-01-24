@@ -21,13 +21,20 @@ export default function CostumerRegister({ onSubmit }) {
       name: yup.string().required("Please choose a name"),
       table: yup.number().required("You need a table number to continue!"),
     }),
+    validateOnBlur: true,
+
     async onSubmit(values) {
-      onSubmit({ name: values.name, table: values.table, email: values.email });
+      onSubmit({
+        name: values.name,
+        table: values.table,
+        email: values.email,
+      });
     },
+    enableReinitialize: true,
   });
 
   return (
-    <div className={`${styles.container} ${"fix_height"}`}>
+    <div className={`${styles.costumerRegContainer} ${"fix_height"}`}>
       <form onSubmit={handleSubmit}>
         <Input
           placeholder="Table"
@@ -35,10 +42,9 @@ export default function CostumerRegister({ onSubmit }) {
           label={"Tables number"}
           type="number"
           onChange={handleChange}
-          width={"80%"}
         />
 
-        {touched.table && errors.table && (
+        {errors.table && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
@@ -46,15 +52,15 @@ export default function CostumerRegister({ onSubmit }) {
             {errors.table}
           </Alert>
         )}
+
         <Input
           placeholder="Name"
           name={"name"}
           label={"Costumer`s name"}
           type="text"
           onChange={handleChange}
-          width={"80%"}
         />
-        {touched.name && errors.name && (
+        {errors.name && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
@@ -68,9 +74,8 @@ export default function CostumerRegister({ onSubmit }) {
           label={"Costumer`s email"}
           type="email"
           onChange={handleChange}
-          width={"80%"}
         />
-        {touched.email && errors.email && (
+        {errors.email && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"

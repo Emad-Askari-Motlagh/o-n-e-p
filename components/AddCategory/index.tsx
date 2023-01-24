@@ -1,5 +1,6 @@
+import useUpload from "hooks/upload.hook";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "../Button";
 import FileInput from "../Image-Input";
 import Input from "../Input";
@@ -9,62 +10,71 @@ import styles from "./styles.module.scss";
 interface AddCategoryProps {
   restaurant: { name: string };
   submit: any;
-  onChangeImage: () => void;
-  fetchedImage: { url: string };
+  onChangeImage: (e: ChangeEvent<HTMLInputElement>) => void;
+
   isAdded: boolean;
   parent: string;
 }
 export default function AddCategory({
   restaurant,
   submit,
-  onChangeImage,
-  fetchedImage,
   isAdded,
   parent,
 }: AddCategoryProps) {
-  const [image, setImage] = useState("");
-  const [name, setName] = useState("");
+  const [fileImage, setFileImage] = useState<Blob | string>();
+  const [name, setName] = useState();
+  const { uploadImage, image } = useUpload(
+    "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
+  );
+
+  const onChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      uploadImage(e), setFileImage(e.target.files[0]);
+    }
+  };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.res_name_container}>
         <span>Restaurant: </span> <span>{restaurant.name}</span>
       </div>
-      <Input
-        label="Name"
-        placeholder="Category`s name"
-        onChange={(e) => setName(e.target.value)}
-      />
-      {image && (
-        <Image
-          alt="ok"
-          width={100}
-          height={100}
-          src={fetchedImage ? fetchedImage.url : image}></Image>
-      )}
-      <FileInput
-        label="Upload Image"
-        onChange={(e) => {
-          if (e.target.files)
-            onChangeImage(), setImage(URL.createObjectURL(e.target.files[0]));
-        }}
-      />
-      <Button
-        onClick={() =>
-          name &&
-          fetchedImage &&
-          submit({
-            variables: {
-              name,
-              image: fetchedImage.url,
-              parent,
-              restaurant,
-            },
-          })
-        }>
-        Add new category
-      </Button>
-      {isAdded && <SucceedMessage>Category Added</SucceedMessage>}
+
+      <Image
+        className={styles.image}
+        alt="ok"
+        width={100}
+        height={100}
+        src={image ?? "/blur_image.webp"}></Image>
+      <form>
+        <Input
+          label="Name"
+          placeholder="Category`s name"
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <FileInput label="Upload Image" onChange={onChangeImage} />
+        <Button
+          type="submit"
+          width="80%"
+          onClick={(e) => {
+            e.preventDefault();
+
+            if (image) {
+              submit({
+                variables: {
+                  name,
+                  image: image,
+                  parent,
+                  restaurant,
+                },
+              });
+            }
+          }}>
+          Add new category
+        </Button>
+
+        {isAdded && <SucceedMessage>Category Added</SucceedMessage>}
+      </form>
     </div>
   );
 }

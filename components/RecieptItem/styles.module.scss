@@ -1,6 +1,5 @@
 .recipet_container {
   color: #ffffffc4;
-  margin: 1em auto;
 
   .items_parent {
     display: flex;
@@ -10,10 +9,11 @@
     border: 1px solid rgba(255, 255, 255, 0.408);
     & > * {
       font-family: Impact, Haettenschweiler, "Arial Narrow", sans-serif;
+      font-weight: 500;
     }
   }
 
   h3 {
-    font-size: 14px;
+    font-size: 10%;
   }
 }

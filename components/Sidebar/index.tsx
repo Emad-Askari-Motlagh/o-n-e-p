@@ -10,6 +10,7 @@ import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
 import Button from "../Button";
+import Button2 from "../Button2";
 
 interface SidebarProps {
   signOut: () => void;
@@ -89,26 +90,24 @@ function SideBar({
                 rightIcon={null}
                 endPoint={`/restaurant/${Router.query.name}/orderHistory/${costumerData?.Costumer?._id}`}
                 itemsLabel="Orders History"></DropdownItem>
+              <DropdownItem
+                leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
+                rightIcon={null}
+                endPoint={`/restaurant/${Router.query.name}/reservation`}
+                itemsLabel="Reservations"></DropdownItem>
             </>
           )
         )}
 
-        {costumerData?.Costumer && (
-          <DropdownItem
-            leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
-            rightIcon={null}
-            endPoint={`/restaurant/${Router.query.name}/reservation`}
-            itemsLabel="Reservations"></DropdownItem>
-        )}
         <DropdownItem
           leftIcon={<BiBookAdd className={styles.nav_item_icons} />}
           rightIcon={null}
           endPoint="/om"
           itemsLabel="Om"></DropdownItem>
         {(user || costumerData) && (
-          <Button width="80%" onClick={SignOut}>
+          <Button2 onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
-          </Button>
+          </Button2>
         )}
       </div>
     </div>

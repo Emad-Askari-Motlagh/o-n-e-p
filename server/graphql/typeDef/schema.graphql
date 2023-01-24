@@ -256,6 +256,7 @@ type Mutation {
     restaurant: String!
     category: String!
     input: MenuItemInput
+    subCat: [String]
   ): MenuItem
   SignOut: String
   SignOutCostumer: String
@@ -299,4 +300,5 @@ type Mutation {
   GetRapport(beginDate: String, finishDate: String): [CategoryParent]
   GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
   DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
+  AddSubCategory(cat: String!, id: String!, restaurant: String!): MenuParent
 }

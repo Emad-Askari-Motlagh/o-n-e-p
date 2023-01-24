@@ -1,52 +1,10 @@
 @import "styles/breakpoints.scss";
 @import "styles/fonts.scss";
 
-.container {
-    width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    .image {
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    }
-    .image_selector {
-        color: black;
-        border: 1px solid tomato;
-        border-radius: 7px;
-        padding: 2px 8px;
+.input_container {
+    form {
         width: 100%;
-        text-align: center;
-        transition: transform 0.2s ease-in-out;
-        cursor: pointer;
-        background-color: lightgray;
-        &:hover {
-            transform: scale(1.02);
-        }
-    }
-    .parent {
+        flex-direction: column;
         display: flex;
-        justify-content: space-around;
-        align-items: center;
-        margin: 2%;
-        color: wheat;
-        transition: all 0.3s ease-in;
-        .edit_button {
-            font-size: 26px;
-            color: tomato;
-            cursor: pointer;
-            &:hover {
-                transform: scale(1.2);
-            }
-        }
-        .image_container {
-            width: 100px;
-            @include md {
-                width: 50px;
-            }
-        }
-    }
-    .input_container {
-        textarea {
-            width: 100%;
-            border-radius: 7px;
-        }
     }
 }
