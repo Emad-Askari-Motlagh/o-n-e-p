@@ -125,7 +125,6 @@ export default function Category() {
       setIsItemSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
-        setIsItemSaved(false);
         reload();
       }, 1500);
     },
