@@ -11,7 +11,7 @@ interface RestaurantSubItemProps {
   label: string;
   image: string;
   endPoint: string;
-  subCat: string;
+  subCat: string[];
 }
 function RestaurantSubItem({
   label,

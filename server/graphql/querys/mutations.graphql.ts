@@ -1,4 +1,3 @@
-import { CostumerAddressInput } from "./../../generated/graphql";
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
@@ -10,13 +9,17 @@ export const LOGIN = gql`
 `;
 export const LOGIN_WITH_GOOGLE = gql`
   mutation SignInWithGoogle {
-    SignInWithGoogle
+    SignInWithGoogle {
+      email
+    }
   }
 `;
 
 export const SIGN_UP_WITH_GOOGLE = gql`
   mutation SignUpWithGoogle {
-    email
+    SignUpWithGoogle {
+      email
+    }
   }
 `;
 export const ADD_COSTUMER = gql`
@@ -274,6 +277,17 @@ export const ADD_MENU_SUB_CATEGORY = gql`
       itemName
       subCategory
       parent
+    }
+  }
+`;
+export const ADD_MENU_ITEM_SUB_CATEGORY = gql`
+  mutation AddMenuItemSubCategory(
+    $id: String!
+    $cat: String!
+    $restaurant: String!
+  ) {
+    AddMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+      name
     }
   }
 `;

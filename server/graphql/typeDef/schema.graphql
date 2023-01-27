@@ -218,7 +218,7 @@ type Query {
   MenuByCategory(restaurant: String!): [MenuParent]
   MenuBySubCategory(restaurant: String!, subCategory: String): [MenuParent]
   MenuItemByCategory(
-    category: String!
+    category: [String!]
     restaurant: String!
   ): [CostumerMenuChoises]
   MenuItemCount(category: String!, restaurant: String!): OrderItem
@@ -228,12 +228,13 @@ type Query {
   AdminOrders: [AdminOrder]!
   Address: CostumerAddress
   PayedOrders(restaurant: String!): [OrderHistory]!
+  FetchAllMenuItems(restaurant: String!): [MenuItem]!
 }
 
 type Mutation {
   CreateUser(email: String!, password: String!, username: String!): User!
   SignIn(email: String!, password: String!): Token!
-  SignInWithGoogle: String
+  SignInWithGoogle: User
   SignUpWithGoogle: User
   UpdateUser(id: String!, email: String!): User!
   AddAddress(address: String!): User!
@@ -301,4 +302,9 @@ type Mutation {
   GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
   DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
   AddSubCategory(cat: String!, id: String!, restaurant: String!): MenuParent
+  AddMenuItemSubCategory(
+    cat: String!
+    id: String!
+    restaurant: String!
+  ): MenuItem
 }

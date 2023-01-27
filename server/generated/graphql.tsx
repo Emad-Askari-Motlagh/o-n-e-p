@@ -178,9 +178,11 @@ export type Mutation = {
   AddMenu?: Maybe<Menu>;
   AddMenuCategory?: Maybe<MenuParent>;
   AddMenuItem?: Maybe<MenuItem>;
+  AddMenuItemSubCategory?: Maybe<MenuItem>;
   AddOrder: Array<Maybe<AdminOrder>>;
   AddRestaurant: Restaurant;
   AddSellInfo: SellInfo;
+  AddSubCategory?: Maybe<MenuParent>;
   CostumerExpiry?: Maybe<CookieSuccess>;
   CreateUser: User;
   DeleteCostumer?: Maybe<Costumer>;
@@ -199,10 +201,10 @@ export type Mutation = {
   RemoveOrder: Array<Maybe<AdminOrder>>;
   SendResetPassword: User;
   SignIn: Token;
-  SignInWithGoogle?: Maybe<Scalars['String']>;
+  SignInWithGoogle?: Maybe<User>;
   SignOut?: Maybe<Scalars['String']>;
   SignOutCostumer?: Maybe<Scalars['String']>;
-  SignUpWithGoogle: User;
+  SignUpWithGoogle?: Maybe<User>;
   UpdateCategory: MenuParent;
   UpdateMenuItems: MenuItem;
   UpdatePassword: User;
@@ -245,6 +247,14 @@ export type MutationAddMenuItemArgs = {
   category: Scalars['String'];
   input?: InputMaybe<MenuItemInput>;
   restaurant: Scalars['String'];
+  subCat?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationAddMenuItemSubCategoryArgs = {
+  cat: Scalars['String'];
+  id: Scalars['String'];
+  restaurant: Scalars['String'];
 };
 
 
@@ -270,6 +280,13 @@ export type MutationAddRestaurantArgs = {
 export type MutationAddSellInfoArgs = {
   items: Array<InputMaybe<Scalars['String']>>;
   price: Scalars['Float'];
+  restaurant: Scalars['String'];
+};
+
+
+export type MutationAddSubCategoryArgs = {
+  cat: Scalars['String'];
+  id: Scalars['String'];
   restaurant: Scalars['String'];
 };
 
@@ -367,11 +384,6 @@ export type MutationSignInArgs = {
 };
 
 
-export type MutationSignUpWithGoogleArgs = {
-  username?: InputMaybe<Scalars['String']>;
-};
-
-
 export type MutationUpdateCategoryArgs = {
   category?: InputMaybe<Scalars['String']>;
   categoryId: Scalars['String'];
@@ -438,6 +450,7 @@ export type Query = {
   Costumer?: Maybe<Costumer>;
   CostumerOrders: Array<Maybe<OrderItem>>;
   CurrentUser?: Maybe<User>;
+  FetchAllMenuItems: Array<Maybe<MenuItem>>;
   Menu?: Maybe<Array<Maybe<MenuParent>>>;
   MenuByCategory?: Maybe<Array<Maybe<MenuParent>>>;
   MenuBySubCategory?: Maybe<Array<Maybe<MenuParent>>>;
@@ -452,6 +465,11 @@ export type Query = {
 
 
 export type QueryCostumerOrdersArgs = {
+  restaurant: Scalars['String'];
+};
+
+
+export type QueryFetchAllMenuItemsArgs = {
   restaurant: Scalars['String'];
 };
 
@@ -566,14 +584,12 @@ export type SignInMutation = { __typename?: 'Mutation', SignIn: { __typename?: '
 export type SignInWithGoogleMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SignInWithGoogleMutation = { __typename?: 'Mutation', SignInWithGoogle?: string | null };
+export type SignInWithGoogleMutation = { __typename?: 'Mutation', SignInWithGoogle?: { __typename?: 'User', email: string } | null };
 
-export type SignUpWithGoogleMutationVariables = Exact<{
-  username: Scalars['String'];
-}>;
+export type SignUpWithGoogleMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SignUpWithGoogleMutation = { __typename?: 'Mutation', SignUpWithGoogle: { __typename?: 'User', email: string } };
+export type SignUpWithGoogleMutation = { __typename?: 'Mutation', SignUpWithGoogle?: { __typename?: 'User', email: string } | null };
 
 export type AddCostumerMutationVariables = Exact<{
   name: Scalars['String'];
@@ -653,6 +669,7 @@ export type AddMenuItemMutationVariables = Exact<{
   restaurant: Scalars['String'];
   category: Scalars['String'];
   input?: InputMaybe<MenuItemInput>;
+  subCat?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 
@@ -757,6 +774,24 @@ export type GetBillInfoMutationVariables = Exact<{
 
 export type GetBillInfoMutation = { __typename?: 'Mutation', GetBillInfo: { __typename?: 'OrderHistory', _id?: string | null, date?: any | null, price?: number | null, products?: Array<{ __typename?: 'MenuItem', name?: string | null, price?: number | null, _id?: string | null } | null> | null } };
 
+export type AddSubCategoryMutationVariables = Exact<{
+  id: Scalars['String'];
+  cat: Scalars['String'];
+  restaurant: Scalars['String'];
+}>;
+
+
+export type AddSubCategoryMutation = { __typename?: 'Mutation', AddSubCategory?: { __typename?: 'MenuParent', itemName?: string | null, subCategory?: Array<string | null> | null, parent?: string | null } | null };
+
+export type AddMenuItemSubCategoryMutationVariables = Exact<{
+  id: Scalars['String'];
+  cat: Scalars['String'];
+  restaurant: Scalars['String'];
+}>;
+
+
+export type AddMenuItemSubCategoryMutation = { __typename?: 'Mutation', AddMenuItemSubCategory?: { __typename?: 'MenuItem', name?: string | null, subCat?: Array<string | null> | null, images?: Array<string | null> | null, _id?: string | null } | null };
+
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -846,6 +881,13 @@ export type PayedOrdersQueryVariables = Exact<{
 
 export type PayedOrdersQuery = { __typename?: 'Query', PayedOrders: Array<{ __typename?: 'OrderHistory', _id?: string | null, date?: any | null, price?: number | null, products?: Array<{ __typename?: 'MenuItem', name?: string | null, itemsType?: string | null, price?: number | null } | null> | null } | null> };
 
+export type FetchAllMenuItemsQueryVariables = Exact<{
+  restaurant: Scalars['String'];
+}>;
+
+
+export type FetchAllMenuItemsQuery = { __typename?: 'Query', FetchAllMenuItems: Array<{ __typename?: 'MenuItem', price?: number | null, _id?: string | null, name?: string | null, images?: Array<string | null> | null } | null> };
+
 
 export const SignInDocument = gql`
     mutation SignIn($email: String!, $password: String!) {
@@ -883,7 +925,9 @@ export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
 export const SignInWithGoogleDocument = gql`
     mutation SignInWithGoogle {
-  SignInWithGoogle
+  SignInWithGoogle {
+    email
+  }
 }
     `;
 export type SignInWithGoogleMutationFn = Apollo.MutationFunction<SignInWithGoogleMutation, SignInWithGoogleMutationVariables>;
@@ -912,8 +956,8 @@ export type SignInWithGoogleMutationHookResult = ReturnType<typeof useSignInWith
 export type SignInWithGoogleMutationResult = Apollo.MutationResult<SignInWithGoogleMutation>;
 export type SignInWithGoogleMutationOptions = Apollo.BaseMutationOptions<SignInWithGoogleMutation, SignInWithGoogleMutationVariables>;
 export const SignUpWithGoogleDocument = gql`
-    mutation SignUpWithGoogle($username: String!) {
-  SignUpWithGoogle(username: $username) {
+    mutation SignUpWithGoogle {
+  SignUpWithGoogle {
     email
   }
 }
@@ -933,7 +977,6 @@ export type SignUpWithGoogleMutationFn = Apollo.MutationFunction<SignUpWithGoogl
  * @example
  * const [signUpWithGoogleMutation, { data, loading, error }] = useSignUpWithGoogleMutation({
  *   variables: {
- *      username: // value for 'username'
  *   },
  * });
  */
@@ -1289,8 +1332,13 @@ export type UpdateMenuItemsMutationHookResult = ReturnType<typeof useUpdateMenuI
 export type UpdateMenuItemsMutationResult = Apollo.MutationResult<UpdateMenuItemsMutation>;
 export type UpdateMenuItemsMutationOptions = Apollo.BaseMutationOptions<UpdateMenuItemsMutation, UpdateMenuItemsMutationVariables>;
 export const AddMenuItemDocument = gql`
-    mutation AddMenuItem($restaurant: String!, $category: String!, $input: MenuItemInput) {
-  AddMenuItem(restaurant: $restaurant, category: $category, input: $input) {
+    mutation AddMenuItem($restaurant: String!, $category: String!, $input: MenuItemInput, $subCat: [String]) {
+  AddMenuItem(
+    restaurant: $restaurant
+    category: $category
+    input: $input
+    subCat: $subCat
+  ) {
     name
   }
 }
@@ -1313,6 +1361,7 @@ export type AddMenuItemMutationFn = Apollo.MutationFunction<AddMenuItemMutation,
  *      restaurant: // value for 'restaurant'
  *      category: // value for 'category'
  *      input: // value for 'input'
+ *      subCat: // value for 'subCat'
  *   },
  * });
  */
@@ -1761,6 +1810,81 @@ export function useGetBillInfoMutation(baseOptions?: Apollo.MutationHookOptions<
 export type GetBillInfoMutationHookResult = ReturnType<typeof useGetBillInfoMutation>;
 export type GetBillInfoMutationResult = Apollo.MutationResult<GetBillInfoMutation>;
 export type GetBillInfoMutationOptions = Apollo.BaseMutationOptions<GetBillInfoMutation, GetBillInfoMutationVariables>;
+export const AddSubCategoryDocument = gql`
+    mutation AddSubCategory($id: String!, $cat: String!, $restaurant: String!) {
+  AddSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+    itemName
+    subCategory
+    parent
+  }
+}
+    `;
+export type AddSubCategoryMutationFn = Apollo.MutationFunction<AddSubCategoryMutation, AddSubCategoryMutationVariables>;
+
+/**
+ * __useAddSubCategoryMutation__
+ *
+ * To run a mutation, you first call `useAddSubCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddSubCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addSubCategoryMutation, { data, loading, error }] = useAddSubCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      cat: // value for 'cat'
+ *      restaurant: // value for 'restaurant'
+ *   },
+ * });
+ */
+export function useAddSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<AddSubCategoryMutation, AddSubCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddSubCategoryMutation, AddSubCategoryMutationVariables>(AddSubCategoryDocument, options);
+      }
+export type AddSubCategoryMutationHookResult = ReturnType<typeof useAddSubCategoryMutation>;
+export type AddSubCategoryMutationResult = Apollo.MutationResult<AddSubCategoryMutation>;
+export type AddSubCategoryMutationOptions = Apollo.BaseMutationOptions<AddSubCategoryMutation, AddSubCategoryMutationVariables>;
+export const AddMenuItemSubCategoryDocument = gql`
+    mutation AddMenuItemSubCategory($id: String!, $cat: String!, $restaurant: String!) {
+  AddMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+    name
+    subCat
+    images
+    _id
+  }
+}
+    `;
+export type AddMenuItemSubCategoryMutationFn = Apollo.MutationFunction<AddMenuItemSubCategoryMutation, AddMenuItemSubCategoryMutationVariables>;
+
+/**
+ * __useAddMenuItemSubCategoryMutation__
+ *
+ * To run a mutation, you first call `useAddMenuItemSubCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddMenuItemSubCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addMenuItemSubCategoryMutation, { data, loading, error }] = useAddMenuItemSubCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      cat: // value for 'cat'
+ *      restaurant: // value for 'restaurant'
+ *   },
+ * });
+ */
+export function useAddMenuItemSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<AddMenuItemSubCategoryMutation, AddMenuItemSubCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddMenuItemSubCategoryMutation, AddMenuItemSubCategoryMutationVariables>(AddMenuItemSubCategoryDocument, options);
+      }
+export type AddMenuItemSubCategoryMutationHookResult = ReturnType<typeof useAddMenuItemSubCategoryMutation>;
+export type AddMenuItemSubCategoryMutationResult = Apollo.MutationResult<AddMenuItemSubCategoryMutation>;
+export type AddMenuItemSubCategoryMutationOptions = Apollo.BaseMutationOptions<AddMenuItemSubCategoryMutation, AddMenuItemSubCategoryMutationVariables>;
 export const RestaurantsDocument = gql`
     query Restaurants {
   Restaurants {
@@ -2343,6 +2467,44 @@ export function usePayedOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type PayedOrdersQueryHookResult = ReturnType<typeof usePayedOrdersQuery>;
 export type PayedOrdersLazyQueryHookResult = ReturnType<typeof usePayedOrdersLazyQuery>;
 export type PayedOrdersQueryResult = Apollo.QueryResult<PayedOrdersQuery, PayedOrdersQueryVariables>;
+export const FetchAllMenuItemsDocument = gql`
+    query FetchAllMenuItems($restaurant: String!) {
+  FetchAllMenuItems(restaurant: $restaurant) {
+    price
+    _id
+    name
+    images
+  }
+}
+    `;
+
+/**
+ * __useFetchAllMenuItemsQuery__
+ *
+ * To run a query within a React component, call `useFetchAllMenuItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchAllMenuItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchAllMenuItemsQuery({
+ *   variables: {
+ *      restaurant: // value for 'restaurant'
+ *   },
+ * });
+ */
+export function useFetchAllMenuItemsQuery(baseOptions: Apollo.QueryHookOptions<FetchAllMenuItemsQuery, FetchAllMenuItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchAllMenuItemsQuery, FetchAllMenuItemsQueryVariables>(FetchAllMenuItemsDocument, options);
+      }
+export function useFetchAllMenuItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchAllMenuItemsQuery, FetchAllMenuItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchAllMenuItemsQuery, FetchAllMenuItemsQueryVariables>(FetchAllMenuItemsDocument, options);
+        }
+export type FetchAllMenuItemsQueryHookResult = ReturnType<typeof useFetchAllMenuItemsQuery>;
+export type FetchAllMenuItemsLazyQueryHookResult = ReturnType<typeof useFetchAllMenuItemsLazyQuery>;
+export type FetchAllMenuItemsQueryResult = Apollo.QueryResult<FetchAllMenuItemsQuery, FetchAllMenuItemsQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -2634,9 +2796,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   AddMenu?: Resolver<Maybe<ResolversTypes['Menu']>, ParentType, ContextType, RequireFields<MutationAddMenuArgs, 'restaurant'>>;
   AddMenuCategory?: Resolver<Maybe<ResolversTypes['MenuParent']>, ParentType, ContextType, RequireFields<MutationAddMenuCategoryArgs, 'image' | 'name' | 'parent' | 'restaurant'>>;
   AddMenuItem?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationAddMenuItemArgs, 'category' | 'restaurant'>>;
+  AddMenuItemSubCategory?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationAddMenuItemSubCategoryArgs, 'cat' | 'id' | 'restaurant'>>;
   AddOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationAddOrderArgs, 'productId'>>;
   AddRestaurant?: Resolver<ResolversTypes['Restaurant'], ParentType, ContextType, RequireFields<MutationAddRestaurantArgs, 'description' | 'id' | 'location' | 'name' | 'numReviews' | 'owner' | 'rating' | 'type'>>;
   AddSellInfo?: Resolver<ResolversTypes['SellInfo'], ParentType, ContextType, RequireFields<MutationAddSellInfoArgs, 'items' | 'price' | 'restaurant'>>;
+  AddSubCategory?: Resolver<Maybe<ResolversTypes['MenuParent']>, ParentType, ContextType, RequireFields<MutationAddSubCategoryArgs, 'cat' | 'id' | 'restaurant'>>;
   CostumerExpiry?: Resolver<Maybe<ResolversTypes['CookieSuccess']>, ParentType, ContextType>;
   CreateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password' | 'username'>>;
   DeleteCostumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType, Partial<MutationDeleteCostumerArgs>>;
@@ -2655,10 +2819,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   RemoveOrder?: Resolver<Array<Maybe<ResolversTypes['AdminOrder']>>, ParentType, ContextType, RequireFields<MutationRemoveOrderArgs, 'productId'>>;
   SendResetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSendResetPasswordArgs, 'email'>>;
   SignIn?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
-  SignInWithGoogle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  SignInWithGoogle?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   SignOut?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   SignOutCostumer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  SignUpWithGoogle?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationSignUpWithGoogleArgs>>;
+  SignUpWithGoogle?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   UpdateCategory?: Resolver<ResolversTypes['MenuParent'], ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'categoryId'>>;
   UpdateMenuItems?: Resolver<ResolversTypes['MenuItem'], ParentType, ContextType, RequireFields<MutationUpdateMenuItemsArgs, 'category' | 'productId' | 'restaurant'>>;
   UpdatePassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'newPass' | 'token' | 'userId'>>;
@@ -2703,6 +2867,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   Costumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType>;
   CostumerOrders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<QueryCostumerOrdersArgs, 'restaurant'>>;
   CurrentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  FetchAllMenuItems?: Resolver<Array<Maybe<ResolversTypes['MenuItem']>>, ParentType, ContextType, RequireFields<QueryFetchAllMenuItemsArgs, 'restaurant'>>;
   Menu?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuArgs, 'restaurant'>>;
   MenuByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuByCategoryArgs, 'restaurant'>>;
   MenuBySubCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuBySubCategoryArgs, 'restaurant'>>;

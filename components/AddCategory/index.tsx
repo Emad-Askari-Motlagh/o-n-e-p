@@ -8,12 +8,10 @@ import SucceedMessage from "../Succeed-Message";
 import styles from "./styles.module.scss";
 
 interface AddCategoryProps {
-  restaurant: { name: string };
+  restaurant?: string;
   submit: any;
-  onChangeImage: (e: ChangeEvent<HTMLInputElement>) => void;
-
-  isAdded: boolean;
-  parent: string;
+  isAdded?: boolean;
+  parent?: string;
 }
 export default function AddCategory({
   restaurant,
@@ -22,7 +20,7 @@ export default function AddCategory({
   parent,
 }: AddCategoryProps) {
   const [fileImage, setFileImage] = useState<Blob | string>();
-  const [name, setName] = useState();
+  const [name, setName] = useState<string>();
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );
@@ -35,10 +33,6 @@ export default function AddCategory({
 
   return (
     <div className={styles.container}>
-      <div className={styles.res_name_container}>
-        <span>Restaurant: </span> <span>{restaurant.name}</span>
-      </div>
-
       <Image
         className={styles.image}
         alt="ok"

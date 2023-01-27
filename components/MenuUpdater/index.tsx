@@ -4,10 +4,10 @@ import styles from "./styles.module.scss";
 
 interface MenuUpdater {
   name: string;
-  ImageSrc: string;
-  id: number;
+  ImageSrc?: string;
+  id?: number;
   price: number;
-  quantity: number;
+  quantity?: number;
 }
 const MenuUpdater = ({ name, ImageSrc, price, quantity }: MenuUpdater) => {
   const sum = price * quantity;

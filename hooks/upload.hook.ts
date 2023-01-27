@@ -2,7 +2,7 @@ import axios from "axios";
 import { ChangeEvent, useState } from "react";
 
 const useUpload = (url: string) => {
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<string>();
 
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {

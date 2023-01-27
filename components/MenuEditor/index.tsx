@@ -6,13 +6,17 @@ import Inputs from "./MenuItem";
 import Modal from "components/Modal";
 import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
+import { UpdateMenuItemsMutationFn } from "@/server/generated/graphql";
+import Input from "../Search-form/Input";
+import Button from "../Button";
 
 interface MenuEditor {
   data: { images: [string]; name: string; price: number };
-  submit: (e: ChangeEvent<HTMLSelectElement>) => void;
+  submit: UpdateMenuItemsMutationFn;
   restaurant: string;
   category: string;
   isSaved: boolean;
+  subCat: string[];
 }
 export default function MenuEditor({
   data,
@@ -20,6 +24,7 @@ export default function MenuEditor({
   restaurant,
   category,
   isSaved,
+  subCat,
 }: MenuEditor) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,6 +62,7 @@ export default function MenuEditor({
           restaurant={restaurant}
           data={data}
           submit={submit}
+          subCat={subCat}
         />
       </Modal>
     </div>

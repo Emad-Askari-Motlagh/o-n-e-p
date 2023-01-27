@@ -1,4 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import Modal from "components/Modal";
 import MenuUpdater from "components/MenuUpdater";
 import SucceedMessage from "../Succeed-Message";
@@ -18,12 +23,12 @@ import {
 interface CategoryProps {
   name: string;
   image: string;
-  submit: UpdateCategoryMutationFn;
-  onChange: (e: ChangeEvent) => void;
+  submit: FormEventHandler<HTMLFormElement>;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   onChangeImage: (e: ChangeEvent<HTMLInputElement>) => void;
   submited: boolean;
-  deleteCategory: DeleteMenuCategoryMutationFn;
-  id: string;
+  deleteCategory?: DeleteMenuCategoryMutationFn;
+  id?: string;
   restaurant: string;
   subCats: string[];
   addSubcategory: () => void;
@@ -53,7 +58,8 @@ export default function CategoryEditor({
       <MenuSubItem
         label={name}
         endPoint={`${name}`}
-        image={image}></MenuSubItem>
+        image={image}
+        subCat={subCats}></MenuSubItem>
 
       <Modal
         isModalOpen={isOpen}
@@ -65,10 +71,7 @@ export default function CategoryEditor({
             display: "flex",
             flexDirection: "column",
           }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            submit();
-          }}>
+          onSubmit={submit}>
           <div
             className={styles.image}
             style={{

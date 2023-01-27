@@ -20,7 +20,7 @@ interface InputsTypes {
   submit: AddMenuItemMutationFn;
   restaurant: string;
   category: string;
-  subCat?: string[];
+  subCat?: string;
 }
 export default function MenuAdder({
   submit,
@@ -31,6 +31,7 @@ export default function MenuAdder({
   const [name, setName] = useState<string>();
   const [price, setPrice] = useState<number>();
   const [description, setDescription] = useState<string>();
+  const [subCategory, setSubCategory] = useState("");
   const [file, setFile] = useState();
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
@@ -44,12 +45,12 @@ export default function MenuAdder({
         restaurant,
         category,
         input: {
-          images: [image],
+          images: [image as string],
           name,
           description,
           price,
         },
-        subCat,
+        subCat: subCategory ?? subCat,
       },
     });
   }
@@ -91,6 +92,13 @@ export default function MenuAdder({
           type="text"
           defaultValue={description}
           onChange={(e) => setDescription(e.target.value)}
+        />
+        <Input
+          placeholder={"SubCategory"}
+          label={"Sub Category"}
+          type="text"
+          defaultValue={subCategory}
+          onChange={(e) => setSubCategory(e.target.value)}
         />
 
         <Button width="80%" onClick={Submit as () => void}>

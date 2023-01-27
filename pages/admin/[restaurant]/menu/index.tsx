@@ -76,10 +76,8 @@ export default function MenuItems() {
           setIsModalOpen={setShowModal}
           label="Add new category">
           <AddCategory
-            restaurant={user.data?.CurrentUser?.restaurant}
+            restaurant={user.data?.CurrentUser?.restaurant.name as string}
             submit={addCategory}
-            onChangeImage={uploadImage}
-            fetchedImage={image}
             isAdded={addCategoryData ? true : false}
           />
         </Modall>
@@ -97,15 +95,15 @@ export default function MenuItems() {
                   )
                 }
                 submited={submited}
-                name={res?.collectionType}
-                image={ChosenImage ? ChosenImage : res?.image}
-                submit={(e: ChangeEvent<HTMLSelectElement>) => {
+                name={res?.collectionType as string}
+                image={(ChosenImage ? ChosenImage : res?.image) as string}
+                submit={(e) => {
                   e.preventDefault();
                   updateCategory({
                     variables: {
                       categoryId: res?._id,
                       category: category ?? res?.collectionType,
-                      image: image?.url ?? res?.image,
+                      image: image ?? res?.image,
                     },
                     refetchQueries: [
                       { query: GET_MENU_CATREGORY },

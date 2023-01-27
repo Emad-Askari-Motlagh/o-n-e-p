@@ -18,6 +18,7 @@
         transition: transform 0.2s ease-in-out;
         cursor: pointer;
         background-color: lightgray;
+
         &:hover {
             transform: scale(1.02);
         }

@@ -22,6 +22,16 @@ const theme = createTheme({
         color: "primary",
       },
     },
+    MuiSelect: {
+      defaultProps: {
+        color: "info",
+      },
+      styleOverrides: {
+        filled: {
+          color: "primary",
+        },
+      },
+    },
     MuiInput: {
       defaultProps: {
         color: "primary",

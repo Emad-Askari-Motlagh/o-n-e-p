@@ -22,8 +22,7 @@ export default function CostumerRegister({ onSubmit }) {
       table: yup.number().required("You need a table number to continue!"),
     }),
     validateOnBlur: true,
-
-    async onSubmit(values) {
+    onSubmit(values, { setErrors }) {
       onSubmit({
         name: values.name,
         table: values.table,
@@ -36,31 +35,33 @@ export default function CostumerRegister({ onSubmit }) {
   return (
     <div className={`${styles.costumerRegContainer} ${"fix_height"}`}>
       <form onSubmit={handleSubmit}>
-        <Input
-          placeholder="Table"
-          name={"table"}
-          label={"Tables number"}
-          type="number"
-          onChange={handleChange}
-        />
+        <div>
+          <Input
+            placeholder="Table"
+            name="table"
+            label={"Tables number"}
+            type="number"
+            onChange={handleChange}
+          />
 
-        {errors.table && (
-          <Alert
-            style={{ padding: "5px 20px" }}
-            variant="danger"
-            className="error">
-            {errors.table}
-          </Alert>
-        )}
+          {touched.table && errors.table && (
+            <Alert
+              style={{ padding: "5px 20px" }}
+              variant="danger"
+              className="error">
+              {errors.table}
+            </Alert>
+          )}
+        </div>
 
         <Input
           placeholder="Name"
-          name={"name"}
+          name="name"
           label={"Costumer`s name"}
           type="text"
           onChange={handleChange}
         />
-        {errors.name && (
+        {errors.name && touched.name && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
@@ -68,14 +69,15 @@ export default function CostumerRegister({ onSubmit }) {
             {errors.name}
           </Alert>
         )}
+
         <Input
           placeholder="Email"
-          name={"email"}
+          name="email"
           label={"Costumer`s email"}
           type="email"
           onChange={handleChange}
         />
-        {errors.email && (
+        {errors.email && touched.email && (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"

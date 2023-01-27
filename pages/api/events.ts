@@ -45,17 +45,19 @@ async function handler(req, res) {
         res,
       };
 
-      Orders.watch().on("change", async (ok) => {
-        const orders = await orderFetcher();
-        const data = `data: ${JSON.stringify(orders)}\n\n`;
-        res.write(data);
-      });
+      Orders.watch().on("change", async (operation) => {
+        if (operation.operationType === "insert") {
+          const orders = await orderFetcher();
+          const data = `data: ${JSON.stringify(orders)}\n\n`;
+          res.write(data);
 
-      clients.push(newClient);
+          clients.push(newClient);
 
-      req.on("close", () => {
-        console.log(`${clientId} Connection closed`);
-        clients = orders;
+          req.on("close", () => {
+            console.log(`${clientId} Connection closed`);
+            clients = orders;
+          });
+        }
       });
     } catch (err) {
       console.log(err);

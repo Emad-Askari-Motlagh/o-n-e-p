@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 interface ButtonTypes {
   onClick: () => void;
-  children: React.ReactElement;
+  children: string;
   type: any;
 }
 export default function Button2({ onClick, type, children }: ButtonTypes) {

@@ -21,6 +21,14 @@ const menuResolvers = {
   },
 
   Query: {
+    async FetchAllMenuItems(_, { restaurant }) {
+      const res = await MenuItem.aggregate([
+        {
+          $match: { restaurant },
+        },
+      ]);
+      return res;
+    },
     async Menu(_, args, context) {
       const res = await Menu.aggregate([
         { $match: { restaurant: args.restaurant } },
@@ -111,6 +119,11 @@ const menuResolvers = {
           category,
           restaurant,
         }: { category: string; restaurant: string } = args;
+        const res = await Menu.find({
+          subCat: {
+            $all: category,
+          },
+        });
 
         const res1 = await Menu.aggregate([
           { $match: { restaurant: restaurant } },
@@ -133,16 +146,18 @@ const menuResolvers = {
                 $filter: {
                   input: "$subCat",
                   as: "item",
+
                   cond: {
-                    $eq: ["$$item", category],
+                    $in: ["$$item", [category]],
                   },
                 },
               },
             },
           },
         ]);
-
-        return res1.filter((res) => res.subCat?.length > 0);
+        console.log(res);
+        return res;
+        // return res1.filter((res) => res.subCat?.length > 0);
       } catch (err) {
         console.log(err);
         throw new ApolloError("Couldn`t find any item", "400");
@@ -336,6 +351,20 @@ const menuResolvers = {
         restaurant,
       });
       await newCategory.save();
+      return res;
+    },
+    async AddMenuItemSubCategory(
+      _: any,
+      { id, restaurant, cat }: { id: string; restaurant: string; cat: string },
+      { userId }: { userId: string }
+    ) {
+      const menuItemId = new Types.ObjectId(id);
+      const res = await MenuItem.updateOne(
+        { _id: menuItemId, restaurant },
+        { $addToSet: { subCat: [cat] } },
+        { upsert: true }
+      );
+
       return res;
     },
   },

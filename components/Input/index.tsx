@@ -19,6 +19,7 @@ type InputProps = {
   defaultValue?: string;
   multiline?: boolean;
   maxRows?: number;
+  minRows?: number;
 };
 function InputComponent({
   required = true,
@@ -34,6 +35,7 @@ function InputComponent({
   defaultValue,
   multiline,
   maxRows,
+  minRows,
 }: InputProps) {
   return (
     <TextField
@@ -47,6 +49,7 @@ function InputComponent({
       type={type}
       defaultValue={defaultValue}
       multiline={multiline}
+      minRows={minRows}
       InputProps={{
         className: style.container,
       }}

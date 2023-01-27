@@ -14,29 +14,33 @@ import FileInput from "../Image-Input";
 import useUpload from "hooks/upload.hook";
 import Image from "next/image";
 import SucceedMessage from "../Succeed-Message";
+import { UpdateMenuItemsMutationFn } from "@/server/generated/graphql";
 
 interface InputsTypes {
   data: any;
-  submit: () => void;
+  submit: UpdateMenuItemsMutationFn;
   restaurant: string;
   category: string;
+  subCat: string[];
 }
 export default function MenuItem({
   data,
   submit,
   restaurant,
   category,
+  subCat: fetchedSubCat,
 }: InputsTypes) {
   const [name, setName] = useState<string>();
   const [price, setPrice] = useState<number>();
   const [description, setDescription] = useState<string>();
   const [file, setFile] = useState();
-  const { uploadImage, setImage, image } = useUpload(
+  const [subCat, setSubCat] = useState("");
+  const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );
   const [submited, setIsSubmited] = useState(false);
   const [newName, setNewName] = useState<File>();
-  function Submit(e: ChangeEvent<HTMLInputElement>) {
+  function Submit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     submit({
       variables: {
@@ -47,7 +51,7 @@ export default function MenuItem({
           name: name ? name : data.name,
           description: description ? description : data.description,
           price: price ? price : data.price,
-          images: image?.url,
+          images: [image as string],
         },
       },
       onCompleted: () => {
@@ -74,27 +78,35 @@ export default function MenuItem({
           }}
         />
         <Input
-          placeholder={data.name}
+          placeholder="Item`s name"
           label={"Name"}
           type="text"
           defaultValue={data.name}
           onChange={(e) => setName(e.target.value)}
         />
         <Input
-          placeholder={`${data.price}.00 kr`}
+          placeholder={"Price"}
           type="number"
           label={"Price"}
           defaultValue={`${data.price} . 00`}
           onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
         <Input
-          placeholder={data.description}
+          placeholder="Description"
           label={"Description"}
           type="text"
           defaultValue={data.description}
           onChange={(e) => setDescription(e.target.value)}
+          multiline={true}
+          minRows={4}
         />
-
+        <Input
+          placeholder="Category"
+          label={"Add to category"}
+          type="text"
+          defaultValue={data.subCat[subCat.length - 1]}
+          onChange={(e) => setSubCat(e.target.value)}
+        />
         {submited && <SucceedMessage>Item Changed Successfuly</SucceedMessage>}
         <Button width="80%" onClick={Submit as () => void}>
           Save

@@ -83,7 +83,7 @@ export const GET_MENU = gql`
   }
 `;
 export const GET_MENU_ITEM_BY_CATREGORY = gql`
-  query MenuItemByCategory($category: String!, $restaurant: String!) {
+  query MenuItemByCategory($category: [String!], $restaurant: String!) {
     MenuItemByCategory(category: $category, restaurant: $restaurant) {
       __typename
       ... on MenuItem {
@@ -221,6 +221,17 @@ export const GET_PAYED_ORDERS = gql`
         itemsType
         price
       }
+    }
+  }
+`;
+
+export const GET_ALL_MENU_ITEMS = gql`
+  query FetchAllMenuItems($restaurant: String!) {
+    FetchAllMenuItems(restaurant: $restaurant) {
+      price
+      _id
+      name
+      images
     }
   }
 `;
