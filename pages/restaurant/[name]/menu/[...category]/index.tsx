@@ -50,28 +50,24 @@ export default function Menu() {
       },
     }
   );
+  if (menuItemsLoading) return <div>...</div>;
+  if (menuItemsError) return <ErrorCard>Couldn`t find any item</ErrorCard>;
 
   return (
     <div className={styles.container}>
-      {error ? (
-        <ErrorCard>Couldn`t find any item</ErrorCard>
-      ) : (
-        <>
-          <motion.label
-            className={styles.label}
-            initial={{ opacity: 0, y: -200 }}
-            animate={{ opacity: 1, y: 0 }}>
-            {Router.query?.name}
-          </motion.label>
-          <div className={styles.items_parent}>
-            {data?.MenuBySubCategory?.length ? (
-              <CategoryItems items={data?.MenuBySubCategory} />
-            ) : (
-              <MenuItems items={menuItesmData?.MenuItemByCategory} />
-            )}
-          </div>
-        </>
-      )}
+      <motion.label
+        className={styles.label}
+        initial={{ opacity: 0, y: -200 }}
+        animate={{ opacity: 1, y: 0 }}>
+        {Router.query?.name}
+      </motion.label>
+      <div className={styles.items_parent}>
+        {data?.MenuBySubCategory?.length ? (
+          <CategoryItems items={data?.MenuBySubCategory} />
+        ) : (
+          <MenuItems items={menuItesmData?.MenuItemByCategory} />
+        )}
+      </div>
     </div>
   );
 }

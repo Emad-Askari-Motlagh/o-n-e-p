@@ -20,7 +20,7 @@ interface InputsTypes {
   submit: AddMenuItemMutationFn;
   restaurant: string;
   category: string;
-  subCat?: string;
+  subCat?: string | string[];
 }
 export default function MenuAdder({
   submit,

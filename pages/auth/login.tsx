@@ -92,11 +92,11 @@ export default function Login() {
             onChange={handleChange}
             label="Email"
           />
-          {touched.email && errors.email && (
+          {touched.email && errors.email ? (
             <Alert style={{ padding: 0 }} variant="danger" className="error">
               {errors.email}
             </Alert>
-          )}
+          ) : null}
         </div>
         <div className={styles.input_container}>
           <Input

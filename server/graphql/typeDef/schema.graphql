@@ -307,4 +307,9 @@ type Mutation {
     id: String!
     restaurant: String!
   ): MenuItem
+  DeleteMenuItemSubCategory(
+    cat: String!
+    id: String!
+    restaurant: String!
+  ): MenuItem
 }

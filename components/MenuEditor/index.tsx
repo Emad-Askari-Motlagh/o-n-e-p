@@ -1,22 +1,32 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { AiOutlineEdit } from "react-icons/ai";
+import React, {
+  ChangeEvent,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from "react";
+import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import Inputs from "./MenuItem";
 import Modal from "components/Modal";
 import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
-import { UpdateMenuItemsMutationFn } from "@/server/generated/graphql";
-import Input from "../Search-form/Input";
-import Button from "../Button";
+import { BiMinusCircle } from "react-icons/bi";
+import {
+  DeleteMenuItemSubCategoryMutationFn,
+  UpdateMenuItemsMutationFn,
+} from "@/server/generated/graphql";
+import Tooltip from "components/MuiTooltip";
 
 interface MenuEditor {
-  data: { images: [string]; name: string; price: number };
+  data: { images: string[]; name: string; price: number };
   submit: UpdateMenuItemsMutationFn;
   restaurant: string;
   category: string;
-  isSaved: boolean;
-  subCat: string[];
+  id: string;
+  isSaved?: boolean;
+  subCat?: string[] | string;
+  deleteSubCatToMenuItem: MouseEventHandler<SVGElement>;
 }
 export default function MenuEditor({
   data,
@@ -25,11 +35,13 @@ export default function MenuEditor({
   category,
   isSaved,
   subCat,
+  deleteSubCatToMenuItem,
+  id,
 }: MenuEditor) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [tooTipVisible, setToolTipVisible] = useState(false);
   return (
-    <div className={styles.container}>
+    <div className={styles.menuEditor_container}>
       <div className={styles.parent}>
         {data.images?.length &&
           data.images?.map((res, i) => {
@@ -57,6 +69,17 @@ export default function MenuEditor({
         isModalOpen={isOpen}
         setIsModalOpen={setIsOpen}
         label="Edit menu item">
+        <div style={{ color: "wheat", float: "right", position: "relative" }}>
+          <Tooltip text="Exclude item">
+            <BiMinusCircle
+              size={34}
+              style={{ cursor: "pointer" }}
+              className={styles.exclude_icon}
+              onClick={deleteSubCatToMenuItem}
+            />
+          </Tooltip>
+        </div>
+
         <Inputs
           category={category}
           restaurant={restaurant}

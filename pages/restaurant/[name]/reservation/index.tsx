@@ -30,17 +30,18 @@ export default function Reservation() {
   }, [refetch, query, url]);
   async function reserve(e) {
     e.preventDefault();
-    console.log(formRef.current);
-    // const res = await axios.post(url, {
-    //   date: startDate,
-    // });
-    // if (res.data) {
-    //   setIsSaved(true);
-    //   setTimeout(() => {
-    //     setRefetch(!refetch);
-    //     setIsSaved(false);
-    //   }, 1500);
-    // }
+
+    const res = await axios.post(url, {
+      date: startDate,
+    });
+    if (res.data) {
+      setIsSaved(true);
+      setTimeout(() => {
+        setRefetch(!refetch);
+        setIsSaved(false);
+        globalThis.location.reload();
+      }, 1500);
+    }
   }
   async function deleteTheBook(id) {
     const res = await axios.delete(url, { params: { bookId: id } });
@@ -87,9 +88,10 @@ export default function Reservation() {
                         <span className={styles.quantity}>4 Persons</span>
                       </td>
                       <td>
-                        <span className={styles.quantity}>
-                          <BiTrash onClick={() => deleteTheBook(res?._id)} />
-                        </span>
+                        <BiTrash
+                          className={styles.icon}
+                          onClick={() => deleteTheBook(res?._id)}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -102,24 +104,22 @@ export default function Reservation() {
           ) : null}
         </div>
         <form ref={formRef}>
-          <div className={styles.first_row}>
-            <div>
-              <Input type="text" placeholder="Name" label="Customer`s name" />
-            </div>
+          <Input type="text" placeholder="Name" label="Customer`s name" />
+          <div style={{ margin: "0.2rem auto", width: "100%" }}>
             <DatePicker handleChange={(date: Date) => setStartDate(date)} />
           </div>
-          <div className={styles.parent}>
-            <Input type="text" placeholder="Antal" label="For how many?" />
-          </div>
-          <div className={styles.parent}>
-            <Input
-              placeholder="Description"
-              multiline
-              maxRows={4}
-              label="Description"></Input>
-          </div>
+
+          <Input type="text" placeholder="Antal" label="For how many?" />
+
+          <Input
+            placeholder="Description"
+            multiline
+            minRows={4}
+            width="100%"
+            label="Description"></Input>
+
           {isSaved && <SucceedMessage>Your Booking Is Accepted</SucceedMessage>}
-          <Button type="submit" onClick={reserve}>
+          <Button width="80%" type="submit" onClick={reserve}>
             Reserve
           </Button>
         </form>

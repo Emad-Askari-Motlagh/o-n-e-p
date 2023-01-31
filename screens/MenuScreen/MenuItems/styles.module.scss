@@ -1,6 +1,18 @@
 @import "styles/fonts.scss";
 @import "styles/breakpoints.scss";
-
+.signs {
+  background-color: tomato;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.04);
+  }
+}
 .container {
   width: 100%;
 
@@ -24,6 +36,7 @@
     align-items: center;
     margin: auto;
     margin-top: 2rem;
+    flex-wrap: wrap;
     @include sm {
       flex-direction: column;
     }

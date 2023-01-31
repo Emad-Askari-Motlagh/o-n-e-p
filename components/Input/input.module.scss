@@ -1,5 +1,6 @@
 .container {
   width: 100%;
+  margin: 0.2em auto;
   background: #e8cbc0; /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #636fa440, #e8cbc024); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
@@ -15,7 +16,6 @@
     flex-direction: column;
     overflow: hidden;
     width: 100%;
-    margin: 10px auto;
 
     &:hover {
       border-color: aliceblue;

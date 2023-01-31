@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import Restaurant from "server/mongoSchema/restaurangSchema";
 import MenuItem from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
@@ -69,7 +70,7 @@ const menuResolvers = {
           },
         },
       ]);
-      const rr = await Menu.find({});
+
       return res;
     },
 
@@ -125,37 +126,37 @@ const menuResolvers = {
           },
         });
 
-        const res1 = await Menu.aggregate([
-          { $match: { restaurant: restaurant } },
+        // const res1 = await Menu.aggregate([
+        //   { $match: { restaurant: restaurant } },
 
-          {
-            $project: {
-              name: 1,
-              restaurant: 1,
-              price: 1,
+        //   {
+        //     $project: {
+        //       name: 1,
+        //       restaurant: 1,
+        //       price: 1,
 
-              orderQuantity: 1,
-              description: 1,
+        //       orderQuantity: 1,
+        //       description: 1,
 
-              quantity: 1,
-              images: 1,
-              _id: 1,
-              category: 1,
+        //       quantity: 1,
+        //       images: 1,
+        //       _id: 1,
+        //       category: 1,
 
-              subCat: {
-                $filter: {
-                  input: "$subCat",
-                  as: "item",
+        //       subCat: {
+        //         $filter: {
+        //           input: "$subCat",
+        //           as: "item",
 
-                  cond: {
-                    $in: ["$$item", [category]],
-                  },
-                },
-              },
-            },
-          },
-        ]);
-        console.log(res);
+        //           cond: {
+        //             $in: ["$$item", [category]],
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // ]);
+
         return res;
         // return res1.filter((res) => res.subCat?.length > 0);
       } catch (err) {
@@ -358,14 +359,36 @@ const menuResolvers = {
       { id, restaurant, cat }: { id: string; restaurant: string; cat: string },
       { userId }: { userId: string }
     ) {
-      const menuItemId = new Types.ObjectId(id);
-      const res = await MenuItem.updateOne(
-        { _id: menuItemId, restaurant },
-        { $addToSet: { subCat: [cat] } },
-        { upsert: true }
-      );
+      try {
+        const menuItemId = new Types.ObjectId(id);
+        const res = await MenuItem.updateOne(
+          { _id: menuItemId, restaurant },
+          { $addToSet: { subCat: [cat] } },
+          { upsert: true }
+        );
 
-      return res;
+        return res;
+      } catch (err) {
+        throw new GraphQLError("OBS! Couldn`t add the item");
+      }
+    },
+    async DeleteMenuItemSubCategory(
+      _: any,
+      { id, restaurant, cat }: { id: string; restaurant: string; cat: string },
+      { userId }: { userId: string }
+    ) {
+      if (!userId) return null;
+      try {
+        const menuItemId = new Types.ObjectId(id);
+        const res = await MenuItem.updateOne(
+          { _id: menuItemId, restaurant },
+          { $pull: { subCat: cat } }
+        );
+
+        return res;
+      } catch (err) {
+        throw new GraphQLError("OBS! Couldn`t delete the item");
+      }
     },
   },
 };

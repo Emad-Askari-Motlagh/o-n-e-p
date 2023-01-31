@@ -187,6 +187,7 @@ export type Mutation = {
   CreateUser: User;
   DeleteCostumer?: Maybe<Costumer>;
   DeleteMenuCategory: Scalars['String'];
+  DeleteMenuItemSubCategory?: Maybe<MenuItem>;
   EditRestaurantInfoItem?: Maybe<Restaurant>;
   EditUserInfoItem?: Maybe<User>;
   EmitSocket?: Maybe<OrderItem>;
@@ -305,6 +306,13 @@ export type MutationDeleteCostumerArgs = {
 
 export type MutationDeleteMenuCategoryArgs = {
   categoryId: Scalars['String'];
+  restaurant: Scalars['String'];
+};
+
+
+export type MutationDeleteMenuItemSubCategoryArgs = {
+  cat: Scalars['String'];
+  id: Scalars['String'];
   restaurant: Scalars['String'];
 };
 
@@ -491,7 +499,7 @@ export type QueryMenuBySubCategoryArgs = {
 
 
 export type QueryMenuItemByCategoryArgs = {
-  category: Scalars['String'];
+  category?: InputMaybe<Array<Scalars['String']>>;
   restaurant: Scalars['String'];
 };
 
@@ -790,7 +798,16 @@ export type AddMenuItemSubCategoryMutationVariables = Exact<{
 }>;
 
 
-export type AddMenuItemSubCategoryMutation = { __typename?: 'Mutation', AddMenuItemSubCategory?: { __typename?: 'MenuItem', name?: string | null, subCat?: Array<string | null> | null, images?: Array<string | null> | null, _id?: string | null } | null };
+export type AddMenuItemSubCategoryMutation = { __typename?: 'Mutation', AddMenuItemSubCategory?: { __typename?: 'MenuItem', name?: string | null } | null };
+
+export type DeleteMenuItemSubCategoryMutationVariables = Exact<{
+  id: Scalars['String'];
+  cat: Scalars['String'];
+  restaurant: Scalars['String'];
+}>;
+
+
+export type DeleteMenuItemSubCategoryMutation = { __typename?: 'Mutation', DeleteMenuItemSubCategory?: { __typename?: 'MenuItem', name?: string | null } | null };
 
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -830,7 +847,7 @@ export type MenuQueryVariables = Exact<{
 export type MenuQuery = { __typename?: 'Query', Menu?: Array<{ __typename?: 'MenuParent', itemName?: string | null } | null> | null };
 
 export type MenuItemByCategoryQueryVariables = Exact<{
-  category: Scalars['String'];
+  category?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
   restaurant: Scalars['String'];
 }>;
 
@@ -1851,9 +1868,6 @@ export const AddMenuItemSubCategoryDocument = gql`
     mutation AddMenuItemSubCategory($id: String!, $cat: String!, $restaurant: String!) {
   AddMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
     name
-    subCat
-    images
-    _id
   }
 }
     `;
@@ -1885,6 +1899,41 @@ export function useAddMenuItemSubCategoryMutation(baseOptions?: Apollo.MutationH
 export type AddMenuItemSubCategoryMutationHookResult = ReturnType<typeof useAddMenuItemSubCategoryMutation>;
 export type AddMenuItemSubCategoryMutationResult = Apollo.MutationResult<AddMenuItemSubCategoryMutation>;
 export type AddMenuItemSubCategoryMutationOptions = Apollo.BaseMutationOptions<AddMenuItemSubCategoryMutation, AddMenuItemSubCategoryMutationVariables>;
+export const DeleteMenuItemSubCategoryDocument = gql`
+    mutation DeleteMenuItemSubCategory($id: String!, $cat: String!, $restaurant: String!) {
+  DeleteMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+    name
+  }
+}
+    `;
+export type DeleteMenuItemSubCategoryMutationFn = Apollo.MutationFunction<DeleteMenuItemSubCategoryMutation, DeleteMenuItemSubCategoryMutationVariables>;
+
+/**
+ * __useDeleteMenuItemSubCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteMenuItemSubCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMenuItemSubCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMenuItemSubCategoryMutation, { data, loading, error }] = useDeleteMenuItemSubCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      cat: // value for 'cat'
+ *      restaurant: // value for 'restaurant'
+ *   },
+ * });
+ */
+export function useDeleteMenuItemSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMenuItemSubCategoryMutation, DeleteMenuItemSubCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMenuItemSubCategoryMutation, DeleteMenuItemSubCategoryMutationVariables>(DeleteMenuItemSubCategoryDocument, options);
+      }
+export type DeleteMenuItemSubCategoryMutationHookResult = ReturnType<typeof useDeleteMenuItemSubCategoryMutation>;
+export type DeleteMenuItemSubCategoryMutationResult = Apollo.MutationResult<DeleteMenuItemSubCategoryMutation>;
+export type DeleteMenuItemSubCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteMenuItemSubCategoryMutation, DeleteMenuItemSubCategoryMutationVariables>;
 export const RestaurantsDocument = gql`
     query Restaurants {
   Restaurants {
@@ -2129,7 +2178,7 @@ export type MenuQueryHookResult = ReturnType<typeof useMenuQuery>;
 export type MenuLazyQueryHookResult = ReturnType<typeof useMenuLazyQuery>;
 export type MenuQueryResult = Apollo.QueryResult<MenuQuery, MenuQueryVariables>;
 export const MenuItemByCategoryDocument = gql`
-    query MenuItemByCategory($category: String!, $restaurant: String!) {
+    query MenuItemByCategory($category: [String!], $restaurant: String!) {
   MenuItemByCategory(category: $category, restaurant: $restaurant) {
     __typename
     ... on MenuItem {
@@ -2805,6 +2854,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   CreateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password' | 'username'>>;
   DeleteCostumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType, Partial<MutationDeleteCostumerArgs>>;
   DeleteMenuCategory?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationDeleteMenuCategoryArgs, 'categoryId' | 'restaurant'>>;
+  DeleteMenuItemSubCategory?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationDeleteMenuItemSubCategoryArgs, 'cat' | 'id' | 'restaurant'>>;
   EditRestaurantInfoItem?: Resolver<Maybe<ResolversTypes['Restaurant']>, ParentType, ContextType, RequireFields<MutationEditRestaurantInfoItemArgs, 'name' | 'value'>>;
   EditUserInfoItem?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationEditUserInfoItemArgs, 'name' | 'value'>>;
   EmitSocket?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType>;
@@ -2871,7 +2921,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   Menu?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuArgs, 'restaurant'>>;
   MenuByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuByCategoryArgs, 'restaurant'>>;
   MenuBySubCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['MenuParent']>>>, ParentType, ContextType, RequireFields<QueryMenuBySubCategoryArgs, 'restaurant'>>;
-  MenuItemByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CostumerMenuChoises']>>>, ParentType, ContextType, RequireFields<QueryMenuItemByCategoryArgs, 'category' | 'restaurant'>>;
+  MenuItemByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CostumerMenuChoises']>>>, ParentType, ContextType, RequireFields<QueryMenuItemByCategoryArgs, 'restaurant'>>;
   MenuItemCount?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType, RequireFields<QueryMenuItemCountArgs, 'category' | 'restaurant'>>;
   OrderItems?: Resolver<Maybe<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   Orders?: Resolver<Array<Maybe<ResolversTypes['OrderItem']>>, ParentType, ContextType, RequireFields<QueryOrdersArgs, 'restaurant'>>;

@@ -1,9 +1,24 @@
 @import "styles/breakpoints.scss";
 @import "styles/fonts.scss";
-
+.choises_card_parent {
+  .parent {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 2rem;
+    .signs {
+      background-color: tomato;
+      height: 20px;
+      width: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+}
 .container {
-  width: max-content;
-  height: max-content;
+  width: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,10 +29,12 @@
   font-family: "Playfair Display", serif;
   padding: 1%;
   color: wheat;
+  min-width: 350px;
   @include sm {
     width: 80%;
     margin: auto;
   }
+
   .extraParent {
     position: absolute;
     overflow: hidden;

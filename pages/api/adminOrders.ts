@@ -5,10 +5,13 @@ let i = 0;
 let clients = [];
 const myOrders = [];
 
-const orderFetcher = async () =>
-  await Orders.find({})
+const orderFetcher = async () => {
+  const fetchedOrders = await Orders.find({})
     .populate({ path: "costumer", model: "Costumer" })
     .populate("product");
+  console.log(fetchedOrders);
+  return fetchedOrders;
+};
 
 function sendEventsToAll(newFact, orders) {
   clients.forEach((client) =>
@@ -49,6 +52,7 @@ async function handler(req, res) {
         if (operation.operationType === "insert") {
           const orders = await orderFetcher();
           const data = `data: ${JSON.stringify(orders)}\n\n`;
+
           res.write(data);
 
           clients.push(newClient);

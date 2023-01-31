@@ -9,6 +9,12 @@ $BC_COLOR: #242424;
 //mixings//
 
 .container {
+  width: 100%;
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
   .table_container {
     border: 2px solid rgba(0, 0, 0, 0.206);
     margin-top: 1em;
@@ -42,6 +48,14 @@ $BC_COLOR: #242424;
       & > * {
         width: 300px;
       }
+      .icon {
+        color: tomato;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
     }
   }
   .calandar_container {
@@ -73,6 +87,7 @@ $BC_COLOR: #242424;
     transition: all 0.13s ease-in;
     @include md {
       width: 95%;
+      padding: 30px 20px;
     }
   }
   .first_row {
@@ -111,6 +126,7 @@ $BC_COLOR: #242424;
   input,
   textarea {
     width: 100%;
+
     border-radius: 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 

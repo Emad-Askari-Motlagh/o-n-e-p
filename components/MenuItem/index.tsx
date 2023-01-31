@@ -5,7 +5,22 @@ import styles from "./style.module.scss";
 import Clickable from "./Clickable";
 import Description from "./MenuDescription";
 import { CgMore } from "react-icons/cg";
+import {
+  AddOrderMutationFn,
+  RemoveOrderMutationFn,
+} from "@/server/generated/graphql";
 
+interface MenuItemProps {
+  description: string;
+  name: String;
+  ImageSrc: string;
+  removeOrder: RemoveOrderMutationFn;
+  id: string;
+  addOrder: AddOrderMutationFn;
+  price: number;
+  quantity: number;
+  itemsChildren: JSX.Element;
+}
 const MenuItem = ({
   description,
   name,
@@ -16,7 +31,7 @@ const MenuItem = ({
   price,
   quantity,
   itemsChildren,
-}) => {
+}: MenuItemProps) => {
   const sum = price * quantity;
   return (
     <div className={styles.container}>

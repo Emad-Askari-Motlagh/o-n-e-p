@@ -1,9 +1,6 @@
 import MenuItem from "components/MenuItem";
 import PrimaryLayout from "components/Primary-layout";
 import useOrders from "hooks/Order.hook";
-import { GET_MENU_ITEM_BY_CATREGORY } from "server/graphql/querys/querys.graphql";
-import { useMutation, useQuery } from "@apollo/client";
-import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
@@ -13,6 +10,13 @@ import Selection from "components/Selection";
 
 export default function Items({ items }) {
   const Router = useRouter();
+  const options = [
+    { id: 1, value: "Choose an extra item", quantity: 0 },
+    { id: 2, value: "Fries", quantity: 0 },
+    { id: 3, value: "Drink", quantity: 0 },
+  ];
+  const [selectedItem, setSelectedItem] = useState("Choose an extra item");
+  const [selection, setSelection] = useState([]);
 
   const {
     orders,
@@ -22,7 +26,7 @@ export default function Items({ items }) {
     AdminOrders,
   } = useOrders();
 
-  const restaurant = Router.query?.name;
+  const restaurant = Router.query?.name as string;
 
   //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
@@ -49,8 +53,7 @@ export default function Items({ items }) {
               id={res?._id}
               description={res?.description}
               name={res?.name}
-              ImageSrc={"/1.webp"}
-              restaurant={restaurant}
+              ImageSrc={res.images[0]}
               addOrder={() =>
                 addOrder({
                   variables: { productId: res._id },
@@ -65,10 +68,80 @@ export default function Items({ items }) {
               quantity={countQuantity(res._id, orders)}
               itemsChildren={
                 <>
-                  <Form>
-                    <Selection />
+                  <Form onSubmit={() => null}>
+                    <Selection
+                      value={selectedItem}
+                      onChange={(e) => {
+                        const r = selection.some(
+                          (r) => r.value === e.target.value
+                        );
+                        if (r) {
+                          return;
+                        }
+                        setSelection([
+                          ...selection,
+                          {
+                            id: selection.length,
+                            value: e.target.value,
+                            quantity: 1,
+                          },
+                        ]);
+                      }}
+                      label="Choose an extra"
+                      options={options}
+                    />
                   </Form>
-                  <ChoisesCard costumerExtra={"costumerExtra"} />
+                  {selection?.map((result, i) => (
+                    <ChoisesCard
+                      key={i}
+                      setSelection={setSelection}
+                      selection={result}
+                      costumerExtra={res.value}>
+                      <span
+                        style={{ color: "wheat" }}
+                        className={styles.signs}
+                        onClick={() => {
+                          setSelection(
+                            selection.map((item) => {
+                              if (item.id === i) {
+                                return {
+                                  ...item,
+                                  value: item.value,
+                                  quantity: (item.quantity += 1),
+                                };
+                              }
+                              return item;
+                            })
+                          );
+                        }}>
+                        +
+                      </span>
+                      <span
+                        className={styles.signs}
+                        style={{ color: "wheat" }}
+                        onClick={() => {
+                          setSelection(
+                            selection.map((item) => {
+                              if (item.id === i && item.quantity >= 1) {
+                                return {
+                                  ...item,
+                                  value: item.value,
+                                  quantity: (item.quantity -= 1),
+                                };
+                              }
+                              return item;
+                            })
+                          );
+                          // if (result.quantity < 1) {
+                          //   setSelection(
+                          //     selection.filter((r) => r.quantity > 0)
+                          //   );
+                          // }
+                        }}>
+                        -
+                      </span>
+                    </ChoisesCard>
+                  ))}
                 </>
               }
             />

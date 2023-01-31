@@ -8,18 +8,18 @@ import React, {
 import "bootstrap/dist/css/bootstrap.css";
 import styles from "./orders.module.scss";
 import PrimaryLayout from "components/Primary-layout/index";
-import { useRouter } from "node_modules/next/router";
-import { BiSearch, BiTrash } from "react-icons/bi";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
+import InfoModal from "components/Modal";
 import Search from "components/Search-form";
 import Warning from "@/components/Warning";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState([]);
+  const [infoOpen, setInfoOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<string>();
   const { AdminOrders } = useOrders();
   const date = new Date();
@@ -27,7 +27,7 @@ const AdminsOrders = () => {
   async function connect_to_socket1() {
     try {
       const evtSource = new EventSource(
-        `${process.env.SERVER_LINK}/api/events`
+        `${process.env.SERVER_LINK}/api/adminOrders`
       );
       evtSource.onmessage = (event) => {
         setShowAlert(true);
@@ -103,7 +103,20 @@ const AdminsOrders = () => {
                   <TableData>{fact?.product?.price}</TableData>
                   <TableData>{new Date(fact?.date).toLocaleString()}</TableData>
                   <TableData>
-                    <FiEye />
+                    <FiEye onClick={() => setInfoOpen(true)} />
+                    <InfoModal
+                      label="Factor Info"
+                      setIsModalOpen={setInfoOpen}
+                      isModalOpen={infoOpen}>
+                      <div style={{ color: "white" }}>
+                        <span>Transaction`s Time:</span>
+                        <span>{}</span>
+                      </div>
+                      <div className={styles.price_parent}>
+                        <span>Total Amount:</span>
+                        <span>{fact!.price} kr</span>
+                      </div>
+                    </InfoModal>
                   </TableData>
                 </tr>
               );
@@ -115,7 +128,8 @@ const AdminsOrders = () => {
         <Modal
           setIsModalOpen={setShowAlert}
           isModalOpen={showAlert}
-          button_label="Let`s see the orders">
+          button_label="Let`s see the orders"
+          label="New order">
           <div>
             <span style={{ color: "wheat" }}>New order</span>
             <audio autoPlay>

@@ -291,3 +291,15 @@ export const ADD_MENU_ITEM_SUB_CATEGORY = gql`
     }
   }
 `;
+
+export const DELETE_MENU_ITEM_SUB_CATEGORY = gql`
+  mutation DeleteMenuItemSubCategory(
+    $id: String!
+    $cat: String!
+    $restaurant: String!
+  ) {
+    DeleteMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
+      name
+    }
+  }
+`;

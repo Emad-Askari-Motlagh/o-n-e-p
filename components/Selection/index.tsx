@@ -28,13 +28,14 @@ function Selection({
         style={{ minWidth: "300px" }}
         onOpen={() => options.shift()}
         onChange={onChange}>
-        {options.map((res, i) => {
-          return (
-            <MenuItem key={i} value={res.value}>
-              {res.value}
-            </MenuItem>
-          );
-        })}
+        {options?.length &&
+          options.map((res, i) => {
+            return (
+              <MenuItem key={i} value={res.value}>
+                {res.value}
+              </MenuItem>
+            );
+          })}
       </Select>
     </div>
   );

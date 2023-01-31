@@ -21,7 +21,6 @@ export default function Modall(
         size="lg">
         <div className={styles.modal_cont}>
           <Modal.Body>
-            {" "}
             <div className={styles.content_parent}>
               <div className={styles.body_part}>
                 <AiFillBell className={styles.icon} />

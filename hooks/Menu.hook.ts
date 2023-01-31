@@ -2,6 +2,8 @@ import { ADD_MENU_ITEM_SUB_CATEGORY } from "./../server/graphql/querys/mutations
 import {
   AddMenuItemSubCategoryMutation,
   AddMenuItemSubCategoryMutationVariables,
+  DeleteMenuItemSubCategoryMutation,
+  DeleteMenuItemSubCategoryMutationVariables,
   FetchAllMenuItemsQuery,
   FetchAllMenuItemsQueryVariables,
 } from "./../server/generated/graphql";
@@ -21,6 +23,7 @@ import {
   UPDATE_MENU_ITEMS,
   DELETE_CATEGORY,
   ADD_MENU_SUB_CATEGORY,
+  DELETE_MENU_ITEM_SUB_CATEGORY,
 } from "server/graphql/querys/mutations.graphql";
 
 import {
@@ -131,7 +134,28 @@ export default function useMenu() {
       });
     },
   });
+  const [deleteSubCatToMenuItem] = useMutation<
+    DeleteMenuItemSubCategoryMutation,
+    DeleteMenuItemSubCategoryMutationVariables
+  >(DELETE_MENU_ITEM_SUB_CATEGORY, {
+    refetchQueries: [
+      { query: GET_MENU_BY_SUB_CATEGORY }, // DocumentNode object parsed with gql
 
+      "MenuBySubCategory", // Query name
+    ],
+    onCompleted: (res) => {
+      setIsItemSaved(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        reload();
+      }, 1500);
+    },
+    onError: (err) => {
+      err.graphQLErrors.map((re) => {
+        console.log(re.extensions);
+      });
+    },
+  });
   const [addCategory, { data: addCategoryData }] = useMutation<
     AddMenuCategoryMutation,
     AddMenuCategoryMutationVariables
@@ -221,5 +245,6 @@ export default function useMenu() {
     errorOnSavingItem,
     allItems,
     AddSubCatToMenuItem,
+    deleteSubCatToMenuItem,
   };
 }

@@ -48,6 +48,7 @@ export default function Category() {
     errorOnSavingItem,
     allItems,
     AddSubCatToMenuItem,
+    deleteSubCatToMenuItem,
   } = useMenu();
 
   return (
@@ -77,7 +78,7 @@ export default function Category() {
 
           {actionType === "category" && (
             <AddCategory
-              restaurant={query?.restaurant}
+              restaurant={query?.restaurant as string}
               submit={addCategory}
               isAdded={addCategoryData ? true : false}
               parent={currentCat}
@@ -90,17 +91,10 @@ export default function Category() {
                 submit={addMenuItem}
                 restaurant={query.restaurant as string}
                 category={query.category?.[0] as string}
-                subCat={query?.category}
-                image={image}
-                uploadImage={uploadImage}></MenuAdder>
+                subCat={query?.category}></MenuAdder>
             )}
           {actionType === "import item" && (
             <div>
-              <Search
-                placeholder="Item to import"
-                label="Add an item to this category"
-                onChange={() => null}
-              />
               {allItems?.FetchAllMenuItems.length &&
                 allItems.FetchAllMenuItems.map((item) => {
                   return (
@@ -112,7 +106,7 @@ export default function Category() {
                       onClick={() =>
                         AddSubCatToMenuItem({
                           variables: {
-                            restaurant: query?.restaurant,
+                            restaurant: query?.restaurant as string,
                             id: item?._id,
                             cat: currentCat,
                           },
@@ -159,22 +153,33 @@ export default function Category() {
                       })
                     }
                     addSubCategory={addSubCategory}
-                    restaurant={query.restaurant}
+                    restaurant={query.restaurant as string}
                   />
                 </div>
               </div>
             ))
           : menuItesmData?.MenuItemByCategory?.map((res) => {
-              return (
-                <MenuEditor
-                  subCat={res?.subCat}
-                  key={res._id}
-                  restaurant={query.restaurant}
-                  category={query.category}
-                  submit={saveMenuItem}
-                  data={res}
-                  isSaved={documentSaved}></MenuEditor>
-              );
+              if (res.__typename === "MenuItem")
+                return (
+                  <MenuEditor
+                    subCat={res.subCat}
+                    key={res?._id}
+                    restaurant={query.restaurant as string}
+                    category={currentCat}
+                    submit={saveMenuItem}
+                    data={res}
+                    deleteSubCatToMenuItem={() =>
+                      deleteSubCatToMenuItem({
+                        variables: {
+                          cat: currentCat,
+                          id: res._id,
+                          restaurant: query.restaurant as string,
+                        },
+                      })
+                    }
+                    isSaved={documentSaved}
+                    id={res?._id}></MenuEditor>
+                );
             })}
       </div>
     </div>

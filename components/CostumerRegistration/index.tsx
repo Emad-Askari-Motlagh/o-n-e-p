@@ -21,7 +21,7 @@ export default function CostumerRegister({ onSubmit }) {
       name: yup.string().required("Please choose a name"),
       table: yup.number().required("You need a table number to continue!"),
     }),
-    validateOnBlur: true,
+
     onSubmit(values, { setErrors }) {
       onSubmit({
         name: values.name,
@@ -44,14 +44,14 @@ export default function CostumerRegister({ onSubmit }) {
             onChange={handleChange}
           />
 
-          {touched.table && errors.table && (
+          {touched.table && errors.table ? (
             <Alert
               style={{ padding: "5px 20px" }}
               variant="danger"
               className="error">
               {errors.table}
             </Alert>
-          )}
+          ) : null}
         </div>
 
         <Input
@@ -61,14 +61,14 @@ export default function CostumerRegister({ onSubmit }) {
           type="text"
           onChange={handleChange}
         />
-        {errors.name && touched.name && (
+        {errors.name && touched.name ? (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
             className="error">
             {errors.name}
           </Alert>
-        )}
+        ) : null}
 
         <Input
           placeholder="Email"
@@ -77,14 +77,14 @@ export default function CostumerRegister({ onSubmit }) {
           type="email"
           onChange={handleChange}
         />
-        {errors.email && touched.email && (
+        {errors.email && touched.email ? (
           <Alert
             style={{ padding: "5px 20px" }}
             variant="danger"
             className="error">
             {errors.email}
           </Alert>
-        )}
+        ) : null}
         <Button type="submit" width={"80%"}>
           Register
         </Button>
