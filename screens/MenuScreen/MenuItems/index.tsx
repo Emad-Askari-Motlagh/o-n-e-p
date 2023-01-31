@@ -93,7 +93,7 @@ export default function Items({ items }) {
                   </Form>
                   {selection?.map((result, i) => (
                     <ChoisesCard
-                      key={i}
+                      key={result.id}
                       setSelection={setSelection}
                       selection={result}
                       costumerExtra={res.value}>
@@ -122,7 +122,7 @@ export default function Items({ items }) {
                         onClick={() => {
                           setSelection(
                             selection.map((item) => {
-                              if (item.id === i && item.quantity >= 1) {
+                              if (item.id === result.id) {
                                 return {
                                   ...item,
                                   value: item.value,
@@ -132,11 +132,12 @@ export default function Items({ items }) {
                               return item;
                             })
                           );
-                          // if (result.quantity < 1) {
-                          //   setSelection(
-                          //     selection.filter((r) => r.quantity > 0)
-                          //   );
-                          // }
+                          if (result.quantity < 1) {
+                            setSelection(
+                              selection.filter((r) => r.id !== result.id)
+                            );
+                          }
+                          return selection;
                         }}>
                         -
                       </span>
