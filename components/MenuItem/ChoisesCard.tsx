@@ -12,7 +12,7 @@ export default function ChoisesCard({
   return (
     <div className={styles.choises_card_parent}>
       <div className={styles.parent}>
-        <span style={{ color: "white" }}>{selection.value}</span>
+        <span style={{ color: "white" }}>{selection.name}</span>
         <span style={{ color: "white" }}>{selection.quantity}</span>
         <span
           style={{

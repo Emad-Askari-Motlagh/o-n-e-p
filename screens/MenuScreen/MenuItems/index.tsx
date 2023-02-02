@@ -7,26 +7,40 @@ import styles from "./styles.module.scss";
 import Form from "components/MenuItem/Form";
 import ChoisesCard from "components/MenuItem/ChoisesCard";
 import Selection from "components/Selection";
+import Button from "@/components/Button";
+import Modal from "components/Modal";
+import { CgMore } from "react-icons/cg";
+import Input from "@/components/Input";
 
 export default function Items({ items }) {
   const Router = useRouter();
-  const options = [
-    { id: 1, value: "Choose an extra item", quantity: 0 },
-    { id: 2, value: "Fries", quantity: 0 },
-    { id: 3, value: "Drink", quantity: 0 },
-  ];
-  const [selectedItem, setSelectedItem] = useState("Choose an extra item");
-  const [selection, setSelection] = useState([]);
 
+  const [selectedItem, setSelectedItem] = useState("Pommes");
+  let [selection, setSelection] = useState([]);
+  const [exrasOrderModal, setExtraOrderModalOpen] = useState(false);
+  let [costumerExtraChoises, setCostumerExtraChoises] = useState([]);
+  const [description, setDescription] = useState("");
   const {
     orders,
     removeOrder,
     addOrder,
     loading: orderLoading,
     AdminOrders,
+    addExtra,
   } = useOrders();
 
   const restaurant = Router.query?.name as string;
+  function onEnterModal(item) {
+    items.map((res) => setSelection([...res.extra]));
+    setSelectedItem(items?.[0]?.name);
+    const correctItem = orders
+      .find((r) => r.product._id === item._id)
+      .extra.flatMap((r) => [
+        { name: r.name, _id: r._id, price: r.price, quantity: r.quantity },
+      ]);
+
+    setCostumerExtraChoises(correctItem);
+  }
 
   //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
@@ -48,104 +62,167 @@ export default function Items({ items }) {
       <div className={styles.items_container}>
         {Array.isArray(items) &&
           items.map((res, i) => (
-            <MenuItem
-              key={res?._id || i}
-              id={res?._id}
-              description={res?.description}
-              name={res?.name}
-              ImageSrc={res.images[0]}
-              addOrder={() =>
-                addOrder({
-                  variables: { productId: res._id },
-                })
-              }
-              removeOrder={() =>
-                removeOrder({
-                  variables: { productId: res._id },
-                })
-              }
-              price={res.price}
-              quantity={countQuantity(res._id, orders)}
-              itemsChildren={
+            <div key={res?._id || i} style={{ margin: "auto" }}>
+              <MenuItem
+                id={res?._id}
+                description={res?.description}
+                name={res?.name}
+                ImageSrc={res.images[0]}
+                addOrder={() =>
+                  addOrder({
+                    variables: { productId: res._id },
+                  })
+                }
+                removeOrder={() =>
+                  removeOrder({
+                    variables: { productId: res._id },
+                  })
+                }
+                price={res.price}
+                quantity={countQuantity(res._id, orders)}
+              />
+
+              <CgMore
+                color="white"
+                onClick={() => setExtraOrderModalOpen(true)}
+              />
+              <Modal
+                isModalOpen={exrasOrderModal}
+                setIsModalOpen={setExtraOrderModalOpen}
+                label={"Extra"}
+                onEnter={() => onEnterModal(res)}>
                 <>
-                  <Form onSubmit={() => null}>
-                    <Selection
-                      value={selectedItem}
-                      onChange={(e) => {
-                        const r = selection.some(
-                          (r) => r.value === e.target.value
-                        );
-                        if (r) {
-                          return;
+                  <form
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}>
+                    {selection.length && (
+                      <Selection
+                        value={
+                          [{ name: "Choose an extra item" }, ...selection][0]
+                            .name
                         }
-                        setSelection([
-                          ...selection,
-                          {
-                            id: selection.length,
-                            value: e.target.value,
-                            quantity: 1,
-                          },
-                        ]);
-                      }}
-                      label="Choose an extra"
-                      options={options}
-                    />
-                  </Form>
-                  {selection?.map((result, i) => (
-                    <ChoisesCard
-                      key={result.id}
-                      setSelection={setSelection}
-                      selection={result}
-                      costumerExtra={res.value}>
-                      <span
-                        style={{ color: "wheat" }}
-                        className={styles.signs}
-                        onClick={() => {
-                          setSelection(
-                            selection.map((item) => {
-                              if (item.id === i) {
-                                return {
-                                  ...item,
-                                  value: item.value,
-                                  quantity: (item.quantity += 1),
-                                };
-                              }
-                              return item;
-                            })
+                        onChange={(e) => {
+                          const { _id, name, price } = selection.find(
+                            (val) => val.name === e.target.value
                           );
-                        }}>
-                        +
-                      </span>
-                      <span
-                        className={styles.signs}
-                        style={{ color: "wheat" }}
-                        onClick={() => {
-                          setSelection(
-                            selection.map((item) => {
-                              if (item.id === result.id) {
-                                return {
-                                  ...item,
-                                  value: item.value,
-                                  quantity: (item.quantity -= 1),
-                                };
-                              }
-                              return item;
-                            })
+                          setSelectedItem(name);
+                          const isMatch = costumerExtraChoises.some(
+                            (extra) => extra.name === name
                           );
-                          if (result.quantity < 1) {
-                            setSelection(
-                              selection.filter((r) => r.id !== result.id)
-                            );
+                          if (!isMatch) {
+                            setCostumerExtraChoises([
+                              ...costumerExtraChoises,
+                              {
+                                _id,
+                                name,
+                                price,
+                                quantity: 1,
+                              },
+                            ]);
                           }
-                          return selection;
+                        }}
+                        label={"Choose an extra item"}
+                        options={[
+                          { name: "Choose an extra item" },
+                          ...selection,
+                        ]}
+                      />
+                    )}
+                    <Input
+                      width="100%"
+                      minRows={4}
+                      multiline
+                      placeholder="Extra description"
+                      onChange={(e) => setDescription(e.target.value)}></Input>
+                  </form>
+                  {costumerExtraChoises.length &&
+                    costumerExtraChoises?.map((result, i) => (
+                      <ChoisesCard
+                        key={i}
+                        setSelection={setCostumerExtraChoises}
+                        selection={result}
+                        costumerExtra={res.value}>
+                        <span
+                          style={{ color: "wheat" }}
+                          className={styles.signs}
+                          onClick={() => {
+                            setCostumerExtraChoises(
+                              costumerExtraChoises.map((item) => {
+                                if (item._id === result._id) {
+                                  return {
+                                    ...item,
+                                    name: item.name,
+                                    quantity: (item.quantity += 1),
+                                  };
+                                }
+                                return item;
+                              })
+                            );
+                          }}>
+                          +
+                        </span>
+                        <span
+                          className={styles.signs}
+                          style={{ color: "wheat" }}
+                          onClick={() => {
+                            setCostumerExtraChoises(
+                              costumerExtraChoises.map((item) => {
+                                if (item._id === result._id) {
+                                  return {
+                                    ...item,
+                                    name: item.name,
+                                    quantity: (item.quantity -= 1),
+                                  };
+                                }
+                                return item;
+                              })
+                            );
+                            if (result.quantity < 1) {
+                              setCostumerExtraChoises(
+                                costumerExtraChoises.filter(
+                                  (r) => r._id !== result._id
+                                )
+                              );
+                            }
+                            return selection;
+                          }}>
+                          -
+                        </span>
+                      </ChoisesCard>
+                    ))}
+                  {orders?.length &&
+                    !!orders.find((r) => r.product._id === res._id) && (
+                      <Button
+                        type="submit"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            if (!description && !costumerExtraChoises?.length) {
+                              return;
+                            }
+                            console.log(costumerExtraChoises);
+                            await addExtra({
+                              variables: {
+                                description,
+                                id: orders.find(
+                                  (r) => r.product._id === res._id
+                                )._id,
+                                orderItem: costumerExtraChoises,
+                              },
+                            });
+                            setExtraOrderModalOpen(false);
+                          } catch (error) {
+                            console.log(error);
+                          }
                         }}>
-                        -
-                      </span>
-                    </ChoisesCard>
-                  ))}
+                        Submit
+                      </Button>
+                    )}
                 </>
-              }
-            />
+              </Modal>
+            </div>
           ))}
       </div>
     </div>

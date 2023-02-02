@@ -10,9 +10,10 @@ interface ModalTypes {
   isModalOpen: boolean;
   label: string;
   onExit?: () => void;
+  onEnter?: () => void;
 }
 export default function Modall(
-  { children, setIsModalOpen, isModalOpen, label, onExit }: ModalTypes,
+  { children, setIsModalOpen, isModalOpen, label, onExit, onEnter }: ModalTypes,
   props: HtmlProps
 ) {
   return (
@@ -22,10 +23,12 @@ export default function Modall(
         show={isModalOpen}
         onHide={() => setIsModalOpen(false)}
         keyboard={false}
+        onExit={onExit}
         backdropClassName={styles.backdrop}
         contentClassName={styles.content}
         dialogClassName={styles.dialoge}
         className={styles.container}
+        onEnter={onEnter}
         size="lg">
         <div className={styles.modal_cont}>
           <Modal.Header>

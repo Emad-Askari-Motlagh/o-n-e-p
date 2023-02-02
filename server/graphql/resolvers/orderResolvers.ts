@@ -380,6 +380,30 @@ const orderResolvers = {
 
       return res;
     },
+    async AddExtraItem(_: any, { id, orderItem, description }) {
+      try {
+        let hasDuplicate = false;
+        const orderId = new Types.ObjectId(id);
+        const oldOrder = await Order.findById(orderId);
+        oldOrder.extra.map((r) => {
+          if (r._id === orderItem._id) {
+            hasDuplicate;
+          }
+        });
+        if (!hasDuplicate) {
+          const newOrder = await Order.findOneAndUpdate(
+            {
+              _id: orderId,
+            },
+            { extra: orderItem, description }
+          );
+        }
+
+        return "ok";
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 export default orderResolvers;

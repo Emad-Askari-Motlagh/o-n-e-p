@@ -14,6 +14,14 @@ var ProductSchema = new mongoose.Schema(
     rating: mongoose.SchemaTypes.Number,
     price: mongoose.SchemaTypes.Number,
     id: String,
+    extra: [
+      {
+        name: String,
+        quantity: mongoose.SchemaTypes.Number,
+        id: Schema.Types.ObjectId,
+        price: mongoose.SchemaTypes.Number,
+      },
+    ],
   },
   { timestamps: true }
 );

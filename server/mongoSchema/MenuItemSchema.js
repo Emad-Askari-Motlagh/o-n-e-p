@@ -12,6 +12,14 @@ var MenuItemSchema = new mongoose.Schema(
       type: String,
       ref: restaurangSchema ?? "Restaurang",
     },
+    extra: [
+      {
+        name: String,
+        quantity: mongoose.SchemaTypes.Number,
+        id: mongoose.SchemaTypes.ObjectId,
+        price: mongoose.SchemaTypes.Number,
+      },
+    ],
     name: String,
     itemsType: String,
     price: mongoose.SchemaTypes.Number,

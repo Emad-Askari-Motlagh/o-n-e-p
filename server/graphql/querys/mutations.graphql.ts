@@ -1,3 +1,4 @@
+import { ExtraItemInput } from "./../../generated/graphql";
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
@@ -301,5 +302,15 @@ export const DELETE_MENU_ITEM_SUB_CATEGORY = gql`
     DeleteMenuItemSubCategory(id: $id, cat: $cat, restaurant: $restaurant) {
       name
     }
+  }
+`;
+
+export const ADD_EXTRA_ORDER = gql`
+  mutation AddExtraItem(
+    $description: String
+    $id: ID!
+    $orderItem: [ExtraItemInput]
+  ) {
+    AddExtraItem(description: $description, id: $id, orderItem: $orderItem)
   }
 `;

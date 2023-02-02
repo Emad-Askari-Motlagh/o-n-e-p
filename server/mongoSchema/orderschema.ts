@@ -34,6 +34,14 @@ var OrderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    extra: [
+      {
+        name: String,
+        quantity: mongoose.SchemaTypes.Number,
+        _id: Schema.Types.ObjectId,
+        price: mongoose.SchemaTypes.Number,
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -71,6 +71,11 @@ export const GET_MENU_BY_SUB_CATEGORY = gql`
       _id
       subCategory
       parent
+      extra {
+        name
+        price
+        _id
+      }
     }
   }
 `;
@@ -96,6 +101,11 @@ export const GET_MENU_ITEM_BY_CATREGORY = gql`
         _id
         category
         subCat
+        extra {
+          name
+          price
+          _id
+        }
       }
       __typename
       ... on OrderItem {
@@ -137,6 +147,12 @@ export const GET_ORDERS_CONSTANTLY = gql`
         description
         _id
       }
+      extra {
+        name
+        price
+        quantity
+        _id
+      }
     }
   }
 `;
@@ -148,6 +164,12 @@ export const GET_ADMIN_ORDERS = gql`
       _id
       orderQuantity
       date
+      extra {
+        name
+        price
+        quantity
+        _id
+      }
       product {
         __typename
         name

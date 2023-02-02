@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import withMuiTheme from "Hoc/withMuiTheme";
 import { InputLabel } from "@mui/material";
@@ -12,7 +11,7 @@ function Selection({
   value,
   label,
 }: {
-  options: { value: string }[];
+  options: { name: string }[];
   onChange: (event: SelectChangeEvent) => void;
   value: string;
   label: string;
@@ -26,13 +25,12 @@ function Selection({
         value={value}
         label={label}
         style={{ minWidth: "300px" }}
-        onOpen={() => options.shift()}
         onChange={onChange}>
         {options?.length &&
           options.map((res, i) => {
             return (
-              <MenuItem key={i} value={res.value}>
-                {res.value}
+              <MenuItem key={i} value={res.name}>
+                {res.name}
               </MenuItem>
             );
           })}

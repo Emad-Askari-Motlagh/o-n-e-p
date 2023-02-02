@@ -13,6 +13,21 @@
     transform: scale(1.04);
   }
 }
+.more_icon {
+  z-index: 20;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: cornsilk;
+  font-size: 24px;
+  margin-left: auto;
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
 .container {
   width: 100%;
 

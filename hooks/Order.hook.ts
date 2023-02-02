@@ -1,3 +1,12 @@
+import { ADD_EXTRA_ORDER } from "./../server/graphql/querys/mutations.graphql";
+import {
+  AddExtraItemMutation,
+  AddExtraItemMutationVariables,
+  AddOrderMutation,
+  AddOrderMutationVariables,
+  RemoveOrderMutation,
+  RemoveOrderMutationVariables,
+} from "./../server/generated/graphql";
 import {
   AddOrderMutationFn,
   AddOrderMutationHookResult,
@@ -48,12 +57,29 @@ const useOrders = () => {
     { query: GET_ORDERS_CONSTANTLY },
     "Orders",
   ];
-  const [addOrder, { data: orderData, loading: ooo }] = useMutation(ADD_ORDER, {
+  const [addOrder, { data: orderData, loading: ooo }] = useMutation<
+    AddOrderMutation,
+    AddOrderMutationVariables
+  >(ADD_ORDER, {
     fetchPolicy: "network-only",
     refetchQueries: refetchTask,
   });
+  const [addExtra] = useMutation<
+    AddExtraItemMutation,
+    AddExtraItemMutationVariables
+  >(ADD_EXTRA_ORDER, {
+    refetchQueries: refetchTask,
+    onError: (r) => {
+      r.graphQLErrors.map((r) => {
+        console.log(r.extensions);
+      });
+    },
+  });
 
-  const [removeOrder] = useMutation(REMOVE_ORDER, {
+  const [removeOrder] = useMutation<
+    RemoveOrderMutation,
+    RemoveOrderMutationVariables
+  >(REMOVE_ORDER, {
     fetchPolicy: "network-only",
     refetchQueries: refetchTask,
   });
@@ -63,6 +89,12 @@ const useOrders = () => {
     OrdersQueryVariables
   >(GET_ORDERS_CONSTANTLY, {
     variables: { restaurant },
+    onCompleted: (result) => {
+      console.log(result);
+    },
+    onError: (err) => {
+      err.graphQLErrors.map((res) => [console.log(res.extensions)]);
+    },
   });
 
   return {
@@ -72,6 +104,7 @@ const useOrders = () => {
     getAdminOrders_loading,
     addOrder,
     removeOrder,
+    addExtra,
   };
 };
 

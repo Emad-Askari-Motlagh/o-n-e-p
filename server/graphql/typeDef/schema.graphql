@@ -32,6 +32,7 @@ type OrderItem {
   product: MenuItem
   restaurant: String
   _id: ID
+  extra: [ExtraItem]
 }
 type PayedItem {
   costumer: Costumer
@@ -119,6 +120,7 @@ type MenuItem {
   orderQuantity: Int
   images: [String]
   subCat: [String]
+  extra: [ExtraItem]
 }
 type MenuParent {
   itemName: String
@@ -129,6 +131,14 @@ type MenuParent {
   _id: ID
   subCategory: [String]
   parent: String
+  extra: [ExtraItem]
+}
+type ExtraItem {
+  name: String
+  price: Int
+  quantity: Int
+  id: ID
+  _id: ID
 }
 type AdminOrder {
   orderQuantity: Int
@@ -138,6 +148,8 @@ type AdminOrder {
   restaurant: String
   _id: ID
   date: Date
+  description: String
+  extra: [ExtraItem]
 }
 type Analistic {
   _id: ID
@@ -203,6 +215,13 @@ input MenuItemInput {
   description: String
   name: String
   images: [String]
+}
+
+input ExtraItemInput {
+  name: String
+  price: Int
+  quantity: Int
+  _id: ID
 }
 
 # type Subscription {
@@ -312,4 +331,5 @@ type Mutation {
     id: String!
     restaurant: String!
   ): MenuItem
+  AddExtraItem(id: ID, orderItem: [ExtraItemInput], description: String): String
 }

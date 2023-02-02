@@ -1,9 +1,5 @@
 import React from "react";
-import ItemsParent from "./ItemsParent";
 import styles from "./style.module.scss";
-import Selection from "../Selection";
-import Form from "./Form";
-import ChoisesCard from "./ChoisesCard";
 import Image from "next/image";
 import { AiOutlineEdit } from "react-icons/ai";
 

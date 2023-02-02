@@ -1,10 +1,9 @@
 import Image from "next/image";
 import React from "react";
-import ItemsParent from "./ItemsParent";
 import styles from "./style.module.scss";
 import Clickable from "./Clickable";
 import Description from "./MenuDescription";
-import { CgMore } from "react-icons/cg";
+
 import {
   AddOrderMutationFn,
   RemoveOrderMutationFn,
@@ -35,11 +34,6 @@ const MenuItem = ({
   const sum = price * quantity;
   return (
     <div className={styles.container}>
-      <div className={styles.extraParent}>
-        <ItemsParent name={name} Icon={CgMore}>
-          {itemsChildren}
-        </ItemsParent>
-      </div>
       <Description
         description={description}
         name={name}
