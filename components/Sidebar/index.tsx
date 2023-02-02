@@ -58,12 +58,12 @@ function SideBar({
             <DropdownItem
               leftIcon={<RiDashboard2Fill className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${user.restaurant.name}/dashboard`}
+              endPoint={`/admin/${fetchedUser.restaurant.name}/dashboard`}
               itemsLabel="Dashboard"></DropdownItem>
             <DropdownItem
               leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
               rightIcon={null}
-              endPoint={`/admin/${fetchedUser?._id}/orders`}
+              endPoint={`/admin/${fetchedUser?.restaurant.name}/orders`}
               itemsLabel="Orders"></DropdownItem>
             <DropdownItem
               leftIcon={<MdRestaurantMenu className={styles.nav_item_icons} />}

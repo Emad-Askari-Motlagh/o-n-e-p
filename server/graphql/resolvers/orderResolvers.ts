@@ -89,9 +89,17 @@ const orderResolvers = {
         throw new GraphQLError("Error on getting orders");
       }
     },
-    async AdminOrders(__: any) {
+    async AdminOrders(_: any, __: any, { userId }: { userId: string }) {
+      const id = new mongoose.Types.ObjectId(userId);
+
+      if (!userId) {
+        return null;
+      }
       try {
-        const AdminOrders = await fetchPayedOrders({});
+        const AdminOrders = await payedItemSchema
+          .find({})
+          .populate("product")
+          .populate("costumer");
         return AdminOrders;
       } catch (err) {
         throw new GraphQLError("Error on getting orders");
@@ -347,6 +355,9 @@ const orderResolvers = {
             restaurant: restaurant,
             costumer: cosId,
             product: order?.product,
+            orderQuantity: order?.orderQuantity,
+            description: order?.description,
+            extra: order?.extra,
           });
 
           await payedOrder.save();

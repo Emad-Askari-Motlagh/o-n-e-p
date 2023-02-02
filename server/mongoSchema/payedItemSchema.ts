@@ -29,6 +29,15 @@ var PayedItem = new mongoose.Schema(
       // `Date.now()` returns the current unix timestamp as a number
       default: Date.now,
     },
+    extra: [
+      {
+        name: String,
+        quantity: mongoose.SchemaTypes.Number,
+        _id: Schema.Types.ObjectId,
+        price: mongoose.SchemaTypes.Number,
+      },
+    ],
+    description: String,
   },
   { timestamps: true }
 );

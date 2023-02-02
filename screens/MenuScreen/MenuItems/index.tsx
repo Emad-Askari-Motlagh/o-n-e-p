@@ -11,8 +11,21 @@ import Button from "@/components/Button";
 import Modal from "components/Modal";
 import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
+import {
+  MenuItemByCategoryQueryHookResult,
+  OrderItemsDocument,
+  MenuItemByCategoryQueryResult,
+  AddOrderMutationResult,
+} from "@/server/generated/graphql";
+interface MyTipes<P> {
+  data: P;
+}
 
-export default function Items({ items }) {
+export default function Items({
+  items,
+}: {
+  items: MyTipes<AddOrderMutationResult>;
+}) {
   const Router = useRouter();
 
   const [selectedItem, setSelectedItem] = useState("Pommes");
@@ -30,18 +43,64 @@ export default function Items({ items }) {
   } = useOrders();
 
   const restaurant = Router.query?.name as string;
-  function onEnterModal(item) {
+  function onEnterModal(item, items) {
     items.map((res) => setSelection([...res.extra]));
     setSelectedItem(items?.[0]?.name);
-    const correctItem = orders
-      .find((r) => r.product._id === item._id)
-      .extra.flatMap((r) => [
-        { name: r.name, _id: r._id, price: r.price, quantity: r.quantity },
-      ]);
-
+    const correctItem = orders.find((r) => r.product._id === item._id)?.extra;
+    console.log(orders, item._id, correctItem);
     setCostumerExtraChoises(correctItem);
   }
 
+  async function submit(res: typeof items) {
+    try {
+      await addExtra({
+        variables: {
+          description,
+          id: orders.find((r) => r.product._id === res._id)._id,
+          orderItem: costumerExtraChoises,
+        },
+      });
+      setTimeout(() => {
+        setExtraOrderModalOpen(false);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  function onAddQuantity(result) {
+    setCostumerExtraChoises(
+      costumerExtraChoises.map((item) => {
+        if (item._id === result._id) {
+          return {
+            ...item,
+            name: item.name,
+            quantity: (item.quantity += 1),
+          };
+        }
+        return item;
+      })
+    );
+  }
+  function onDeleteQuantity(result) {
+    setCostumerExtraChoises(
+      costumerExtraChoises.map((item) => {
+        if (item._id === result._id) {
+          return {
+            ...item,
+            name: item.name,
+            quantity: (item.quantity -= 1),
+          };
+        }
+        return item;
+      })
+    );
+    if (result.quantity < 1) {
+      setCostumerExtraChoises(
+        costumerExtraChoises.filter((r) => r._id !== result._id)
+      );
+    }
+    return selection;
+  }
   //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
     id: number,
@@ -90,7 +149,7 @@ export default function Items({ items }) {
                 isModalOpen={exrasOrderModal}
                 setIsModalOpen={setExtraOrderModalOpen}
                 label={"Extra"}
-                onEnter={() => onEnterModal(res)}>
+                onEnter={() => onEnterModal(res, items)}>
                 <>
                   <form
                     style={{
@@ -104,6 +163,9 @@ export default function Items({ items }) {
                             .name
                         }
                         onChange={(e) => {
+                          if (!selection?.length) {
+                            return;
+                          }
                           const { _id, name, price } = selection.find(
                             (val) => val.name === e.target.value
                           );
@@ -137,7 +199,7 @@ export default function Items({ items }) {
                       placeholder="Extra description"
                       onChange={(e) => setDescription(e.target.value)}></Input>
                   </form>
-                  {costumerExtraChoises.length &&
+                  {costumerExtraChoises?.length &&
                     costumerExtraChoises?.map((result, i) => (
                       <ChoisesCard
                         key={i}
@@ -148,46 +210,14 @@ export default function Items({ items }) {
                           style={{ color: "wheat" }}
                           className={styles.signs}
                           onClick={() => {
-                            setCostumerExtraChoises(
-                              costumerExtraChoises.map((item) => {
-                                if (item._id === result._id) {
-                                  return {
-                                    ...item,
-                                    name: item.name,
-                                    quantity: (item.quantity += 1),
-                                  };
-                                }
-                                return item;
-                              })
-                            );
+                            onAddQuantity(result);
                           }}>
                           +
                         </span>
                         <span
                           className={styles.signs}
                           style={{ color: "wheat" }}
-                          onClick={() => {
-                            setCostumerExtraChoises(
-                              costumerExtraChoises.map((item) => {
-                                if (item._id === result._id) {
-                                  return {
-                                    ...item,
-                                    name: item.name,
-                                    quantity: (item.quantity -= 1),
-                                  };
-                                }
-                                return item;
-                              })
-                            );
-                            if (result.quantity < 1) {
-                              setCostumerExtraChoises(
-                                costumerExtraChoises.filter(
-                                  (r) => r._id !== result._id
-                                )
-                              );
-                            }
-                            return selection;
-                          }}>
+                          onClick={() => onDeleteQuantity(result)}>
                           -
                         </span>
                       </ChoisesCard>
@@ -196,26 +226,9 @@ export default function Items({ items }) {
                     !!orders.find((r) => r.product._id === res._id) && (
                       <Button
                         type="submit"
-                        onClick={async (e) => {
+                        onClick={(e) => {
                           e.preventDefault();
-                          try {
-                            if (!description && !costumerExtraChoises?.length) {
-                              return;
-                            }
-                            console.log(costumerExtraChoises);
-                            await addExtra({
-                              variables: {
-                                description,
-                                id: orders.find(
-                                  (r) => r.product._id === res._id
-                                )._id,
-                                orderItem: costumerExtraChoises,
-                              },
-                            });
-                            setExtraOrderModalOpen(false);
-                          } catch (error) {
-                            console.log(error);
-                          }
+                          submit(res);
                         }}>
                         Submit
                       </Button>

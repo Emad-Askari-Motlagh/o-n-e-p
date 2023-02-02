@@ -1,3 +1,4 @@
+import payedItemSchema from "server/mongoSchema/payedItemSchema";
 import dbInit from "@/lib/dbInit";
 import Orders from "@/server/mongoSchema/payedItemSchema";
 
@@ -6,7 +7,8 @@ let clients = [];
 const myOrders = [];
 
 const orderFetcher = async () => {
-  const fetchedOrders = await Orders.find({})
+  const fetchedOrders = await payedItemSchema
+    .find({})
     .populate({ path: "costumer", model: "Costumer" })
     .populate("product");
   console.log(fetchedOrders);
@@ -48,7 +50,7 @@ async function handler(req, res) {
         res,
       };
 
-      Orders.watch().on("change", async (operation) => {
+      payedItemSchema.watch().on("change", async (operation) => {
         if (operation.operationType === "insert") {
           const orders = await orderFetcher();
           const data = `data: ${JSON.stringify(orders)}\n\n`;

@@ -673,7 +673,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "id",
+            "name": "_id",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -1673,8 +1673,8 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "AdminOrder",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,

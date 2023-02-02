@@ -42,6 +42,7 @@ var OrderSchema = new mongoose.Schema(
         price: mongoose.SchemaTypes.Number,
       },
     ],
+    description: String,
   },
   { timestamps: true }
 );

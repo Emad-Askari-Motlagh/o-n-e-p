@@ -1,0 +1,16 @@
+@import "/styles/fonts";
+
+.AdminOrdersInfo_container {
+    width: 100%;
+    color: #ffff;
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 80%;
+        margin-right: auto;
+        span {
+            font-family: "Archivo Black", sans-serif;
+        }
+    }
+}

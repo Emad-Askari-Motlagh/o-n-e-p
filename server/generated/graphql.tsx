@@ -103,7 +103,7 @@ export type ExtraItem = {
 };
 
 export type ExtraItemInput = {
-  id?: InputMaybe<Scalars['ID']>;
+  _id?: InputMaybe<Scalars['ID']>;
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['Int']>;
   quantity?: InputMaybe<Scalars['Int']>;
@@ -195,7 +195,7 @@ export type Mutation = {
   AddAddress: User;
   AddCostumer?: Maybe<Costumer>;
   AddCostumerAddress?: Maybe<CostumerAddress>;
-  AddExtraItem?: Maybe<AdminOrder>;
+  AddExtraItem?: Maybe<Scalars['String']>;
   AddMenu?: Maybe<Menu>;
   AddMenuCategory?: Maybe<MenuParent>;
   AddMenuItem?: Maybe<MenuItem>;
@@ -845,7 +845,7 @@ export type AddExtraItemMutationVariables = Exact<{
 }>;
 
 
-export type AddExtraItemMutation = { __typename?: 'Mutation', AddExtraItem?: { __typename?: 'AdminOrder', _id?: string | null } | null };
+export type AddExtraItemMutation = { __typename?: 'Mutation', AddExtraItem?: string | null };
 
 export type RestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -890,7 +890,7 @@ export type MenuItemByCategoryQueryVariables = Exact<{
 }>;
 
 
-export type MenuItemByCategoryQuery = { __typename?: 'Query', MenuItemByCategory?: Array<{ __typename: 'MenuItem', name?: string | null, orderQuantity?: number | null, description?: string | null, price?: number | null, quantity?: number | null, images?: Array<string | null> | null, _id?: string | null, category?: string | null, subCat?: Array<string | null> | null, extra?: Array<{ __typename?: 'ExtraItem', name?: string | null, price?: number | null } | null> | null } | { __typename: 'OrderItem', orderQuantity?: number | null } | null> | null };
+export type MenuItemByCategoryQuery = { __typename?: 'Query', MenuItemByCategory?: Array<{ __typename: 'MenuItem', name?: string | null, orderQuantity?: number | null, description?: string | null, price?: number | null, quantity?: number | null, images?: Array<string | null> | null, _id?: string | null, category?: string | null, subCat?: Array<string | null> | null, extra?: Array<{ __typename?: 'ExtraItem', name?: string | null, price?: number | null, _id?: string | null } | null> | null } | { __typename: 'OrderItem', orderQuantity?: number | null } | null> | null };
 
 export type MenuItemCountQueryVariables = Exact<{
   category: Scalars['String'];
@@ -910,12 +910,12 @@ export type OrdersQueryVariables = Exact<{
 }>;
 
 
-export type OrdersQuery = { __typename?: 'Query', Orders: Array<{ __typename?: 'OrderItem', _id?: string | null, orderQuantity?: number | null, product?: { __typename?: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, extra?: Array<{ __typename?: 'ExtraItem', name?: string | null, price?: number | null, quantity?: number | null, id?: string | null } | null> | null } | null> };
+export type OrdersQuery = { __typename?: 'Query', Orders: Array<{ __typename?: 'OrderItem', _id?: string | null, orderQuantity?: number | null, product?: { __typename?: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, extra?: Array<{ __typename?: 'ExtraItem', name?: string | null, price?: number | null, quantity?: number | null, _id?: string | null } | null> | null } | null> };
 
 export type AdminOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AdminOrdersQuery = { __typename?: 'Query', AdminOrders: Array<{ __typename: 'AdminOrder', _id?: string | null, orderQuantity?: number | null, date?: any | null, product?: { __typename: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, costumer?: { __typename: 'Costumer', table?: number | null, _id?: string | null } | null } | null> };
+export type AdminOrdersQuery = { __typename?: 'Query', AdminOrders: Array<{ __typename: 'AdminOrder', _id?: string | null, orderQuantity?: number | null, date?: any | null, extra?: Array<{ __typename?: 'ExtraItem', name?: string | null, price?: number | null, quantity?: number | null, _id?: string | null } | null> | null, product?: { __typename: 'MenuItem', name?: string | null, price?: number | null, description?: string | null, _id?: string | null } | null, costumer?: { __typename: 'Costumer', table?: number | null, _id?: string | null } | null } | null> };
 
 export type CostumerOrdersQueryVariables = Exact<{
   restaurant: Scalars['String'];
@@ -1974,9 +1974,7 @@ export type DeleteMenuItemSubCategoryMutationResult = Apollo.MutationResult<Dele
 export type DeleteMenuItemSubCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteMenuItemSubCategoryMutation, DeleteMenuItemSubCategoryMutationVariables>;
 export const AddExtraItemDocument = gql`
     mutation AddExtraItem($description: String, $id: ID!, $orderItem: [ExtraItemInput]) {
-  AddExtraItem(description: $description, id: $id, orderItem: $orderItem) {
-    _id
-  }
+  AddExtraItem(description: $description, id: $id, orderItem: $orderItem)
 }
     `;
 export type AddExtraItemMutationFn = Apollo.MutationFunction<AddExtraItemMutation, AddExtraItemMutationVariables>;
@@ -2272,6 +2270,7 @@ export const MenuItemByCategoryDocument = gql`
       extra {
         name
         price
+        _id
       }
     }
     __typename
@@ -2400,7 +2399,7 @@ export const OrdersDocument = gql`
       name
       price
       quantity
-      id
+      _id
     }
   }
 }
@@ -2440,6 +2439,12 @@ export const AdminOrdersDocument = gql`
     _id
     orderQuantity
     date
+    extra {
+      name
+      price
+      quantity
+      _id
+    }
     product {
       __typename
       name
@@ -2947,7 +2952,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   AddAddress?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddAddressArgs, 'address'>>;
   AddCostumer?: Resolver<Maybe<ResolversTypes['Costumer']>, ParentType, ContextType, RequireFields<MutationAddCostumerArgs, 'email' | 'name' | 'table'>>;
   AddCostumerAddress?: Resolver<Maybe<ResolversTypes['CostumerAddress']>, ParentType, ContextType, Partial<MutationAddCostumerAddressArgs>>;
-  AddExtraItem?: Resolver<Maybe<ResolversTypes['AdminOrder']>, ParentType, ContextType, Partial<MutationAddExtraItemArgs>>;
+  AddExtraItem?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<MutationAddExtraItemArgs>>;
   AddMenu?: Resolver<Maybe<ResolversTypes['Menu']>, ParentType, ContextType, RequireFields<MutationAddMenuArgs, 'restaurant'>>;
   AddMenuCategory?: Resolver<Maybe<ResolversTypes['MenuParent']>, ParentType, ContextType, RequireFields<MutationAddMenuCategoryArgs, 'image' | 'name' | 'parent' | 'restaurant'>>;
   AddMenuItem?: Resolver<Maybe<ResolversTypes['MenuItem']>, ParentType, ContextType, RequireFields<MutationAddMenuItemArgs, 'category' | 'restaurant'>>;

@@ -1,24 +1,22 @@
 import { ADD_EXTRA_ORDER } from "./../server/graphql/querys/mutations.graphql";
-import {
-  AddExtraItemMutation,
-  AddExtraItemMutationVariables,
-  AddOrderMutation,
-  AddOrderMutationVariables,
-  RemoveOrderMutation,
-  RemoveOrderMutationVariables,
-} from "./../server/generated/graphql";
+
 import {
   AddOrderMutationFn,
   AddOrderMutationHookResult,
   OrdersQueryHookResult,
   AddOrderMutationOptions,
-  AddOrderMutation,
   OrdersQueryVariables,
   OrdersQueryResult,
   AdminOrdersQueryVariables,
   AdminOrdersQueryResult,
   OrdersQuery,
   AdminOrdersQuery,
+  AddExtraItemMutation,
+  AddExtraItemMutationVariables,
+  AddOrderMutation,
+  AddOrderMutationVariables,
+  RemoveOrderMutation,
+  RemoveOrderMutationVariables,
 } from "server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
@@ -48,7 +46,7 @@ const useOrders = () => {
   const restaurant = (router.query as { name: string }).name;
   const {
     data,
-    error,
+    error: adminOrdersError,
     loading: getAdminOrders_loading,
   } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS);
   const refetchTask = [
@@ -57,24 +55,20 @@ const useOrders = () => {
     { query: GET_ORDERS_CONSTANTLY },
     "Orders",
   ];
-  const [addOrder, { data: orderData, loading: ooo }] = useMutation<
-    AddOrderMutation,
-    AddOrderMutationVariables
-  >(ADD_ORDER, {
+  const [
+    addOrder,
+    { data: orderData, loading: orderDataLoading, error: orderDataError },
+  ] = useMutation<AddOrderMutation, AddOrderMutationVariables>(ADD_ORDER, {
     fetchPolicy: "network-only",
     refetchQueries: refetchTask,
   });
-  const [addExtra] = useMutation<
-    AddExtraItemMutation,
-    AddExtraItemMutationVariables
-  >(ADD_EXTRA_ORDER, {
-    refetchQueries: refetchTask,
-    onError: (r) => {
-      r.graphQLErrors.map((r) => {
-        console.log(r.extensions);
-      });
-    },
-  });
+  const [addExtra, { loading: addExtraLoading, error: addExtraError }] =
+    useMutation<AddExtraItemMutation, AddExtraItemMutationVariables>(
+      ADD_EXTRA_ORDER,
+      {
+        refetchQueries: refetchTask,
+      }
+    );
 
   const [removeOrder] = useMutation<
     RemoveOrderMutation,
@@ -89,12 +83,6 @@ const useOrders = () => {
     OrdersQueryVariables
   >(GET_ORDERS_CONSTANTLY, {
     variables: { restaurant },
-    onCompleted: (result) => {
-      console.log(result);
-    },
-    onError: (err) => {
-      err.graphQLErrors.map((res) => [console.log(res.extensions)]);
-    },
   });
 
   return {
@@ -104,7 +92,12 @@ const useOrders = () => {
     getAdminOrders_loading,
     addOrder,
     removeOrder,
+    orderDataLoading,
+    orderDataError,
     addExtra,
+    addExtraLoading,
+    addExtraError,
+    adminOrdersError,
   };
 };
 

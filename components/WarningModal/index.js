@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { AiFillBell } from "react-icons/ai";
-import { Modal, Button } from "react-bootstrap";
+import { Modal as BootstrapModal, Button } from "react-bootstrap";
 
-export default function Modall(
+export default function Modal(
   { children, setIsModalOpen, isModalOpen, label, onExit, button_label },
   props
 ) {
   return (
     <>
-      <Modal
+      <BootstrapModal
         {...props}
         show={isModalOpen}
         onHide={() => setIsModalOpen(false)}
@@ -20,7 +20,7 @@ export default function Modall(
         className={styles.container}
         size="lg">
         <div className={styles.modal_cont}>
-          <Modal.Body>
+          <BootstrapModal.Body>
             <div className={styles.content_parent}>
               <div className={styles.body_part}>
                 <AiFillBell className={styles.icon} />
@@ -35,9 +35,9 @@ export default function Modall(
                 </button>
               </div>
             </div>
-          </Modal.Body>
+          </BootstrapModal.Body>
         </div>
-      </Modal>
+      </BootstrapModal>
     </>
   );
 }

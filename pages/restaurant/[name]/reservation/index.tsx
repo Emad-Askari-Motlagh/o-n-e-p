@@ -10,8 +10,10 @@ import { useRouter } from "next/router";
 import { useProvideAuth } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
+import withRedirect from "Hoc/withRedirect";
+import withState from "Hoc/withState";
 
-export default function Reservation() {
+const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);
   const [refetch, setRefetch] = useState(true);
@@ -126,5 +128,6 @@ export default function Reservation() {
       </div>
     </div>
   );
-}
+};
 Reservation.Layout = PrimaryLayout;
+export default Reservation;

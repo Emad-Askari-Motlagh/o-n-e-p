@@ -52,17 +52,6 @@ export default function Items() {
       }
     }
   }
-  useEffect(() => {
-    const dd: string[] = Router.query?.category as string[];
-
-    Array.isArray(data?.MenuItemByCategory) &&
-      !loading &&
-      data?.MenuItemByCategory.map((res, i) => {
-        if (res.subCat) {
-          console.log(res);
-        }
-      });
-  }, [data]);
 
   return (
     <div className={styles.container}>

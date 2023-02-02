@@ -164,6 +164,7 @@ export const GET_ADMIN_ORDERS = gql`
       _id
       orderQuantity
       date
+      description
       extra {
         name
         price
@@ -171,14 +172,12 @@ export const GET_ADMIN_ORDERS = gql`
         _id
       }
       product {
-        __typename
         name
         price
         description
         _id
       }
       costumer {
-        __typename
         table
         _id
       }

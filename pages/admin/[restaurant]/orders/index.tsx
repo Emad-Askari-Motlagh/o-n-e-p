@@ -15,13 +15,23 @@ import Modal from "components/WarningModal";
 import InfoModal from "components/Modal";
 import Search from "components/Search-form";
 import Warning from "@/components/Warning";
+import { MdOutlineExpandMore } from "react-icons/md";
+import AdminOrdersInfo from "@/components/AdminOrdersInfo";
+import TableData from "@/components/Table/TableData";
+import TableHeader from "@/components/Table/TableHeader";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState([]);
   const [infoOpen, setInfoOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<string>();
-  const { AdminOrders } = useOrders();
+  const [error, setError] = useState(false);
+  const [currentOrderInfo, setCurrentOrderInfo] = useState<{
+    _id: string;
+    extra: { name: string; quantity: string }[];
+    description: string;
+  }>();
+  const { AdminOrders, adminOrdersError } = useOrders();
   const date = new Date();
 
   async function connect_to_socket1() {
@@ -35,7 +45,7 @@ const AdminsOrders = () => {
         setData(JSON.parse(event.data));
       };
       evtSource.onerror = (event) => {
-        console.log(event);
+        setError(true);
       };
       evtSource.onopen = (event) => {
         console.log("open");
@@ -58,9 +68,20 @@ const AdminsOrders = () => {
       console.log(err);
     }
   }
+  function onClick(id: string, fact: typeof currentOrderInfo) {
+    setCurrentOrderInfo(fact);
+    setInfoOpen(true);
+  }
+
   const orders = data?.length ? data : AdminOrders;
-  if (!orders?.length)
-    return <Warning label="Orders" message="You have not any orders" />;
+  if (!orders?.length) return <Warning label="Orders" message="Loading..." />;
+  if (error || adminOrdersError)
+    return (
+      <Warning
+        label="Orders"
+        message="Unexpected error happend. Please try later"
+      />
+    );
   return (
     <div className={styles.container}>
       <span style={{ marginLeft: "20px" }}>
@@ -90,40 +111,48 @@ const AdminsOrders = () => {
             orders.map((fact, i) => {
               return (
                 <tr key={i}>
-                  <TableData>{fact?.costumer?.table}</TableData>
+                  <TableData style={{ tableLayout: "auto", width: "10%" }}>
+                    {fact?.costumer?.table}
+                  </TableData>
                   <TableData>
                     {captalizeFirstLetter(fact?.product?.name as string)}
                   </TableData>
                   <TableData
+                    style={{ tableLayout: "auto", width: "10%" }}
                     color={
                       (fact?.orderQuantity as number) <= 1 ? "white" : "tomato"
                     }>
                     {fact?.orderQuantity}
                   </TableData>
-                  <TableData>{fact?.product?.price}</TableData>
+                  <TableData
+                    style={{
+                      tableLayout: "auto",
+                      width: "15%",
+                    }}>{`${fact?.product?.price}.00 kr`}</TableData>
                   <TableData>{new Date(fact?.date).toLocaleString()}</TableData>
-                  <TableData>
-                    <FiEye onClick={() => setInfoOpen(true)} />
-                    <InfoModal
-                      label="Factor Info"
-                      setIsModalOpen={setInfoOpen}
-                      isModalOpen={infoOpen}>
-                      <div style={{ color: "white" }}>
-                        <span>Transaction`s Time:</span>
-                        <span>{}</span>
-                      </div>
-                      <div className={styles.price_parent}>
-                        <span>Total Amount:</span>
-                        <span>{fact!.price} kr</span>
-                      </div>
-                    </InfoModal>
+                  <TableData style={{ tableLayout: "auto", width: "10%" }}>
+                    <MdOutlineExpandMore
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onClick(fact?._id as string, fact)}
+                    />
                   </TableData>
                 </tr>
               );
             })}
         </tbody>
       </table>
-
+      <div>
+        <InfoModal
+          setIsModalOpen={setInfoOpen}
+          isModalOpen={infoOpen}
+          label="Orders`s extra info">
+          {
+            <div>
+              <AdminOrdersInfo currentOrderInfo={currentOrderInfo} />
+            </div>
+          }
+        </InfoModal>
+      </div>
       <div>
         <Modal
           setIsModalOpen={setShowAlert}
@@ -141,17 +170,6 @@ const AdminsOrders = () => {
     </div>
   );
 };
-const TableData = ({
-  children,
-  color,
-}: {
-  children: ReactNode;
-  color?: string;
-}) => <td style={{ color }}>{children}</td>;
-
-const TableHeader = ({ children }: { children: ReactNode }) => (
-  <th className={styles.table_header}>{children}</th>
-);
 
 export default AdminsOrders;
 AdminsOrders.Layout = PrimaryLayout;

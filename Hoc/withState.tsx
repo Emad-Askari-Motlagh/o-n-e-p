@@ -1,7 +1,7 @@
 import { useProvideAuth } from "hooks/Context.hook";
 import React, { ReactComponentElement } from "react";
 
-const withHigherOrderComponent = (Component: React.ReactNode) => {
+const withState = (Component: React.ReactNode) => {
   return (props) => {
     const { signOut, user, costumerData, signOutCostumer } = useProvideAuth();
     return (
@@ -16,4 +16,4 @@ const withHigherOrderComponent = (Component: React.ReactNode) => {
     );
   };
 };
-export default withHigherOrderComponent;
+export default withState;

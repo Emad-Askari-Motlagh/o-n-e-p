@@ -17,11 +17,6 @@ const nextConfig = {
         destination: "/restaurant",
         permanent: true,
       },
-      {
-        source: "/admin/setting/:path*",
-        destination: "/blog/:path*",
-        permanent: false,
-      },
     ];
   },
   webpack: (config, { isServer, dev }) => {

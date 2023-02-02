@@ -18,7 +18,6 @@
     "@envelop/depth-limit": "^1.5.3",
     "@envelop/response-cache": "^2.3.3",
     "@envelop/sentry": "^3.4.2",
-    "@graphql-codegen/typescript-resolvers": "^2.7.3",
     "@graphql-tools/schema": "^8.3.13",
     "@graphql-yoga/node": "^2.13.6",
     "@mui/material": "^5.9.2",
@@ -142,12 +141,13 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.2.1",
-    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript": "^2.8.8",
     "@graphql-codegen/typescript-operations": "^2.5.3",
     "@graphql-codegen/typescript-react-apollo": "^3.3.3",
     "@graphql-codegen/typescript-react-query": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "^2.7.13",
     "@types/axios": "^0.14.0",
     "@types/leaflet": "^1.9.0",
     "@types/next-pwa": "^5.6.2",

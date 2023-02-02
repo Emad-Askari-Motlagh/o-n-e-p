@@ -1,4 +1,3 @@
-import { sendMail } from "@/lib/sendMail";
 import User from "server/mongoSchema/userSchema";
 import bcrypt from "bcrypt";
 import { ApolloError, AuthenticationError } from "apollo-server";

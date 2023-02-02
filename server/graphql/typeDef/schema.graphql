@@ -42,6 +42,8 @@ type PayedItem {
   _id: ID
   createdAt: Date
   orderQuantity: Int
+  description: String
+  extra: [ExtraItem]
 }
 type OrderHistory {
   costumer: Costumer
@@ -244,7 +246,7 @@ type Query {
   OrderItems: OrderItem
   Orders(restaurant: String!): [OrderItem]!
   CostumerOrders(restaurant: String!): [OrderItem]!
-  AdminOrders: [AdminOrder]!
+  AdminOrders: [PayedItem]!
   Address: CostumerAddress
   PayedOrders(restaurant: String!): [OrderHistory]!
   FetchAllMenuItems(restaurant: String!): [MenuItem]!
