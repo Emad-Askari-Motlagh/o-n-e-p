@@ -3,7 +3,7 @@
 @mixin rapport_item {
     text-align: center;
     width: 30%;
-    height: 300px;
+    object-fit: cover;
     overflow: visible;
     background-color: #383838;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -15,9 +15,10 @@
     color: #383838;
     letter-spacing: 0.3em;
     border: 3px double lightcoral;
-    min-width: 350px;
+    min-width: 250px;
     @include md {
-        width: 90%;
+        width: 70%;
+        margin: auto;
     }
 }
 .dash_container {
