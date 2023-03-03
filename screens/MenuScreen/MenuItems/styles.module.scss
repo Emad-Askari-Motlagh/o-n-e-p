@@ -17,13 +17,14 @@
   z-index: 20;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  color: cornsilk;
-  font-size: 24px;
+  color: rgb(132, 113, 35);
+  font-size: 30px;
   margin-left: auto;
-  float: right;
+
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2%;
+  right: 3%;
+
   &:hover {
     transform: scale(1.1);
   }

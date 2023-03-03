@@ -11,12 +11,7 @@ import Button from "@/components/Button";
 import Modal from "components/Modal";
 import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
-import {
-  MenuItemByCategoryQueryHookResult,
-  OrderItemsDocument,
-  MenuItemByCategoryQueryResult,
-  AddOrderMutationResult,
-} from "@/server/generated/graphql";
+import { AddOrderMutationResult } from "@/server/generated/graphql";
 interface MyTipes<P> {
   data: P;
 }
@@ -28,7 +23,7 @@ export default function Items({
 }) {
   const Router = useRouter();
 
-  const [selectedItem, setSelectedItem] = useState("Pommes");
+  let [selectedItem, setSelectedItem] = useState("Pommes");
   let [selection, setSelection] = useState([]);
   const [exrasOrderModal, setExtraOrderModalOpen] = useState(false);
   let [costumerExtraChoises, setCostumerExtraChoises] = useState([]);
@@ -43,21 +38,59 @@ export default function Items({
   } = useOrders();
 
   const restaurant = Router.query?.name as string;
-  function onEnterModal(item, items) {
-    items.map((res) => setSelection([...res.extra]));
+
+  function onEnterModal(
+    item: { _id: string },
+    items: { name: string; extra: {}[] }[]
+  ) {
+    if (!item) return;
+    items.map((res) => {
+      setSelection([...res.extra]);
+    });
     setSelectedItem(items?.[0]?.name);
-    const correctItem = orders.find((r) => r.product._id === item._id)?.extra;
-    console.log(orders, item._id, correctItem);
-    setCostumerExtraChoises(correctItem);
+    const correctItem = orders
+      .find((r) => r.product._id === item._id)
+      ?.extra.filter((extra) => extra.quantity !== 0);
+    if (correctItem) {
+      setCostumerExtraChoises([...correctItem]);
+    }
   }
 
+  function onSelect(e) {
+    if (!selection?.length) {
+      return;
+    }
+
+    const { _id, name, price } = selection.find(
+      (val) => val.name === e.target.value
+    );
+
+    setSelectedItem(name);
+    const isMatch = !!costumerExtraChoises.find((extra) => extra.name === name);
+    if (!isMatch) {
+      setCostumerExtraChoises([
+        ...costumerExtraChoises,
+        {
+          _id,
+          name,
+          price,
+          quantity: 1,
+        },
+      ]);
+    }
+  }
   async function submit(res: typeof items) {
     try {
       await addExtra({
         variables: {
           description,
           id: orders.find((r) => r.product._id === res._id)._id,
-          orderItem: costumerExtraChoises,
+          orderItem: costumerExtraChoises.map((r) => ({
+            name: r.name,
+            price: r.price,
+            _id: r._id,
+            quantity: r.quantity,
+          })),
         },
       });
       setTimeout(() => {
@@ -67,40 +100,42 @@ export default function Items({
       console.log(error);
     }
   }
-  function onAddQuantity(result) {
-    setCostumerExtraChoises(
-      costumerExtraChoises.map((item) => {
+  function onAddQuantity(result: { _id: string; quantity: number }) {
+    setCostumerExtraChoises([
+      ...costumerExtraChoises.map((item) => {
         if (item._id === result._id) {
           return {
             ...item,
-            name: item.name,
-            quantity: (item.quantity += 1),
+
+            quantity: item.quantity + 1,
           };
         }
         return item;
-      })
-    );
+      }),
+    ]);
   }
-  function onDeleteQuantity(result) {
-    setCostumerExtraChoises(
-      costumerExtraChoises.map((item) => {
+  function onDeleteQuantity(result: { _id: string; quantity: number }) {
+    setCostumerExtraChoises([
+      ...costumerExtraChoises.map((item) => {
         if (item._id === result._id) {
           return {
             ...item,
-            name: item.name,
-            quantity: (item.quantity -= 1),
+
+            quantity: item.quantity - 1,
           };
         }
         return item;
-      })
-    );
+      }),
+    ]);
+
     if (result.quantity < 1) {
-      setCostumerExtraChoises(
-        costumerExtraChoises.filter((r) => r._id !== result._id)
-      );
+      setCostumerExtraChoises([
+        ...costumerExtraChoises.filter((r) => r._id === result._id),
+      ]);
     }
     return selection;
   }
+
   //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
     id: number,
@@ -121,7 +156,9 @@ export default function Items({
       <div className={styles.items_container}>
         {Array.isArray(items) &&
           items.map((res, i) => (
-            <div key={res?._id || i} style={{ margin: "auto" }}>
+            <div
+              key={res?._id || i}
+              style={{ margin: "auto", position: "relative" }}>
               <MenuItem
                 id={res?._id}
                 description={res?.description}
@@ -142,8 +179,8 @@ export default function Items({
               />
 
               <CgMore
-                color="white"
                 onClick={() => setExtraOrderModalOpen(true)}
+                className={styles.more_icon}
               />
               <Modal
                 isModalOpen={exrasOrderModal}
@@ -162,29 +199,7 @@ export default function Items({
                           [{ name: "Choose an extra item" }, ...selection][0]
                             .name
                         }
-                        onChange={(e) => {
-                          if (!selection?.length) {
-                            return;
-                          }
-                          const { _id, name, price } = selection.find(
-                            (val) => val.name === e.target.value
-                          );
-                          setSelectedItem(name);
-                          const isMatch = costumerExtraChoises.some(
-                            (extra) => extra.name === name
-                          );
-                          if (!isMatch) {
-                            setCostumerExtraChoises([
-                              ...costumerExtraChoises,
-                              {
-                                _id,
-                                name,
-                                price,
-                                quantity: 1,
-                              },
-                            ]);
-                          }
-                        }}
+                        onChange={onSelect}
                         label={"Choose an extra item"}
                         options={[
                           { name: "Choose an extra item" },
@@ -200,7 +215,7 @@ export default function Items({
                       onChange={(e) => setDescription(e.target.value)}></Input>
                   </form>
                   {costumerExtraChoises?.length &&
-                    costumerExtraChoises?.map((result, i) => (
+                    costumerExtraChoises.map((result, i) => (
                       <ChoisesCard
                         key={i}
                         setSelection={setCostumerExtraChoises}

@@ -231,7 +231,7 @@ const userResolvers = {
         }
         const token = JWT.sign({ email }, "MY_SECRET");
 
-        const sender = "kontakt@alliancecodes.se";
+        const sender = "emad.askari@gmail.com";
         //  Process a POST request
         const msg = {
           to: email, // Change to your recipient
@@ -250,11 +250,12 @@ const userResolvers = {
 
         sgMail.setApiKey(api_key as string);
         await sgMail.send(msg);
+        console.log(email, token);
         doc.token = token;
         doc.save();
         return doc;
-      } catch (err) {
-        throw new ApolloError("Couldnt save the address");
+      } catch (err: any) {
+        throw new ApolloError(err?.message || "Couldnt send the message");
       }
     },
     async AddAddress(

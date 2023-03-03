@@ -33,7 +33,7 @@ export default function Rapport() {
   const {
     user: { data: userData },
   } = useProvideAuth();
-  const [getAnalistics, { data: raportData }] = useMutation<
+  const [getAnalistics, { data: rapportData }] = useMutation<
     GetRapportMutation,
     GetRapportMutationVariables
   >(GET_RAPPORT);
@@ -41,8 +41,8 @@ export default function Rapport() {
   useEffect(() => {
     getAnalistics({
       variables: {
-        beginDate: beginDate,
-        finishDate: finishDate,
+        beginDate: beginDate as any,
+        finishDate: finishDate as any,
       },
     });
     // doc.text("Hello world!", 10, 10);
@@ -90,9 +90,7 @@ export default function Rapport() {
 
         <div className={styles.rapport_container}>
           <div>
-            <h3>{userData?.CurrentUser?.restaurant.name}</h3>
-            <br />
-            {typeof beginDate === new Date() && (
+            {typeof beginDate == Date() && (
               <div className={styles.date_description}>
                 <span>{`From: ${beginDate?.toLocaleString()}`}</span>
                 <br />
@@ -101,9 +99,18 @@ export default function Rapport() {
             )}
           </div>
 
-          {raportData?.GetRapport.flatMap((res, i) => {
+          {rapportData?.GetRapport.flatMap((res, i) => {
             return (
               <div className={styles.rapport_wraper} key={i}>
+                {res.categorizedByDate?.length ? (
+                  <div>
+                    <h3>{userData.CurrentUser.restaurant.name}</h3>
+                    <div className={styles.dates}>
+                      <span>From :{beginDate?.toLocaleString()}</span>
+                      <span>Untill: {finishDate?.toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                ) : null}
                 {res.categorizedByTags.map((re, i) => (
                   <RapportItem
                     key={re._id}

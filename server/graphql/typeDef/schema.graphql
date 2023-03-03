@@ -91,14 +91,7 @@ type Location {
   type: String!
   coordinates: [Float!]
 }
-input LocationInput {
-  mytype: String!
-  coordinates: [Int!]
-}
-input RegisterInput {
-  email: String!
-  password: String!
-}
+
 type Token {
   token: String!
 }
@@ -225,7 +218,14 @@ input ExtraItemInput {
   quantity: Int
   _id: ID
 }
-
+input LocationInput {
+  mytype: String!
+  coordinates: [Int!]
+}
+input RegisterInput {
+  email: String!
+  password: String!
+}
 # type Subscription {
 #   messages: [Message]
 # }
@@ -319,7 +319,7 @@ type Mutation {
   ): Restaurant
   AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
   GetAnalistics(year: Int): [Analistic]
-  GetRapport(beginDate: String, finishDate: String): [CategoryParent]
+  GetRapport(beginDate: Date, finishDate: Date): [CategoryParent]
   GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
   DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
   AddSubCategory(cat: String!, id: String!, restaurant: String!): MenuParent

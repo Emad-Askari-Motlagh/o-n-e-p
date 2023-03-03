@@ -241,7 +241,7 @@ export const GET_ANALISTICS = gql`
   }
 `;
 export const GET_RAPPORT = gql`
-  mutation GetRapport($beginDate: String, $finishDate: String) {
+  mutation GetRapport($beginDate: Date, $finishDate: Date) {
     GetRapport(beginDate: $beginDate, finishDate: $finishDate) {
       categorizedByName {
         _id

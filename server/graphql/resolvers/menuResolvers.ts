@@ -120,11 +120,14 @@ const menuResolvers = {
           category,
           restaurant,
         }: { category: string; restaurant: string } = args;
-        const res = await Menu.find({
-          subCat: {
-            $all: category,
+        const res = await Menu.find(
+          {
+            subCat: {
+              $all: category,
+            },
           },
-        });
+          { __typename: 0 }
+        );
 
         // const res1 = await Menu.aggregate([
         //   { $match: { restaurant: restaurant } },

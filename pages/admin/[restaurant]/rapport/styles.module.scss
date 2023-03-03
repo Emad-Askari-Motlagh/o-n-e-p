@@ -41,19 +41,34 @@
         display: flex;
     }
     .rapport_container {
-        width: 500px;
         margin: auto;
-        background-color: #ffff;
+        width: 70%;
         color: black;
-        padding: 3rem 1rem;
-        margin-bottom: 2rem;
-        border: 2px solid black;
+
         .date_description {
             font-size: 10px;
         }
         .rapport_wraper {
-            width: 80%;
+            background-color: #ffff;
+            border: 2px solid black;
+            width: 90vw;
+            max-width: 1200px;
+            height: 1200px;
+            padding: 2rem;
+            margin: auto;
+            h3 {
+                margin: auto;
+                text-align: center;
+            }
+            .dates {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
 
+                & > * {
+                    font-size: 10px;
+                }
+            }
             .rapport_row {
                 display: flex;
                 justify-content: space-evenly;

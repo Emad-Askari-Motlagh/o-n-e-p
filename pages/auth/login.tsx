@@ -18,12 +18,13 @@ import LoginSucceed from "components/Succeed-Message";
 import { useMutation } from "@apollo/client";
 import { LOGIN_WITH_GOOGLE } from "@/server/graphql/querys/mutations.graphql";
 import { signIn as signInWithGoogle } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const [error, setError] = useState<string | null>();
   const [loginSuccesed, setLoginSuccesed] = useState(false);
   const { signIn, signOut, user, signInError } = useProvideAuth();
-
+  const Router = useRouter();
   const onSuccess = async () => {
     try {
       await signInWithGoogle("google", {
@@ -55,9 +56,7 @@ export default function Login() {
           });
           if (token) {
             setLoginSuccesed(true);
-            setTimeout(() => {
-              globalThis.location.href = `/admin/${user.data?.CurrentUser?.restaurant.name}`;
-            }, 1500);
+            Router.push(`/admin/${user.data?.CurrentUser?.restaurant.name}`);
           } else {
             setError(signInError);
           }

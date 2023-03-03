@@ -27,6 +27,8 @@ import {
   UPDATE_PASSWORD,
 } from "@/server/graphql/querys/mutations.graphql";
 import {
+  SendResetPasswordMutation,
+  SendResetPasswordMutationVariables,
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from "@/server/generated/graphql";
@@ -49,9 +51,19 @@ export default function ResetPass() {
       console.log(err);
     },
   });
-  const [sendResetPass] = useMutation(SEND_RESET_PASSWORD, {
+  const [sendResetPass] = useMutation<
+    SendResetPasswordMutation,
+    SendResetPasswordMutationVariables
+  >(SEND_RESET_PASSWORD, {
     onError: (err) => {
-      console.log(err);
+      setError("Couldnt reset password");
+      err.graphQLErrors.map((re) => {
+        console.log(re.extensions);
+      });
+    },
+    onCompleted: () => {
+      setError("");
+      setWentThrough("Message sent, check your mail box");
     },
   });
   const token = router.query.token as string | undefined;
@@ -121,16 +133,13 @@ export default function ResetPass() {
         Don`t worry! Enter your email address and we send you a reset link
       </h3>
 
-      <form
-        ref={formRef}
-        onSubmit={formSubmit}
-        style={{ display: "flex", flexDirection: "column" }}>
+      <form ref={formRef} onSubmit={formSubmit}>
         {token ? (
           <Input
             name="password"
             placeholder="Enter your new password"
             type="password"
-            width={"80%"}
+            width={"100%"}
             onChange={onChange}
           />
         ) : (
@@ -138,12 +147,13 @@ export default function ResetPass() {
             name="email"
             placeholder="Enter your email"
             type="text"
-            width={"80%"}
+            width={"100%"}
             onChange={onChange}
           />
         )}
         {error && <Error>{error}</Error>}
         {WentThrough && <Error>{WentThrough}</Error>}
+
         <Button width="50%" type="submit">
           Send the reset password link
         </Button>

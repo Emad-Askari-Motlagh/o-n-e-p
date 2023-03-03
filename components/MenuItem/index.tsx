@@ -11,7 +11,7 @@ import {
 
 interface MenuItemProps {
   description: string;
-  name: String;
+  name: string;
   ImageSrc: string;
   removeOrder: RemoveOrderMutationFn;
   id: string;

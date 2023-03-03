@@ -4,15 +4,14 @@
     justify-content: center;
     align-items: center;
     .button-74 {
-        background-color: #fbeee0;
-        border: 2px solid #422800;
+        background-color: #407088;
+
         border-radius: 30px;
-        box-shadow: #422800 4px 4px 0 0;
-        color: #422800;
+        border-width: 0;
         cursor: pointer;
         display: inline-block;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 0.7rem;
         padding: 0 10px;
         line-height: 30px;
         text-align: center;
@@ -20,14 +19,15 @@
         user-select: none;
         -webkit-user-select: none;
         touch-action: manipulation;
+        color: whitesmoke;
     }
 
     .button-74:hover {
-        background-color: #fff;
+        background-color: #6884a6;
     }
 
     .button-74:active {
-        box-shadow: #422800 2px 2px 0 0;
+        box-shadow: #3d3d3d 4px 4px 4px 2px;
         transform: translate(2px, 2px);
     }
 }

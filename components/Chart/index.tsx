@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Line,
 } from "recharts";
+import styles from "./styles.module.scss";
 
 const mounths = [
   "jan",
@@ -44,7 +45,7 @@ export default function Chart({ data, sortType }) {
   const dat = data?.GetAnalistics;
   const dataa = dat?.length && dat?.flatMap((res) => [res]);
   return (
-    <div>
+    <div className={styles.container}>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart data={dataa}>
           <defs>

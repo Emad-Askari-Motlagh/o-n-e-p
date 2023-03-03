@@ -22,6 +22,8 @@ import {
 } from "server/generated/graphql";
 import MenuItems from "screens/MenuScreen/MenuItems";
 import CategoryItems from "@/screens/MenuScreen/CategoryItems";
+import { NextRequest } from "next/server";
+import { NextApiRequest } from "next";
 
 export default function Menu() {
   const Router = useRouter();
@@ -73,3 +75,14 @@ export default function Menu() {
 }
 
 Menu.Layout = PrimaryLayout;
+
+export async function getServerSideProps(req: NextApiRequest) {
+  if (!req.cookies?.["costumerId"]) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/restaurant",
+      },
+    };
+  }
+}

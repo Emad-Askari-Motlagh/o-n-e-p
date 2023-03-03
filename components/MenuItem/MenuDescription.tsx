@@ -1,9 +1,19 @@
 import React from "react";
 import styles from "./style.module.scss";
 import Image from "next/image";
-import { AiOutlineEdit } from "react-icons/ai";
 
-export default function MenuDescription({ description, name, ImageSrc }) {
+interface Props {
+  description: string;
+  name: string;
+  ImageSrc: string;
+  id: string;
+}
+
+export default function MenuDescription({
+  description,
+  name,
+  ImageSrc,
+}: Props) {
   return (
     <div className={styles.container}>
       <Image

@@ -67,6 +67,11 @@ const useOrders = () => {
       ADD_EXTRA_ORDER,
       {
         refetchQueries: refetchTask,
+        onError: (er) => {
+          er.graphQLErrors.map((re) => {
+            console.log(re.extensions);
+          });
+        },
       }
     );
 
