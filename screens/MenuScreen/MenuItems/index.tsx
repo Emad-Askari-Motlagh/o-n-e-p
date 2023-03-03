@@ -79,7 +79,7 @@ export default function Items({
       ]);
     }
   }
-  async function submit(res: typeof items) {
+  async function submit(res: { _id: string }) {
     try {
       await addExtra({
         variables: {
@@ -92,10 +92,10 @@ export default function Items({
             quantity: r.quantity,
           })),
         },
+        onCompleted: () => {
+          setExtraOrderModalOpen(false);
+        },
       });
-      setTimeout(() => {
-        setExtraOrderModalOpen(false);
-      }, 1000);
     } catch (error) {
       console.log(error);
     }
