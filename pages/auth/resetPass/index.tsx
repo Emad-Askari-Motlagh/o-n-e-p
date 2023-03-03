@@ -48,7 +48,9 @@ export default function ResetPass() {
     UpdatePasswordMutationVariables
   >(UPDATE_PASSWORD, {
     onError: (err) => {
-      console.log(err);
+      err.graphQLErrors.map((re) => {
+        console.log(re.extensions);
+      });
     },
   });
   const [sendResetPass] = useMutation<
@@ -57,9 +59,6 @@ export default function ResetPass() {
   >(SEND_RESET_PASSWORD, {
     onError: (err) => {
       setError("Couldnt reset password");
-      err.graphQLErrors.map((re) => {
-        console.log(re.extensions);
-      });
     },
     onCompleted: () => {
       setError("");
@@ -67,7 +66,7 @@ export default function ResetPass() {
     },
   });
   const token = router.query.token as string | undefined;
-  const uId = router.query.uId as number | undefined;
+  const uId = router.query.uId;
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     if (token) {
       setPassword(e.target.value);
@@ -154,9 +153,7 @@ export default function ResetPass() {
         {error && <Error>{error}</Error>}
         {WentThrough && <Error>{WentThrough}</Error>}
 
-        <Button width="50%" type="submit">
-          Send the reset password link
-        </Button>
+        <Button type="submit">Send the reset password link</Button>
       </form>
     </div>
   );

@@ -28,7 +28,7 @@ export default async function handler(
           token,
         },
       };
-      await sgMail.setApiKey(api_key as string);
+      sgMail.setApiKey(api_key as string);
       await sgMail.send(msg);
       //Replace the old token with new one
       // const user = await User.findOneAndUpdate({ email }, { token });

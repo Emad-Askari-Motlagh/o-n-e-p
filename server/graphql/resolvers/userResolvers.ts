@@ -229,6 +229,7 @@ const userResolvers = {
         if (!doc) {
           return null;
         }
+        console.log(doc);
         const token = JWT.sign({ email }, "MY_SECRET");
 
         const sender = "emad.askari@gmail.com";

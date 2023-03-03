@@ -10,16 +10,6 @@ export default function HomeScreen({ ALL_RESTAURANTS }) {
   if (!ALL_RESTAURANTS?.length) {
     return null;
   }
-  useEffect(() => {
-    async function sendMAil() {
-      const res = await axios.post("/api/contact/sendGrid", {
-        sender: "emad.askari@gmail.com",
-        email: "emad.askari@gmail.com",
-      });
-      console.log(res.data);
-    }
-    sendMAil();
-  }, []);
 
   return (
     <div className={styles.container}>
