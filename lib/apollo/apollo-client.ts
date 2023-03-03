@@ -56,7 +56,7 @@ function createApolloClient() {
 }
 
 export function initializeApollo(
-  initialState = null
+  initialState: any
 ): ApolloClient<NormalizedCacheObject> {
   const _apolloClient = apolloClient ?? createApolloClient();
 

@@ -250,7 +250,7 @@ const userResolvers = {
 
         sgMail.setApiKey(api_key as string);
         await sgMail.send(msg);
-        console.log(email, token);
+
         doc.token = token;
         doc.save();
         return doc;

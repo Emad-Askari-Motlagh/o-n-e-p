@@ -75,14 +75,3 @@ export default function Menu() {
 }
 
 Menu.Layout = PrimaryLayout;
-
-export async function getServerSideProps(req: NextApiRequest) {
-  if (!req.cookies?.["costumerId"]) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/restaurant",
-      },
-    };
-  }
-}
