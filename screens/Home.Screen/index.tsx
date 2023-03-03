@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense, useRef, useState, useId } from "react";
 import styles from "./styles.module.scss";
 import Restaurant from "components/Restaurant";
+import axios from "axios";
 
 export default function HomeScreen({ ALL_RESTAURANTS }) {
   const restaurantArray = ALL_RESTAURANTS ? ALL_RESTAURANTS : Array(6).fill(1);
@@ -9,6 +10,16 @@ export default function HomeScreen({ ALL_RESTAURANTS }) {
   if (!ALL_RESTAURANTS?.length) {
     return null;
   }
+  useEffect(() => {
+    async function sendMAil() {
+      const res = await axios.post("/api/contact/sendGrid", {
+        sender: "emad.askari@gmail.com",
+        email: "emad.askari@gmail.com",
+      });
+      console.log(res.data);
+    }
+    sendMAil();
+  }, []);
 
   return (
     <div className={styles.container}>

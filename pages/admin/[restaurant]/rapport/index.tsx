@@ -145,7 +145,7 @@ export default function Rapport() {
           <>
             <iframe
               ref={embedRef}
-              type="application/pdf"
+              itemType="application/pdf"
               height="800px"
               width="80%"
               src={doc}></iframe>
@@ -160,7 +160,15 @@ export default function Rapport() {
   );
 }
 
-function RapportItem({ val, sum, moms }) {
+function RapportItem({
+  val,
+  sum,
+  moms,
+}: {
+  val: number;
+  sum: number;
+  moms: number;
+}) {
   return (
     <div key={val} className={styles.rapport_row}>
       <div>{val}</div>

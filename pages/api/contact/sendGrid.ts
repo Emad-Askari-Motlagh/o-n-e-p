@@ -28,9 +28,8 @@ export default async function handler(
           token,
         },
       };
-
-      //Send a mail to the user
-      await sendMail(msg);
+      await sgMail.setApiKey(api_key as string);
+      await sgMail.send(msg);
       //Replace the old token with new one
       // const user = await User.findOneAndUpdate({ email }, { token });
       // console.log(user);
