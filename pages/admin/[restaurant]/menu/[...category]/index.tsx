@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  EventHandler,
+  useEffect,
+  useState,
+} from "react";
 import PrimaryLayout from "components/Primary-layout";
 import MenuEditor from "components/MenuEditor";
 import MenuAdder from "@/components/MenuAdder";
@@ -15,13 +21,14 @@ import useMenu from "hooks/Menu.hook";
 import Selection from "@/components/Selection";
 import Search from "components/Search-form/Input";
 import SearchResult from "@/components/SearchResult";
+import { SelectChangeEvent } from "@mui/material";
 
 export default function Category() {
   const { query, push, reload } = useRouter();
   const { user } = useProvideAuth();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
-  const [actionType, setActionType] = useState("category");
+  const [actionType, setActionType] = useState("create category");
 
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
@@ -50,7 +57,15 @@ export default function Category() {
     AddSubCatToMenuItem,
     deleteSubCatToMenuItem,
   } = useMenu();
+  const [options, setOptions] = useState([
+    { name: "create item" },
+    { name: "create category" },
+    { name: "import item" },
+  ]);
 
+  function onSelectionChange(e: SelectChangeEvent) {
+    setActionType(e.target.value);
+  }
   return (
     <div className={styles.container}>
       <div className={styles.add_button_parent}>
@@ -67,16 +82,12 @@ export default function Category() {
           label="Create new category">
           <Selection
             value={actionType}
-            onChange={(e) => setActionType(e.target.value)}
-            options={[
-              { value: "category" },
-              { value: "item" },
-              { value: "import item" },
-            ]}
+            onChange={onSelectionChange}
+            options={options}
             label="Choose one of the options"
           />
 
-          {actionType === "category" && (
+          {actionType === "create category" && (
             <AddCategory
               restaurant={query?.restaurant as string}
               submit={addCategory}
@@ -85,7 +96,7 @@ export default function Category() {
             />
           )}
 
-          {actionType === "item" &&
+          {actionType === "create item" &&
             !menuBySubCategoryData?.MenuBySubCategory?.length && (
               <MenuAdder
                 submit={addMenuItem}

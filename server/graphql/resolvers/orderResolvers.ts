@@ -232,6 +232,7 @@ const orderResolvers = {
 
         const id = new mongoose.Types.ObjectId(costumerId);
         const oldOrder = await Order.findOne({ product: productId });
+
         if (oldOrder) {
           const newOrder = await Order.findOneAndUpdate(
             {
@@ -251,6 +252,7 @@ const orderResolvers = {
             product: productId,
             restaurant: "Göteburgare",
           });
+
           await order.save();
           const orders = await fetchOrders({});
 
