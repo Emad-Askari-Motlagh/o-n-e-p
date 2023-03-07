@@ -31,7 +31,7 @@ interface CategoryProps {
   id?: string;
   restaurant: string;
   subCats: string[];
-  addSubcategory: () => void;
+  addSubCategory?: () => void;
 }
 export default function CategoryEditor({
   name,
@@ -44,7 +44,7 @@ export default function CategoryEditor({
   id,
   restaurant,
   subCats,
-  addSubcategory,
+  addSubCategory,
 }: CategoryProps) {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);

@@ -3,6 +3,7 @@ import React, {
   ChangeEventHandler,
   EventHandler,
   useEffect,
+  useRef,
   useState,
   useTransition,
 } from "react";
@@ -58,19 +59,17 @@ export default function Category() {
     AddSubCatToMenuItem,
     deleteSubCatToMenuItem,
   } = useMenu();
-  const [options, setOptions] = useState([
+  const options = useRef([
     { name: "create item" },
     { name: "create category" },
     { name: "import item" },
   ]);
 
   function onSelectionChange(e: SelectChangeEvent) {
-    startTransition(() => {
-      setActionType(e.target.value);
-    });
+    setActionType(e.target.value);
   }
 
-  const MenuItems = allItems.FetchAllMenuItems.map((item) => {
+  const MenuItems = allItems?.FetchAllMenuItems.map((item) => {
     return (
       <SearchResult
         key={item?._id}
@@ -164,7 +163,7 @@ export default function Category() {
           <Selection
             value={actionType}
             onChange={onSelectionChange}
-            options={options}
+            options={options.current}
             label="Choose one of the options"
             loading={isPending}
           />
