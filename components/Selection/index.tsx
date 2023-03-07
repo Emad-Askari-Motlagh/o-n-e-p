@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, SyntheticEvent } from "react";
+import React, { ReactEventHandler, SyntheticEvent, useTransition } from "react";
 import styles from "./styles.module.scss";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -12,6 +12,7 @@ function Selection({
   label,
   onOpen,
   onSelect,
+  isPending,
 }: {
   options: { name: string }[];
   onChange: (event: SelectChangeEvent) => void;
@@ -19,7 +20,19 @@ function Selection({
   label: string;
   onSelect?: ReactEventHandler<HTMLDivElement>;
   onOpen?: (event: SyntheticEvent<Element, Event>) => void;
+  isPending?: boolean;
 }) {
+  const items = options?.map((res, i) => {
+    return (
+      <MenuItem key={i} value={res.name}>
+        {isPending ? (
+          <div style={{ color: "whitesmoke" }}>{`${res.name}...`}...</div>
+        ) : (
+          res.name
+        )}
+      </MenuItem>
+    );
+  });
   return (
     <div className={styles.container}>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
@@ -33,14 +46,7 @@ function Selection({
         style={{ minWidth: "300px" }}
         onSelect={onSelect}
         onChange={onChange}>
-        {options?.length &&
-          options.map((res, i) => {
-            return (
-              <MenuItem key={i} value={res.name}>
-                {res.name}
-              </MenuItem>
-            );
-          })}
+        {items}
       </Select>
     </div>
   );

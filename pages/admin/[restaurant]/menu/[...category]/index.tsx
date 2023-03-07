@@ -4,6 +4,7 @@ import React, {
   EventHandler,
   useEffect,
   useState,
+  useTransition,
 } from "react";
 import PrimaryLayout from "components/Primary-layout";
 import MenuEditor from "components/MenuEditor";
@@ -29,7 +30,7 @@ export default function Category() {
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [actionType, setActionType] = useState("create category");
-
+  const [isPending, startTransition] = useTransition();
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );
@@ -64,8 +65,88 @@ export default function Category() {
   ]);
 
   function onSelectionChange(e: SelectChangeEvent) {
-    setActionType(e.target.value);
+    startTransition(() => {
+      setActionType(e.target.value);
+    });
   }
+
+  const MenuItems = allItems.FetchAllMenuItems.map((item) => {
+    return (
+      <SearchResult
+        key={item?._id}
+        name={item?.name as string}
+        id={item?._id as string}
+        imgSrc={item?.images?.[0] as string}
+        onClick={() =>
+          AddSubCatToMenuItem({
+            variables: {
+              restaurant: query?.restaurant as string,
+              id: item?._id,
+              cat: currentCat,
+            },
+          })
+        }
+        restaurant={query.restaurant as string}
+        category={query.category?.[0] as string}
+      />
+    );
+  });
+
+  const CategoryEditorComponent = menuBySubCategoryData?.MenuBySubCategory.map(
+    (res, i) => (
+      <div key={res?._id}>
+        <div className={styles.category_parent}>
+          <CategoryEditor
+            onChangeImage={uploadImage}
+            subCats={res?.subCategory}
+            onChange={(e) =>
+              setCategory((e.target as typeof e.target & { value: any }).value)
+            }
+            id={res?._id}
+            submited={itemSaved}
+            name={res?.collectionType}
+            image={ChosenImage ? ChosenImage : res?.image}
+            deleteCategory={deleteCategory}
+            submit={() =>
+              updateCategory({
+                variables: {
+                  image: res?.image,
+                  category,
+                  categoryId: res?._id,
+                },
+              })
+            }
+            addSubCategory={addSubCategory}
+            restaurant={query.restaurant as string}
+          />
+        </div>
+      </div>
+    )
+  );
+
+  const MenuEditoEomponent = menuItesmData?.MenuItemByCategory?.map((res) => {
+    if (res.__typename === "MenuItem")
+      return (
+        <MenuEditor
+          subCat={res.subCat}
+          key={res?._id}
+          restaurant={query.restaurant as string}
+          category={currentCat}
+          submit={saveMenuItem}
+          data={res}
+          deleteSubCatToMenuItem={() =>
+            deleteSubCatToMenuItem({
+              variables: {
+                cat: currentCat,
+                id: res._id,
+                restaurant: query.restaurant as string,
+              },
+            })
+          }
+          isSaved={documentSaved}
+          id={res?._id}></MenuEditor>
+      );
+  });
   return (
     <div className={styles.container}>
       <div className={styles.add_button_parent}>
@@ -85,6 +166,7 @@ export default function Category() {
             onChange={onSelectionChange}
             options={options}
             label="Choose one of the options"
+            loading={isPending}
           />
 
           {actionType === "create category" && (
@@ -105,30 +187,7 @@ export default function Category() {
                 subCat={query?.category}></MenuAdder>
             )}
           {actionType === "import item" && (
-            <div>
-              {allItems?.FetchAllMenuItems.length &&
-                allItems.FetchAllMenuItems.map((item) => {
-                  return (
-                    <SearchResult
-                      key={item?._id}
-                      name={item?.name as string}
-                      id={item?._id as string}
-                      imgSrc={item?.images?.[0] as string}
-                      onClick={() =>
-                        AddSubCatToMenuItem({
-                          variables: {
-                            restaurant: query?.restaurant as string,
-                            id: item?._id,
-                            cat: currentCat,
-                          },
-                        })
-                      }
-                      restaurant={query.restaurant as string}
-                      category={query.category?.[0] as string}
-                    />
-                  );
-                })}
-            </div>
+            <div>{allItems?.FetchAllMenuItems.length && MenuItems}</div>
           )}
           {errorOnSavingItem && (
             <ErrorCard>There was an error during creation</ErrorCard>
@@ -138,60 +197,8 @@ export default function Category() {
 
       <div className={styles.items_parent}>
         {menuBySubCategoryData?.MenuBySubCategory?.length
-          ? menuBySubCategoryData?.MenuBySubCategory.map((res, i) => (
-              <div key={res?._id}>
-                <div className={styles.category_parent}>
-                  <CategoryEditor
-                    onChangeImage={uploadImage}
-                    subCats={res?.subCategory}
-                    onChange={(e) =>
-                      setCategory(
-                        (e.target as typeof e.target & { value: any }).value
-                      )
-                    }
-                    id={res?._id}
-                    submited={itemSaved}
-                    name={res?.collectionType}
-                    image={ChosenImage ? ChosenImage : res?.image}
-                    deleteCategory={deleteCategory}
-                    submit={() =>
-                      updateCategory({
-                        variables: {
-                          image: res?.image,
-                          category,
-                          categoryId: res?._id,
-                        },
-                      })
-                    }
-                    addSubCategory={addSubCategory}
-                    restaurant={query.restaurant as string}
-                  />
-                </div>
-              </div>
-            ))
-          : menuItesmData?.MenuItemByCategory?.map((res) => {
-              if (res.__typename === "MenuItem")
-                return (
-                  <MenuEditor
-                    subCat={res.subCat}
-                    key={res?._id}
-                    restaurant={query.restaurant as string}
-                    category={currentCat}
-                    submit={saveMenuItem}
-                    data={res}
-                    deleteSubCatToMenuItem={() =>
-                      deleteSubCatToMenuItem({
-                        variables: {
-                          cat: currentCat,
-                          id: res._id,
-                          restaurant: query.restaurant as string,
-                        },
-                      })
-                    }
-                    isSaved={documentSaved}
-                    id={res?._id}></MenuEditor>
-                );
-            })}
+          ? CategoryEditorComponent
+          : MenuEditoEomponent}
       </div>
     </div>
   );
