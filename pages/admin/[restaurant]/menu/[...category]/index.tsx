@@ -32,6 +32,7 @@ export default function Category() {
   const [category, setCategory] = useState("");
   const [actionType, setActionType] = useState("create category");
   const [isPending, startTransition] = useTransition();
+  const [importedItems, setImportedItems] = useState([]);
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );
@@ -68,8 +69,11 @@ export default function Category() {
   function onSelectionChange(e: SelectChangeEvent) {
     setActionType(e.target.value);
   }
+  useEffect(() => {
+    setImportedItems([...menuBySubCategoryData?.MenuBySubCategory]);
+  }, [actionType, menuBySubCategoryData?.MenuBySubCategory]);
 
-  const MenuItems = allItems?.FetchAllMenuItems.map((item) => {
+  const MenuItems = importedItems.map((item) => {
     return (
       <SearchResult
         key={item?._id}
@@ -123,7 +127,7 @@ export default function Category() {
     )
   );
 
-  const MenuEditoEomponent = menuItesmData?.MenuItemByCategory?.map((res) => {
+  const MenuEditorComponent = menuItesmData?.MenuItemByCategory?.map((res) => {
     if (res.__typename === "MenuItem")
       return (
         <MenuEditor
@@ -185,7 +189,7 @@ export default function Category() {
                 category={query.category?.[0] as string}
                 subCat={query?.category}></MenuAdder>
             )}
-          {actionType === "import item" && (
+          {actionType === "import item" && allItems?.FetchAllMenuItems && (
             <div>{allItems?.FetchAllMenuItems.length && MenuItems}</div>
           )}
           {errorOnSavingItem && (
@@ -197,7 +201,7 @@ export default function Category() {
       <div className={styles.items_parent}>
         {menuBySubCategoryData?.MenuBySubCategory?.length
           ? CategoryEditorComponent
-          : MenuEditoEomponent}
+          : MenuEditorComponent}
       </div>
     </div>
   );
