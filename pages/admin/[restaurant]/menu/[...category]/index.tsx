@@ -68,10 +68,16 @@ export default function Category() {
 
   function onSelectionChange(e: SelectChangeEvent) {
     setActionType(e.target.value);
+
     startTransition(() => {
-      setImportedItems([...menuBySubCategoryData?.MenuBySubCategory]);
+      setImportedItems([...allItems?.FetchAllMenuItems]);
     });
   }
+  // useEffect(() => {
+  //   if (allItems?.FetchAllMenuItems?.length) {
+  //     setImportedItems([...allItems?.FetchAllMenuItems]);
+  //   }
+  // }, [actionType, allItems?.FetchAllMenuItems]);
 
   const MenuItems = importedItems.map((item) => {
     return (
@@ -189,8 +195,8 @@ export default function Category() {
                 category={query.category?.[0] as string}
                 subCat={query?.category}></MenuAdder>
             )}
-          {actionType === "import item" && allItems?.FetchAllMenuItems && (
-            <div>{allItems?.FetchAllMenuItems.length && MenuItems}</div>
+          {actionType === "import item" && importedItems.length && (
+            <div>{MenuItems}</div>
           )}
           {errorOnSavingItem && (
             <ErrorCard>There was an error during creation</ErrorCard>
