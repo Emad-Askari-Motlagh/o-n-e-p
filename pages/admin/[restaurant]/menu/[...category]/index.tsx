@@ -68,10 +68,10 @@ export default function Category() {
 
   function onSelectionChange(e: SelectChangeEvent) {
     setActionType(e.target.value);
+    startTransition(() => {
+      setImportedItems([...menuBySubCategoryData?.MenuBySubCategory]);
+    });
   }
-  useEffect(() => {
-    setImportedItems([...menuBySubCategoryData?.MenuBySubCategory]);
-  }, [actionType, menuBySubCategoryData?.MenuBySubCategory]);
 
   const MenuItems = importedItems.map((item) => {
     return (
