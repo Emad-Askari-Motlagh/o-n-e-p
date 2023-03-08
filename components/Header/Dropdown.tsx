@@ -7,11 +7,20 @@ import { IoIosArrowDropright } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
 import { RiContactsLine, RiDashboard2Fill } from "react-icons/ri";
 import { MdLogout } from "react-icons/md";
-import { useProvideAuth } from "@/hooks/Context.hook";
+import { useProvideAuth } from "hooks/Context.hook";
 import WebsiteName from "./WebsiteName";
 
-export default function DropdownMenu({ isVisible, setIsVisible, elementRef }) {
-  const { signOut } = useProvideAuth();
+interface DropdownMenuProps {
+  isVisible: boolean;
+  setIsVisible: (arg: boolean) => void;
+  elementRef: React.LegacyRef<HTMLDivElement>;
+}
+export default function DropdownMenu({
+  isVisible,
+  setIsVisible,
+  elementRef,
+}: DropdownMenuProps) {
+  const { signOut, user } = useProvideAuth();
   return (
     <div
       className={styles.dropdown}
@@ -19,8 +28,7 @@ export default function DropdownMenu({ isVisible, setIsVisible, elementRef }) {
         width: isVisible ? "350px" : "0px",
         borderWidth: isVisible ? "2px" : "0",
       }}
-      ref={isVisible ? elementRef : null}
-    >
+      ref={isVisible ? elementRef : null}>
       <IoIosArrowDropright
         className={styles.upArrow}
         size={32}
@@ -33,8 +41,7 @@ export default function DropdownMenu({ isVisible, setIsVisible, elementRef }) {
       <DropDownItem
         leftIcon={<RiDashboard2Fill color="white" />}
         rightIcon={null}
-        endPoint="/om"
-      >
+        endPoint="/om">
         <a rel="noopener" href={"/Dashboard"} className={styles.menu_item}>
           Dashboard
         </a>
@@ -42,38 +49,32 @@ export default function DropdownMenu({ isVisible, setIsVisible, elementRef }) {
       <DropDownItem
         leftIcon={<FcAbout color="white" />}
         rightIcon={null}
-        endPoint="/om"
-      >
+        endPoint="/om">
         <a rel="noopener" href={"/om"} className={styles.menu_item}>
           Om oss
         </a>
       </DropDownItem>
       <DropDownItem leftIcon={<BiBookAdd color="white" />} rightIcon={null}>
         <button
-          rel="noopener"
           style={{ borderWidth: 0, backgroundColor: "transparent" }}
           className={styles.menu_item}
-          onClick={signOut}
-        >
+          onClick={signOut}>
           Orders
         </button>
       </DropDownItem>
 
       <DropDownItem
         leftIcon={<RiContactsLine color="white" />}
-        rightIcon={null}
-      >
+        rightIcon={null}>
         <a rel="noopener" href={"/kontakt"} className={styles.menu_item}>
           Skriva till oss
         </a>
       </DropDownItem>
       <DropDownItem leftIcon={<MdLogout color="white" />} rightIcon={null}>
         <button
-          rel="noopener"
           style={{ borderWidth: 0, backgroundColor: "transparent" }}
           className={styles.menu_item}
-          onClick={signOut}
-        >
+          onClick={signOut}>
           Logout
         </button>
       </DropDownItem>

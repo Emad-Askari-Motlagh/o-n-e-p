@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  ClassAttributes,
+  HTMLAttributes,
+  useRef,
+  useState,
+} from "react";
 import styles from "./styles.module.scss";
 
 interface TooltipType {
@@ -8,6 +13,7 @@ interface TooltipType {
 const Tooltip = ({ text, children }: TooltipType) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const componentRef = useRef<HTMLAttributes<HTMLDivElement>>();
 
   return (
     <>
@@ -18,7 +24,9 @@ const Tooltip = ({ text, children }: TooltipType) => {
         },
         onMouseOut: () => setIsVisible(false),
       })}
-      {isVisible && <div className={styles.tooltip}>{text}</div>}
+      <div ref={componentRef} className={styles.tooltip}>
+        {text}
+      </div>
     </>
   );
 };

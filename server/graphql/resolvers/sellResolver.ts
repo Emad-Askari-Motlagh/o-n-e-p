@@ -22,7 +22,7 @@ const sellResolvers = {
           costumer: costumer_id,
         });
         const sell = await res.save();
-        console.log(sell);
+
         return sell;
       } catch (err) {
         console.log(err);

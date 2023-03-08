@@ -1,25 +1,28 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import {
-  CardElement,
-  useStripe,
-  useElements,
-  CardNumberElement,
-} from "@stripe/react-stripe-js";
+import React, { useEffect, useState } from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { motion } from "framer-motion";
 import style from "./stripe.module.scss";
 import { Alert } from "react-bootstrap";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import SucceedMessage from "../Succeed-Message";
-
-export default function Stripe({ sum, quantity, orders, pay }) {
+import { PayMutationFn } from "@/server/generated/graphql";
+type StripeProps = {
+  sum: number;
+  quantity: number;
+  orders: { _id: string }[];
+  pay: PayMutationFn;
+};
+export default function Stripe({ sum, quantity, orders, pay }: StripeProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     //Block native form submission.
     event.preventDefault();
 
@@ -41,20 +44,16 @@ export default function Stripe({ sum, quantity, orders, pay }) {
         console.log("payment id", id);
         if (id) {
           setSuccess(true);
-          console.log({
-            restaurant: router.query.name,
-            products: orders?.map((res) => res?._id),
-            price: sum,
-          });
+
           pay({
             variables: {
-              restaurant: router.query.name,
-              products: orders?.map((res) => res?._id),
+              restaurant: router.query.name as string,
+              products: orders?.map((res: { _id: string }) => res?._id),
               price: sum,
             },
           });
         }
-      } catch (err) {
+      } catch (err: any) {
         console.log("Error", err.message);
         setError(err.message);
       }
@@ -69,7 +68,6 @@ export default function Stripe({ sum, quantity, orders, pay }) {
             <label>{`Quantity:  ${quantity}`}</label>
             <span>{`Price:${sum}.00 kr`} </span>
           </div>
-
           <div style={{ marginBottom: "4%" }}>
             <motion.label
               className={style.card_label}
@@ -82,7 +80,6 @@ export default function Stripe({ sum, quantity, orders, pay }) {
               options={{
                 style: {
                   base: inputStyle,
-                  margin: "20px",
                 },
               }}
             />

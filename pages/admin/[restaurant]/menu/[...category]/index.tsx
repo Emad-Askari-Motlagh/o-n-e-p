@@ -191,7 +191,9 @@ export default function Category() {
                 category={query.category?.[0] as string}
                 subCat={query?.category}></MenuAdder>
             )}
-          {importedItems?.length && <div>{MenuItems}</div>}
+          {importedItems?.length && actionType === "import item" && (
+            <div>{MenuItems}</div>
+          )}
           {errorOnSavingItem && (
             <ErrorCard>There was an error during creation</ErrorCard>
           )}

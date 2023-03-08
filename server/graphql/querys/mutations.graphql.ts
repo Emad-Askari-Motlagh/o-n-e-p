@@ -314,3 +314,9 @@ export const ADD_EXTRA_ORDER = gql`
     AddExtraItem(description: $description, id: $id, orderItem: $orderItem)
   }
 `;
+
+export const DELETE_ADMIN_ORDER = gql`
+  mutation DeleteItemFromAdminList($itemId: String, $costumerId: String) {
+    DeleteItemFromAdminList(itemId: $itemId, costumerId: $costumerId)
+  }
+`;

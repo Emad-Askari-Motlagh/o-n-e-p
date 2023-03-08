@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
 import Button from "../Button";
 import Modal from "../Modal";
 import style from "./style.module.scss";
@@ -8,7 +7,18 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "components/Stripe";
 import Addresses from "screens/adressScreen";
+import ErrorCard from "../ErrorCard";
+import { PayMutationFn } from "@/server/generated/graphql";
 
+type PaymentProps = {
+  isModalOpen: boolean;
+  setIsModalOpen: (arg: boolean) => void;
+  orders: any;
+  address: [];
+  pay: PayMutationFn;
+  sum: number;
+  paymentError: boolean;
+};
 export default function Payment({
   isModalOpen,
   setIsModalOpen,
@@ -16,7 +26,8 @@ export default function Payment({
   address,
   pay,
   sum,
-}) {
+  paymentError,
+}: PaymentProps) {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(process.env.STRIPE_KEY)
   );
@@ -47,6 +58,9 @@ export default function Payment({
                 pay={pay}
               />
             </Elements>
+            {paymentError && (
+              <ErrorCard>OBS! Payment didn`t go throw</ErrorCard>
+            )}
           </div>
         </Modal>
       )}

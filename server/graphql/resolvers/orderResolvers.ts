@@ -417,6 +417,31 @@ const orderResolvers = {
         console.log(err);
       }
     },
+    async DeleteItemFromAdminList(
+      _: any,
+      {
+        itemId,
+        costumerId,
+      }: {
+        itemId: string;
+        costumerId: string;
+      }
+    ) {
+      const product = new Types.ObjectId(itemId);
+      const costumer = new Types.ObjectId(costumerId);
+
+      try {
+        const rr = await payedItemSchema.findOneAndRemove({
+          costumer,
+          _id: product,
+        });
+
+        return "Ok";
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("Error during deleting the order");
+      }
+    },
   },
 };
 export default orderResolvers;

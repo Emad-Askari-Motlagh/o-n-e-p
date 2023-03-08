@@ -15,11 +15,13 @@ import {
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import { useRouter } from "next/router";
 import Warning from "@/components/Warning";
+import ErrorCard from "@/components/ErrorCard";
 
 export default function CheckOut() {
   const { addOrder, removeOrder, orders, loading } = useOrders();
   const { data } = useQuery(COSTUMER_ADDRESS);
   const router = useRouter();
+  const [paymentError, setPaymentError] = useState(false);
   const [pay] = useMutation(PAY, {
     refetchQueries: [
       {
@@ -33,6 +35,15 @@ export default function CheckOut() {
         variables: { restaurant: router.query.name },
       },
     ],
+    onCompleted: () => {
+      router.reload();
+    },
+    onError: (err) => {
+      setPaymentError(true);
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
+    },
   });
   interface CurrentValue {
     orderQuantity?: number;
@@ -74,12 +85,13 @@ export default function CheckOut() {
                 sum={sum}
               />
             );
-          })}{" "}
+          })}
       </div>
       {orders && orders?.length && (
         <span
           className={styles.total_amount}>{`Total Amount : ${sum},00 kr`}</span>
       )}
+
       <Payment
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
@@ -87,6 +99,7 @@ export default function CheckOut() {
         address={data?.Address}
         pay={pay}
         sum={sum}
+        paymentError={paymentError}
       />
     </div>
   );

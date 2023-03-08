@@ -14,11 +14,15 @@ import {
 } from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
+import { useAuth, useProvideAuth } from "hooks/Context.hook";
 
 export default function Header(props) {
   const { data: userData, error: userError, loading: userLoading } = props.user;
   const { data: costumerData, costumerError, costumerLoading } = props.costumer;
-
+  const { user } = useProvideAuth();
+  const homeEndPoint = user.data?.CurrentUser
+    ? `/admin/${user.data.CurrentUser.restaurant.name}`
+    : "/restaurant";
   return (
     <Navbar {...props}>
       <div
@@ -67,7 +71,7 @@ export default function Header(props) {
         <NavItem
           header_label=""
           icon={
-            <Link href="/restaurant">
+            <Link href={homeEndPoint}>
               <div>
                 <CgHome className={styles.icons} />
               </div>

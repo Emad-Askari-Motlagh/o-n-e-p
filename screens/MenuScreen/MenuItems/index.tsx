@@ -150,7 +150,28 @@ export default function Items({
       }
     }
   }
-
+  const MenuItems = costumerExtraChoises.map((result, i) => (
+    <ChoisesCard
+      key={i}
+      setSelection={setCostumerExtraChoises}
+      selection={result}
+      costumerExtra={res.value}>
+      <span
+        style={{ color: "wheat" }}
+        className={styles.signs}
+        onClick={() => {
+          onAddQuantity(result);
+        }}>
+        +
+      </span>
+      <span
+        className={styles.signs}
+        style={{ color: "wheat" }}
+        onClick={() => onDeleteQuantity(result)}>
+        -
+      </span>
+    </ChoisesCard>
+  ));
   return (
     <div className={styles.container}>
       <div className={styles.items_container}>
@@ -214,29 +235,7 @@ export default function Items({
                       placeholder="Extra description"
                       onChange={(e) => setDescription(e.target.value)}></Input>
                   </form>
-                  {costumerExtraChoises?.length &&
-                    costumerExtraChoises.map((result, i) => (
-                      <ChoisesCard
-                        key={i}
-                        setSelection={setCostumerExtraChoises}
-                        selection={result}
-                        costumerExtra={res.value}>
-                        <span
-                          style={{ color: "wheat" }}
-                          className={styles.signs}
-                          onClick={() => {
-                            onAddQuantity(result);
-                          }}>
-                          +
-                        </span>
-                        <span
-                          className={styles.signs}
-                          style={{ color: "wheat" }}
-                          onClick={() => onDeleteQuantity(result)}>
-                          -
-                        </span>
-                      </ChoisesCard>
-                    ))}
+                  {costumerExtraChoises?.length && MenuItems}
                   {orders?.length &&
                     !!orders.find((r) => r.product._id === res._id) && (
                       <Button

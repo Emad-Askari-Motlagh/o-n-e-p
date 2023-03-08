@@ -19,6 +19,7 @@ import { MdOutlineExpandMore } from "react-icons/md";
 import AdminOrdersInfo from "@/components/AdminOrdersInfo";
 import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
+import { BiTrash } from "react-icons/bi";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -31,7 +32,8 @@ const AdminsOrders = () => {
     extra: { name: string; quantity: string }[];
     description: string;
   }>();
-  const { AdminOrders, adminOrdersError } = useOrders();
+  const { AdminOrders, adminOrdersError, DeleteItemFromAdminList } =
+    useOrders();
   const date = new Date();
 
   async function connect_to_socket1() {
@@ -72,7 +74,14 @@ const AdminsOrders = () => {
     setCurrentOrderInfo(fact);
     setInfoOpen(true);
   }
-
+  function onDeleteItem(item) {
+    DeleteItemFromAdminList({
+      variables: {
+        itemId: item._id,
+        costumerId: item.costumer._id,
+      },
+    });
+  }
   const orders = data?.length ? data : AdminOrders;
   if (!orders?.length) return <Warning label="Orders" message="Loading..." />;
   if (error || adminOrdersError)
@@ -106,6 +115,7 @@ const AdminsOrders = () => {
             <TableHeader>price</TableHeader>
             <TableHeader>Order Time</TableHeader>
             <TableHeader>View</TableHeader>
+            <TableHeader>View</TableHeader>
           </tr>
           {Array.isArray(orders) &&
             orders.map((fact, i) => {
@@ -134,6 +144,12 @@ const AdminsOrders = () => {
                     <MdOutlineExpandMore
                       style={{ cursor: "pointer" }}
                       onClick={() => onClick(fact?._id as string, fact)}
+                    />
+                  </TableData>
+                  <TableData style={{ tableLayout: "auto", width: "5%" }}>
+                    <BiTrash
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onDeleteItem(fact)}
                     />
                   </TableData>
                 </tr>

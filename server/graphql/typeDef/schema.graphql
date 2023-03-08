@@ -334,4 +334,5 @@ type Mutation {
     restaurant: String!
   ): MenuItem
   AddExtraItem(id: ID, orderItem: [ExtraItemInput], description: String): String
+  DeleteItemFromAdminList(itemId: String, costumerId: String): String
 }

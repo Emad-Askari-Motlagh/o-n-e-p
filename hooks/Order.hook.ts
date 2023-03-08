@@ -1,4 +1,7 @@
-import { ADD_EXTRA_ORDER } from "./../server/graphql/querys/mutations.graphql";
+import {
+  ADD_EXTRA_ORDER,
+  DELETE_ADMIN_ORDER,
+} from "./../server/graphql/querys/mutations.graphql";
 
 import {
   AddOrderMutationFn,
@@ -67,11 +70,6 @@ const useOrders = () => {
       ADD_EXTRA_ORDER,
       {
         refetchQueries: refetchTask,
-        onError: (er) => {
-          er.graphQLErrors.map((re) => {
-            console.log(re.extensions);
-          });
-        },
       }
     );
 
@@ -89,7 +87,10 @@ const useOrders = () => {
   >(GET_ORDERS_CONSTANTLY, {
     variables: { restaurant },
   });
-
+  const [DeleteItemFromAdminList] = useMutation(DELETE_ADMIN_ORDER, {
+    fetchPolicy: "network-only",
+    refetchQueries: refetchTask,
+  });
   return {
     orders: fetchedOrders?.Orders,
     loading,
@@ -103,6 +104,7 @@ const useOrders = () => {
     addExtraLoading,
     addExtraError,
     adminOrdersError,
+    DeleteItemFromAdminList,
   };
 };
 
