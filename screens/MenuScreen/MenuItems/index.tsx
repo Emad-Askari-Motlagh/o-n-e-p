@@ -155,7 +155,7 @@ export default function Items({
       key={i}
       setSelection={setCostumerExtraChoises}
       selection={result}
-      costumerExtra={res.value}>
+      costumerExtra={result}>
       <span
         style={{ color: "wheat" }}
         className={styles.signs}

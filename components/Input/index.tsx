@@ -20,6 +20,7 @@ type InputProps = {
   multiline?: boolean;
   maxRows?: number;
   minRows?: number;
+  value?: string | number;
 };
 function InputComponent({
   required = true,
@@ -36,9 +37,11 @@ function InputComponent({
   multiline,
   maxRows,
   minRows,
+  value,
 }: InputProps) {
   return (
     <TextField
+      value={value}
       helperText={`Please enter your ${placeholder}`}
       id="demo-helper-text-misaligned"
       label={name}

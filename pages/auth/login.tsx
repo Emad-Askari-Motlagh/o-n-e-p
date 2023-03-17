@@ -32,45 +32,51 @@ export default function Login() {
         redirect: false,
       });
     } catch (err) {
-      setError(err.message);
+      setError(signInError);
     }
   };
-  const { handleChange, handleSubmit, values, touched, errors, setErrors } =
-    useFormik({
-      initialValues: {
-        email: "",
-        password: "",
-      },
-      validationSchema: yup.object().shape({
-        email: yup
-          .string()
-          .email("Invalid email address")
-          .required("Please enter email"),
-        password: yup.string().required("Please enter password"),
-      }),
-      async onSubmit(values, { resetForm, setErrors }) {
-        try {
-          const token = await signIn({
-            email: values.email,
-            password: values.password,
-          });
-          if (token) {
-            setLoginSuccesed(true);
-            Router.push(`/admin/${user.data?.CurrentUser?.restaurant.name}`);
-          } else {
-            setError(signInError);
-          }
-        } catch (err) {
-          setError("Error on login");
+  const {
+    handleChange,
+    handleSubmit,
+    values,
+    touched,
+    errors,
+    setErrors,
+    handleBlur,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: yup.object().shape({
+      email: yup
+        .string()
+        .email("Invalid email address")
+        .required("Please enter email"),
+      password: yup.string().required("Please enter password"),
+    }),
 
-          console.log(err);
-        } finally {
+    async onSubmit(values, { resetForm, setErrors }) {
+      try {
+        const token = await signIn({
+          email: values.email,
+          password: values.password,
+        });
+        if (token) {
+          setLoginSuccesed(true);
+          Router.push(`/admin/${user.data?.CurrentUser?.restaurant.name}`);
+        } else {
           resetForm();
         }
-      },
+      } catch (err) {
+        setError("Error on login");
+        resetForm();
+        console.log(err);
+      }
+    },
 
-      enableReinitialize: true,
-    });
+    enableReinitialize: true,
+  });
 
   return (
     <motion.div
@@ -90,6 +96,7 @@ export default function Login() {
             type="text"
             onChange={handleChange}
             label="Email"
+            value={values.email}
           />
           {touched.email && errors.email ? (
             <Alert style={{ padding: 0 }} variant="danger" className="error">
@@ -104,6 +111,7 @@ export default function Login() {
             type="password"
             onChange={handleChange}
             label="Password"
+            value={values.password}
           />
           {touched.password && errors.password ? (
             <Alert style={{ padding: 0 }} variant="danger" className="error">
@@ -116,7 +124,7 @@ export default function Login() {
           Login
         </Button>
         {loginSuccesed && <LoginSucceed>Login Succeed</LoginSucceed>}
-        {error && (
+        {signInError && (
           <Alert variant="danger" className={styles.error_message}>
             {error}
           </Alert>
