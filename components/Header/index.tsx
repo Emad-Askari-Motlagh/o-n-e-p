@@ -14,12 +14,12 @@ import {
 } from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
-import { useAuth, useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 
 export default function Header(props) {
   const { data: userData, error: userError, loading: userLoading } = props.user;
   const { data: costumerData, costumerError, costumerLoading } = props.costumer;
-  const { user } = useProvideAuth();
+  const { user } = useUser();
   const homeEndPoint = user.data?.CurrentUser
     ? `/admin/${user.data.CurrentUser.restaurant.name}`
     : "/restaurant";

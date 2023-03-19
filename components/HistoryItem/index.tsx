@@ -20,8 +20,10 @@ export default function HistoryItem({ billInfo }: { billInfo: any }) {
         })}
       <div className={styles.price_parent}>
         <span>Transaction`s Time:</span>
+
         <span>{billInfo.date}</span>
       </div>
+
       <div className={styles.price_parent}>
         <span>Total Amount:</span>
         <span>{billInfo.price} kr</span>

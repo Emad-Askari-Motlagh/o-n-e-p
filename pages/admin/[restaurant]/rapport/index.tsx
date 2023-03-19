@@ -1,5 +1,5 @@
 import PrimaryLayout from "@/components/Primary-layout";
-import { useAuth, useProvideAuth } from "hooks/Context.hook";
+import { useAuth, useUser } from "hooks/Context.hook";
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
@@ -32,7 +32,7 @@ export default function Rapport() {
 
   const {
     user: { data: userData },
-  } = useProvideAuth();
+  } = useUser();
   const [getAnalistics, { data: rapportData }] = useMutation<
     GetRapportMutation,
     GetRapportMutationVariables
@@ -79,12 +79,12 @@ export default function Rapport() {
           <React_Calendar
             label="Begin Date"
             value={beginDate}
-            handleChange={(val) => seBeginDate(val)}
+            handleChange={(val: Date) => seBeginDate(val)}
           />
           <React_Calendar
             label="Finish Date"
             value={finishDate}
-            handleChange={(val) => seFinishDate(val)}
+            handleChange={(val: Date) => seFinishDate(val)}
           />
         </div>
 
@@ -94,7 +94,11 @@ export default function Rapport() {
               <div className={styles.date_description}>
                 <span>{`From: ${beginDate?.toLocaleString()}`}</span>
                 <br />
-                <span>{`Untill: ${finishDate?.toDateString()}`}</span>
+                <span>{`Untill: ${
+                  finishDate?.toLocaleString()
+                    ? finishDate?.toLocaleString()
+                    : finishDate.toDateString()
+                }`}</span>
               </div>
             )}
           </div>
@@ -107,7 +111,7 @@ export default function Rapport() {
                     <h3>{userData.CurrentUser.restaurant.name}</h3>
                     <div className={styles.dates}>
                       <span>From :{beginDate?.toLocaleString()}</span>
-                      <span>Untill: {finishDate?.toLocaleDateString()}</span>
+                      <span>Untill: {finishDate?.toLocaleString()}</span>
                     </div>
                   </div>
                 ) : null}

@@ -7,7 +7,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
 import withRedirect from "Hoc/withRedirect";
@@ -17,7 +17,7 @@ const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);
   const [refetch, setRefetch] = useState(true);
-  const { costumerData } = useProvideAuth();
+  const { costumerData } = useUser();
   const { query } = useRouter();
   const [isDeleted, setIsDeleted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);

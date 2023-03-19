@@ -9,7 +9,7 @@ import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
-import { useAuth, useProvideAuth } from "hooks/Context.hook";
+import { useAuth, useUser } from "hooks/Context.hook";
 import PrimaryLayout from "components/Primary-layout";
 import Button from "components/Button";
 import Input from "components/Input";
@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 export default function Login() {
   const [error, setError] = useState<string | null>();
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-  const { signIn, signOut, user, signInError } = useProvideAuth();
+  const { signIn, signOut, user, signInError } = useUser();
   const Router = useRouter();
   const onSuccess = async () => {
     try {
@@ -55,6 +55,7 @@ export default function Login() {
         .required("Please enter email"),
       password: yup.string().required("Please enter password"),
     }),
+    validateOnMount: true,
 
     async onSubmit(values, { resetForm, setErrors }) {
       try {

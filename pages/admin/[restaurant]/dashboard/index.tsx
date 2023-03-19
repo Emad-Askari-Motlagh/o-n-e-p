@@ -1,5 +1,5 @@
 import PrimaryLayout from "@/components/Primary-layout";
-import { useAuth, useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Chart from "components/Chart";
@@ -15,7 +15,7 @@ export default function Dashboard() {
   const router = useRouter();
   const {
     user: { data: userData },
-  } = useProvideAuth();
+  } = useUser();
 
   const [getAnalistics, { data: analisticsData }] = useMutation(GET_ANALISTICS);
   useEffect(() => {

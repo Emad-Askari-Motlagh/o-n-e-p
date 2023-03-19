@@ -7,7 +7,7 @@ import { IoIosArrowDropright } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
 import { RiContactsLine, RiDashboard2Fill } from "react-icons/ri";
 import { MdLogout } from "react-icons/md";
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import WebsiteName from "./WebsiteName";
 
 interface DropdownMenuProps {
@@ -20,7 +20,7 @@ export default function DropdownMenu({
   setIsVisible,
   elementRef,
 }: DropdownMenuProps) {
-  const { signOut, user } = useProvideAuth();
+  const { signOut, user } = useUser();
   return (
     <div
       className={styles.dropdown}

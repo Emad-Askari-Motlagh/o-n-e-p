@@ -15,7 +15,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
 import Modall from "@/components/Modal";
 import ErrorCard from "@/components/ErrorCard";
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
 import AddCategory from "@/components/AddCategory";
@@ -27,7 +27,7 @@ import { SelectChangeEvent } from "@mui/material";
 
 export default function Category() {
   const { query, push, reload } = useRouter();
-  const { user } = useProvideAuth();
+  const { user } = useUser();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [actionType, setActionType] = useState("create category");

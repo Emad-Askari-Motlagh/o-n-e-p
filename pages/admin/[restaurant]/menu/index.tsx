@@ -8,7 +8,7 @@ import PrimaryLayout from "components/Primary-layout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
-import { useAuth, useProvideAuth } from "hooks/Context.hook";
+import { useAuth, useUser } from "hooks/Context.hook";
 import {
   ADD_MENU_CATEGORY,
   ADD_MENU_ITEM,
@@ -25,7 +25,7 @@ import Modall from "@/components/Modal";
 import AddCategory from "@/components/AddCategory";
 
 export default function MenuItems() {
-  const { user } = useProvideAuth();
+  const { user } = useUser();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [showModal, setShowModal] = useState(false);

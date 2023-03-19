@@ -21,7 +21,7 @@ export default function CostumerRegister({ onSubmit }) {
       name: yup.string().required("Please choose a name"),
       table: yup.number().required("You need a table number to continue!"),
     }),
-
+    validateOnMount: true,
     onSubmit(values, { setErrors }) {
       onSubmit({
         name: values.name,

@@ -7,7 +7,7 @@ import {
 } from "@/server/graphql/querys/mutations.graphql";
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
@@ -17,7 +17,7 @@ export default function Profile() {
   //     name<T>:string
   // };
 
-  const { user } = useProvideAuth();
+  const { user } = useUser();
   const userInfo = user.data?.CurrentUser;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
 

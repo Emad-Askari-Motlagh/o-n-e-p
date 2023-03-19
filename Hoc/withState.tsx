@@ -1,9 +1,9 @@
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import React, { ReactComponentElement } from "react";
 
 const withState = (Component: React.ReactNode) => {
   return (props) => {
-    const { signOut, user, costumerData, signOutCostumer } = useProvideAuth();
+    const { signOut, user, costumerData, signOutCostumer } = useUser();
     return (
       <Component
         {...props}

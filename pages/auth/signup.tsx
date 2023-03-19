@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
 import Header_animations from "components/framer_helpers/Header_animations";
-import { useProvideAuth } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import Input from "components/Input";
 import PrimaryLayout from "components/Primary-layout";
 import Button from "components/Button";
@@ -18,7 +18,7 @@ import LoginSucceed from "components/Succeed-Message";
 
 export default function Signup() {
   const [error, setError] = useState(null);
-  const { signUp, signUpWithGoogle } = useProvideAuth();
+  const { signUp, signUpWithGoogle } = useUser();
   const [loginSuccesed, setLoginSuccesed] = useState(false);
 
   const { handleChange, handleSubmit, values, touched, errors } = useFormik({

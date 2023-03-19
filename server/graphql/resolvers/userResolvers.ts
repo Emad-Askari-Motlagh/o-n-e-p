@@ -60,7 +60,7 @@ const userResolvers = {
           name: username,
         });
         //Create the token
-        let token = await storeJwt({
+        let token = storeJwt({
           user: user.email,
           id: user._id,
         });

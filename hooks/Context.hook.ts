@@ -39,11 +39,12 @@ interface User {
   name: string;
   restaurant: string;
 }
-export const useAuth = () => {
+
+const useAuth = () => {
   return useContext(authContext);
 };
 
-export function useProvideAuth() {
+export function useUser() {
   const [authToken, setAuthToken] = useState<string | undefined>();
   const [user, setUser] = useState<CurrentUserQuery>();
   const authHdaders = getAuthHeaders();
@@ -184,3 +185,4 @@ export function useProvideAuth() {
     signUpWithGoogle,
   };
 }
+export default useAuth;

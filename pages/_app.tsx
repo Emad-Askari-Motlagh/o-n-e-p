@@ -23,10 +23,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppPropsWithLayout) {
+function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
   const [loading, setLoading] = React.useState(false);
   const client = useApollo({});
   const Layout = Component.Layout || Noop;
