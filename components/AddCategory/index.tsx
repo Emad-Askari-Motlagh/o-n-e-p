@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "../Button";
 import FileInput from "../Image-Input";
+import Info from "../Info";
 import Input from "../Input";
 import SucceedMessage from "../Succeed-Message";
 import styles from "./styles.module.scss";
@@ -33,6 +34,9 @@ export default function AddCategory({
 
   return (
     <div className={styles.container}>
+      <Info>
+        You can create item, import menu item or create category in this section
+      </Info>
       <Image
         className={styles.image}
         alt="ok"

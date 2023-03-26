@@ -13,7 +13,6 @@ import styles from "./styles.module.scss";
 import FileInput from "../Image-Input";
 import useUpload from "hooks/upload.hook";
 import Image from "next/image";
-import SucceedMessage from "../Succeed-Message";
 import { AddMenuItemMutationFn } from "@/server/generated/graphql";
 
 interface InputsTypes {

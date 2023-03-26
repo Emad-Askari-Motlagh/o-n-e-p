@@ -65,7 +65,7 @@ export default function MenuItems() {
 
   return (
     <div className={styles.container}>
-      <h2>Restaurant Menu</h2>
+      <h1>Restaurant Menu</h1>
       <div className={styles.add_button_parent}>
         <IoMdAddCircle
           className={styles.add_button}

@@ -1,0 +1,38 @@
+@import "/styles/fonts";
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .items_Parent {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 2% 0;
+  }
+  .total_amount {
+    color: wheat;
+  }
+  .error_Parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    border-radius: 80px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    span {
+      text-align: center;
+      margin: auto;
+      font-family: "Archivo Black", sans-serif;
+
+      padding: 20px;
+    }
+  }
+}
