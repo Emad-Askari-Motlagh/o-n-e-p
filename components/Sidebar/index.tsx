@@ -31,7 +31,7 @@ function SideBar({
   const Router = useRouter();
   async function SignOut() {
     await signOut();
-    Router.reload();
+    Router.push("/");
   }
 
   const fetchedUser = user;
@@ -105,7 +105,7 @@ function SideBar({
           endPoint="/om"
           itemsLabel="Om"></DropdownItem>
         {(user || costumerData) && (
-          <Button2 onClick={SignOut}>
+          <Button2 type="button" onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
           </Button2>
         )}

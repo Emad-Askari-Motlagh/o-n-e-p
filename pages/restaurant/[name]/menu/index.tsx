@@ -12,6 +12,7 @@ import {
   MenuByCategoryQuery,
   MenuByCategoryQueryVariables,
 } from "server/generated/graphql";
+import Header_animations from "@/components/framer_helpers/Header_animations";
 
 export default function Menu() {
   const Router = useRouter();
@@ -28,12 +29,7 @@ export default function Menu() {
         <ErrorCard>Couldn`t find any item</ErrorCard>
       ) : (
         <>
-          <motion.label
-            className={styles.label}
-            initial={{ opacity: 0, y: -200 }}
-            animate={{ opacity: 1, y: 0 }}>
-            {Router.query?.name}
-          </motion.label>
+          <Header_animations text="Menu"></Header_animations>
           <div className={styles.items_parent}>
             {(data?.MenuByCategory
               ? data?.MenuByCategory

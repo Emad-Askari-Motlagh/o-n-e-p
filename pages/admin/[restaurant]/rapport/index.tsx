@@ -1,21 +1,13 @@
 import PrimaryLayout from "@/components/Primary-layout";
-import { useAuth, useUser } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
-import { renderToString, renderToStaticMarkup } from "react-dom/server";
-import Chart from "components/Chart";
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  GET_ANALISTICS,
-  GET_RAPPORT,
-} from "@/server/graphql/querys/mutations.graphql";
+import { GET_RAPPORT } from "@/server/graphql/querys/mutations.graphql";
 import SelectInput from "@/components/SelectInput";
 import React_Calendar from "components/Calendar";
 import jsPDF from "jspdf";
 import Button from "@/components/Button";
-import TableHeader from "@/components/Table/TableHeader";
-import TableData from "@/components/Table/TableData";
-import { TableBody } from "@mui/material";
 import {
   GetRapportMutation,
   GetRapportMutationVariables,
@@ -26,8 +18,6 @@ export default function Rapport() {
   const [doc, setDoc] = useState<string>();
   const [beginDate, seBeginDate] = useState(new Date());
   const [finishDate, seFinishDate] = useState(new Date());
-  const reff = useRef();
-  const htmlRef = useRef<HTMLElement>();
   const embedRef = useRef();
 
   const {
