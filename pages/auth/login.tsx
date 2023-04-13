@@ -22,6 +22,7 @@ export default function Login() {
   const [loginSuccesed, setLoginSuccesed] = useState(false);
   const { signIn, signOut, user, signInError } = useUser();
   const Router = useRouter();
+
   const onSuccess = async () => {
     try {
       await signInWithGoogle("google", {
@@ -62,7 +63,9 @@ export default function Login() {
         });
         if (token) {
           setLoginSuccesed(true);
-          Router.push(`/admin/${user.data?.CurrentUser?.restaurant.name}`);
+          setTimeout(() => {
+            Router.push(`/admin`);
+          }, 1000);
         } else {
           resetForm();
         }
