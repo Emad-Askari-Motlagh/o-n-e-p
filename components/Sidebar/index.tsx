@@ -102,8 +102,8 @@ function SideBar({
         <DropdownItem
           leftIcon={<BiBookAdd className={styles.nav_item_icons} />}
           rightIcon={null}
-          endPoint="/om"
-          itemsLabel="Om"></DropdownItem>
+          endPoint="/about"
+          itemsLabel="About"></DropdownItem>
         {(user || costumerData) && (
           <Button2 type="button" onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
