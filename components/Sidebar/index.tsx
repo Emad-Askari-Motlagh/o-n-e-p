@@ -3,7 +3,13 @@ import styles from "./sidebar.module.scss";
 import { BiBasket, BiBookAdd, BiCode } from "react-icons/bi";
 import { IoIosArrowDropright, IoLogoBitcoin } from "react-icons/io";
 import { FcAbout } from "react-icons/fc";
-import { RiContactsLine, RiDashboard2Fill, RiUser2Fill } from "react-icons/ri";
+import {
+  RiContactsLine,
+  RiCustomerServiceLine,
+  RiDashboard2Fill,
+  RiReservedFill,
+  RiUser2Fill,
+} from "react-icons/ri";
 import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
@@ -75,6 +81,11 @@ function SideBar({
               rightIcon={null}
               endPoint={`/admin/${fetchedUser?.restaurant.name}/menu`}
               itemsLabel="Menu"></DropdownItem>
+            <DropdownItem
+              leftIcon={<RiReservedFill className={styles.nav_item_icons} />}
+              rightIcon={null}
+              endPoint={`/admin/${fetchedUser?.restaurant.name}/reservations`}
+              itemsLabel="Reservations"></DropdownItem>
             <DropdownItem
               leftIcon={<GoSettings className={styles.nav_item_icons} />}
               rightIcon={null}

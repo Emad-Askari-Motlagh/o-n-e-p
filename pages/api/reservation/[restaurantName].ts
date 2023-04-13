@@ -30,7 +30,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const oldReservation = await Reservation.find({
       restaurant: restaurantName,
-      costumer: id,
     }).populate("costumer");
 
     if (oldReservation.length) {

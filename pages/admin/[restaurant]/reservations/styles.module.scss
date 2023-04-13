@@ -1,0 +1,155 @@
+@import "styles/fonts.scss";
+@import "styles/breakpoints.scss";
+
+//Variables//
+$ITEM_BORDERS: 40px;
+$ITEMS_WIDTH: 40%;
+$ITEMS_HEIGHT: 400px;
+$BC_COLOR: #242424;
+//mixings//
+
+.container {
+  width: 100%;
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .table_container {
+    border: 2px solid rgba(0, 0, 0, 0.206);
+    margin-top: 1em;
+    border-radius: 10px;
+    h3 {
+      font-size: 22px;
+      padding-left: 1em;
+      text-shadow: 1px 1px 1px black;
+      color: #ffffff;
+    }
+    table {
+      color: #ffffff;
+      display: table;
+      font-size: 12px;
+      border-bottom: 1px solid gray;
+      width: 100%;
+      justify-content: space-evenly;
+      align-items: center;
+      tr {
+        box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.43);
+      }
+      td,
+      th {
+        width: 25%;
+        border-bottom: 1px solid rgba(240, 128, 128, 0.35);
+        padding-left: 1em;
+      }
+      .date {
+        opacity: 0.6;
+      }
+      & > * {
+        width: 300px;
+      }
+      .icon {
+        color: tomato;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
+    }
+  }
+  .calandar_container {
+    max-width: 90%;
+
+    color: rgb(213, 189, 189);
+
+    font-family: "playfair" sans-serif;
+    margin: 40px auto;
+    height: max-content;
+    border-radius: 20px;
+    padding: 10px;
+
+    margin-bottom: 20%;
+    box-shadow: rgba(41, 38, 38, 0.495) 4px 4px 12px, rgba(19, 18, 18, 0.417) -4px -4px 12px inset;
+    border-radius: 10px 140px;
+
+    background-color: transparent;
+
+    background-size: 10px 10px;
+    display: block;
+    position: relative;
+
+    padding: 70px 60px;
+
+    font-size: 17px;
+    line-height: 28px;
+
+    transition: all 0.13s ease-in;
+    @include md {
+      width: 95%;
+      padding: 30px 20px;
+    }
+  }
+  .first_row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1em;
+  }
+  h2 {
+    font-size: 23px;
+    margin: auto;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(to bottom, #466b913c 0%, #242424 100%);
+    border-bottom: 4px solid rgba(93, 47, 47, 0.2);
+    border-radius: 10px;
+    padding-bottom: 100px;
+    padding-top: 1em;
+    position: relative;
+    color: #fff;
+    font: 900 30px Montserrat;
+    text-shadow: 0 10px 25px rgba(0, 0, 0);
+  }
+
+  label {
+    color: "white";
+    opacity: "0.5";
+    font-size: 12px;
+  }
+
+  .calander {
+    margin: auto;
+    margin-top: 4%;
+    border-radius: 10px;
+  }
+  input,
+  textarea {
+    width: 100%;
+
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+    transition: background-color 0.2s ease-in;
+
+    border-width: 0;
+    font-size: 16px;
+    color: "white";
+    opacity: "0.5";
+
+    &:focus {
+      outline: none;
+
+      &::placeholder {
+        color: whitesmoke;
+        font-size: 14px;
+        caret-color: red;
+      }
+    }
+    &::placeholder {
+      font-size: 14px;
+      color: black;
+      opacity: 0.5;
+    }
+  }
+}

@@ -2,7 +2,13 @@ import React from "react";
 import Label from "../Label";
 import styles from "./style.module.scss";
 
-export default function Warning({ label, message }) {
+export default function Warning({
+  label,
+  message,
+}: {
+  label?: string;
+  message?: string;
+}) {
   return (
     <div className={styles.container}>
       <Label label_name={label} />

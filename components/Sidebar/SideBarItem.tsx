@@ -20,6 +20,7 @@ export default function SideBarItem({
   const { asPath } = useRouter();
   const pathArray = decodeURI(asPath).split("/");
   const endpointArray = decodeURI(endPoint).split("/");
+
   useEffect(() => {
     pathArray[pathArray.length - 1].includes(
       endpointArray[endpointArray.length - 1]

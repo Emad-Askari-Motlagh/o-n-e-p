@@ -99,6 +99,7 @@ export default function Signup() {
             </Alert>
           ) : null}
         </div>
+
         <div className={styles.input_container}>
           <Input
             name="password"
