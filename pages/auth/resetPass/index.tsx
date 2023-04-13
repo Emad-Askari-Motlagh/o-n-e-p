@@ -1,24 +1,11 @@
 import Button from "components/Button";
 import Input from "components/Input";
 import PrimaryLayout from "components/Primary-layout";
-import e from "express";
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  EventHandler,
-  FormEvent,
-  FormEventHandler,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+
+import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import styles from "./style.module.scss";
 import { FiKey } from "react-icons/fi";
 import { useRouter } from "next/router";
-import { useProvideAuth } from "hooks/Context.hook";
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { ApolloError, useMutation } from "@apollo/client";
@@ -32,7 +19,6 @@ import {
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from "@/server/generated/graphql";
-import JWT, { JwtPayload } from "jsonwebtoken";
 import Error from "components/ErrorCard";
 
 export default function ResetPass() {
@@ -91,7 +77,7 @@ export default function ResetPass() {
 
         const pass = formElements.password.value;
         updatePassword({
-          variables: { token, newPass: pass, userId: uId },
+          variables: { token, newPass: pass, userId: uId as string },
           onError: (err: ApolloError) => {
             setError(err.message);
           },
@@ -127,16 +113,18 @@ export default function ResetPass() {
         <FiKey className={styles.icon} />
       </div>
 
-      <h2>Forgot your password!</h2>
+      <h2>{`${token ? "Reset password" : "Forgot your password!"}`}</h2>
       <h3>
-        Don`t worry! Enter your email address and we send you a reset link
+        {uId
+          ? "Enter your new password"
+          : "Don`t worry! Enter your email address and we send you a reset link"}
       </h3>
 
       <form ref={formRef} onSubmit={formSubmit}>
         {token ? (
           <Input
             name="password"
-            placeholder="Enter your new password"
+            placeholder="new password"
             type="password"
             width={"100%"}
             onChange={onChange}
@@ -153,7 +141,9 @@ export default function ResetPass() {
         {error && <Error>{error}</Error>}
         {WentThrough && <Error>{WentThrough}</Error>}
 
-        <Button type="submit">Send the reset password link</Button>
+        <Button type="submit">{`${
+          token ? "Change password" : "Send reset password link"
+        }`}</Button>
       </form>
     </div>
   );

@@ -229,8 +229,8 @@ const userResolvers = {
         if (!doc) {
           return null;
         }
-        console.log(doc);
-        const token = JWT.sign({ email }, "MY_SECRET");
+
+        const token = JWT.sign({ email, id: doc._id }, "MY_SECRET");
 
         const sender = "emad.askari@gmail.com";
         //  Process a POST request
@@ -242,6 +242,7 @@ const userResolvers = {
           dynamicTemplateData: {
             id: doc._id,
             token,
+            user: doc.email,
           },
         };
 

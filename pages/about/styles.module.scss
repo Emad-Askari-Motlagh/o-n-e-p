@@ -1,0 +1,11 @@
+.about_container {
+    color: whitesmoke;
+    padding: 2rem;
+    min-height: 100vmin;
+    .__header {
+        text-align: center;
+    }
+    &.__paragraph {
+        text-align: justify;
+    }
+}
