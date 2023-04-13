@@ -75,7 +75,6 @@ export default function Signup() {
             value={values.email}
             onChange={handleChange}
             width={"80%"}
-            username="Email"
             label={"Email"}
           />
           {touched.email && errors.email ? (
@@ -134,7 +133,7 @@ export default function Signup() {
           Submit
         </Button>
         {loginSuccesed && (
-          <LoginSucceed value="Thanks, You are registered now" />
+          <LoginSucceed>Thanks, You are registered now</LoginSucceed>
         )}
       </form>
 
