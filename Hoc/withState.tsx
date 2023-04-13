@@ -1,8 +1,8 @@
 import { useUser } from "hooks/Context.hook";
 import React, { ReactComponentElement } from "react";
 
-const withState = (Component: React.ReactNode) => {
-  return (props) => {
+function withState<P>(Component: React.ComponentType<P>) {
+  const ComponentWithState = (props: P & JSX.IntrinsicAttributes) => {
     const { signOut, user, costumerData, signOutCostumer } = useUser();
     return (
       <Component
@@ -15,5 +15,6 @@ const withState = (Component: React.ReactNode) => {
       />
     );
   };
-};
+  return ComponentWithState;
+}
 export default withState;

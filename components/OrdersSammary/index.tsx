@@ -6,7 +6,6 @@ import useOrders from "hooks/Order.hook";
 import SummaryItem from "components/SummaryItem";
 import { useRouter } from "next/router";
 import LinkButton from "components/LinkButton";
-
 export default function Summary() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,10 +45,10 @@ export default function Summary() {
                 price={res?.product.price}
               />
             ))}{" "}
-          <div className={style.button_parent}>
-            <LinkButton
-              href={`/restaurant/${router.query.name}/checkout/2345`}
-              onClick={() => setIsModalOpen(false)}>
+          <div
+            className={style.button_parent}
+            onClick={() => setIsModalOpen(false)}>
+            <LinkButton href={`/restaurant/${router.query.name}/checkout/2345`}>
               Checkout
             </LinkButton>
           </div>

@@ -7,7 +7,7 @@ export default function about({}: Props) {
   return (
     <div style={{ color: "whitesmoke" }}>
       <h1 style={{ textAlign: "center" }}>About</h1>
-      <div style={{ width: "8;p0%", margin: "auto" }}>
+      <div style={{ width: "80%", margin: "auto" }}>
         Welcome to our React-based food ordering app! We are passionate about
         food and technology, and we have combined these two passions to create a
         user-friendly platform that allows you to order your favorite meals with

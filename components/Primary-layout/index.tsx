@@ -53,7 +53,9 @@ function PrimaryLayout({
           isCurrent={isCurrent}
           isVisible={isVisible}
           restaurant={
-            user ? user.data?.CurrentUser?.restaurant.name : router.query?.name
+            (user
+              ? user.data?.CurrentUser?.restaurant.name
+              : router.query?.name) as string
           }
           setIsVisible={setIsVisible}
           elementRef={ref}
@@ -70,7 +72,7 @@ function PrimaryLayout({
         </div>
         {children}
         {costumerData?.data && router.query.name && (
-          <Sammary costumerData={costumerData.data} />
+          <Sammary costumerData={costumerData.data.Costumer} />
         )}
       </main>
 

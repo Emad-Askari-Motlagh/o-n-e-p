@@ -9,16 +9,21 @@ import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
-import Button from "../Button";
 import Button2 from "../Button2";
+import { CostumerQuery, CostumerQueryResult } from "@/server/generated/graphql";
 
 interface SidebarProps {
   signOut: () => void;
   isCurrent?: boolean;
   restaurant?: string;
   isAdmin?: boolean;
-  costumerData: any;
-  user: { _id: number; restaurant: { name: string } };
+  costumerData: CostumerQuery;
+  user: {
+    _id: string;
+    restaurant?: { name: string };
+    email: string;
+    name: string;
+  };
 }
 function SideBar({
   signOut,
@@ -104,7 +109,7 @@ function SideBar({
           rightIcon={null}
           endPoint="/about"
           itemsLabel="About"></DropdownItem>
-        {(user || costumerData) && (
+        {(user || costumerData?.Costumer) && (
           <Button2 type="button" onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
           </Button2>
