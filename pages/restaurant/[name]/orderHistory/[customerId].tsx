@@ -38,7 +38,7 @@ const AdminsOrders = () => {
     PayedOrdersQuery,
     PayedOrdersQueryVariables
   >(GET_PAYED_ORDERS, {
-    variables: { restaurant: "Göteburgare" },
+    variables: { restaurant: router.query?.name as string },
   });
   const [getInfo, { data: billInfoData }] = useMutation<
     GetBillInfoMutation,
