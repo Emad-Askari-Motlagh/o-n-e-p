@@ -6,7 +6,7 @@ type Props = {};
 export default function about({}: Props) {
   return (
     <div className={styles.about_container}>
-      <h1 className={styles.__header}>About</h1>
+      <h1 className={styles.__header}>About Beställät App</h1>
       <div className={styles.__paragraph}>
         Welcome to our React-based food ordering app! We are passionate about
         food and technology, and we have combined these two passions to create a

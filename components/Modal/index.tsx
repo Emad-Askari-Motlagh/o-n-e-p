@@ -36,7 +36,6 @@ export default function Modall(
           </Modal.Header>
           <Modal.Body> {children}</Modal.Body>
           <Modal.Footer>
-            {" "}
             <AiOutlineCloseCircle
               size={32}
               className={styles.close_icon}

@@ -1,6 +1,5 @@
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "components/Primary-layout";
-import RestaurantSubItem from "components/RestaurantSubItem";
 import {
   GET_MENU_BY_SUB_CATEGORY,
   GET_MENU_CATREGORY,

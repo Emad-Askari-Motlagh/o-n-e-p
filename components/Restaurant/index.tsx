@@ -1,13 +1,20 @@
 import Link from "next/link";
 import React, { Suspense, useEffect } from "react";
-import Menu from "../Menu";
 import styles from "./styles.module.scss";
 import Image from "next/image";
-import BlurImage from "../BlurImage";
 import { motion } from "framer-motion";
 import { IoNavigateCircle } from "react-icons/io5";
 import LinkButton from "../LinkButton";
 
+interface RetaurantProps {
+  name?: string;
+  endPoint: string;
+  children?: JSX.Element;
+  images?: string | string[];
+  description?: string;
+  location?: number[];
+  buttonLabel?: string;
+}
 export default function Restaurant({
   name,
   endPoint,
@@ -16,7 +23,7 @@ export default function Restaurant({
   description,
   location,
   buttonLabel,
-}) {
+}: RetaurantProps) {
   return (
     <div className={styles.container}>
       <div className={styles.restaurant_card_wrapper}>
@@ -50,7 +57,7 @@ export default function Restaurant({
               </a>
             </div>
 
-            <LinkButton width="80%" scroll={false} href={endPoint}>
+            <LinkButton width="80%" href={endPoint}>
               {buttonLabel}
             </LinkButton>
           </div>

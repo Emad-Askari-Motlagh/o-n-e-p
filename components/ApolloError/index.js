@@ -4,7 +4,7 @@ export default function ApolloError({ error }) {
   return (
     <div>
       <pre>
-        Bad:{" "}
+        Bad:
         {error?.graphQLErrors?.map(({ message, extensions }, i) => (
           <Alert variant="warning" key={i}>
             {extensions.originalError.message}

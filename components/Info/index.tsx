@@ -1,12 +1,10 @@
 import React from "react";
 import { Alert, Snackbar } from "@mui/material";
-
+import styles from "./styles.module.scss";
 export default function Info({ children }: { children: string }) {
   return (
-    <div>
-      <Alert style={{ margin: "1rem auto" }} severity="info">
-        {children}
-      </Alert>
+    <div className={styles["info-wrapper"]}>
+      <Alert severity="info">{children}</Alert>
     </div>
   );
 }

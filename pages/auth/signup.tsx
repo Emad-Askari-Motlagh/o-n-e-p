@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import styles from "./auth.module.scss";
-import { IoIosArrowRoundBack } from "react-icons/io";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
-import { ImFacebook2 } from "react-icons/im";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";

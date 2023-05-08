@@ -11,7 +11,6 @@ import { useUser } from "hooks/Context.hook";
 import PrimaryLayout from "components/Primary-layout";
 import Button from "components/Button";
 import Input from "components/Input";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
 import LoginSucceed from "components/Succeed-Message";
 import { signIn as signInWithGoogle } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -91,8 +90,8 @@ export default function Login() {
         style={{ color: "white", fontSize: "12px" }}
       />
       <Info>
-        For testing one of restaurant feautures, you can use
-        email:emad.askari@gmail.com & password:emadi
+        For testing one of restaurant`s feautures, you can use email:
+        emad.askari@gmail.com & password: emadi
       </Info>
       <form onSubmit={handleSubmit} onFocus={() => setError(null)}>
         <div className={styles.input_container} onFocus={() => setError(null)}>

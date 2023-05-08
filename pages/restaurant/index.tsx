@@ -17,7 +17,6 @@ import {
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
 import { NextApiRequest } from "next";
-import axios from "axios";
 import { useRouter } from "next/router";
 
 interface HomeProps {

@@ -4,6 +4,7 @@ import { GrFacebook } from "react-icons/gr";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { ImMail4 } from "react-icons/im";
 import Link from "next/link";
+
 export default function PageTwo() {
   return (
     <footer className={styles.pagetwocontainer}>
