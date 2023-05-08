@@ -12,6 +12,7 @@ import { google } from "googleapis";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { signIn } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth";
+import { GraphQLError } from "graphql";
 
 const userResolvers = {
   Query: {
@@ -109,7 +110,14 @@ const userResolvers = {
 
         //if the passwords do not match
         if (!doesPasswordMatch) {
-          throw new ApolloError("Password didnt match");
+          throw new GraphQLError(
+            "You are not authorized to perform this action.",
+            {
+              extensions: {
+                code: "FORBIDDEN",
+              },
+            }
+          );
         }
 
         const token = await storeJwt({
