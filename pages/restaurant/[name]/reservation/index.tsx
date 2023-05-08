@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  EventHandler,
+  ChangeEvent,
+  MouseEventHandler,
+} from "react";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/Primary-layout";
 import DatePicker from "@/components/DatePicker";
@@ -10,8 +17,6 @@ import { useRouter } from "next/router";
 import { useUser } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
-import withRedirect from "Hoc/withRedirect";
-import withState from "Hoc/withState";
 
 const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -30,7 +35,7 @@ const Reservation = () => {
       setOldRes(res.data);
     }
   }, [refetch, query, url]);
-  async function reserve(e) {
+  async function reserve(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
 
     const res = await axios.post(url, {
@@ -45,7 +50,7 @@ const Reservation = () => {
       }, 1500);
     }
   }
-  async function deleteTheBook(id) {
+  async function deleteTheBook(id: string) {
     const res = await axios.delete(url, { params: { bookId: id } });
     if (res.status === 200) {
       setIsDeleted(true);

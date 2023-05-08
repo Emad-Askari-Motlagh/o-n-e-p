@@ -23,7 +23,7 @@ const Reservation = () => {
       const res = await axios.get(url);
       setOldRes(res.data);
     }
-  }, [refetch, url]);
+  }, [refetch, url, user.data?.CurrentUser]);
 
   return (
     <div className={styles.container}>
