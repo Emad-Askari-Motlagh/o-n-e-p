@@ -30,8 +30,8 @@ const pubSub = createPubSub();
 
 const server = createServer({
   cors: {
-    credentials: false,
-    origin: ["https://next-test-socket.herokuapp.com"], // your frontend url.
+    credentials: true,
+    origin: [process.env.SERVER_LINK], // your frontend url.
   },
 
   plugins: [],
