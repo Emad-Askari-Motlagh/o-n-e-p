@@ -104,7 +104,7 @@ export function useUser() {
         return null;
       }
     } catch (err) {
-      setSignInError("Error on signin happend");
+      setSignInError("An unexpected error occurred");
       console.log("Error during the signin", err);
     }
   };

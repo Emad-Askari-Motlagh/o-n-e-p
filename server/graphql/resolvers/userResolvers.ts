@@ -172,9 +172,13 @@ const userResolvers = {
           const doc = await user.save();
           console.log(session, doc);
           return doc;
+        } else {
+          throw new ApolloError(
+            "Right now there is an error on google auth. Please try again later"
+          );
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        throw new ApolloError(err?.message);
       }
     },
     async UpdateUser(

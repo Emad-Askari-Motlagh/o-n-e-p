@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import Info from "@/components/Info";
 
 export default function Login() {
-  const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | null>("");
   const [loginSuccesed, setLoginSuccesed] = useState(false);
   const { signIn, signOut, user, signInError } = useUser();
   const Router = useRouter();
@@ -65,13 +65,13 @@ export default function Login() {
           setTimeout(() => {
             Router.push(`/admin`);
           }, 1000);
+          setError("");
         } else {
-          resetForm();
           throw new Error("Invalid login");
         }
+        resetForm();
       } catch (err) {
         setError("Error on login");
-        resetForm();
         console.log(err);
       }
     },
@@ -132,7 +132,7 @@ export default function Login() {
         {loginSuccesed && <LoginSucceed>Login Succeed</LoginSucceed>}
         {signInError && (
           <Alert variant="danger" className={styles.error_message}>
-            {error}
+            {signInError}
           </Alert>
         )}
       </form>

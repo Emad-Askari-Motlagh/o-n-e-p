@@ -7,36 +7,36 @@ import Link from "next/link";
 
 export default function PageTwo() {
   return (
-    <footer className={styles.pagetwocontainer}>
-      <div className={styles.firstDiv}>
-        <div className={styles.secound_part}>
-          <div className={styles.social_part}>
+    <footer className={styles.footer}>
+      <div className={styles.footer_wrapper}>
+        <div className={styles.footer__col1}>
+          <div className={styles.footer__col2}>
             <Link href="www.google.com">
               <a href="www.google.com">
-                <GrFacebook size={14} color="gray" />
+                <GrFacebook size={16} color="gray" />
               </a>
             </Link>
 
             <Link href="www.google.com">
               <a href="www.google.com">
                 <AiFillTwitterCircle
-                  size={14}
+                  size={16}
                   color="gray"></AiFillTwitterCircle>
               </a>
             </Link>
 
             <Link href="www.google.com">
               <a>
-                <ImMail4 size={14} color="gray" />
+                <ImMail4 size={16} color="gray" />
               </a>
             </Link>
           </div>
           <Link href="/terms/terms">
-            <a className={styles.term}>Term and Conditions</a>
+            <a className={styles.footer__terms}>Term and Conditions</a>
           </Link>
 
-          <div className={styles.companyDiv}>
-            <div> AllianceCodes © 2021</div>
+          <div className={styles.footer__invention}>
+            <div> AllianceCodes ©2021</div>
           </div>
         </div>
       </div>
