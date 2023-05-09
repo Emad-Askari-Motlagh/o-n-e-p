@@ -28,6 +28,7 @@ const sseLink = new SSELink({ uri: `${link}/api/graphql` });
 //create http link
 const httplink = new HttpLink({
   uri: `${link}/api/graphql`,
+  credentials: "same-origin",
 });
 
 //Split the link based on graphql operation

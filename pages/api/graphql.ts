@@ -32,6 +32,8 @@ const server = createServer({
   cors: {
     credentials: false,
     origin: ["https://emad-portfolio1.herokuapp.com"], // your frontend url.
+    allowedHeaders: ["X-Custom-Header"],
+    methods: ["POST"],
   },
 
   plugins: [],
