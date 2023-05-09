@@ -30,7 +30,7 @@ const pubSub = createPubSub();
 
 const server = createServer({
   cors: {
-    credentials: false,
+    credentials: true,
     origin: ["https://emad-portfolio.herokuapp.com"], // your frontend url.
   },
 
