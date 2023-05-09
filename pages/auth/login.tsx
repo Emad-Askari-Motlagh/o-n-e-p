@@ -67,6 +67,7 @@ export default function Login() {
           }, 1000);
         } else {
           resetForm();
+          throw new Error("Invalid login");
         }
       } catch (err) {
         setError("Error on login");
