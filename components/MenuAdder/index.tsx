@@ -1,12 +1,4 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  EventHandler,
-  FormEvent,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, useState } from "react";
 import Input from "../Input";
 import Button from "components/Button";
 import styles from "./styles.module.scss";
@@ -31,7 +23,6 @@ export default function MenuAdder({
   const [price, setPrice] = useState<number>();
   const [description, setDescription] = useState<string>();
   const [subCategory, setSubCategory] = useState("");
-  const [file, setFile] = useState();
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
   );

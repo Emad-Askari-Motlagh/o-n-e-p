@@ -1,13 +1,14 @@
 @import "/styles/breakpoints";
 @import "/styles/fonts";
-.about_container {
+
+.about {
     color: whitesmoke;
     padding: 2rem;
     min-height: 100vmin;
-    .__header {
+    &__header {
         text-align: center;
     }
-    &.__paragraph {
+    &__paragraph {
         text-align: justify;
         @include portrait {
             text-align: center;

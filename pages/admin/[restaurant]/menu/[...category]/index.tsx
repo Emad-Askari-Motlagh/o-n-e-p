@@ -1,12 +1,4 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  EventHandler,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import React, { useEffect, useRef, useState, useTransition } from "react";
 import PrimaryLayout from "components/Primary-layout";
 import MenuEditor from "components/MenuEditor";
 import MenuAdder from "@/components/MenuAdder";
@@ -22,7 +14,7 @@ import AddCategory from "@/components/AddCategory";
 import useMenu from "hooks/Menu.hook";
 import Selection from "@/components/Selection";
 import Search from "components/Search-form/Input";
-import SearchResult from "@/components/SearchResult";
+import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
 
 export default function Category() {
@@ -77,7 +69,7 @@ export default function Category() {
 
   const MenuItems = importedItems.map((item) => {
     return (
-      <SearchResult
+      <MenuItemComponent
         key={item?._id}
         name={item?.name as string}
         id={item?._id as string}
@@ -184,13 +176,19 @@ export default function Category() {
           )}
 
           {actionType === "create item" &&
-            !menuBySubCategoryData?.MenuBySubCategory?.length && (
-              <MenuAdder
-                submit={addMenuItem}
-                restaurant={query.restaurant as string}
-                category={query.category?.[0] as string}
-                subCat={query?.category}></MenuAdder>
-            )}
+          !menuBySubCategoryData?.MenuBySubCategory?.length ? (
+            <MenuAdder
+              submit={addMenuItem}
+              restaurant={query.restaurant as string}
+              category={query.category?.[0] as string}
+              subCat={query?.category}></MenuAdder>
+          ) : (
+            actionType === "create item" && (
+              <ErrorCard>
+                Creation of an item is allowed in lowest level of category
+              </ErrorCard>
+            )
+          )}
           {importedItems?.length && actionType === "import item" && (
             <div>{MenuItems}</div>
           )}
