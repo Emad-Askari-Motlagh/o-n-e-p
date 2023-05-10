@@ -121,7 +121,7 @@ function SideBar({
           endPoint="/about"
           itemsLabel="About"></DropdownItem>
         {(user || costumerData?.Costumer) && (
-          <Button2 type="button" onClick={SignOut}>
+          <Button2 width="50%" type="button" onClick={SignOut}>
             {user ? "Logout" : costumerData && "Close the table"}
           </Button2>
         )}

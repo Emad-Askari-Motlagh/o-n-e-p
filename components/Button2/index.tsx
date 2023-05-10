@@ -5,6 +5,7 @@ interface ButtonTypes {
   onClick: () => void;
   children: string;
   type: any;
+  width?: string;
 }
 export default function Button2({
   onClick,
