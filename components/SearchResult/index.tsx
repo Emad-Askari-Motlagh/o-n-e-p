@@ -22,10 +22,10 @@ export default function SearchResult({
   category,
 }: SearchResultProps) {
   return (
-    <div className={styles.container} onClick={onClick}>
+    <div className={styles.container}>
       <Image width={50} height={50} src={imgSrc} alt={name} />
       <span>{name}</span>
-      <Button2 type="button" onClick={() => null}>
+      <Button2 type="button" onClick={onClick}>
         Add
       </Button2>
     </div>

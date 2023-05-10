@@ -55,7 +55,7 @@ export default function MenuAdder({
   }
 
   return (
-    <div className={styles.input_container}>
+    <div className={styles.container}>
       <Image
         className={styles.image}
         alt="ok"

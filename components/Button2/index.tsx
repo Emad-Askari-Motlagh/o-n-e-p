@@ -6,9 +6,14 @@ interface ButtonTypes {
   children: string;
   type: any;
 }
-export default function Button2({ onClick, type, children }: ButtonTypes) {
+export default function Button2({
+  onClick,
+  type,
+  children,
+  width,
+}: ButtonTypes) {
   return (
-    <div className={styles.button_container}>
+    <div className={styles.button_container} style={{ width }}>
       <button
         onClick={onClick}
         type={type}
