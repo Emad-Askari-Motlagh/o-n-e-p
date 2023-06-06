@@ -1,5 +1,5 @@
 import userSchema from "@/server/mongoSchema/userSchema";
-import Restaurant from "server/mongoSchema/restaurangSchema";
+import Restaurant from "@/server/mongoSchema/restaurantSchema";
 import sellSchema from "@/server/mongoSchema/sellSchema";
 import { ApolloError } from "apollo-server";
 

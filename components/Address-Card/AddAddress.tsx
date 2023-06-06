@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import * as yup from "yup";
 import styles from "./address-card.module.scss";
 import { useFormik, ErrorMessage } from "formik";
@@ -13,7 +13,11 @@ interface AddressFormValues {
   full_address: string;
 }
 
-const AddAddress: React.FC<{ closeEvent: () => void }> = ({ closeEvent }) => {
+const AddAddress = ({
+  closeEvent,
+}: {
+  closeEvent?: MouseEventHandler<HTMLDivElement>;
+}) => {
   const { handleChange, handleSubmit, values, touched, errors, resetForm } =
     useFormik<AddressFormValues>({
       initialValues: {
@@ -43,8 +47,8 @@ const AddAddress: React.FC<{ closeEvent: () => void }> = ({ closeEvent }) => {
       validateOnBlur: true,
     });
 
-  const closeModal = (target: HTMLElement | null) => {
-    target?.id === "container" && closeEvent();
+  const closeModal = (target: HTMLDivElement | null) => {
+    target?.id === "container" && closeEvent(target);
   };
 
   return (

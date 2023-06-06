@@ -14,6 +14,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
 
     await dbInit();
     const user = decodeJwt(token as string);
+    console.log(user);
     const userObj = await userSchema.findById(user?.id).populate("restaurant");
     // //Init Apollo client
     //Get the cookie from the req
@@ -35,6 +36,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
       };
     }
   } catch (error) {
+    console.log(err);
     return error;
   }
 }

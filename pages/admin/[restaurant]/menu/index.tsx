@@ -8,7 +8,7 @@ import PrimaryLayout from "components/Primary-layout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
-import { useAuth, useUser } from "hooks/Context.hook";
+import { useUser } from "hooks/Context.hook";
 import {
   ADD_MENU_CATEGORY,
   ADD_MENU_ITEM,

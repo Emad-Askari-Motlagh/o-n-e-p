@@ -2,7 +2,7 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 import menuCategorySchema, {
   i_MenuCategoryDocument,
 } from "./menuCategorySchema";
-import restaurangSchema, { IRestaurant } from "./restaurangSchema";
+import restaurangSchema, { IRestaurant } from "./restaurantSchema";
 
 // Define the interface for the MenuItem document
 export interface I_MenuItemDocument extends Document {

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 import { Model } from "mongoose";
 import { I_CostumerDocument } from "./costumerSchema";
-import { IRestaurant } from "./restaurangSchema";
+import { IRestaurant } from "./restaurantSchema";
 
 interface IReservation extends Document {
   description: string;

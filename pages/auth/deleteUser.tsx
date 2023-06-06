@@ -27,7 +27,7 @@ export default function Login() {
     <motion.div
       initial={{ opacity: 0, y: -200 }}
       animate={{ opacity: 1, y: 0 }}
-      className={styles.loginfirstdiv}>
+      className={styles.login_row1}>
       <div>
         <IoIosArrowRoundBack size={42}></IoIosArrowRoundBack>
         <Link href="/">Home</Link>

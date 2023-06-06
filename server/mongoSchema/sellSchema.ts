@@ -3,7 +3,7 @@ import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 
 import mongoose, { Types, SchemaTypes, Document, Schema } from "mongoose";
 import costumerSchema from "./costumerSchema";
-import restaurangSchema from "./restaurangSchema";
+import restaurangSchema from "./restaurantSchema";
 
 export interface I_SellDocument extends Document {
   restaurant: { type: String };

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import restaurangSchema from "./restaurangSchema";
+import restaurangSchema from "./restaurantSchema";
 
 var ExtraItemSchema = new mongoose.Schema(
   {

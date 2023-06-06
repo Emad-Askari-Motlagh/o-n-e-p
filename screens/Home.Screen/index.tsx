@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense, useRef, useState, useId } from "react";
 import styles from "./styles.module.scss";
 import Restaurant from "components/Restaurant";
-import { IRestaurant } from "@/server/mongoSchema/restaurangSchema";
+import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 
 export default function HomeScreen({
   ALL_RESTAURANTS,

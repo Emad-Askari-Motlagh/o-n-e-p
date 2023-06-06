@@ -16,15 +16,27 @@ import Restaurant from "@/components/Restaurant";
 import dbInit from "@/lib/dbInit";
 import { NextApiRequest } from "next";
 import { decodeJwt } from "@/lib/storeJwt";
-import userSchema from "@/server/mongoSchema/userSchema";
+import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
+import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 
-export default function Profile({ RES }) {
-  //   interface Emi{
-  //     name<T>:string
-  // };
-  const res = JSON.parse(RES);
+interface ProfileProps {
+  RES: string;
+}
+
+interface UserInfo {
+  name: string;
+  email: string;
+  restaurant: {
+    name: string;
+    openTimes: string;
+    address: string;
+  };
+}
+
+export default function Profile({ RES }: ProfileProps) {
+  const res = JSON.parse(RES) as Restaurant;
   const { user } = useUser();
-  const userInfo = user.data?.CurrentUser;
+  const userInfo = user.data?.CurrentUser as UserInfo;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
 
   const [changeUserInfo, { data: userEditData }] = useMutation(
@@ -39,6 +51,7 @@ export default function Profile({ RES }) {
   if (!user.data?.CurrentUser) {
     return null;
   }
+
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
@@ -48,26 +61,25 @@ export default function Profile({ RES }) {
         <h1>Profile</h1>
       </div>
       <Restaurant
-        setId={res?._id}
-        location={res?.location.coordinates}
+        location={res.location}
         key={res._id}
-        name={res?.name ?? "placeHolder"}
-        type={res?.type ?? "placeHolder"}
-        description={res?.description ?? "placeHolder"}
-        images={res?.images}
-        endPoint={`/admin/${res?.name}/menu`}
+        name={res.name ?? "placeHolder"}
+        description={res.description ?? "placeHolder"}
+        images={res.images}
+        endPoint={`/admin/${res.name}/menu`}
         buttonLabel="Edit the menu"
       />
       <InfoParent type="user" header="User information">
         <InfoItem
           label="Name"
-          value={userInfo?.name as string}
+          value={userInfo.name}
           changeItem={changeUserInfo}
-          type="user"></InfoItem>
+          type="user"
+        />
 
         <InfoItem
           label="Email"
-          value={userInfo?.email as string}
+          value={userInfo.email}
           changeItem={changeUserInfo}
           type="user"
         />
@@ -75,22 +87,22 @@ export default function Profile({ RES }) {
       <InfoParent type="restaurant" header="Restaurant information">
         <InfoItem
           label="Name"
-          value={userInfo?.restaurant.name as string}
+          value={userInfo.restaurant.name}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
           label="Open times"
-          value={userInfo?.restaurant.openTimes as string}
+          value={userInfo.restaurant.openTimes}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
           label="Address"
-          value={userInfo?.restaurant.address as string}
+          value={userInfo.restaurant.address}
           changeItem={changeRestaurantInfo}
         />
         <InfoItem
           label="Food types"
-          value={"userInfo?.name"}
+          value={userInfo.name} // Should this be userInfo.restaurant.foodTypes?
           changeItem={changeRestaurantInfo}
         />
       </InfoParent>
@@ -98,7 +110,13 @@ export default function Profile({ RES }) {
   );
 }
 
-const InfoParent = ({ header, children, type }) => {
+interface InfoParentProps {
+  header: string;
+  children: React.ReactNode;
+  type: string;
+}
+
+const InfoParent = ({ header, children, type }: InfoParentProps) => {
   return (
     <div className={styles.restaurant_section}>
       <div className={styles.header_parent}>
@@ -108,27 +126,30 @@ const InfoParent = ({ header, children, type }) => {
     </div>
   );
 };
+
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
-    //Init mongoDb
+    // Init mongoDb
     const token = req.cookies["token"];
-    if (!token)
+    if (!token) {
       return {
         redirect: {
           destination: "/",
           permanent: false,
-          // statusCode: 301
         },
       };
+    }
+
     await dbInit();
-    const user = decodeJwt(token as string);
-    const userObj = await userSchema.findById(user?.id).populate("restaurant");
-    // //Init Apollo client
-    //Get the cookie from the req
+    const user: { id: string } = decodeJwt(token as string);
+    const userObj: I_UserDocument = await userSchema
+      .findById(user?.id)
+      .populate("restaurant");
+
     return {
       props: {
         RES: JSON.stringify(userObj.restaurant),
-        adminIsOnline: req.cookies?.["token"] ? true : false,
+        adminIsOnline: !!req.cookies?.["token"],
       },
     };
   } catch (err) {
@@ -138,4 +159,5 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     };
   }
 }
+
 Profile.Layout = PrimaryLayout;

@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql";
 import { ApolloError } from "apollo-server";
-import { SchemaType, Types } from "mongoose";
-import Restaurant from "server/mongoSchema/restaurangSchema";
+import { SchemaType, SchemaTypes, Types } from "mongoose";
+import Restaurant from "@/server/mongoSchema/restaurantSchema";
 import MenuItem from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
 import Menu from "server/mongoSchema/MenuItemSchema";
@@ -176,11 +176,13 @@ const menuResolvers = {
     },
 
     async MenuByCategory(_: any, args: MenuByCategoryArgs, context: any) {
+      console.log(args);
       try {
+        const { restaurant } = args;
         const res = await menuCategorySchema.find({
-          restaurant: args.restaurant,
-          parent: { $exists: false },
+          restaurant,
         });
+
         return res;
       } catch (err) {
         console.log(err);
@@ -192,7 +194,7 @@ const menuResolvers = {
     },
     async MenuBySubCategory(_: any, args: MenuBySubCategoryArgs, context: any) {
       const { subCategory, restaurant } = args;
-      console.log(subCategory, restaurant);
+
       try {
         const res = await menuCategorySchema.aggregate([
           {

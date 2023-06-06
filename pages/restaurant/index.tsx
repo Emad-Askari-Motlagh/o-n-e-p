@@ -11,7 +11,7 @@ import {
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
 import { NextApiRequest } from "next";
-import { IRestaurant } from "@/server/mongoSchema/restaurangSchema";
+import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 
 interface HomeProps {
   ALL_RESTAURANTS: [IRestaurant];

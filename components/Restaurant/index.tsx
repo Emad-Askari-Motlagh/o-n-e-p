@@ -51,7 +51,7 @@ export default function Restaurant({
 
             <div className={styles.map_parent}>
               <a
-                href={`/map?name=${name}&lat=${location.coordinates[0]}&lng=${location.coordinates[1]}`}>
+                href={`/map?name=${name}&lat=${location.coordinates?.[0]}&lng=${location.coordinates?.[1]}`}>
                 <IoNavigateCircle className={styles.icon} />
                 <span>Find on map</span>
               </a>

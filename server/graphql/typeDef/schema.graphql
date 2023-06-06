@@ -236,7 +236,7 @@ type Query {
   Restaurants: [Restaurant]
   Costumer: Costumer
   Menu(restaurant: String!): [MenuParent]
-  MenuByCategory(restaurant: String!): [MenuParent]
+  MenuByCategory(restaurant: String): [MenuParent]
   MenuBySubCategory(restaurant: String!, subCategory: String): [MenuParent]
   MenuItemByCategory(
     category: [String!]

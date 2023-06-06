@@ -12,7 +12,6 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@/lib/apollo/apollo-client";
-
 import { SessionProvider } from "next-auth/react";
 
 const Noop = ({ children }: { children: any }) => <>{children}</>;
@@ -27,7 +26,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
   const [loading, setLoading] = React.useState(false);
   const client = useApollo({});
   const Layout = Component.Layout || Noop;
-
+  //This useEffect hook uses for loading indicator
   React.useEffect(() => {
     const start = () => {
       setLoading(true);

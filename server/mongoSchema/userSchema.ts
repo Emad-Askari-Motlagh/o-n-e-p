@@ -1,5 +1,5 @@
 import mongoose, { SchemaTypes, Schema } from "mongoose";
-import restaurangSchema from "./restaurangSchema";
+import restaurangSchema from "./restaurantSchema";
 
 export interface I_UserDocument extends mongoose.Document {
   restaurant: Schema.Types.ObjectId | typeof restaurangSchema;

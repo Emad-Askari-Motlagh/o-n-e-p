@@ -142,6 +142,8 @@ export default function Login() {
           <a>Do you forgot your password?</a>
         </Link>
       </div>
+      {/*--------this part is for the situation that user can register--------------------*/}
+
       {/* <div className={styles.login_alternatives_container}>
         <div onClick={onSuccess} className={styles.auth_buttons}>
           <FaGoogle className={styles.icons}></FaGoogle>

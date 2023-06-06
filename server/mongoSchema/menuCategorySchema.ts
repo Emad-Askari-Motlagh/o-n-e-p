@@ -1,9 +1,9 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import restaurantSchema, { RestaurantDocument } from "./restaurantSchema";
+import restaurantSchema from "./restaurantSchema";
 
 // Define the interface for the MenuCategory document
 export interface i_MenuCategoryDocument extends Document {
-  restaurant: Types.ObjectId | RestaurantDocument;
+  restaurant: String;
   image: string;
   itemName: string;
   collectionType: string;
@@ -15,10 +15,7 @@ export interface i_MenuCategoryDocument extends Document {
 
 const MenuCategorySchema = new Schema<i_MenuCategoryDocument>(
   {
-    restaurant: {
-      type: Schema.Types.ObjectId,
-      ref: "Restaurant",
-    },
+    restaurant: String,
     image: { type: String },
     itemName: String,
     collectionType: String,

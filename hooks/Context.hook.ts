@@ -46,7 +46,6 @@ const useAuth = () => {
 
 export function useUser() {
   const [authToken, setAuthToken] = useState<string | undefined>();
-  const [user, setUser] = useState<CurrentUserQuery>();
   const authHdaders = getAuthHeaders();
   const Router = useRouter();
   const client = useApollo({});
