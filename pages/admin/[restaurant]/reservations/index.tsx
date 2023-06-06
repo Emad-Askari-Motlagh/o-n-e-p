@@ -30,6 +30,7 @@ const Reservation = () => {
       <div className={styles.calandar_container}>
         <h2>Reservations</h2>
         {!user.data?.CurrentUser && <ErrorCard>Please login first</ErrorCard>}
+
         <div className={styles.table_container}>
           {oldDate.length ? (
             <>
@@ -67,7 +68,9 @@ const Reservation = () => {
                 </tbody>
               </table>
             </>
-          ) : null}
+          ) : (
+            <ErrorCard>OBS! There is`nt any reservation yet</ErrorCard>
+          )}
         </div>
       </div>
     </div>
