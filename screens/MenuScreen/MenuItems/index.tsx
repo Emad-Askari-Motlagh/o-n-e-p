@@ -1,9 +1,8 @@
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import MenuItem from "components/MenuItem";
 import PrimaryLayout from "components/Primary-layout";
 import useOrders from "hooks/Order.hook";
-import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./styles.module.scss";
 import Form from "components/MenuItem/Form";
 import ChoisesCard from "components/MenuItem/ChoisesCard";
 import Selection from "components/Selection";
@@ -12,8 +11,23 @@ import Modal from "components/Modal";
 import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
 import { AddOrderMutationResult } from "@/server/generated/graphql";
+import styles from "./styles.module.scss";
+
 interface MyTipes<P> {
   data: P;
+}
+
+interface MenuItemExtra {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface MenuItemSelection {
+  _id: string;
+  name: string;
+  extra: MenuItemExtra[];
 }
 
 export default function Items({
@@ -23,11 +37,13 @@ export default function Items({
 }) {
   const Router = useRouter();
 
-  let [selectedItem, setSelectedItem] = useState("Pommes");
-  let [selection, setSelection] = useState([]);
+  const [selectedItem, setSelectedItem] = useState<string>("Pommes");
+  const [selection, setSelection] = useState<MenuItemSelection[]>([]);
   const [exrasOrderModal, setExtraOrderModalOpen] = useState(false);
-  let [costumerExtraChoises, setCostumerExtraChoises] = useState([]);
-  const [description, setDescription] = useState("");
+  const [costumerExtraChoises, setCostumerExtraChoises] = useState<
+    MenuItemExtra[]
+  >([]);
+  const [description, setDescription] = useState<string>("");
   const {
     orders,
     removeOrder,
@@ -39,25 +55,30 @@ export default function Items({
 
   const restaurant = Router.query?.name as string;
 
+  // useEffect(() => {
+  //   if (selection.length) {
+  //     setSelectedItem(selection[0].name);
+  //     const correctItem = orders
+  //       .find((r) => r.product._id === item._id)
+  //       ?.extra.filter((extra) => extra.quantity !== 0);
+  //     if (correctItem) {
+  //       setCostumerExtraChoises([...correctItem]);
+  //     }
+  //   }
+  // }, [selection, orders]);
+
   function onEnterModal(
     item: { _id: string },
-    items: { name: string; extra: {}[] }[]
+    items: { name: string; extra: MenuItemExtra[] }[]
   ) {
     if (!item) return;
     items.map((res) => {
       setSelection([...res.extra]);
     });
-    setSelectedItem(items?.[0]?.name);
-    const correctItem = orders
-      .find((r) => r.product._id === item._id)
-      ?.extra.filter((extra) => extra.quantity !== 0);
-    if (correctItem) {
-      setCostumerExtraChoises([...correctItem]);
-    }
   }
 
   function onSelect(e) {
-    if (!selection?.length) {
+    if (!selection.length) {
       return;
     }
 
@@ -79,6 +100,7 @@ export default function Items({
       ]);
     }
   }
+
   async function submit(res: { _id: string }) {
     try {
       await addExtra({
@@ -100,56 +122,47 @@ export default function Items({
       console.log(error);
     }
   }
+
   function onAddQuantity(result: { _id: string; quantity: number }) {
-    setCostumerExtraChoises([
-      ...costumerExtraChoises.map((item) => {
+    setCostumerExtraChoises((prevChoises) =>
+      prevChoises.map((item) => {
         if (item._id === result._id) {
           return {
             ...item,
-
             quantity: item.quantity + 1,
           };
         }
         return item;
-      }),
-    ]);
+      })
+    );
   }
+
   function onDeleteQuantity(result: { _id: string; quantity: number }) {
-    setCostumerExtraChoises([
-      ...costumerExtraChoises.map((item) => {
+    setCostumerExtraChoises((prevChoises) => {
+      const updatedChoises = prevChoises.map((item) => {
         if (item._id === result._id) {
           return {
             ...item,
-
             quantity: item.quantity - 1,
           };
         }
         return item;
-      }),
-    ]);
+      });
 
-    if (result.quantity < 1) {
-      setCostumerExtraChoises([
-        ...costumerExtraChoises.filter((r) => r._id === result._id),
-      ]);
-    }
-    return selection;
+      return updatedChoises.filter((item) => item.quantity >= 1);
+    });
   }
 
-  //Function to Compute final quantity based on co§;stumers Orders
   function countQuantity(
     id: number,
     orders: [{ orderQuantity: number; product: { _id: number } }]
   ) {
     if (Array.isArray(orders) && id) {
       const result = orders.find((ress) => ress.product?._id === id);
-      if (result) {
-        return result.orderQuantity;
-      } else {
-        return 0;
-      }
+      return result ? result.orderQuantity : 0;
     }
   }
+
   const MenuItems = costumerExtraChoises.map((result, i) => (
     <ChoisesCard
       key={i}
@@ -172,6 +185,7 @@ export default function Items({
       </span>
     </ChoisesCard>
   ));
+
   return (
     <div className={styles.container}>
       <div className={styles.items_container}>

@@ -1,43 +1,24 @@
-import Head from "next/head";
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  useEffect,
-  useState,
-} from "react";
-import Home_screen from "screens/Home.Screen";
+import React, { ChangeEvent, useState } from "react";
+import Restaurants from "screens/Home.Screen";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import PrimaryLayout from "components/Primary-layout";
 import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys.graphql";
 import dbInit from "lib/dbInit";
-import Search_form from "components/Search-form";
+import Search from "components/Search-form";
 import { AiOutlineFork } from "react-icons/ai";
 import {
   RestaurantsQuery,
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
 import { NextApiRequest } from "next";
-import { useRouter } from "next/router";
+import { IRestaurant } from "@/server/mongoSchema/restaurangSchema";
 
 interface HomeProps {
-  ALL_RESTAURANTS: string[];
-  adminIsOnline: boolean;
-  costumerIsOnline: boolean;
+  ALL_RESTAURANTS: [IRestaurant];
 }
-const Home = ({
-  ALL_RESTAURANTS,
-  adminIsOnline,
-  costumerIsOnline,
-}: HomeProps) => {
-  const [restaurants, setRestaurants] = useState([]);
+const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
+  const [restaurants, setRestaurants] = useState<[IRestaurant]>([]);
   const [searchQeury, setSearchQuery] = useState<string>();
-  const router = useRouter();
-  // useEffect(() => {
-  //   console.log(adminIsOnline);
-  //   if (adminIsOnline) {
-  //     router.push("/admin/dashboard");
-  //   }
-  // }, [adminIsOnline, costumerIsOnline, router.pathname]);
 
   function searchOverRestaurants(e: ChangeEvent<HTMLInputElement>) {
     try {
@@ -47,7 +28,7 @@ const Home = ({
       setSearchQuery(query);
       const result =
         Array.isArray(ALL_RESTAURANTS) &&
-        ALL_RESTAURANTS.filter((res: {}) => {
+        ALL_RESTAURANTS.filter((res) => {
           if (res?.name.toLowerCase().includes(query)) {
             return res;
           }
@@ -60,14 +41,11 @@ const Home = ({
 
   return (
     <>
-      <Search_form
-        placeHolder={"Vilken restaurang letar du efter?"}
-        label={"Hitta din restaurang"}
-        onChange={searchOverRestaurants}>
+      <Search label={"Hitta din restaurang"} onChange={searchOverRestaurants}>
         <AiOutlineFork color="white" />
-      </Search_form>
+      </Search>
 
-      <Home_screen
+      <Restaurants
         ALL_RESTAURANTS={searchQeury ? restaurants : ALL_RESTAURANTS}
       />
     </>
@@ -77,18 +55,15 @@ const Home = ({
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     //Init mongoDb
-
-    const ee = await dbInit();
-
+    await dbInit();
     // //Init Apollo client
-    const apolloClient = await initializeApollo();
+    const apolloClient = await initializeApollo({});
     const res = await apolloClient.query<
       RestaurantsQuery,
       RestaurantsQueryVariables
     >({
       query: FETCH_ALL_RESTAURANTS,
     });
-
     //Get the cookie from the req
     return {
       props: {

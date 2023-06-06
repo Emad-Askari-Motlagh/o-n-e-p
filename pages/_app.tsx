@@ -60,7 +60,6 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
               <Layout>
                 <div className={styles.container}>
                   <div className={styles.spinner}>
-                    <h3 className={styles.loading_h5}>Loading...</h3>
                     <Lottie
                       loop
                       animationData={lottieJson}

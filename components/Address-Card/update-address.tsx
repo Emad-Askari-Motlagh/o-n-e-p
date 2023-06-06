@@ -7,7 +7,11 @@ import Input from "../Input";
 
 interface UpdateAddressProps {
   addressData: {
-    id: string;
+    address: string;
+    city: string;
+    postNumber: string;
+    region: string;
+    title: string;
   };
   closeEvent: () => void;
 }
@@ -16,8 +20,6 @@ export default function UpdateAddress({
   addressData,
   closeEvent,
 }: UpdateAddressProps) {
-  const { id } = addressData;
-
   const { handleChange, handleSubmit, values, touched, errors } = useFormik({
     initialValues: {
       title: "",

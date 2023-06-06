@@ -1,13 +1,18 @@
 import userSchema from "@/server/mongoSchema/userSchema";
 import Restaurant from "server/mongoSchema/restaurangSchema";
-import orderschema from "@/server/mongoSchema/orderschema";
-import payedItemSchema from "@/server/mongoSchema/payedItemSchema";
 import sellSchema from "@/server/mongoSchema/sellSchema";
+import { ApolloError } from "apollo-server";
+
 const productResolvers = {
   Query: {
     async Restaurants() {
-      const res = await Restaurant.find({});
-      return res;
+      try {
+        const res = await Restaurant.find({});
+        return res;
+      } catch (err) {
+        throw new ApolloError("Couldn't find any restaurant");
+        console.log(err);
+      }
     },
   },
   Mutation: {

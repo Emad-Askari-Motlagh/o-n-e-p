@@ -7,6 +7,7 @@ interface SearchProps {
   onSubmit?: MouseEvent;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   label: string;
+  children?: React.ReactNode;
 }
 export default function Search_form({
   onSubmit,

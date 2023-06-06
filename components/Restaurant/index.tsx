@@ -12,7 +12,7 @@ interface RetaurantProps {
   children?: JSX.Element;
   images?: string | string[];
   description?: string;
-  location?: number[];
+  location?: { coordinates: number[] };
   buttonLabel?: string;
 }
 export default function Restaurant({
@@ -30,7 +30,7 @@ export default function Restaurant({
         <section className={styles.left_card}>
           <div className={styles.images}>
             <Image
-              src={images && images[1]}
+              src={images && images?.[0]}
               width={600}
               height={600}
               layout="responsive"
@@ -51,7 +51,7 @@ export default function Restaurant({
 
             <div className={styles.map_parent}>
               <a
-                href={`/map?name=${name}&lat=${location[0]}&lng=${location[1]}`}>
+                href={`/map?name=${name}&lat=${location.coordinates[0]}&lng=${location.coordinates[1]}`}>
                 <IoNavigateCircle className={styles.icon} />
                 <span>Find on map</span>
               </a>
@@ -65,7 +65,7 @@ export default function Restaurant({
         <section className={styles.right_card}>
           <div className={styles.images}>
             <Image
-              src={images && images[1]}
+              src={images && images?.[1]}
               width={600}
               height={600}
               layout="responsive"
@@ -73,7 +73,7 @@ export default function Restaurant({
           </div>
           <div className={styles.images}>
             <Image
-              src={images && images[1]}
+              src={images && images?.[2]}
               width={600}
               height={600}
               layout="responsive"

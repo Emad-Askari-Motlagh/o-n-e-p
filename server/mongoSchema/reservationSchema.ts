@@ -31,5 +31,4 @@ const reservationSchema: Schema<IReservation> = new mongoose.Schema(
 const Reservation: Model<IReservation> =
   mongoose.models.Reservation ||
   mongoose.model<IReservation>("Reservation", reservationSchema);
-
 export default Reservation;

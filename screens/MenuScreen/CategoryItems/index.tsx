@@ -1,8 +1,13 @@
 import RestaurantSubItem from "@/components/RestaurantSubItem";
 import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
+import { i_MenuCategoryDocument } from "server/mongoSchema/menuCategorySchema";
 
-export default function CategoryItems({ items }) {
+export default function CategoryItems({
+  items,
+}: {
+  items: [i_MenuCategoryDocument];
+}) {
   return (
     <div className={styles.container}>
       {items.length &&
@@ -13,7 +18,6 @@ export default function CategoryItems({ items }) {
                 key={index}
                 label={res.collectionType}
                 endPoint={`${res.collectionType}`}
-                subCat={res}
                 image={res.image}
               />
             </div>

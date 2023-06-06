@@ -13,7 +13,6 @@ const useRestaurant = () => {
     const result = await client?.mutate({
       mutation: ADD_ORDER,
     });
-    console.log(result);
     return result;
   };
 

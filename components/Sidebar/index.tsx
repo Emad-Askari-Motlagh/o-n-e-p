@@ -17,6 +17,7 @@ import { FaJediOrder } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
 import Button2 from "../Button2";
 import { CostumerQuery, CostumerQueryResult } from "@/server/generated/graphql";
+import { IoFastFoodOutline } from "react-icons/io5";
 
 interface SidebarProps {
   signOut: () => void;
@@ -53,7 +54,7 @@ function SideBar({
       <div className={styles.items_wrapper}>
         <div className={styles.user_container}>
           {Router.query?.name ? (
-            <IoLogoBitcoin size={24} className={styles.user_icon} />
+            <IoFastFoodOutline size={24} className={styles.user_icon} />
           ) : (
             <BiCode size={24} className={styles.user_icon} />
           )}

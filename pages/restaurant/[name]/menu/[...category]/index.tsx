@@ -7,7 +7,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import {
   MenuBySubCategoryQuery,
@@ -23,6 +23,7 @@ export default function Menu() {
   const currentCat = Router.query.category?.[Router.query.category?.length - 1];
   const item = Router.query?.category?.[Router.query?.category.length - 1];
   const restaurant = Router.query?.name;
+
   const { data, error, loading } = useQuery<
     MenuBySubCategoryQuery,
     MenuBySubCategoryQueryVariables
@@ -46,7 +47,8 @@ export default function Menu() {
     }
   );
   if (menuItemsLoading) return <div>...</div>;
-  if (menuItemsError) return <ErrorCard>Couldn`t find any item</ErrorCard>;
+  if (menuItemsError || !menuItesmData.MenuItemByCategory.length)
+    return <ErrorCard>Couldn`t find any item</ErrorCard>;
 
   return (
     <div className={styles.container}>
@@ -59,8 +61,10 @@ export default function Menu() {
       <div className={styles.items_parent}>
         {data?.MenuBySubCategory?.length ? (
           <CategoryItems items={data?.MenuBySubCategory} />
-        ) : (
+        ) : menuItesmData?.MenuItemByCategory.length ? (
           <MenuItems items={menuItesmData?.MenuItemByCategory} />
+        ) : (
+          !loading && <ErrorCard>Sorry</ErrorCard>
         )}
       </div>
     </div>

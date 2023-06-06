@@ -1,11 +1,23 @@
-import mongoose from "mongoose";
-import restaurangSchema from "./restaurangSchema";
+import mongoose, { Document, Schema, Types } from "mongoose";
+import restaurantSchema, { RestaurantDocument } from "./restaurantSchema";
 
-var MenutCategorySchema = new mongoose.Schema(
+// Define the interface for the MenuCategory document
+export interface i_MenuCategoryDocument extends Document {
+  restaurant: Types.ObjectId | RestaurantDocument;
+  image: string;
+  itemName: string;
+  collectionType: string;
+  subCategory: string[];
+  parent: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const MenuCategorySchema = new Schema<i_MenuCategoryDocument>(
   {
     restaurant: {
-      type: String,
-      ref: restaurangSchema,
+      type: Schema.Types.ObjectId,
+      ref: "Restaurant",
     },
     image: { type: String },
     itemName: String,
@@ -15,5 +27,6 @@ var MenutCategorySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 export default mongoose.models.MenuCategory ||
-  mongoose.model("MenuCategory", MenutCategorySchema);
+  mongoose.model<i_MenuCategoryDocument>("MenuCategory", MenuCategorySchema);
