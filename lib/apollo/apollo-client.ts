@@ -8,7 +8,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import merge from "deepmerge";
-import SSELink from "@/lib/sse";
+import SSELink from "@/lib/sseLink";
 
 const link = `${process.env.SERVER_LINK}`;
 let apolloClient: any;

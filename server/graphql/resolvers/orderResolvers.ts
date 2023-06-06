@@ -224,6 +224,7 @@ const orderResolvers = {
       { productId }: AddOrderMutationVariables,
       { costumerId }: { costumerId: string }
     ) {
+      console.log("here");
       try {
         if (!costumerId) {
           return null;

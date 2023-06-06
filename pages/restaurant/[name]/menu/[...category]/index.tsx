@@ -2,18 +2,14 @@ import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "components/Primary-layout";
 import {
   GET_MENU_BY_SUB_CATEGORY,
-  GET_MENU_CATREGORY,
   GET_MENU_ITEM_BY_CATREGORY,
 } from "@/server/graphql/querys/querys.graphql";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useId } from "react";
+import React from "react";
 import styles from "./styles.module.scss";
 import {
-  MenuByCategoryQuery,
-  MenuByCategoryQueryVariables,
   MenuBySubCategoryQuery,
   MenuBySubCategoryQueryVariables,
   MenuItemByCategoryQuery,

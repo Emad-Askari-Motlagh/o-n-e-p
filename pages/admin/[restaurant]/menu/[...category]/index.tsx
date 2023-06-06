@@ -183,7 +183,7 @@ export default function Category() {
               category={query.category?.[0] as string}
               subCat={query?.category}></MenuAdder>
           ) : (
-            actionType === "create item" && (
+            actionType === "create item"&& (
               <ErrorCard>
                 Creation of an item is allowed in lowest level of category
               </ErrorCard>

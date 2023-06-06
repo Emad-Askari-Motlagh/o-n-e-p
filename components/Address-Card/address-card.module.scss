@@ -82,6 +82,14 @@
     }
     .inputContainer {
       width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 0.4rem;
+      input {
+        width: 800px !important;
+        margin: auto !important;
+      }
     }
     .header {
       position: absolute;
@@ -122,7 +130,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
+      padding-top: 1rem;
       @include md {
         margin-top: 10px;
       }
@@ -130,7 +138,14 @@
 
     .inputContainer {
       width: 100%;
-
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 0.4rem;
+      input {
+        width: 800px !important;
+        margin: auto !important;
+      }
       span {
         margin-bottom: 10px;
         margin-top: 20px;

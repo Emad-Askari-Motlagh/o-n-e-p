@@ -1,17 +1,17 @@
-import React, { useEffect, useState, Suspense, startTransition } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+import { useMutation } from "@apollo/client";
+import { NextApiRequest } from "next";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "components/Primary-layout";
 import RegisterForm from "components/CostumerRegistration";
-import { useMutation, useQuery } from "@apollo/client";
+import RestaurantSubItem from "components/RestaurantSubItem";
+import ErrorCard from "components/ErrorCard";
+import SucceedMessage from "@/components/Succeed-Message";
 import { ADD_COSTUMER } from "server/graphql/querys/mutations.graphql";
 import dbInit from "lib/dbInit";
 import Costumer from "server/mongoSchema/costumerSchema";
-import RestaurantSubItem from "components/RestaurantSubItem";
-import { useRouter } from "next/router";
-import { motion } from "framer-motion";
-import ErrorCard from "components/ErrorCard";
-import SucceedMessage from "@/components/Succeed-Message";
-import { NextApiRequest } from "next";
 import { I_CostumerDocument } from "server/mongoSchema/costumerSchema";
 import {
   AddCostumerMutation,
@@ -26,7 +26,6 @@ export default function Restaurant({
 }) {
   const [error, setError] = useState<string | null>("");
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-
   const [AddCostumer] = useMutation<
     AddCostumerMutation,
     AddCostumerMutationVariables
@@ -42,7 +41,6 @@ export default function Restaurant({
       }, 1000);
     },
   });
-
   const Router = useRouter();
 
   async function submitForm(values: {
@@ -59,8 +57,6 @@ export default function Restaurant({
           name,
         },
       });
-
-      // Router.reload();
     } catch (err: any) {
       console.log(err.message);
     }
@@ -75,13 +71,16 @@ export default function Restaurant({
           ? "Costumer Registration"
           : "Please choose one of alternatives!"}
       </motion.label>
+
       {!COSTUMER ? (
+        // If COSTUMER is not available, render the registration form
         <>
           <RegisterForm onSubmit={submitForm} />
           {error && <ErrorCard>{error}</ErrorCard>}
           {isRegistered && <SucceedMessage>Costumer Registered</SucceedMessage>}
         </>
       ) : (
+        // If COSTUMER is available, render the alternatives
         <div className={styles.items_parent}>
           <div className={styles.item_parent}>
             <RestaurantSubItem
@@ -109,13 +108,15 @@ Restaurant.Layout = PrimaryLayout;
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
-    //Init mongoDb
+    // Initialize MongoDB
     await dbInit();
 
     let costumer = null;
-    //Get the cookie from the req
+
+    // Get the cookie from the request
     const { costumerId } = req.cookies;
-    //If there was a cookie then find the costumer in DB and return it
+
+    // If there is a cookie, find the costumer in the database
     if (costumerId) {
       costumer = await Costumer.findById(costumerId);
     }

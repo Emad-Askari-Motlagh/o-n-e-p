@@ -7,14 +7,8 @@ interface RestaurantSubItemProps {
   label: string;
   image: string;
   endPoint: string;
-  subCat: string[];
 }
-function RestaurantSubItem({
-  label,
-  image,
-  endPoint,
-  subCat,
-}: RestaurantSubItemProps) {
+function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
   const Router = useRouter();
 
   return (

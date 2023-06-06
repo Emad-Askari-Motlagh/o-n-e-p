@@ -60,5 +60,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/_app.js", "components/Search-form/index.js", "pages/restaurant/[name]/menu/[...category]/index.js]/[item]/index.jsex.js.js", "pages/api/auth/[...nextauth].j", "pages/api/auth/[...nextAuth].js", "next.config.js"  ]
+, "pages/_app.js", "components/Search-form/index.js", "pages/restaurant/[name]/menu/[...category]/index.js]/[item]/index.jsex.js.js", "pages/api/auth/[...nextauth].j", "pages/api/auth/[...nextauth].ts", "next.config.js", "pages/api/auth/google/callback.js", "server/mongoSchema/reservationSchrma.js", "toasts/Top_toast.js"  ]
 }

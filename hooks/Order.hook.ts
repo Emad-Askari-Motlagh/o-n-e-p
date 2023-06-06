@@ -4,12 +4,7 @@ import {
 } from "./../server/graphql/querys/mutations.graphql";
 
 import {
-  AddOrderMutationFn,
-  AddOrderMutationHookResult,
   OrdersQueryHookResult,
-  AddOrderMutationOptions,
-  OrdersQueryVariables,
-  OrdersQueryResult,
   AdminOrdersQueryVariables,
   AdminOrdersQueryResult,
   OrdersQuery,
@@ -20,6 +15,8 @@ import {
   AddOrderMutationVariables,
   RemoveOrderMutation,
   RemoveOrderMutationVariables,
+  AddOrderMutationFn,
+  RemoveOrderMutationFn,
 } from "server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
@@ -39,8 +36,8 @@ type MyTypes = {
   loading: boolean;
   AdminOrders: AdminOrdersQueryResult;
   getAdminOrders_loading: boolean;
-  addOrder?: undefined;
-  removeOrder?: undefined;
+  addOrder?: AddOrderMutationFn;
+  removeOrder?: RemoveOrderMutationFn;
 };
 
 const useOrders = () => {
@@ -64,6 +61,7 @@ const useOrders = () => {
   ] = useMutation<AddOrderMutation, AddOrderMutationVariables>(ADD_ORDER, {
     fetchPolicy: "network-only",
     refetchQueries: refetchTask,
+    onError: (err) => err.graphQLErrors.map((res) => console.log(res.message)),
   });
   const [addExtra, { loading: addExtraLoading, error: addExtraError }] =
     useMutation<AddExtraItemMutation, AddExtraItemMutationVariables>(

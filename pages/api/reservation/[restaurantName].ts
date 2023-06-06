@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
-import Reservation from "@/server/mongoSchema/reservationSchrma";
+import Reservation from "@/server/mongoSchema/reservationSchema";
 import { Types } from "mongoose";
 
 export const config = {
