@@ -12,8 +12,15 @@ type StripeProps = {
   quantity: number;
   orders: { _id: string }[];
   pay: PayMutationFn;
+  redirectPath: string;
 };
-export default function Stripe({ sum, quantity, orders, pay }: StripeProps) {
+export default function Stripe({
+  sum,
+  quantity,
+  orders,
+  pay,
+  redirectPath,
+}: StripeProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [success, setSuccess] = useState(false);
@@ -41,15 +48,18 @@ export default function Stripe({ sum, quantity, orders, pay }: StripeProps) {
     } else {
       try {
         const { id } = paymentMethod;
-        console.log("payment id", id);
         if (id) {
           setSuccess(true);
-
           pay({
             variables: {
               restaurant: router.query.name as string,
               products: orders?.map((res: { _id: string }) => res?._id),
               price: sum,
+            },
+            onCompleted: () => {
+              // setTimeout(() => {
+              //   router.push(redirectPath);
+              // }, 2000);
             },
           });
         }

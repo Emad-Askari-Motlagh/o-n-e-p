@@ -9,6 +9,7 @@ import CheckoutForm from "components/Stripe";
 import Addresses from "screens/adressScreen";
 import ErrorCard from "../ErrorCard";
 import { PayMutationFn } from "@/server/generated/graphql";
+import Info from "../Info";
 
 type PaymentProps = {
   isModalOpen: boolean;
@@ -33,9 +34,7 @@ export default function Payment({
   );
 
   const router = useRouter();
-  function hasDuplicates(array) {
-    return new Set(array).size !== array.length;
-  }
+
   const cartLength =
     (Array.isArray(data) &&
       data.reduce((acc, item) => acc + item.orderQuantity, 0)) ||
@@ -50,12 +49,17 @@ export default function Payment({
           label="Payment">
           <div style={{ color: "white" }}>
             <Addresses mydata={address} />
+            <Info>
+              OBS! for payment use: Card number:4242424242424242 Expire
+              date:1234 ccv:567 Zip:12345
+            </Info>
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 orders={data}
                 sum={sum}
                 quantity={cartLength}
                 pay={pay}
+                redirectPath={`/restaurant/${router.query?.name}/menu`}
               />
             </Elements>
             {paymentError && (

@@ -20,7 +20,7 @@ import { PAY } from "@/server/graphql/querys/mutations.graphql";
 
 export default function CheckOut() {
   const router = useRouter();
-
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   // Custom hook to manage orders
   const { addOrder, removeOrder, orders, loading } = useOrders();
 
@@ -43,8 +43,7 @@ export default function CheckOut() {
       },
     ],
     onCompleted: () => {
-      // Reload the page after payment is completed
-      router.reload();
+      setPaymentSuccess(true);
     },
     onError: (err) => {
       // Handle payment error
@@ -62,7 +61,8 @@ export default function CheckOut() {
   }, 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  if (paymentSuccess)
+    return <Warning label="Checkout" message="Your order saved sucessefuly" />;
   if (!orders?.length)
     return <Warning label="Checkout" message="You have not any orders" />;
 

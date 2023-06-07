@@ -5,10 +5,8 @@ import userResolvers from "./userResolvers";
 import menuResolvers from "./menuResolvers";
 import costumerSchema from "./costumerResolvers";
 import sellResolvers from "./sellResolver";
-import paymentResolvers from "./paymentResolvers";
-import kontaktResolvers from "./kontaktResolvers";
 import orderResolvers from "./orderResolvers";
-import { ResolversTypes } from "server/generated/graphql";
+
 //Merge all resolvers before send to apollo
 const resolvers = [
   userResolvers,
@@ -16,8 +14,6 @@ const resolvers = [
   menuResolvers,
   costumerSchema,
   orderResolvers,
-  paymentResolvers,
-  kontaktResolvers,
   sellResolvers,
 ];
 

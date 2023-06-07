@@ -53,7 +53,7 @@ function SideBar({
     <div className={styles.dropdown}>
       <div className={styles.items_wrapper}>
         <div className={styles.user_container}>
-          {Router.query?.name ? (
+          {Router.query?.name || Router.query?.restaurant ? (
             <IoFastFoodOutline size={24} className={styles.user_icon} />
           ) : (
             <BiCode size={24} className={styles.user_icon} />

@@ -25,23 +25,6 @@ async function fetchPayedOrders(query: object) {
     .populate("costumer");
 }
 
-// const stripe = new Stripe(process.env.STRIPE_KEY as string, {
-//   apiVersion: "2022-08-01",
-// });
-
-let i = 0;
-let clients = [];
-let facts = [];
-
-// const createCustomer = async () => {
-//   const params: Stripe.CustomerCreateParams = {
-//     description: "test customer",
-//   };
-
-//   const customer: Stripe.Customer = await stripe.customers.create(params);
-
-//   return customer.id;
-// };
 const subscribers: void[] = [];
 
 const onMessagesUpdates = (fn: any) => subscribers.push(fn);
@@ -150,50 +133,6 @@ const orderResolvers = {
     // },
   },
 
-  // Subscription: {
-  //   messages: {
-  //     subscribe: (_, __) => {
-  //       const channel = Math.random().toString(36).slice(2, 15);
-  //       onMessagesUpdates(() => pubsub.publish(channel, { messages }));
-  //       setTimeout(() => pubsub.publish(channel, { messages }), 0);
-  //       return pubsub.subscribe(channel);
-  //     },
-  //   },
-  //   // orders: {
-  //   //   subscribe: async (_, __, { costumerId }) => {
-  //   //     if (!costumerId) {
-  //   //       return null;
-  //   //       throw new ForbiddenError("User is not loged in");
-  //   //     }
-  //   //     const id = mongoose.Types.ObjectId(id);
-  //   //     const pubsub = createPubSub();
-  //   //     const orders = await fetchOrders({ costumer: costumerId });
-  //   //     Order.watch().on("change", async (res) => {
-  //   //       const orders = await fetchOrders({});
-
-  //   //       pubsub.publish("orders", { orders });
-  //   //       return pubsub.subscribe("orders");
-  //   //     });
-  //   //     pubsub.publish("orders", { orders });
-  //   //     return pubsub.subscribe("orders");
-  //   //   },
-  //   // },
-  //   AdminOrders: {
-  //     subscribe: async (_, __, { pubsub }) => {
-  //       // const pubsub = createPubSub();
-  //       const orders = await fetchOrders({});
-  //       Order.watch().on("change", async (res) => {
-  //         const orders = await fetchOrders({});
-
-  //         // pubsub.publish("AdminOrders", { AdminOrders: orders });
-  //         return pubsub.subscribe("AdminOrders");
-  //       });
-
-  //       // pubsub.publish("AdminOrders", { AdminOrders: orders });
-  //       return pubsub.subscribe("AdminOrders");
-  //     },
-  //   },
-  // },
   OrderItem: {
     product: (parent) => parent.product,
     costumer: (parent) => parent.costumer,
@@ -224,7 +163,6 @@ const orderResolvers = {
       { productId }: AddOrderMutationVariables,
       { costumerId }: { costumerId: string }
     ) {
-      console.log("here");
       try {
         if (!costumerId) {
           return null;
@@ -363,7 +301,10 @@ const orderResolvers = {
             extra: order?.extra,
           });
 
-          await payedOrder.save();
+          const payedOrders = await payedOrder.save();
+          if (!payedOrders) {
+            throw new ApolloError("Couldnt save order");
+          }
           await Order.findOneAndRemove({ _id: id });
           return order;
         });
@@ -375,6 +316,7 @@ const orderResolvers = {
           price: price,
         });
         await cosHistoryDocument.save();
+
         const sell = await new sellSchema({
           restaurant: restaurant,
           costumer: cosId,
@@ -384,7 +326,7 @@ const orderResolvers = {
         await sell.save();
         return sell;
       } catch (err: any) {
-        console.log(err);
+        throw err;
       }
     },
     async GetBillInfo(_, { restaurant, recieptId }) {

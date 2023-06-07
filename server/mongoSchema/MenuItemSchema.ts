@@ -7,7 +7,7 @@ import restaurangSchema, { IRestaurant } from "./restaurantSchema";
 // Define the interface for the MenuItem document
 export interface I_MenuItemDocument extends Document {
   category: Types.ObjectId | i_MenuCategoryDocument;
-  restaurant: Types.ObjectId | IRestaurant;
+  restaurant: string;
   extra: {
     name: string;
     quantity: number;
@@ -33,8 +33,7 @@ const MenuItemSchema = new Schema<I_MenuItemDocument>(
       ref: "MenuCategory",
     },
     restaurant: {
-      type: Schema.Types.ObjectId,
-      ref: "Restaurang",
+      type: String,
     },
     extra: [
       {
