@@ -312,11 +312,7 @@ type Mutation {
   Pay(restaurant: String!, products: [String!], price: Float!): SellInfo!
   AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
   EditUserInfoItem(name: String!, value: String!): User
-  EditRestaurantInfoItem(
-    restaurant: String
-    name: String!
-    value: String!
-  ): Restaurant
+  EditRestaurantInfoItem(name: String!, value: String!): Restaurant
   AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
   GetAnalistics(year: Int): [Analistic]
   GetRapport(beginDate: Date, finishDate: Date): [CategoryParent]

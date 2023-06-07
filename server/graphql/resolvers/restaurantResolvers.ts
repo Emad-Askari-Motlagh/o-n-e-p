@@ -66,19 +66,18 @@ const productResolvers = {
         location,
       };
     },
-    async EditRestaurantInfoItem(_, { restaurant, name, value }, { userId }) {
+    async EditRestaurantInfoItem(_, { name, value }, { userId }) {
       if (!userId) {
         return null;
       }
       try {
-        console.log(name, value, "ok");
         const user = await userSchema.findById(userId).populate("restaurant");
 
         const res = await Restaurant.findOneAndUpdate(
           { name: user.restaurant.name },
           { $set: { [name]: value } }
         );
-        console.log(res);
+
         return res;
       } catch (err) {
         throw new ApolloError("Couldn't save the info");

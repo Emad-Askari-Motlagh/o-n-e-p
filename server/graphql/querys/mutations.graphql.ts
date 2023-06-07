@@ -218,16 +218,8 @@ export const EDIT_USER_INFO_ITEM = gql`
   }
 `;
 export const EDIT_RESTAURANT_INFO_ITEM = gql`
-  mutation EditRestaurantInfoItem(
-    $restaurant: String!
-    $name: String!
-    $value: String!
-  ) {
-    EditRestaurantInfoItem(
-      restaurant: $restaurant
-      name: $name
-      value: $value
-    ) {
+  mutation EditRestaurantInfoItem($name: String!, $value: String!) {
+    EditRestaurantInfoItem(name: $name, value: $value) {
       name
     }
   }

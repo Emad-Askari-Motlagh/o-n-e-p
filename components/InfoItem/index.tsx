@@ -7,15 +7,20 @@ import Modall from "@/components/Modal";
 import Input from "@/components/Input";
 import Button from "../Button";
 import InfoEditor from "../InfoEditor/InfoItem";
-import { EditUserInfoItemMutationFn } from "@/server/generated/graphql";
+import {
+  EditRestaurantInfoItemMutation,
+  EditRestaurantInfoItemMutationFn,
+  EditUserInfoItemMutationFn,
+} from "@/server/generated/graphql";
 
 interface InfoItemProps {
   label: string;
   value: string;
-  changeItem: EditUserInfoItemMutationFn;
+  changeItem: EditRestaurantInfoItemMutationFn;
   type: string;
   children: JSX.Element;
   myR: React.LegacyRef<HTMLDivElement>;
+  field?: string;
 }
 const InfoItem: React.FC<InfoItemProps> = ({
   label,
@@ -24,6 +29,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
   type,
   children,
   myR,
+  field,
 }: InfoItemProps) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -48,6 +54,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
               placeHolder={value}
               label={label}
               changeItem={changeItem}
+              field={field}
               type={type}></InfoEditor>
           </Modall>
         </div>

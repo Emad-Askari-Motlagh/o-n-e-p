@@ -72,6 +72,7 @@ export default function Profile({ RES }: ProfileProps) {
           value={userInfo.name}
           changeItem={changeUserInfo}
           type="user"
+          field="name"
         />
 
         <InfoItem
@@ -79,6 +80,7 @@ export default function Profile({ RES }: ProfileProps) {
           value={userInfo.email}
           changeItem={changeUserInfo}
           type="user"
+          field="email"
         />
       </InfoParent>
       <InfoParent type="restaurant" header="Restaurant information">
@@ -86,21 +88,25 @@ export default function Profile({ RES }: ProfileProps) {
           label="Name"
           value={userInfo.restaurant.name}
           changeItem={changeRestaurantInfo}
+          field="name"
         />
         <InfoItem
           label="Open times"
           value={userInfo.restaurant.openTimes}
           changeItem={changeRestaurantInfo}
+          field="openTimes"
         />
         <InfoItem
           label="Address"
           value={userInfo.restaurant.address}
           changeItem={changeRestaurantInfo}
+          field="address"
         />
         <InfoItem
           label="Food types"
           value={"vegan"} // Should this be userInfo.restaurant.foodTypes?
           changeItem={changeRestaurantInfo}
+          field="foodTypes"
         />
       </InfoParent>
     </div>
