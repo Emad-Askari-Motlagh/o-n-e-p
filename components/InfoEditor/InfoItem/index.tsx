@@ -1,33 +1,63 @@
-import PrimaryLayout from "@/components/Primary-layout";
-import { useProvideAuth } from "hooks/Context.hook";
 import React, { useState } from "react";
 import styles from "./style.module.scss";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import SucceedMessage from "@/components/Succeed-Message";
+import {
+  EditRestaurantInfoItemMutation,
+  EditRestaurantInfoItemMutationFn,
+  EditUserInfoItemMutationFn,
+} from "@/server/generated/graphql";
 
-const InfoEditor = ({ label, placeHolder, changeItem, type }) => {
-  const [value, setValue] = useState();
+interface InfoEditorProps {
+  label: string;
+  placeHolder: string;
+  changeItem: EditRestaurantInfoItemMutationFn;
+  type: string;
+}
+
+const InfoEditor: React.FC<InfoEditorProps> = ({
+  label,
+  placeHolder,
+  changeItem,
+  type,
+}) => {
+  const [value, setValue] = useState<any>();
   const [changedSuccess, setChangedSuccess] = useState(false);
-  function change() {
+
+  function change(e) {
     changeItem({
-      variables: { name: label, value },
+      variables: { restaurant: "Göteburgare", name: label, value },
       onCompleted: () => {
         setChangedSuccess(true);
       },
+      onError: (error) => {
+        error.graphQLErrors.map((r) => console.log(r.extensions));
+      },
     });
   }
+
   return (
     <div className={styles.info_editor}>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}>
         <label>{label}</label>
         <Input
+          width="80%"
           onChange={(e) => setValue(e.target.value)}
-          placeholder={placeHolder}></Input>
-        <Button onClick={change}>Submit your change</Button>
+          placeholder={label}
+          value={value ?? placeHolder}
+        />
+        <Button type="submit" onClick={change}>
+          Submit your change
+        </Button>
         {changedSuccess && <SucceedMessage>The item changed</SucceedMessage>}
       </div>
     </div>
   );
 };
+
 export default InfoEditor;

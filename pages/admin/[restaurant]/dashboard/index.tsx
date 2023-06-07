@@ -9,6 +9,10 @@ import SelectInput from "@/components/SelectInput";
 import React_Calendar from "components/Calendar";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import {
+  GetAnalisticsMutation,
+  GetAnalisticsMutationVariables,
+} from "@/server/generated/graphql";
 
 export default function Dashboard() {
   const [sortType, setSortType] = useState(new Date());
@@ -17,10 +21,13 @@ export default function Dashboard() {
     user: { data: userData },
   } = useUser();
 
-  const [getAnalistics, { data: analisticsData }] = useMutation(GET_ANALISTICS);
+  const [getAnalistics, { data: analisticsData }] = useMutation<
+    GetAnalisticsMutation,
+    GetAnalisticsMutationVariables
+  >(GET_ANALISTICS);
   useEffect(() => {
     getAnalistics({
-      variables: { year: sortType?.$y },
+      variables: { year: sortType?.getFullYear() },
       onCompleted: (e) => console.log(e),
     });
   }, [sortType, getAnalistics]);

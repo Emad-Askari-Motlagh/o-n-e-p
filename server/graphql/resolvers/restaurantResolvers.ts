@@ -70,13 +70,19 @@ const productResolvers = {
       if (!userId) {
         return null;
       }
-      const user = await userSchema.findById(userId).populate("restaurant");
+      try {
+        console.log(name, value, "ok");
+        const user = await userSchema.findById(userId).populate("restaurant");
 
-      const res = await Restaurant.findOneAndUpdate(
-        { name: user.restaurant.name },
-        { $set: { name: value } }
-      );
-      return res;
+        const res = await Restaurant.findOneAndUpdate(
+          { name: user.restaurant.name },
+          { $set: { [name]: value } }
+        );
+        console.log(res);
+        return res;
+      } catch (err) {
+        throw new ApolloError("Couldn't save the info");
+      }
     },
     async GetAnalistics(_: any, { year }: { year: number }, { userId }) {
       if (!userId) return null;

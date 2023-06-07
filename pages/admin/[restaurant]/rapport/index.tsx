@@ -12,6 +12,7 @@ import {
   GetRapportMutation,
   GetRapportMutationVariables,
 } from "@/server/generated/graphql";
+import Info from "@/components/Info";
 
 export default function Rapport() {
   const [sortType, setSortType] = useState("year");
@@ -77,7 +78,7 @@ export default function Rapport() {
             handleChange={(val: Date) => seFinishDate(val)}
           />
         </div>
-
+        <Info>OBS! Rapport on pdf is not available yet.</Info>
         <div className={styles.rapport_container}>
           <div>
             {typeof beginDate == Date() && (

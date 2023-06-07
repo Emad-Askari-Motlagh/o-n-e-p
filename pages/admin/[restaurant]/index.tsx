@@ -1,6 +1,5 @@
 import InfoItem from "@/components/InfoItem";
 import PrimaryLayout from "@/components/Primary-layout";
-import SucceedMessage from "@/components/Succeed-Message";
 import {
   EDIT_RESTAURANT_INFO_ITEM,
   EDIT_USER_INFO_ITEM,
@@ -8,16 +7,14 @@ import {
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
 import { useUser } from "hooks/Context.hook";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
-import RestaurantSubItem from "@/components/RestaurantSubItem";
 import Restaurant from "@/components/Restaurant";
 import dbInit from "@/lib/dbInit";
 import { NextApiRequest } from "next";
 import { decodeJwt } from "@/lib/storeJwt";
 import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
-import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 
 interface ProfileProps {
   RES: string;
@@ -102,7 +99,7 @@ export default function Profile({ RES }: ProfileProps) {
         />
         <InfoItem
           label="Food types"
-          value={userInfo.name} // Should this be userInfo.restaurant.foodTypes?
+          value={"vegan"} // Should this be userInfo.restaurant.foodTypes?
           changeItem={changeRestaurantInfo}
         />
       </InfoParent>
