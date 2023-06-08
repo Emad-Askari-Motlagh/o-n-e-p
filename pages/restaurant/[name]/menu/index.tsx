@@ -28,24 +28,23 @@ export default function Menu() {
       ) : (
         <>
           <Header_animations text="Menu"></Header_animations>
-          <div className={styles.items_parent}>
+          <ul className={styles.items_parent}>
             {(data?.MenuByCategory
               ? data?.MenuByCategory
               : Array(data?.MenuByCategory?.length).fill(1)
             ).map((res, index) => {
               return (
-                <div key={index} className={styles.item_parent}>
+                <li key={index} className={styles.item_parent}>
                   <RestaurantSubItem
                     key={index}
                     label={res.itemName}
                     endPoint={res.itemName}
-                    subCat={res.subCategory}
                     image={"/2.webp"}
                   />
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </>
       )}
     </div>
