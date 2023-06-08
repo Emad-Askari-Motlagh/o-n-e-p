@@ -18,7 +18,7 @@ export default function Menu() {
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
-    variables: { restaurant: "Göteburgare" },
+    variables: { restaurant: Router.query?.name as string },
   });
 
   return (

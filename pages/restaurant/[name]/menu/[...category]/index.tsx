@@ -1,28 +1,34 @@
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { useQuery } from "@apollo/client";
+import { motion } from "framer-motion";
+import styles from "./styles.module.scss";
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "components/Primary-layout";
 import {
   GET_MENU_BY_SUB_CATEGORY,
   GET_MENU_ITEM_BY_CATREGORY,
 } from "@/server/graphql/querys/querys.graphql";
-import { useQuery } from "@apollo/client";
-import { motion } from "framer-motion";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import styles from "./styles.module.scss";
 import {
   MenuBySubCategoryQuery,
   MenuBySubCategoryQueryVariables,
   MenuItemByCategoryQuery,
   MenuItemByCategoryQueryVariables,
 } from "server/generated/graphql";
-import MenuItems from "screens/MenuScreen/MenuItems";
-import CategoryItems from "@/screens/MenuScreen/CategoryItems";
+
+// Dynamic import the MenuItems component
+const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"));
+
+// Dynamic import the CategoryItems component
+const CategoryItems = dynamic(
+  () => import("@/screens/MenuScreen/CategoryItems")
+);
 
 export default function Menu() {
-  const Router = useRouter();
-  const currentCat = Router.query.category?.[Router.query.category?.length - 1];
-  const item = Router.query?.category?.[Router.query?.category.length - 1];
-  const restaurant = Router.query?.name;
+  const router = useRouter();
+  const currentCat = router.query.category?.[router.query.category?.length - 1];
+  const restaurant = router.query?.name;
 
   const { data, error, loading } = useQuery<
     MenuBySubCategoryQuery,
@@ -34,7 +40,7 @@ export default function Menu() {
     },
   });
   const {
-    data: menuItesmData,
+    data: menuItemsData,
     loading: menuItemsLoading,
     error: menuItemsError,
   } = useQuery<MenuItemByCategoryQuery, MenuItemByCategoryQueryVariables>(
@@ -46,9 +52,10 @@ export default function Menu() {
       },
     }
   );
-  if (menuItemsLoading) return <div>...</div>;
-  if (menuItemsError || !menuItesmData.MenuItemByCategory.length)
-    return <ErrorCard>Couldn`t find any item</ErrorCard>;
+
+  if (menuItemsLoading) return <div>Loading...</div>;
+  if (menuItemsError || !menuItemsData.MenuItemByCategory.length)
+    return <ErrorCard>Couldn't find any item</ErrorCard>;
 
   return (
     <div className={styles.container}>
@@ -56,13 +63,13 @@ export default function Menu() {
         className={styles.label}
         initial={{ opacity: 0, y: -200 }}
         animate={{ opacity: 1, y: 0 }}>
-        {Router.query?.name}
+        {router.query?.name}
       </motion.label>
       <div className={styles.items_parent}>
         {data?.MenuBySubCategory?.length ? (
           <CategoryItems items={data?.MenuBySubCategory} />
-        ) : menuItesmData?.MenuItemByCategory.length ? (
-          <MenuItems items={menuItesmData?.MenuItemByCategory} />
+        ) : menuItemsData?.MenuItemByCategory.length ? (
+          <MenuItems items={menuItemsData?.MenuItemByCategory} />
         ) : (
           !loading && <ErrorCard>Sorry</ErrorCard>
         )}

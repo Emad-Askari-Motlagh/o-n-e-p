@@ -10,7 +10,11 @@ import Button from "@/components/Button";
 import Modal from "components/Modal";
 import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
-import { AddOrderMutationResult } from "@/server/generated/graphql";
+import {
+  AddOrderMutation,
+  AddOrderMutationResult,
+  MenuItemByCategoryQuery,
+} from "@/server/generated/graphql";
 import styles from "./styles.module.scss";
 
 interface MyTipes<P> {
@@ -33,7 +37,7 @@ interface MenuItemSelection {
 export default function Items({
   items,
 }: {
-  items: MyTipes<AddOrderMutationResult>;
+  items: MyTipes<MenuItemByCategoryQuery>;
 }) {
   const Router = useRouter();
 
