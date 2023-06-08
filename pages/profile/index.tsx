@@ -11,6 +11,7 @@ import { useUser } from "hooks/Context.hook";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
+import Head from "next/head";
 
 export default function Profile() {
   //   interface Emi{
@@ -35,6 +36,10 @@ export default function Profile() {
   }
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Profile</title>
+        <meta name="description" content="Admin profile page" />
+      </Head>
       <div className={styles.header_container}>
         <span>
           <CgProfile className={styles.icon} />

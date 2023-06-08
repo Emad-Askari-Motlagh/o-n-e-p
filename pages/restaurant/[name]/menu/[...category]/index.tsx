@@ -16,6 +16,7 @@ import {
   MenuItemByCategoryQuery,
   MenuItemByCategoryQueryVariables,
 } from "server/generated/graphql";
+import Head from "next/head";
 
 // Dynamic import the MenuItems component
 const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"));
@@ -59,6 +60,10 @@ export default function Menu() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Menu Page</title>
+        <meta name="description" content="This is the menu page" />
+      </Head>
       <motion.label
         className={styles.label}
         initial={{ opacity: 0, y: -200 }}

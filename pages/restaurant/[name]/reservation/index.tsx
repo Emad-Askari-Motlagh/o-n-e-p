@@ -63,6 +63,10 @@ const Reservation = () => {
   }
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Reservation Page</title>
+        <meta name="description" content="Reservation page" />
+      </Head>
       <div className={styles.calandar_container}>
         <h2>Make your Reservation</h2>
         <div className={styles.table_container}>

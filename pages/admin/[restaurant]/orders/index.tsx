@@ -20,6 +20,7 @@ import AdminOrdersInfo from "@/components/AdminOrdersInfo";
 import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
 import { BiTrash } from "react-icons/bi";
+import Head from "next/head";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -93,6 +94,11 @@ const AdminsOrders = () => {
     );
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Admin Orders</title>
+        <meta name="description" content="Admin Orders page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <span style={{ marginLeft: "20px" }}>
         {date.getFullYear() +
           "-" +
@@ -105,7 +111,6 @@ const AdminsOrders = () => {
           label={"Hitta din restaurang"}
           onChange={searchOverRestaurants}></Search>
       </div>
-
       <table>
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>

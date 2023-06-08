@@ -13,6 +13,7 @@ import {
   GetAnalisticsMutation,
   GetAnalisticsMutationVariables,
 } from "@/server/generated/graphql";
+import Head from "next/head";
 
 export default function Dashboard() {
   const [sortType, setSortType] = useState(new Date());
@@ -34,6 +35,11 @@ export default function Dashboard() {
 
   return (
     <div className={styles.dash_container}>
+      <Head>
+        <title>Dashboard - Admin</title>
+        <meta name="description" content="Admin`s Dashboard" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h1>Dashboard</h1>
       <div className={styles.calendar_parent}>
         <React_Calendar
@@ -42,7 +48,6 @@ export default function Dashboard() {
           value={sortType}
         />
       </div>
-
       <div className={styles.info_container}>
         <div>
           <span>Oppen times: 12 - 14</span>
@@ -61,7 +66,6 @@ export default function Dashboard() {
         </div>
       </div>
       <Chart data={analisticsData} sortType={sortType} />
-
       <div className={styles.rapport_container}>
         <Link href={`/admin/${router.query.restaurant}/rapport`}>
           <a className={styles.rapport_item}>Z-Rapport</a>

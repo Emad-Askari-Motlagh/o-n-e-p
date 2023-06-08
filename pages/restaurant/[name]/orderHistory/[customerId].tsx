@@ -28,8 +28,9 @@ import {
 import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
 import HistoryItem from "@/components/HistoryItem";
+import Head from "next/head";
 
-const AdminsOrders = () => {
+const OrdersHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [BillData, setBillData] = useState();
   const router = useRouter();
@@ -80,6 +81,10 @@ const AdminsOrders = () => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>OrdersHistory</title>
+        <meta name="description" content="OrdersHistory page" />
+      </Head>
       <span style={{ marginLeft: "20px" }}>
         {new Date().getFullYear() +
           "-" +
@@ -92,7 +97,6 @@ const AdminsOrders = () => {
           label={"Hitta din restaurang"}
           onChange={searchOverRestaurants}></Search>
       </div>
-
       <table>
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>
@@ -139,5 +143,5 @@ const AdminsOrders = () => {
   );
 };
 
-export default AdminsOrders;
-AdminsOrders.Layout = PrimaryLayout;
+export default OrdersHistory;
+OrdersHistory.Layout = PrimaryLayout;

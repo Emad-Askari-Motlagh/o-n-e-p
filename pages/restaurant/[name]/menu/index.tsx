@@ -11,6 +11,7 @@ import {
   MenuByCategoryQueryVariables,
 } from "server/generated/graphql";
 import Header_animations from "@/components/framer_helpers/Header_animations";
+import Head from "next/head";
 
 export default function Menu() {
   const Router = useRouter();
@@ -23,6 +24,11 @@ export default function Menu() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{Router.query?.name}</title>
+        <meta name="description" content={`${Router.query?.name} menu`} />
+      </Head>
       {error ? (
         <ErrorCard>Couldn`t find any item</ErrorCard>
       ) : (

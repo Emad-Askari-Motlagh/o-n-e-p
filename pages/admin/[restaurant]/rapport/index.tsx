@@ -13,6 +13,7 @@ import {
   GetRapportMutationVariables,
 } from "@/server/generated/graphql";
 import Info from "@/components/Info";
+import Head from "next/head";
 
 export default function Rapport() {
   const [sortType, setSortType] = useState("year");
@@ -63,8 +64,11 @@ export default function Rapport() {
 
   return (
     <div className={styles.dash_container}>
+      <Head>
+        <title>Restaurant rapport page</title>
+        <meta name="description" content="Restaurant rapport page" />
+      </Head>
       <h1>Rapport</h1>
-
       <div className={styles.rapport}>
         <div className={styles.calendar_parent}>
           <React_Calendar

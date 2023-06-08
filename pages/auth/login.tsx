@@ -15,6 +15,7 @@ import LoginSucceed from "components/Succeed-Message";
 import { signIn as signInWithGoogle } from "next-auth/react";
 import { useRouter } from "next/router";
 import Info from "@/components/Info";
+import Head from "next/head";
 
 export default function Login() {
   const [error, setError] = useState<string | null>("");
@@ -84,8 +85,12 @@ export default function Login() {
       initial={{ opacity: 0, y: -200 }}
       animate={{ opacity: 1, y: 0 }}
       className={styles.login_container}>
+      {" "}
+      <Head>
+        <title>Login</title>
+        <meta name="description" content="Login page" />
+      </Head>
       <Header_animations text=" Login" />
-
       <Header_animations
         text="Welcome back, nice to have you here "
         style={{ color: "white", fontSize: "12px" }}
@@ -136,21 +141,18 @@ export default function Login() {
           </Alert>
         )}
       </form>
-
       <div className={styles.forgotPassword_div}>
         <Link href="/auth/resetPass">
           <a>Do you forgot your password?</a>
         </Link>
       </div>
       {/*--------this part is for the situation that user can register--------------------*/}
-
       {/* <div className={styles.login_alternatives_container}>
         <div onClick={onSuccess} className={styles.auth_buttons}>
           <FaGoogle className={styles.icons}></FaGoogle>
           <span> Signin with Google</span>
         </div>
       </div> */}
-
       {/* <Link href="/auth/signup">
         <a className={styles.account_recomendation}>
           Dont you have an account?

@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Bestellät - Restaurants</title>
+        <title>Bestellät - Restaurants-List</title>
       </Head>
       {loading ? (
         <ApolloProvider client={client}>

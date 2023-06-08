@@ -1,10 +1,14 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSubscription, useMutation, gql, useQuery } from "@apollo/client";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import useSocketIo from "hooks/SocketIo.hook";
+import {
+  PostMessageMutation,
+  PostMessageMutationVariables,
+} from "@/server/generated/graphql";
 
 const POST_MESSAGE = gql`
-  mutation ($user: String!, $content: String!) {
+  mutation PostMessage($user: String!, $content: String!) {
     PostMessage(user: $user, content: $content)
   }
 `;
@@ -18,6 +22,7 @@ const MESSAGE = gql`
     }
   }
 `;
+
 const GET_MESSAGES = gql`
   subscription {
     messages {
@@ -28,38 +33,46 @@ const GET_MESSAGES = gql`
   }
 `;
 
-const Messages = ({ user }) => {
+interface Message {
+  content: string;
+  user: string;
+  id: string;
+}
+
+const Messages: React.FC<{ user: string }> = ({ user }) => {
   return null;
 };
 
-// create random user
 const user = "User_" + String(new Date().getTime());
-const Chat = () => {
-  const [state, stateSet] = React.useState({
+
+const Chat: React.FC = () => {
+  const [state, stateSet] = useState<{ user: string; content: string }>({
     user: "Jack",
     content: "",
   });
   const { data, connected } = useSocketIo("/api/socket");
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     console.log(data);
   }, [data]);
 
-  // init chat and message
+  const [postMessage] = useMutation<
+    PostMessageMutation,
+    PostMessageMutationVariables
+  >(POST_MESSAGE);
+  const { data: messageData } = useQuery(MESSAGE);
+  const { data: subscriptionData } = useSubscription(GET_MESSAGES);
 
   const [msg, setMsg] = useState("");
 
   const sendMessage = async () => {
     if (msg) {
       postMessage({ variables: { user, content: msg } });
-      // build message obj
       const message = {
         user,
         msg,
       };
-
-      // dispatch message to other users
       const resp = await fetch("/api/socket", {
         method: "POST",
         headers: {
@@ -67,14 +80,12 @@ const Chat = () => {
         },
         body: JSON.stringify(message),
       });
-
-      // reset field if OK
       if (resp.ok) setMsg("");
     }
-
-    // focus after click
     inputRef?.current?.focus();
   };
+
+  const messages: Message[] = data || messageData?.messages || [];
 
   return (
     <Container>
@@ -100,8 +111,8 @@ const Chat = () => {
           </Button>
         </Col>
       </Row>
-      {data.length ? (
-        data.map((chat, i) => (
+      {messages.length ? (
+        messages.map((chat, i) => (
           <div key={"msg_" + i}>
             <span>{chat.user === user ? "Me" : chat.user}</span>: {chat.msg}
           </div>
