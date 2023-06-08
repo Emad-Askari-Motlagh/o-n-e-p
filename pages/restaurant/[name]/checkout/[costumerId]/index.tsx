@@ -17,6 +17,7 @@ import {
   GET_PAYED_ORDERS,
 } from "@/server/graphql/querys/querys.graphql";
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
+import { PayMutation, PayMutationVariables } from "@/server/generated/graphql";
 
 export default function CheckOut() {
   const router = useRouter();
@@ -30,18 +31,7 @@ export default function CheckOut() {
   const [paymentError, setPaymentError] = useState(false);
 
   // Mutation for payment
-  const [pay] = useMutation(PAY, {
-    refetchQueries: [
-      // Refetching orders after payment
-      {
-        query: GET_ORDERS_CONSTANTLY,
-        variables: { restaurant: router.query.name },
-      },
-      {
-        query: GET_PAYED_ORDERS,
-        variables: { restaurant: router.query.name },
-      },
-    ],
+  const [pay] = useMutation<PayMutation, PayMutationVariables>(PAY, {
     onCompleted: () => {
       setPaymentSuccess(true);
     },

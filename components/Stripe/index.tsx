@@ -57,9 +57,9 @@ export default function Stripe({
               price: sum,
             },
             onCompleted: () => {
-              // setTimeout(() => {
-              //   router.push(redirectPath);
-              // }, 2000);
+              setTimeout(() => {
+                router.push(redirectPath);
+              }, 2000);
             },
           });
         }
