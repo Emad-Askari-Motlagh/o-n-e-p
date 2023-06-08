@@ -24,7 +24,7 @@ function Selection({
 }) {
   const items = options?.map((res, i) => {
     return (
-      <MenuItem key={i} value={res.name}>
+      <MenuItem key={i} value={res.name} disabled={i === 0 ? true : false}>
         {isPending ? (
           <div style={{ color: "whitesmoke" }}>{`${res.name}...`}...</div>
         ) : (
@@ -41,7 +41,7 @@ function Selection({
         id="demo-simple-select"
         value={value}
         label={label}
-        placeholder="ok"
+        placeholder=""
         onOpen={onOpen}
         style={{ minWidth: "300px" }}
         onSelect={onSelect}

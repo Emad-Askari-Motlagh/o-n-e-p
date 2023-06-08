@@ -1,29 +1,27 @@
-import React, { useEffect, useRef, useState, useTransition } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PrimaryLayout from "components/Primary-layout";
 import MenuEditor from "components/MenuEditor";
-import MenuAdder from "@/components/MenuAdder";
 import { useRouter } from "next/router";
 import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
 import Modall from "@/components/Modal";
-import ErrorCard from "@/components/ErrorCard";
-import { useUser } from "hooks/Context.hook";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
-import AddCategory from "@/components/AddCategory";
 import useMenu from "hooks/Menu.hook";
-import Selection from "@/components/Selection";
-import Search from "components/Search-form/Input";
 import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
+import dynamic from "next/dynamic";
+import Info from "@/components/Info";
+const Selection = dynamic(() => import("@/components/Selection"));
+const AddCategory = dynamic(() => import("@/components/AddCategory"));
+const MenuAdder = dynamic(() => import("@/components/MenuAdder"));
+const ErrorCard = dynamic(() => import("@/components/ErrorCard"));
 
 export default function Category() {
   const { query, push, reload } = useRouter();
-  const { user } = useUser();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
-  const [actionType, setActionType] = useState("create category");
-  const [isPending, startTransition] = useTransition();
+  const [actionType, setActionType] = useState("Options...");
   const [importedItems, setImportedItems] = useState([]);
   const { uploadImage, image } = useUpload(
     "https://api.cloudinary.com/v1_1/dug3htihd/image/upload"
@@ -52,15 +50,17 @@ export default function Category() {
     AddSubCatToMenuItem,
     deleteSubCatToMenuItem,
   } = useMenu();
+
   const options = useRef([
+    { name: "Options..." },
     { name: "create item" },
     { name: "create category" },
     { name: "import item" },
   ]);
-
-  function onSelectionChange(e: SelectChangeEvent) {
+  const onSelectionChange = useCallback((e: SelectChangeEvent) => {
     setActionType(e.target.value);
-  }
+  }, []);
+
   useEffect(() => {
     if (allItems?.FetchAllMenuItems?.length && actionType === "import item") {
       setImportedItems([...allItems?.FetchAllMenuItems]);
@@ -157,15 +157,17 @@ export default function Category() {
         <Modall
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          label="Create new category">
+          label="Edit menu options">
+          <Info>
+            You can create item, import menu item or create category in this
+            section
+          </Info>
           <Selection
             value={actionType}
             onChange={onSelectionChange}
             options={options.current}
             label="Choose one of the options"
-            loading={isPending}
           />
-
           {actionType === "create category" && (
             <AddCategory
               restaurant={query?.restaurant as string}
@@ -174,7 +176,6 @@ export default function Category() {
               parent={currentCat}
             />
           )}
-
           {actionType === "create item" &&
           !menuBySubCategoryData?.MenuBySubCategory?.length ? (
             <MenuAdder
@@ -183,7 +184,7 @@ export default function Category() {
               category={query.category?.[0] as string}
               subCat={query?.category}></MenuAdder>
           ) : (
-            actionType === "create item"&& (
+            actionType === "create item" && (
               <ErrorCard>
                 Creation of an item is allowed in lowest level of category
               </ErrorCard>

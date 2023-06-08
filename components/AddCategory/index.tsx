@@ -34,15 +34,13 @@ export default function AddCategory({
 
   return (
     <div className={styles.container}>
-      <Info>
-        You can create item, import menu item or create category in this section
-      </Info>
       <Image
         className={styles.image}
-        alt="ok"
+        alt="Catrgory"
         width={100}
         height={100}
-        src={image ?? "/blur_image.webp"}></Image>
+        src={image ?? "/blur_image.webp"}></Image>{" "}
+      <FileInput label="Upload Image" onChange={onChangeImage} />
       <form>
         <Input
           label="Name"
@@ -50,7 +48,6 @@ export default function AddCategory({
           onChange={(e) => setName(e.target.value)}
         />
 
-        <FileInput label="Upload Image" onChange={onChangeImage} />
         <Button
           type="submit"
           width="80%"
