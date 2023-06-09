@@ -90,32 +90,34 @@ const costumerResolvers: CostumerResolvers = {
         return { message: "Cookie not stored" };
       }
     },
-    async CostumerExpiry(_, args, { res }) {
-      try {
-        storeCookie(["costumerExpire", "args.time"], res, 300000);
-        return { message: "Cookie stored" };
-      } catch (err) {
-        return { message: "Cookie not stored" };
-      }
-    },
-    async AddCostumerAddress(_, { address }, { costumerId, res }) {
-      if (!costumerId) {
-        return null;
-      }
+async CostumerExpiry(_, args, { res }) {
+  try {
+    storeCookie(["costumerExpire", args.time], res, 300000);
+    return { message: "Cookie stored" };
+  } catch (err) {
+    console.log(err);
+    throw new ApolloError("Couldn't store the cookie", "COOKIE_STORE_ERROR");
+  }
+},
 
-      try {
-        const id = new Types.ObjectId(costumerId);
-        const costumer = await Costumer.findOneAndUpdate({ _id: id, address });
-        const fetchedAddress = costumer?.address;
-        if (fetchedAddress) {
-          return fetchedAddress;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        console.log("Could`nt save address");
-      }
-    },
+async AddCostumerAddress(_, { address }, { costumerId, res }) {
+  if (!costumerId) {
+    return null;
+  }
+
+  try {
+    const id = new Types.ObjectId(costumerId);
+    const costumer = await Costumer.findOneAndUpdate({ _id: id }, { address });
+    if (!costumer) {
+      throw new ApolloError("Costumer not found", "COSTUMER_NOT_FOUND");
+    }
+    return costumer.address;
+  } catch (err) {
+    console.log(err);
+    throw new ApolloError("Couldn't save the address", "ADDRESS_SAVE_ERROR");
+  }
+}
+
   },
 };
 export default costumerResolvers;
