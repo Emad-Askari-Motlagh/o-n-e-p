@@ -19,14 +19,14 @@ import {
 } from "@/server/generated/graphql";
 import getApolloErrors from "@/utils/getApolloErrors";
 
-export default function Restaurant({
-  COSTUMER,
-}: {
-  COSTUMER: I_CostumerDocument;
-}) {
-  const [error, setError] = useState<string | null>("");
+interface RestaurantProps {
+  COSTUMER: I_CostumerDocument | null;
+}
+
+const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
+  const [error, setError] = useState lo<string | null>(null);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const [AddCostumer] = useMutation<
+  const [addCostumer] = useMutation<
     AddCostumerMutation,
     AddCostumerMutationVariables
   >(ADD_COSTUMER, {
@@ -43,14 +43,14 @@ export default function Restaurant({
   });
   const Router = useRouter();
 
-  async function submitForm(values: {
+  const submitForm = async (values: {
     email: string;
     table: number;
     name: string;
-  }) {
+  }) => {
     try {
       const { email, table, name } = values;
-      await AddCostumer({
+      await addCostumer({
         variables: {
           email,
           table,
@@ -60,16 +60,17 @@ export default function Restaurant({
     } catch (err: any) {
       console.log(err.message);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
       <motion.label
         initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}>
+        animate={{ opacity: 1, y: 0 }}
+      >
         {!COSTUMER
           ? "Costumer Registration"
-          : "Please choose one of alternatives!"}
+          : "Please choose one of the alternatives!"}
       </motion.label>
 
       {!COSTUMER ? (
@@ -77,7 +78,9 @@ export default function Restaurant({
         <>
           <RegisterForm onSubmit={submitForm} />
           {error && <ErrorCard>{error}</ErrorCard>}
-          {isRegistered && <SucceedMessage>Costumer Registered</SucceedMessage>}
+          {isRegistered && (
+            <SucceedMessage>Costumer Registered</SucceedMessage>
+          )}
         </>
       ) : (
         // If COSTUMER is available, render the alternatives
@@ -102,14 +105,12 @@ export default function Restaurant({
       )}
     </div>
   );
-}
+};
 
 Restaurant.Layout = PrimaryLayout;
-
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
-    // Initialize MongoDB
-    await dbInit();
+    await dbInit(); // Initialize MongoDB
 
     let costumer = null;
 
@@ -134,3 +135,4 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     };
   }
 }
+
