@@ -1,14 +1,13 @@
 import { NextApiResponse } from "next";
 import Costumer from "server/mongoSchema/costumerSchema";
 import { ApolloError } from "apollo-server";
-import stream from "stream";
 import { storeCookie, deleteCookie } from "lib/storeCookie";
 import { Types } from "mongoose";
-import type { Resolvers, CostumerResolvers } from "server/generated/graphql";
+import { Resolvers, CostumerResolvers } from "server/generated/graphql";
 
-const costumerResolvers: Resolvers = {
+const costumerResolvers: CostumerResolvers = {
   Query: {
-    async Costumer(_: any, __: any, { costumerId }: { costumerId: string }) {
+    Costumer: async (_parent, { costumerId }, _context, _info) => {
       try {
         if (!costumerId) {
           return null;
@@ -18,10 +17,10 @@ const costumerResolvers: Resolvers = {
         return costumer;
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn`t find any costumer");
+        throw new ApolloError("Couldn't find any costumer", "COSTUMER_NOT_FOUND");
       }
     },
-    async Address(_: any, __: any, { costumerId }: { costumerId: string }) {
+    Address: async (_parent, { costumerId }, _context, _info) => {
       if (!costumerId) {
         return null;
       }
@@ -34,68 +33,61 @@ const costumerResolvers: Resolvers = {
         }
         return costumer?.address;
       } catch (e) {
-        console.log("Error getting address");
+        console.log("Error getting address", e);
+        throw new ApolloError("Couldn't fetch costumer address", "ADDRESS_FETCH_ERROR");
       }
     },
   },
   Mutation: {
-    async AddCostumer(_: any, { name, table, email }, { res }) {
+    AddCostumer: async (_parent, { name, table, email }, { res }) => {
       try {
-        //check if already there is a user with this email
-        const oldCostumer = await Costumer.findOne({ email });
-        if (oldCostumer) {
-          //if there is any user in db set the cookie with old one
-
-          //store the cookie object which include the id and expiration time for future uses
-          storeCookie(
-            [{ costumerId: oldCostumer._id }, { expireTime: 300000 }],
-            res,
-            300000
-          );
-
-          return oldCostumer;
+        const existingCostumer = await Costumer.findOne({ email });
+        if (existingCostumer) {
+          storeCookie({ costumerId: existingCostumer._id }, res, 300000);
+          return existingCostumer;
         } else {
-          //If there wasnt any old costumer then create a new one
-          const costumer = await new Costumer({
-            name,
-            table,
-            email,
-          });
-          const res = await costumer.save();
-          //if there is any user in db set the cookie with old one
-          storeCookie({ costumerId: res._id, expireTime: 300000 }, res, 300000);
-
-          return res;
+          const costumer = new Costumer({ name, table, email });
+          const savedCostumer = await costumer.save();
+          storeCookie({ costumerId: savedCostumer._id }, res, 300000);
+          return savedCostumer;
         }
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn`t save the costumer");
+        throw new ApolloError("Couldn't save the costumer", "COSTUMER_SAVE_ERROR");
       }
     },
 
-    //Delete the costumer
-
-    async DeleteCostumer(_, __, { costumerId, res }) {
+    DeleteCostumer: async (_parent, _args, { costumerId, res }) => {
       try {
         if (!costumerId) {
           return null;
         }
         const id = new Types.ObjectId(costumerId);
         const costumer = await Costumer.findOneAndRemove({ _id: id });
-
         return costumer;
       } catch (err) {
-        throw new ApolloError("Couldnt delete the costumer");
+        console.log(err);
+        throw new ApolloError("Couldn't delete the costumer", "COSTUMER_DELETE_ERROR");
       }
     },
-    //signOut user
-    async SignOutCostumer(_: any, __: any, { res }: { res: NextApiResponse }) {
+
+    SignOutCostumer: async (_parent, _args, { res }) => {
       try {
-        //Delete the cookie, we can inject an array in multiple cookie cases
         await deleteCookie("costumerId", res);
         return "done";
       } catch (err) {
-        return "Error";
+        console.log(err);
+        throw new ApolloError("Couldn't sign out the costumer", "COSTUMER_SIGNOUT_ERROR");
+      }
+    },
+
+    CostumerExpiry: async (_parent, args, { res }) => {
+      try {
+        storeCookie(["costumerExpire", args.time], res, 300000);
+        return { message: "Cookie stored" };
+      } catch (err) {
+        console.log(err);
+        return { message: "Cookie not stored" };
       }
     },
     async CostumerExpiry(_, args, { res }) {
