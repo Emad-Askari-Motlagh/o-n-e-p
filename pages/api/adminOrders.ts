@@ -1,10 +1,9 @@
 import payedItemSchema from "server/mongoSchema/payedItemSchema";
 import dbInit from "@/lib/dbInit";
-import Orders from "@/server/mongoSchema/payedItemSchema";
+import { NextApiRequest, NextApiResponse } from "next";
 
-let i = 0;
-let clients = [];
-const myOrders = [];
+let clients: { id: number; res: NextApiResponse<any> }[] = [];
+const myOrders: any[] = [];
 
 const orderFetcher = async () => {
   const fetchedOrders = await payedItemSchema
@@ -15,23 +14,17 @@ const orderFetcher = async () => {
   return fetchedOrders;
 };
 
-function sendEventsToAll(newFact, orders) {
+function sendEventsToAll(newFact: any, orders: any[]) {
   clients.forEach((client) =>
     client.res.write(`data: ${JSON.stringify(newFact)}\n\n`)
   );
 }
-async function handler(req, res) {
-  // await NextCors(req, res, {
-  //   // Options
-  //   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  //   origin: "*",
-  //   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  // });
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
       await dbInit();
 
-      // Process a POST request
       const headers = {
         Connection: "keep-alive",
         "Content-Encoding": "none",
@@ -40,8 +33,6 @@ async function handler(req, res) {
       };
 
       res.writeHead(200, headers);
-
-      var i = 1;
 
       const clientId = Date.now();
 
@@ -67,17 +58,22 @@ async function handler(req, res) {
       });
     } catch (err) {
       console.log(err);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-
-    // res.flush();
   } else if (req.method === "POST") {
-    //Handle any other HTTP method
-
-    const newFact = req.body;
-    myOrders.push(newFact);
-    res.json(newFact);
-    const orders = await orderFetcher();
-    return sendEventsToAll(newFact, orders);
+    try {
+      const newFact = req.body;
+      myOrders.push(newFact);
+      res.json(newFact);
+      const orders = await orderFetcher();
+      sendEventsToAll(newFact, orders);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  } else {
+    res.status(405).json({ error: "Method Not Allowed" });
   }
 }
+
 export default handler;
