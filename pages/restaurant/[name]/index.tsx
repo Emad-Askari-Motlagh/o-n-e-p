@@ -24,7 +24,7 @@ interface RestaurantProps {
 }
 
 const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
-  const [error, setError] = useState lo<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [addCostumer] = useMutation<
     AddCostumerMutation,
@@ -108,6 +108,12 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 };
 
 Restaurant.Layout = PrimaryLayout;
+
+export async function getServerSideProps({ req }: { req: NextApiRequest }) {
+  try {
+    await dbInit
+
+
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     await dbInit(); // Initialize MongoDB
