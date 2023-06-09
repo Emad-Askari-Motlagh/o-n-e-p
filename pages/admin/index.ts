@@ -9,34 +9,58 @@ export default function Admin() {
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
-    //Init mongoDb
+    // Initialize MongoDB
+    await dbInit();
+
     const token = req.cookies["token"];
 
-    await dbInit();
-    const user = decodeJwt(token as string);
-    console.log(user);
-    const userObj = await userSchema.findById(user?.id).populate("restaurant");
-    // //Init Apollo client
-    //Get the cookie from the req
-    if (token) {
+    if (!token) {
+      // If no token is found, redirect to the restaurant page
       return {
         redirect: {
-          destination: `/admin/${userObj.restaurant.name}`,
+          destination: "/restaurant",
           permanent: false,
-          // statusCode: 301
-        },
-      };
-    } else {
-      return {
-        redirect: {
-          destination: `/restaurant`,
-          permanent: false,
-          // statusCode: 301
         },
       };
     }
+
+    const user = decodeJwt(token as string);
+
+    if (!user || !user.id) {
+      // If the token is invalid or user ID is not present, redirect to the restaurant page
+      return {
+        redirect: {
+          destination: "/restaurant",
+          permanent: false,
+        },
+      };
+    }
+
+    const userObj = await userSchema.findById(user.id).populate("restaurant");
+
+    if (!userObj) {
+      // If the user is not found, redirect to the restaurant page
+      return {
+        redirect: {
+          destination: "/restaurant",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      redirect: {
+        destination: `/admin/${userObj.restaurant.name}`,
+        permanent: false,
+      },
+    };
   } catch (error) {
-    console.log(err);
-    return error;
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/restaurant",
+        permanent: false,
+      },
+    };
   }
 }
