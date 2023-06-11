@@ -51,7 +51,17 @@ export function useUser() {
   const client = useApollo({});
   const [signInError, setSignInError] = useState<string | undefined>();
   const costumerData = useQuery<CostumerQuery, CostumerQueryVariables>(
-    GET_COSTUMER
+    GET_COSTUMER,
+    {
+      onError: (err) => {
+        console.log(
+          err.graphQLErrors.map((res) => console.log(res.extensions))
+        );
+      },
+      onCompleted: (e) => {
+        console.log(e.Costumer);
+      },
+    }
   );
 
   //Try to use hooks

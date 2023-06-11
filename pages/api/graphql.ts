@@ -1,96 +1,77 @@
 import userSchema from "@/server/mongoSchema/userSchema";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
+// import { createServer } from "@graphql-yoga/node";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "@/server/graphql/typeDef/schema.graphql";
 import resolvers from "@/server/graphql/resolvers";
 import dbInit from "@/lib/dbInit";
 import JWT, { JwtPayload } from "jsonwebtoken";
-import { AuthenticationError } from "apollo-server-core";
-import { getSession } from "next-auth/react";
-import { createServer } from "http";
-import { PubSub } from "graphql-subscriptions";
 
-interface ReturnContext {
-  id: string;
-}
-
-const pubSub = new PubSub();
+// const pubsub = new PubSub();
 
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
 
-const server = createServer((req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "OPTIONS") {
-    res.writeHead(200, {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS, GET, POST",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Content-Length": "0",
+import {
+  createServer,
+  createPubSub,
+  GraphQLYogaError,
+} from "@graphql-yoga/node";
+import { AuthenticationError } from "apollo-server-core";
+import { getSession } from "next-auth/react";
+
+interface ReturnContext {
+  id: string;
+}
+
+const pubSub = createPubSub();
+
+const server = createServer({
+  cors: {
+    credentials: true,
+    origin: ["https://emad-portfolio.herokuapp.com"], // your frontend url.
+  },
+
+  plugins: [],
+
+  context: async ({ req }: { req: NextApiRequest }) => {
+    await dbInit();
+    let { token, costumerId } = req.cookies;
+    const session = await getSession({
+      req,
     });
-    res.end();
-  } else if (req.method === "POST" && req.url === "/graphql") {
-    const chunks: any[] = [];
-    req.on("data", (chunk) => chunks.push(chunk));
-    req.on("end", async () => {
-      const body = Buffer.concat(chunks).toString();
-      const { token, costumerId } = req.cookies;
 
-      await dbInit();
+    // 1. Find optional visitor id
+    let id: string | number | null = null;
+    let user: object | null = null;
 
-      let id: string | number | null = null;
-      let user: object | null = null;
-
-      try {
-        if (token) {
-          let obj = JWT.verify(token, "MY_SECRET");
-          id = (obj as ReturnContext).id;
-        }
-
-        const session = await getSession({ req });
-
-        if (session) {
-          id = session?._id;
-        }
-      } catch (err) {
-        console.error("error on apollo server", err);
-        throw new AuthenticationError(
-          "Authentication token is invalid, please log in"
-        );
+    try {
+      if (token) {
+        let obj = JWT.verify(token, "MY_SECRET");
+        id = (obj as ReturnContext).id;
       }
 
-      const context = {
-        userId: id,
-        costumerId,
-        user,
-        pubSub,
-      };
+      if (session) {
+        id = session?._id;
+      }
+    } catch (err) {
+      console.error("error on apollo server", err); // expired token, invalid token
+      // TODO try apollo-link-error on the client
+      throw new AuthenticationError(
+        "Authentication token is invalid, please log in"
+      );
+    }
 
-      const { execute, parse } = require("graphql");
-
-      execute({
-        schema,
-        document: parse(body),
-        contextValue: context,
-      }).then((result) => {
-        res.setHeader("Content-Type", "application/json");
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader(
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorization"
-        );
-        res.setHeader(
-          "Access-Control-Allow-Methods",
-          "OPTIONS, GET, POST, DELETE"
-        );
-        res.end(JSON.stringify(result));
-      });
-    });
-  } else {
-    res.statusCode = 404;
-    res.end();
-  }
+    return {
+      userId: id,
+      costumerId,
+      user,
+      pubSub,
+    };
+  },
+  schema,
 });
 
 export default server;

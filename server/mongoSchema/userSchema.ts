@@ -1,38 +1,29 @@
-import mongoose, { SchemaTypes, Schema } from "mongoose";
-import restaurangSchema from "./restaurantSchema";
+import mongoose, { Schema, Document } from "mongoose";
+import restaurantSchema, { IRestaurant } from "./restaurantSchema";
 
-export interface I_UserDocument extends mongoose.Document {
-  restaurant: Schema.Types.ObjectId | typeof restaurangSchema;
+export interface I_UserDocument extends Document {
+  name?: string;
+  email: string;
+  password: string;
+  token?: string;
+  id?: string;
+  restaurant: Schema.Types.ObjectId | IRestaurant;
 }
 
-var userSchema = new mongoose.Schema(
+const userSchema: Schema<I_UserDocument> = new mongoose.Schema(
   {
     name: { type: String },
     email: { type: String, unique: true, required: true },
-    password: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
     token: { type: String, unique: true },
     id: String,
     restaurant: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: restaurangSchema ?? "Restaurang",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: restaurantSchema ?? "Restaurant",
     },
   },
   { timestamps: true }
 );
-// UserSchema.pre("save", function (next) {
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-//   bcrypt.genSalt(10, (err, salt) => {
-//     if (err) return next(err);
 
-//     bcrypt.hash(this.password, salt, (err, hash) => {
-//       if (err) return next(err);
-//       this.password = hash;
-
-//       next();
-//     });
-//   });
-// });
 export default mongoose.models.User ||
   mongoose.model<I_UserDocument>("User", userSchema);

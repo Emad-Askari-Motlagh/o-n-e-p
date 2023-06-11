@@ -167,23 +167,6 @@ const productResolvers = {
             categorizedByTags: [
               { $group: { _id: "$emi.category", sum: { $sum: "$sum" } } },
             ],
-            // categorizedByMe: [
-            //   {
-            //     $bucket: {
-            //       groupBy: "$emi.category",
-            //       boundaries: [0, 150, 200, 300, 400],
-            //       default: "cats",
-            //       output: {
-            //         col: {
-            //           $addToSet: {
-            //             names: "$emi.category",
-            //             count: { $sum: "$sum" },
-            //           },
-            //         },
-            //       },
-            //     },
-            //   },
-            // ],
             categorizedByName: [
               { $group: { _id: "$emi.name", sum: { $sum: "$sum" } } },
             ],
@@ -199,63 +182,8 @@ const productResolvers = {
             ],
           },
         },
-
-        //  {$project:{categorizedByTags:1,}}
-
-        // {
-        //   $match: {
-        //     date: {
-        //       $gte: new Date(beginDate),
-        //       $lt: new Date(finishDate),
-        //     },
-        //   },
-        // },
-
-        // {
-        //   $group: {
-        //     _id: {
-        //       from: new Date(beginDate).toLocaleString(),
-        //       untill: new Date(finishDate).toLocaleString(),
-        //     },
-
-        //     salaries: { $sum: "$sum" },
-        //     itemsSum: { $sum: { $multiply: ["$emi.price", "$emi.quantity"] } },
-        //     catSold: {
-        //       $addToSet: {
-        //         cat: "$emi.category",
-        //       },
-        //     },
-        //     itemSold: {
-        //       $addToSet: {
-        //         item: "$emi.name",
-
-        //         // salaries: { $sum: "$sum" },
-        //         // itemsSum: {
-        //         //   $sum: { $multiply: ["$emi.price", "$emi.quantity"] },
-        //         // },
-        //       },
-        //     },
-        //     catSum: {
-        //       $addToSet: {
-        //         $filter: {
-        //           input: "$$emi",
-        //           as: "item",
-        //           cond: { $gte: ["$$item.price", 100] },
-        //         },
-        //       },
-        //     },
-        //   },
-        // },
       ]);
 
-      // {
-      //   $lookup: {
-      //     from: "menuitems",
-      //     localField: "items",
-      //     foreignField: "_id",
-      //     as: "emi",
-      //   },
-      // },
       const ee = await sellSchema.aggregate([
         {
           $lookup: {
@@ -265,13 +193,7 @@ const productResolvers = {
             as: "emi",
           },
         },
-        // {
-        //   $replaceRoot: {
-        //     newRoot: {
-        //       $mergeObjects: [{ $arrayElemAt: ["$emi", 0] }, "$$ROOT"],
-        //     },
-        //   },
-        // },
+
         {
           $project: {
             year: { $year: "$date" },

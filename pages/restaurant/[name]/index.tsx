@@ -66,8 +66,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
     <div className={styles.container}>
       <motion.label
         initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+        animate={{ opacity: 1, y: 0 }}>
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}
@@ -78,9 +77,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
         <>
           <RegisterForm onSubmit={submitForm} />
           {error && <ErrorCard>{error}</ErrorCard>}
-          {isRegistered && (
-            <SucceedMessage>Costumer Registered</SucceedMessage>
-          )}
+          {isRegistered && <SucceedMessage>Costumer Registered</SucceedMessage>}
         </>
       ) : (
         // If COSTUMER is available, render the alternatives
@@ -106,14 +103,8 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
     </div>
   );
 };
-
+export default Restaurant;
 Restaurant.Layout = PrimaryLayout;
-
-export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  try {
-    await dbInit
-
-
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     await dbInit(); // Initialize MongoDB
@@ -141,4 +132,3 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     };
   }
 }
-

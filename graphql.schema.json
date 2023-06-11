@@ -2395,6 +2395,43 @@
             "deprecationReason": null
           },
           {
+            "name": "DeleteItemFromAdminList",
+            "description": null,
+            "args": [
+              {
+                "name": "costumerId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "itemId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DeleteMenuCategory",
             "description": null,
             "args": [
@@ -2519,18 +2556,6 @@
                     "name": "String",
                     "ofType": null
                   }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "restaurant",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -2816,7 +2841,7 @@
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Date",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2828,7 +2853,7 @@
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Date",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -3639,6 +3664,34 @@
             "deprecationReason": null
           },
           {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "extra",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ExtraItem",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "orderQuantity",
             "description": null,
             "args": [],
@@ -3709,7 +3762,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "AdminOrder",
+                  "name": "PayedItem",
                   "ofType": null
                 }
               }
@@ -3856,13 +3909,9 @@
                 "name": "restaurant",
                 "description": null,
                 "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -5334,7 +5383,7 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
-        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
         "fields": [
           {
             "name": "kind",
@@ -5377,7 +5426,7 @@
             "deprecationReason": null
           },
           {
-            "name": "specifiedByUrl",
+            "name": "specifiedByURL",
             "description": null,
             "args": [],
             "type": {
@@ -5716,7 +5765,7 @@
       },
       {
         "name": "specifiedBy",
-        "description": "Exposes a URL that specifies the behaviour of this scalar.",
+        "description": "Exposes a URL that specifies the behavior of this scalar.",
         "isRepeatable": false,
         "locations": [
           "SCALAR"
@@ -5724,7 +5773,7 @@
         "args": [
           {
             "name": "url",
-            "description": "The URL that specifies the behaviour of this scalar.",
+            "description": "The URL that specifies the behavior of this scalar.",
             "type": {
               "kind": "NON_NULL",
               "name": null,

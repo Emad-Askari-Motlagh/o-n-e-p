@@ -3,7 +3,10 @@ import { NextApiRequest } from "next";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys.graphql";
 import dbInit from "lib/dbInit";
-import { RestaurantsQuery, RestaurantsQueryVariables } from "@/server/generated/graphql";
+import {
+  RestaurantsQuery,
+  RestaurantsQueryVariables,
+} from "@/server/generated/graphql";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 import PrimaryLayout from "components/Primary-layout";
 import Search from "components/Search-form";
@@ -14,7 +17,7 @@ interface HomeProps {
   ALL_RESTAURANTS: IRestaurant[];
 }
 
-const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
+export default function Home({ ALL_RESTAURANTS }: HomeProps) {
   const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -40,7 +43,7 @@ const Home = ({ ALL_RESTAURANTS }: HomeProps) => {
       />
     </>
   );
-};
+}
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
@@ -48,7 +51,10 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
 
     const apolloClient = await initializeApollo({}); // Init Apollo client
 
-    const res = await apolloClient.query<RestaurantsQuery, RestaurantsQueryVariables>({
+    const res = await apolloClient.query<
+      RestaurantsQuery,
+      RestaurantsQueryVariables
+    >({
       query: FETCH_ALL_RESTAURANTS,
     });
 
@@ -72,5 +78,3 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
 }
 
 Home.Layout = PrimaryLayout;
-
-export default Home;

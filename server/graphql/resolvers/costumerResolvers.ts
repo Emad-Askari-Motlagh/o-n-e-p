@@ -5,9 +5,9 @@ import { storeCookie, deleteCookie } from "lib/storeCookie";
 import { Types } from "mongoose";
 import { Resolvers, CostumerResolvers } from "server/generated/graphql";
 
-const costumerResolvers: CostumerResolvers = {
+const costumerResolvers = {
   Query: {
-    Costumer: async (_parent, { costumerId }, _context, _info) => {
+    Costumer: async (_parent, _args, { costumerId }, _info) => {
       try {
         if (!costumerId) {
           return null;
@@ -17,10 +17,13 @@ const costumerResolvers: CostumerResolvers = {
         return costumer;
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't find any costumer", "COSTUMER_NOT_FOUND");
+        throw new ApolloError(
+          "Couldn't find any costumer",
+          "COSTUMER_NOT_FOUND"
+        );
       }
     },
-    Address: async (_parent, { costumerId }, _context, _info) => {
+    Address: async (_parent, _args, { costumerId }, _info) => {
       if (!costumerId) {
         return null;
       }
@@ -34,7 +37,10 @@ const costumerResolvers: CostumerResolvers = {
         return costumer?.address;
       } catch (e) {
         console.log("Error getting address", e);
-        throw new ApolloError("Couldn't fetch costumer address", "ADDRESS_FETCH_ERROR");
+        throw new ApolloError(
+          "Couldn't fetch costumer address",
+          "ADDRESS_FETCH_ERROR"
+        );
       }
     },
   },
@@ -53,7 +59,10 @@ const costumerResolvers: CostumerResolvers = {
         }
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't save the costumer", "COSTUMER_SAVE_ERROR");
+        throw new ApolloError(
+          "Couldn't save the costumer",
+          "COSTUMER_SAVE_ERROR"
+        );
       }
     },
 
@@ -67,7 +76,10 @@ const costumerResolvers: CostumerResolvers = {
         return costumer;
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't delete the costumer", "COSTUMER_DELETE_ERROR");
+        throw new ApolloError(
+          "Couldn't delete the costumer",
+          "COSTUMER_DELETE_ERROR"
+        );
       }
     },
 
@@ -77,7 +89,10 @@ const costumerResolvers: CostumerResolvers = {
         return "done";
       } catch (err) {
         console.log(err);
-        throw new ApolloError("Couldn't sign out the costumer", "COSTUMER_SIGNOUT_ERROR");
+        throw new ApolloError(
+          "Couldn't sign out the costumer",
+          "COSTUMER_SIGNOUT_ERROR"
+        );
       }
     },
 
@@ -90,34 +105,42 @@ const costumerResolvers: CostumerResolvers = {
         return { message: "Cookie not stored" };
       }
     },
-async CostumerExpiry(_, args, { res }) {
-  try {
-    storeCookie(["costumerExpire", args.time], res, 300000);
-    return { message: "Cookie stored" };
-  } catch (err) {
-    console.log(err);
-    throw new ApolloError("Couldn't store the cookie", "COOKIE_STORE_ERROR");
-  }
-},
+    async CostumerExpiry(_, args, { res }) {
+      try {
+        storeCookie(["costumerExpire", args.time], res, 300000);
+        return { message: "Cookie stored" };
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError(
+          "Couldn't store the cookie",
+          "COOKIE_STORE_ERROR"
+        );
+      }
+    },
 
-async AddCostumerAddress(_, { address }, { costumerId, res }) {
-  if (!costumerId) {
-    return null;
-  }
+    async AddCostumerAddress(_, { address }, { costumerId, res }) {
+      if (!costumerId) {
+        return null;
+      }
 
-  try {
-    const id = new Types.ObjectId(costumerId);
-    const costumer = await Costumer.findOneAndUpdate({ _id: id }, { address });
-    if (!costumer) {
-      throw new ApolloError("Costumer not found", "COSTUMER_NOT_FOUND");
-    }
-    return costumer.address;
-  } catch (err) {
-    console.log(err);
-    throw new ApolloError("Couldn't save the address", "ADDRESS_SAVE_ERROR");
-  }
-}
-
+      try {
+        const id = new Types.ObjectId(costumerId);
+        const costumer = await Costumer.findOneAndUpdate(
+          { _id: id },
+          { address }
+        );
+        if (!costumer) {
+          throw new ApolloError("Costumer not found", "COSTUMER_NOT_FOUND");
+        }
+        return costumer.address;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError(
+          "Couldn't save the address",
+          "ADDRESS_SAVE_ERROR"
+        );
+      }
+    },
   },
 };
 export default costumerResolvers;
