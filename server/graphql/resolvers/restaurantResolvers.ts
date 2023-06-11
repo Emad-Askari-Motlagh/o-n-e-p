@@ -2,7 +2,10 @@ import userSchema from "@/server/mongoSchema/userSchema";
 import Restaurant from "@/server/mongoSchema/restaurantSchema";
 import sellSchema from "@/server/mongoSchema/sellSchema";
 import { ApolloError } from "apollo-server";
-import { Resolvers } from "server/generated/graphql";
+import {
+  EditRestaurantInfoItemMutationVariables,
+  Resolvers,
+} from "server/generated/graphql";
 
 const productResolvers: Resolvers = {
   Query: {
@@ -27,7 +30,8 @@ const productResolvers: Resolvers = {
       }
     },
 
-    async AddRestaurant(_, args) {
+    async AddRestaurant(_, args, { userId }) {
+      if (!userId) return null;
       try {
         const restaurant = await new Restaurant(args);
         await restaurant.save();
@@ -38,7 +42,11 @@ const productResolvers: Resolvers = {
       }
     },
 
-    async EditRestaurantInfoItem(_, { name, value }, { userId }) {
+    async EditRestaurantInfoItem(
+      _,
+      { name, value }: EditRestaurantInfoItemMutationVariables,
+      { userId }
+    ) {
       if (!userId) {
         return null;
       }
@@ -103,6 +111,7 @@ const productResolvers: Resolvers = {
       { beginDate, finishDate }: { beginDate: string; finishDate: string },
       { userId }
     ) {
+      if (!userId) return null;
       try {
         const user = await userSchema.findById(userId).populate("restaurant");
 
