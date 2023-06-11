@@ -5,7 +5,7 @@ var ExtraItemSchema = new mongoose.Schema(
   {
     restaurant: {
       type: String,
-      ref: restaurangSchema,
+      ref: "Restaurant",
     },
     name: { type: String, required: true },
     price: { type: String, required: true },

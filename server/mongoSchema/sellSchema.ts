@@ -3,7 +3,6 @@ import MenuItemSchema from "server/mongoSchema/MenuItemSchema";
 
 import mongoose, { Types, SchemaTypes, Document, Schema } from "mongoose";
 import costumerSchema from "./costumerSchema";
-import restaurangSchema from "./restaurantSchema";
 
 export interface I_SellDocument extends Document {
   restaurant: { type: String };
@@ -17,7 +16,7 @@ var sellSchema = new mongoose.Schema(
   {
     restaurant: {
       type: String,
-      ref: restaurangSchema ?? "Restaurang",
+      ref: "Restaurang",
     },
     items: [
       {

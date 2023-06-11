@@ -14,6 +14,7 @@ interface RetaurantProps {
   description?: string;
   location?: { coordinates: number[] };
   buttonLabel?: string;
+  openTimes?: string;
 }
 export default function Restaurant({
   name,
@@ -23,6 +24,7 @@ export default function Restaurant({
   description,
   location,
   buttonLabel,
+  openTimes,
 }: RetaurantProps) {
   return (
     <div className={styles.container}>
@@ -46,7 +48,8 @@ export default function Restaurant({
             </motion.h3>
             <span className={styles.restaurant_description}>{description}</span>
             <span className={styles.restaurant_openTime}>
-              Closes in 5 hours 30 min | 10AM - 10PM Everyday
+              <span>Open Times: </span>
+              <span>{openTimes}</span>
             </span>
 
             <div className={styles.map_parent}>

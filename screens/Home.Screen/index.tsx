@@ -6,7 +6,7 @@ import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 export default function HomeScreen({
   ALL_RESTAURANTS,
 }: {
-  ALL_RESTAURANTS: [IRestaurant];
+  ALL_RESTAURANTS: IRestaurant[] | null;
 }) {
   const restaurantArray = ALL_RESTAURANTS ? ALL_RESTAURANTS : Array(6).fill(1);
   const placeHolder = "...";
@@ -17,6 +17,7 @@ export default function HomeScreen({
   return (
     <div className={styles.container}>
       {ALL_RESTAURANTS.map((res) => {
+        console.log(res);
         return (
           <Restaurant
             location={res.location}
@@ -26,6 +27,7 @@ export default function HomeScreen({
             images={res?.images}
             endPoint={`/restaurant/${res?.name}`}
             buttonLabel="Begin to order"
+            openTimes={res?.openTimes}
           />
         );
       })}

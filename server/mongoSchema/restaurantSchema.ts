@@ -19,7 +19,7 @@ export interface IRestaurant extends Document {
   id: string;
 }
 
-const restaurantSchema: Schema<IRestaurant> = new mongoose.Schema(
+const restaurantSchema = new mongoose.Schema(
   {
     name: String,
     owner: { type: mongoose.Types.ObjectId, ref: "User" },

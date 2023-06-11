@@ -1,20 +1,20 @@
-import InfoItem from "@/components/InfoItem";
+import React from "react";
+import { NextApiRequest } from "next";
+import { gql, useMutation } from "@apollo/client";
+import { decodeJwt } from "@/lib/storeJwt";
+import dbInit from "@/lib/dbInit";
+import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
 import PrimaryLayout from "@/components/Primary-layout";
+import InfoItem from "@/components/InfoItem";
+import Restaurant from "@/components/Restaurant";
+import { CgProfile } from "react-icons/cg";
+import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import {
   EDIT_RESTAURANT_INFO_ITEM,
   EDIT_USER_INFO_ITEM,
 } from "@/server/graphql/querys/mutations.graphql";
-import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
-import { gql, useMutation } from "@apollo/client";
 import { useUser } from "hooks/Context.hook";
-import React from "react";
 import styles from "./style.module.scss";
-import { CgProfile } from "react-icons/cg";
-import Restaurant from "@/components/Restaurant";
-import dbInit from "@/lib/dbInit";
-import { NextApiRequest } from "next";
-import { decodeJwt } from "@/lib/storeJwt";
-import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
 
 interface ProfileProps {
   RES: string;
@@ -30,7 +30,7 @@ interface UserInfo {
   };
 }
 
-export default function Profile({ RES }: ProfileProps) {
+const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
   const res = JSON.parse(RES) as Restaurant;
   const { user } = useUser();
   const userInfo = user.data?.CurrentUser as UserInfo;
@@ -74,7 +74,6 @@ export default function Profile({ RES }: ProfileProps) {
           type="user"
           field="name"
         />
-
         <InfoItem
           label="Email"
           value={userInfo.email}
@@ -111,7 +110,7 @@ export default function Profile({ RES }: ProfileProps) {
       </InfoParent>
     </div>
   );
-}
+};
 
 interface InfoParentProps {
   header: string;
@@ -119,7 +118,11 @@ interface InfoParentProps {
   type: string;
 }
 
-const InfoParent = ({ header, children, type }: InfoParentProps) => {
+const InfoParent: React.FC<InfoParentProps> = ({
+  header,
+  children,
+  type,
+}: InfoParentProps) => {
   return (
     <div className={styles.restaurant_section}>
       <div className={styles.header_parent}>
@@ -129,6 +132,8 @@ const InfoParent = ({ header, children, type }: InfoParentProps) => {
     </div>
   );
 };
+
+export default Profile;
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
@@ -152,13 +157,12 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     return {
       props: {
         RES: JSON.stringify(userObj.restaurant),
-        adminIsOnline: !!req.cookies?.["token"],
       },
     };
   } catch (err) {
     console.log(err);
     return {
-      props: {},
+      props: { RES: null },
     };
   }
 }

@@ -10,11 +10,7 @@ import Button from "@/components/Button";
 import Modal from "components/Modal";
 import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
-import {
-  AddOrderMutation,
-  AddOrderMutationResult,
-  MenuItemByCategoryQuery,
-} from "@/server/generated/graphql";
+import { MenuItemByCategoryQuery } from "@/server/generated/graphql";
 import styles from "./styles.module.scss";
 
 interface MyTipes<P> {
@@ -58,18 +54,6 @@ export default function Items({
   } = useOrders();
 
   const restaurant = Router.query?.name as string;
-
-  // useEffect(() => {
-  //   if (selection.length) {
-  //     setSelectedItem(selection[0].name);
-  //     const correctItem = orders
-  //       .find((r) => r.product._id === item._id)
-  //       ?.extra.filter((extra) => extra.quantity !== 0);
-  //     if (correctItem) {
-  //       setCostumerExtraChoises([...correctItem]);
-  //     }
-  //   }
-  // }, [selection, orders]);
 
   function onEnterModal(
     item: { _id: string },
@@ -226,7 +210,7 @@ export default function Items({
                 setIsModalOpen={setExtraOrderModalOpen}
                 label={"Extra"}
                 onEnter={() => onEnterModal(res, items)}>
-                <>
+                <div>
                   <form
                     style={{
                       display: "flex",
@@ -251,21 +235,21 @@ export default function Items({
                       minRows={4}
                       multiline
                       placeholder="Extra description"
-                      onChange={(e) => setDescription(e.target.value)}></Input>
+                      onChange={(e) =>
+                        setDescription(e.target.value)
+                      }></Input>{" "}
+                    <Button
+                      width="80%"
+                      type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        submit(res);
+                      }}>
+                      Submit
+                    </Button>
                   </form>
-                  {costumerExtraChoises?.length && MenuItems}
-                  {orders?.length &&
-                    !!orders.find((r) => r.product._id === res._id) && (
-                      <Button
-                        type="submit"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          submit(res);
-                        }}>
-                        Submit
-                      </Button>
-                    )}
-                </>
+                  {costumerExtraChoises?.length && MenuItems}{" "}
+                </div>
               </Modal>
             </div>
           ))}

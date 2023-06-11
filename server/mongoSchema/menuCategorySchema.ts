@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import restaurantSchema from "./restaurantSchema";
 
 // Define the interface for the MenuCategory document
 export interface i_MenuCategoryDocument extends Document {

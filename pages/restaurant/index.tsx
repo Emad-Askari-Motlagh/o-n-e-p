@@ -14,7 +14,7 @@ import Restaurants from "screens/Home.Screen";
 import { AiOutlineFork } from "react-icons/ai";
 
 interface HomeProps {
-  ALL_RESTAURANTS: IRestaurant[];
+  ALL_RESTAURANTS: IRestaurant[] | null;
 }
 
 export default function Home({ ALL_RESTAURANTS }: HomeProps) {
