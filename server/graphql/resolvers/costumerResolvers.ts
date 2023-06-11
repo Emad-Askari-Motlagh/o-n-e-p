@@ -3,7 +3,11 @@ import Costumer from "server/mongoSchema/costumerSchema";
 import { ApolloError } from "apollo-server";
 import { storeCookie, deleteCookie } from "lib/storeCookie";
 import { Types } from "mongoose";
-import { Resolvers, CostumerResolvers } from "server/generated/graphql";
+import {
+  Resolvers,
+  CostumerResolvers,
+  AddCostumerMutationVariables,
+} from "server/generated/graphql";
 
 const costumerResolvers = {
   Query: {
@@ -45,7 +49,11 @@ const costumerResolvers = {
     },
   },
   Mutation: {
-    AddCostumer: async (_parent, { name, table, email }, { res }) => {
+    AddCostumer: async (
+      _parent,
+      { name, table, email }: AddCostumerMutationVariables,
+      { res }
+    ) => {
       try {
         const existingCostumer = await Costumer.findOne({ email });
         if (existingCostumer) {

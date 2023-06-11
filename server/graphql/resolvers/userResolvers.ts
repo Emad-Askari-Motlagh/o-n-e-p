@@ -13,19 +13,32 @@ import { authOptions } from "pages/api/auth/[...nextauth]";
 import { signIn } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth";
 import { GraphQLError } from "graphql";
+import { EditUserInfoItemMutationVariables } from "@/server/generated/graphql";
 
 const userResolvers = {
   Query: {
     //Find the user by id
     async CurrentUser(_: any, __: any, { userId }: { userId: string | null }) {
-      if (!userId) {
-        return null;
+      try {
+        if (!userId) {
+          return null;
+        }
+
+        const id = new mongoose.Types.ObjectId(userId);
+
+        const user = await User.findById(id).populate("restaurant");
+
+        if (!user) {
+          throw new ApolloError("User not found", "USER_NOT_FOUND");
+        }
+
+        return user;
+      } catch (err) {
+        throw new ApolloError(
+          err?.message || "Failed to fetch user",
+          "FETCH_USER_FAILED"
+        );
       }
-      const id = await new mongoose.Types.ObjectId(userId);
-
-      const user = await User.findById(id).populate("restaurant");
-
-      return user;
     },
   },
   User: {
@@ -181,19 +194,33 @@ const userResolvers = {
         throw new ApolloError(err?.message);
       }
     },
+
     async UpdateUser(
       __: any,
       { username, id }: { username: string; id: string },
       context: NextPageContext & { user: object }
     ) {
-      const doc = await (
-        await User.findById(id)
-      ).$set({
-        username,
-      });
-      doc.save();
-      if (!context.user) return {};
-      return doc;
+      try {
+        const doc = await User.findById(id);
+
+        if (!doc) {
+          throw new ApolloError("User not found", "USER_NOT_FOUND");
+        }
+
+        doc.username = username;
+        await doc.save();
+
+        if (!context.user) {
+          return {};
+        }
+
+        return doc;
+      } catch (err) {
+        throw new ApolloError(
+          err?.message || "Failed to update user",
+          "UPDATE_USER_FAILED"
+        );
+      }
     },
 
     async UpdatePassword(
@@ -205,34 +232,47 @@ const userResolvers = {
       }: { token: string; newPass: string; userId: string },
       { req }: { req: NextApiRequest }
     ) {
-      if (!token || !newPass || !userId) {
-        return null;
+      try {
+        if (!token || !newPass || !userId) {
+          return null;
+        }
+
+        const user = await User.findOne({ _id: userId, token });
+
+        if (!user) {
+          throw new ApolloError("User not found or token is invalid");
+        }
+
+        const decoded = JWT.verify(token, "MY_SECRET") as { email: string };
+
+        if (!decoded) {
+          throw new ApolloError("Token is not valid");
+        }
+
+        const email = decoded.email.toLowerCase();
+        const hashedPass = await bcrypt.hash(newPass, 10);
+
+        if (!hashedPass) {
+          throw new ApolloError("Error when hashing the password");
+        }
+
+        const doc = await User.findOneAndUpdate(
+          { email },
+          { password: hashedPass },
+          { new: true } // To return the updated document
+        );
+
+        if (!doc) {
+          throw new ApolloError("User not found");
+        }
+
+        user.token = null;
+        user.save();
+
+        return doc;
+      } catch (err) {
+        throw new ApolloError(err?.message || err);
       }
-      const user = await User.findOne({ _id: userId, token });
-
-      //Hash the password
-      const decoded = JWT.verify(token, "MY_SECRET") as {
-        email: string;
-      };
-
-      if (!decoded) {
-        throw new ApolloError("Token is not valid");
-      }
-      const email = decoded.email.toLowerCase();
-
-      const hashedPass = await bcrypt.hash(newPass, 10);
-      //Create a new user in DB
-
-      if (!hashedPass) {
-        throw new ApolloError("Error when hashing the password");
-      }
-      const doc = await User.findOneAndUpdate(
-        { email },
-        { password: hashedPass }
-      );
-      user.token = null;
-      user.save();
-      return doc;
     },
 
     async SendResetPassword(_: any, { email }: { email: string }) {
@@ -288,16 +328,30 @@ const userResolvers = {
         throw new ApolloError("Couldnt save the address");
       }
     },
-    async EditUserInfoItem(_: any, { name, value }, { userId }) {
-      if (!userId) {
-        return null;
+    async EditUserInfoItem(
+      _: any,
+      { name, value }: EditUserInfoItemMutationVariables,
+      { userId }: { userId: string }
+    ) {
+      try {
+        if (!userId) {
+          return null;
+        }
+        const id = new mongoose.Types.ObjectId(userId);
+        const user = await User.findOneAndUpdate(
+          { _id: id },
+          { $set: { name: value } },
+          { new: true } // To return the updated document
+        );
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        return user;
+      } catch (err) {
+        throw new Error(err?.message || err);
       }
-      const id = await new mongoose.Types.ObjectId(userId);
-      const user = await User.findOneAndUpdate(
-        { _id: id },
-        { $set: { name: value } }
-      );
-      return user;
     },
   },
 };
