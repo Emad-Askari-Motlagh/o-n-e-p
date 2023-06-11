@@ -38,24 +38,29 @@ const orderResolvers = {
   Query: {
     messages: () => messages,
     async OrderItems(_: any, __: any, { costumerId }: { costumerId: string }) {
-      if (!costumerId) {
-        return null;
+      try {
+        if (!costumerId) {
+          return null;
+        }
+
+        const orders = await Order.find({ costumer: costumerId })
+          .populate("product")
+          .populate("costumer");
+
+        const output = orders.filter((order) => order.orderQuantity > 0);
+
+        return output;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("An error occurred while fetching order items");
       }
-      const res = await Order.find({ costumerId })
-        .populate("product")
-        .populate("costumer");
-      const output = res.map((result) => result.orderQuantity > 0 && res);
-      return output;
     },
+
     async Orders(
       __: any,
       { restaurant }: { restaurant: string },
       { costumerId }: { costumerId: string }
     ) {
-      // if (!userId) {
-      //   throw new ForbiddenError("User is not loged in");
-      // }
-
       if (!costumerId || !restaurant) {
         return null;
       }
@@ -69,7 +74,7 @@ const orderResolvers = {
         });
         return orders;
       } catch (err) {
-        throw new GraphQLError("Error on getting orders");
+        throw new ApolloError("Error on getting orders");
       }
     },
     async AdminOrders(_: any, __: any, { userId }: { userId: string }) {
@@ -85,7 +90,7 @@ const orderResolvers = {
           .populate("costumer");
         return AdminOrders;
       } catch (err) {
-        throw new GraphQLError("Error on getting orders");
+        throw new ApolloError("Error on getting orders");
       }
     },
     async PayedOrders(
@@ -93,9 +98,9 @@ const orderResolvers = {
       { restaurant }: { restaurant: string },
       { costumerId }: { costumerId: string }
     ) {
-      // if (!costumerId) {
-      //   return null;
-      // }
+      if (!costumerId) {
+        return null;
+      }
       try {
         const id = new mongoose.Types.ObjectId(costumerId);
         const orders = await costumerHistory
@@ -148,14 +153,21 @@ const orderResolvers = {
       _: any,
       { user, content }: { user: string; content: string }
     ) => {
-      const id = messages.length;
-      messages.push({
-        id,
-        user,
-        content,
-      });
-      subscribers.forEach((fn) => fn());
-      return id;
+      try {
+        const id = messages.length;
+        messages.push({
+          id,
+          user,
+          content,
+        });
+        subscribers.forEach((fn) => fn());
+        return id;
+      } catch (err) {
+        throw new ApolloError(
+          err?.message || "Failed to post message",
+          "POST_MESSAGE_FAILED"
+        );
+      }
     },
 
     async AddOrder(

@@ -134,49 +134,53 @@ const menuResolvers = {
       return res;
     },
     async Menu(_: any, args: MenuArgs, context: any) {
-      const res = await Menu.aggregate([
-        { $match: { restaurant: args.restaurant } },
-        {
-          $project: {
-            category: {
-              $filter: {
-                input: "$category",
-                as: "item",
-                cond: {
-                  $eq: ["$$item.id", 44],
+      try {
+        const res = await Menu.aggregate([
+          { $match: { restaurant: args.restaurant } },
+          {
+            $project: {
+              category: {
+                $filter: {
+                  input: "$category",
+                  as: "item",
+                  cond: {
+                    $eq: ["$$item.id", 44],
+                  },
                 },
               },
             },
           },
-        },
-        { $unwind: "$category" },
-        {
-          $project: {
-            "category.item": {
-              $filter: {
-                input: "$category.item",
-                as: "item",
-                cond: {
-                  $eq: ["$$item.name", "Fish"],
+          { $unwind: "$category" },
+          {
+            $project: {
+              "category.item": {
+                $filter: {
+                  input: "$category.item",
+                  as: "item",
+                  cond: {
+                    $eq: ["$$item.name", "Fish"],
+                  },
                 },
               },
             },
           },
-        },
-        { $unwind: "$category.item" },
-        {
-          $group: {
-            _id: "$category.item",
-            count: { $sum: 1 },
+          { $unwind: "$category.item" },
+          {
+            $group: {
+              _id: "$category.item",
+              count: { $sum: 1 },
+            },
           },
-        },
-      ]);
+        ]);
 
-      return res;
+        return res;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("An error occurred while fetching the menu", 500);
+      }
     },
 
     async MenuByCategory(_: any, args: MenuByCategoryArgs, context: any) {
-      console.log(args);
       try {
         const { restaurant } = args;
         const res = await menuCategorySchema.find({
@@ -245,8 +249,11 @@ const menuResolvers = {
   },
 
   Mutation: {
-    async AddMenu(_: any, args: AddMenuArgs) {
+    async AddMenu(_: any, args: AddMenuArgs, { userId }: { userId: string }) {
       try {
+        if (!userId) {
+          return null;
+        }
         const { category, restaurant } = args;
         const res = await Restaurant.findOne(
           { name: restaurant },
@@ -260,6 +267,7 @@ const menuResolvers = {
         return newMenu;
       } catch (err) {
         console.log(err);
+        throw new ApolloError("An error occurred while adding the menu", "500");
       }
     },
     async AddMenuCategory(
@@ -331,9 +339,18 @@ const menuResolvers = {
             images: input.images,
           }
         );
+
+        if (!newMenu) {
+          throw new ApolloError("Menu item not found", "NOT_FOUND");
+        }
+
         return newMenu;
       } catch (err) {
         console.log(err);
+        throw new ApolloError(
+          "An error occurred while updating the menu item",
+          "INTERNAL_SERVER_ERROR"
+        );
       }
     },
     async UpdateCategory(
@@ -341,54 +358,89 @@ const menuResolvers = {
       { category, image, categoryId }: UpdateCategoryArgs,
       { userId }: { userId: string }
     ) {
-      if (!userId) {
-        return null;
-      }
-      const newMenu = await menuCategorySchema.findOneAndUpdate(
-        { _id: categoryId },
-        {
-          itemName: category,
-          image: image,
-          collectionType: category,
+      try {
+        if (!userId) {
+          throw new ApolloError("User not logged in", "UNAUTHORIZED");
         }
-      );
-      return newMenu;
+
+        const newMenu = await menuCategorySchema.findOneAndUpdate(
+          { _id: categoryId },
+          {
+            itemName: category,
+            image: image,
+            collectionType: category,
+          }
+        );
+
+        if (!newMenu) {
+          throw new ApolloError("Category not found", "NOT_FOUND");
+        }
+
+        return newMenu;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("An error occurred", "INTERNAL_SERVER_ERROR");
+      }
     },
     async DeleteMenuCategory(
       _: any,
       { categoryId, restaurant }: DeleteMenuCategoryArgs,
       { userId }: { userId: string }
     ) {
-      if (!userId) {
-        return null;
+      try {
+        if (!userId) {
+          throw new ApolloError("User not logged in", "UNAUTHORIZED");
+        }
+
+        const deletedCategory = await menuCategorySchema.findOneAndDelete({
+          restaurant,
+          _id: categoryId,
+        });
+
+        if (!deletedCategory) {
+          throw new ApolloError("Category not found", "NOT_FOUND");
+        }
+
+        return categoryId;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("An error occurred", "INTERNAL_SERVER_ERROR");
       }
-      await menuCategorySchema.findOneAndDelete({
-        restaurant,
-        _id: categoryId,
-      });
-      return categoryId;
     },
+
     async AddSubCategory(
       _: any,
       { id, restaurant, cat }: AddSubCategoryArgs,
       { userId }: { userId: string }
     ) {
-      const catId = new Types.ObjectId(id);
-      const catL = await menuCategorySchema.findOne({ _id: catId });
-      const res = await menuCategorySchema.updateOne(
-        { _id: catId },
-        { $push: { subCategory: cat } },
-        { upsert: true }
-      );
-      const newCategory = await new menuCategorySchema({
-        collectionType: cat,
-        itemName: cat,
-        image: "",
-        parent: catL.collectionType,
-        restaurant,
-      });
-      await newCategory.save();
-      return res;
+      try {
+        if (!userId) {
+          throw new ApolloError("User not logged in", "UNAUTHORIZED");
+        }
+
+        const catId = new Types.ObjectId(id);
+        const catL = await menuCategorySchema.findOne({ _id: catId });
+
+        const res = await menuCategorySchema.updateOne(
+          { _id: catId },
+          { $push: { subCategory: cat } },
+          { upsert: true }
+        );
+
+        const newCategory = await new menuCategorySchema({
+          collectionType: cat,
+          itemName: cat,
+          image: "",
+          parent: catL.collectionType,
+          restaurant,
+        });
+        await newCategory.save();
+
+        return res;
+      } catch (err) {
+        console.log(err);
+        throw new ApolloError("An error occurred", "INTERNAL_SERVER_ERROR");
+      }
     },
     async AddMenuItemSubCategory(
       _: any,
