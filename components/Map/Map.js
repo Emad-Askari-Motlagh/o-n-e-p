@@ -16,7 +16,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
-import RoutingControl from "./RoutingControl";
 import { useRouter } from "next/router";
 
 const Map = () => {
