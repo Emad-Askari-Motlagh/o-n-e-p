@@ -15,6 +15,7 @@ import {
 } from "@/server/graphql/querys/mutations.graphql";
 import { useUser } from "hooks/Context.hook";
 import styles from "./style.module.scss";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 interface ProfileProps {
   RES: string;
@@ -55,7 +56,7 @@ const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
         <span>
           <CgProfile className={styles.icon} />
         </span>
-        <h1>Profile</h1>
+        <AnimatedHeader>Profile</AnimatedHeader>
       </div>
       <Restaurant
         location={res.location}

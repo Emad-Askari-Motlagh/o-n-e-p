@@ -69,7 +69,7 @@ const Reservation = () => {
               </table>
             </>
           ) : (
-            <ErrorCard>OBS! There is`nt any reservation yet</ErrorCard>
+            <ErrorCard>There isn`t any reservation yet</ErrorCard>
           )}
         </div>
       </div>

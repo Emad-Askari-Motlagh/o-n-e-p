@@ -21,6 +21,7 @@ import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
 import { BiTrash } from "react-icons/bi";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
@@ -61,16 +62,6 @@ const AdminsOrders = () => {
     connect_to_socket1();
   }, []);
 
-  function searchOverRestaurants(e) {
-    try {
-      e.preventDefault();
-      //Filter the restaurants when user begin to search
-      const query = e.target.value;
-      setSearchResult(query);
-    } catch (err) {
-      console.log(err);
-    }
-  }
   function onClick(id: string, fact: typeof currentOrderInfo) {
     setCurrentOrderInfo(fact);
     setInfoOpen(true);
@@ -99,6 +90,7 @@ const AdminsOrders = () => {
         <meta name="description" content="Admin Orders page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <AnimatedHeader>Admin`s Orders</AnimatedHeader>
       <span style={{ marginLeft: "20px" }}>
         {date.getFullYear() +
           "-" +
@@ -106,11 +98,7 @@ const AdminsOrders = () => {
           "-" +
           date.getDate()}
       </span>
-      <div className={styles.search_parent} style={{ margin: "20px" }}>
-        <Search
-          label={"Hitta din restaurang"}
-          onChange={searchOverRestaurants}></Search>
-      </div>
+
       <table>
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>

@@ -64,13 +64,13 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 
   return (
     <div className={styles.container}>
-      <motion.label
+      <motion.h1
         initial={{ opacity: 0, y: -200 }}
         animate={{ opacity: 1, y: 0 }}>
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}
-      </motion.label>
+      </motion.h1>
 
       {!COSTUMER ? (
         // If COSTUMER is not available, render the registration form

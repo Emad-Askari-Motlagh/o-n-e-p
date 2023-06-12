@@ -14,6 +14,7 @@ import {
   GetAnalisticsMutationVariables,
 } from "@/server/generated/graphql";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 export default function Dashboard() {
   const [sortType, setSortType] = useState(new Date());
@@ -29,7 +30,6 @@ export default function Dashboard() {
   useEffect(() => {
     getAnalistics({
       variables: { year: sortType?.getFullYear() },
-      onCompleted: (e) => console.log(e),
     });
   }, [sortType, getAnalistics]);
 
@@ -40,7 +40,7 @@ export default function Dashboard() {
         <meta name="description" content="Admin`s Dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Dashboard</h1>
+      <AnimatedHeader>Dashboard</AnimatedHeader>
       <div className={styles.calendar_parent}>
         <React_Calendar
           label="Choose A Year"

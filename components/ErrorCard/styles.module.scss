@@ -2,15 +2,15 @@
 @import "/styles/fonts";
 
 .container {
-    background-color: tomato;
-    width: 80%;
-    margin: auto;
+    background-color: #ff8707;
+    color: #282828;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     text-align: center;
-    box-shadow: #00000026 1.95px 1.95px 2.6px;
-    border-radius: 5px;
-    margin-top: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.1);
     span {
-        font-family: "Playfair Display", sans-serif;
-        color: black;
+        opacity: 0.8;
     }
 }
