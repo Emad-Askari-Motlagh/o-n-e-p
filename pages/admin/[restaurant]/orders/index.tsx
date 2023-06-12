@@ -22,13 +22,15 @@ import TableHeader from "@/components/Table/TableHeader";
 import { BiTrash } from "react-icons/bi";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import useEventSource from "hooks/EventSource.hook";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
-  const [data, setData] = useState([]);
+
   const [infoOpen, setInfoOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<string>();
   const [error, setError] = useState(false);
+  const { data } = useEventSource(`${process.env.SERVER_LINK}/api/adminOrders`);
   const [currentOrderInfo, setCurrentOrderInfo] = useState<{
     _id: string;
     extra: { name: string; quantity: string }[];
@@ -37,30 +39,6 @@ const AdminsOrders = () => {
   const { AdminOrders, adminOrdersError, DeleteItemFromAdminList } =
     useOrders();
   const date = new Date();
-
-  async function connect_to_socket1() {
-    try {
-      const evtSource = new EventSource(
-        `${process.env.SERVER_LINK}/api/adminOrders`
-      );
-      evtSource.onmessage = (event) => {
-        setShowAlert(true);
-
-        setData(JSON.parse(event.data));
-      };
-      evtSource.onerror = (event) => {
-        setError(true);
-      };
-      evtSource.onopen = (event) => {
-        console.log("open");
-      };
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  useEffect(() => {
-    connect_to_socket1();
-  }, []);
 
   function onClick(id: string, fact: typeof currentOrderInfo) {
     setCurrentOrderInfo(fact);

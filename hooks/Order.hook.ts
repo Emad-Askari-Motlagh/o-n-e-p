@@ -48,7 +48,10 @@ const useOrders = () => {
     data,
     error: adminOrdersError,
     loading: getAdminOrders_loading,
-  } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS);
+  } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS, {
+    pollInterval: 5000,
+    onError: (err) => err.graphQLErrors.map((e) => console.log(e.extensions)),
+  });
   const refetchTask = [
     { query: GET_ADMIN_ORDERS },
     "AdminOrders",
@@ -61,7 +64,6 @@ const useOrders = () => {
   ] = useMutation<AddOrderMutation, AddOrderMutationVariables>(ADD_ORDER, {
     fetchPolicy: "network-only",
     refetchQueries: refetchTask,
-    onError: (err) => err.graphQLErrors.map((res) => console.log(res.message)),
   });
   const [addExtra, { loading: addExtraLoading, error: addExtraError }] =
     useMutation<AddExtraItemMutation, AddExtraItemMutationVariables>(

@@ -36,6 +36,7 @@ const useEventSource = (uri: string) => {
   const handleMessage = (event) => {
     // Handle the received message
     const parsedData = JSON.parse(event.data);
+    console.log(parsedData);
     setData([...parsedData]);
   };
 
