@@ -17,7 +17,6 @@ export default function HomeScreen({
   return (
     <div className={styles.container}>
       {ALL_RESTAURANTS.map((res) => {
-        console.log(res);
         return (
           <Restaurant
             location={res.location}

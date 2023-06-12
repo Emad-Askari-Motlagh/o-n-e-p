@@ -14,11 +14,7 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-import {
-  createServer,
-  createPubSub,
-  GraphQLYogaError,
-} from "@graphql-yoga/node";
+import { createServer, createPubSub } from "@graphql-yoga/node";
 import { AuthenticationError } from "apollo-server-core";
 import { getSession } from "next-auth/react";
 
@@ -51,10 +47,6 @@ const server = createServer({
       if (token) {
         let obj = JWT.verify(token, "MY_SECRET");
         id = (obj as ReturnContext).id;
-      } else {
-        throw new AuthenticationError(
-          "Authentication token is invalid, please log in"
-        );
       }
 
       if (session) {

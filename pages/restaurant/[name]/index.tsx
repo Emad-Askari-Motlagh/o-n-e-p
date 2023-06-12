@@ -17,7 +17,6 @@ import {
   AddCostumerMutation,
   AddCostumerMutationVariables,
 } from "@/server/generated/graphql";
-import getApolloErrors from "@/utils/getApolloErrors";
 
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
@@ -30,9 +29,6 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
     AddCostumerMutation,
     AddCostumerMutationVariables
   >(ADD_COSTUMER, {
-    onError: (err) => {
-      setError(getApolloErrors(err));
-    },
     onCompleted: () => {
       setIsRegistered(true);
       setError(null);
