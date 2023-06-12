@@ -51,6 +51,10 @@ const server = createServer({
       if (token) {
         let obj = JWT.verify(token, "MY_SECRET");
         id = (obj as ReturnContext).id;
+      } else {
+        throw new AuthenticationError(
+          "Authentication token is invalid, please log in"
+        );
       }
 
       if (session) {

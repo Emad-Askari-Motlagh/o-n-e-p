@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const useEventSource = (uri) => {
+const useEventSource = (uri: string) => {
   const [data, setData] = useState([]);
   const [listening, setListening] = useState(false);
   useEffect(() => {
@@ -15,7 +15,7 @@ const useEventSource = (uri) => {
       setListening(true);
       if (events) () => events.close();
     }
-  }, []);
+  }, [listening, uri]);
   return {
     data,
   };

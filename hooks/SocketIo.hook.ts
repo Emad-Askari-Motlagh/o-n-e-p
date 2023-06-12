@@ -6,9 +6,12 @@ export default function useSocketIo(path) {
   const [chat, setChat] = useState([]);
   const [connected, setConnected] = useState(false);
   useEffect(() => {
-    const chat = [];
     // connect to socket server
     const socket = connect("/", {
+      reconnection: true, // Enable reconnection attempts
+      reconnectionAttempts: 5, // Number of reconnection attempts
+      reconnectionDelay: 1000, // Delay between reconnection attempts in milliseconds
+      reconnectionDelayMax: 5000, // Maximum delay between reconnection attempts
       path,
     });
 
@@ -25,6 +28,6 @@ export default function useSocketIo(path) {
 
     // socket disconnet onUnmount if exists
     if (socket) return () => socket.disconnect();
-  }, []);
+  }, [path]);
   return { data, connected };
 }
