@@ -76,7 +76,7 @@ $BC_COLOR: #242424;
     min-height: calc(100vmin - 50vmin);
 
     @include md {
-      width: 90%;
+      width: 70%;
       min-height: inherit;
       flex-direction: column;
       justify-content: center;

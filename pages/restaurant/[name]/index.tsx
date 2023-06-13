@@ -62,7 +62,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 
   return (
     <div className={styles.container}>
-      <AnimatedHeader color="fff">
+      <AnimatedHeader color="#fff">
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}
