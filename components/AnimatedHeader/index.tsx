@@ -4,7 +4,7 @@ import styles from "./AnimatedHeader.module.scss";
 
 interface AnimatedHeaderProps {
   children: ReactNode;
-  color: string;
+  color?: string;
 }
 
 const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({ children, color }) => {

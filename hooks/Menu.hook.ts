@@ -121,17 +121,11 @@ export default function useMenu() {
       "MenuBySubCategory", // Query name
     ],
     onCompleted: (res) => {
-      console.log(res);
       setIsItemSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
         reload();
       }, 1500);
-    },
-    onError: (err) => {
-      err.graphQLErrors.map((re) => {
-        console.log(re.extensions);
-      });
     },
   });
   const [deleteSubCatToMenuItem] = useMutation<
@@ -149,11 +143,6 @@ export default function useMenu() {
         setIsModalOpen(false);
         reload();
       }, 1500);
-    },
-    onError: (err) => {
-      err.graphQLErrors.map((re) => {
-        console.log(re.extensions);
-      });
     },
   });
   const [addCategory, { data: addCategoryData }] = useMutation<
@@ -198,6 +187,7 @@ export default function useMenu() {
     DeleteMenuCategoryMutation,
     DeleteMenuCategoryMutationVariables
   >(DELETE_CATEGORY, {
+    onError: (err) => err.graphQLErrors.map((r) => console.log(r.extensions)),
     refetchQueries: [
       { query: GET_MENU_BY_SUB_CATEGORY }, // DocumentNode object parsed with gql
       "MenuBySubCategory", // Query name

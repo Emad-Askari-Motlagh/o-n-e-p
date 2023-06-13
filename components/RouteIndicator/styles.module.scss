@@ -23,11 +23,10 @@
     height: 100%;
     margin: auto;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     align-items: center;
     flex-direction: row;
     padding: 1% 5%;
-
     padding-right: 10px;
 
     @include md {
@@ -37,25 +36,12 @@
       cursor: pointer;
       position: relative;
       width: 100%;
-      &:not(:last-of-type) {
-        &::after {
-          content: "➢";
-          color: wheat;
-          position: absolute;
-          transform: translate(-50%, -50%);
-          top: 50%;
-          right: -1em;
-          @include md {
-            right: -2em;
-          }
-        }
-      }
+
       li {
         list-style: decimal;
-        height: 100%;
-        width: 100%;
+
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         text-shadow: 1px 1px 1px black;
 
@@ -63,12 +49,9 @@
           margin: 2px 5px;
         }
         .sideBar1 {
-          font-family: "Paytone One", sans-serif;
-
           @include linkStyle();
         }
         .sideBar1WithIndicator {
-          font-family: "Paytone One", sans-serif;
           font-size: 10px;
           @include linkStyle();
         }

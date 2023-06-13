@@ -1,4 +1,5 @@
-import { SIGN_UP_WITH_GOOGLE } from "./../server/graphql/querys/mutations.graphql";
+import { useRouter } from "next/router";
+import { signOut as signOutWithGoogle } from "next-auth/react";
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -29,8 +30,6 @@ import {
   LOGIN_WITH_GOOGLE,
   SIGN_OUT_COSTUMER,
 } from "server/graphql/querys/mutations.graphql";
-import { useRouter } from "next/router";
-import { signOut as signOutWithGoogle } from "next-auth/react";
 
 const authContext = createContext({});
 interface User {
@@ -46,7 +45,7 @@ const useAuth = () => {
 
 export function useUser() {
   const [authToken, setAuthToken] = useState<string | undefined>();
-  const authHdaders = getAuthHeaders();
+  const authHeaders = getAuthHeaders();
   const Router = useRouter();
   const client = useApollo({});
   const [signInError, setSignInError] = useState<string | undefined>();
@@ -54,19 +53,16 @@ export function useUser() {
     GET_COSTUMER
   );
 
-  //Try to use hooks
   const [signOutCostumer] = useMutation<
     SignOutCostumerMutation,
     SignOutCostumerMutationVariables
   >(SIGN_OUT_COSTUMER);
-  const userData = useQuery<CurrentUserQuery>(GET_CURRENT_USER);
+  const userData = useQuery<CurrentUserQuery, CurrentUserQueryVariables>(
+    GET_CURRENT_USER
+  );
 
   const isSignedIn = () => {
-    if (authToken) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!authToken;
   };
 
   function getAuthHeaders() {
@@ -76,7 +72,6 @@ export function useUser() {
     };
   }
 
-  //Use mutate functions
   const signIn = async ({
     email,
     password,
@@ -91,8 +86,7 @@ export function useUser() {
       >({
         mutation: LOGIN,
         variables: { email, password },
-
-        refetchQueries: [{ query: GET_CURRENT_USER }, "CurrentUser"],
+        refetchQueries: [{ query: GET_CURRENT_USER }],
       });
       const token = result.data?.SignIn.token;
 
@@ -102,24 +96,29 @@ export function useUser() {
       } else {
         return null;
       }
-    } catch (err) {
+    } catch (err: any) {
       setSignInError("An unexpected error occurred");
       console.log("Error during the signin", err);
     }
   };
 
   const SigninWithGoogle = async () => {
-    const result = await client.mutate<
-      SignInWithGoogleMutation,
-      SignInWithGoogleMutationVariables
-    >({
-      mutation: LOGIN_WITH_GOOGLE,
-    });
-    setAuthToken(result.data?.SignInWithGoogle.token);
-    if (!result.errors && result.data) {
-      return result.data.SignInWithGoogle.token;
-    } else {
-      setSignInError("Error on signin happend");
+    try {
+      const result = await client.mutate<
+        SignInWithGoogleMutation,
+        SignInWithGoogleMutationVariables
+      >({
+        mutation: LOGIN_WITH_GOOGLE,
+      });
+      setAuthToken(result.data?.SignInWithGoogle.token);
+      if (result.data) {
+        return result.data.SignInWithGoogle.token;
+      } else {
+        setSignInError("Error on signin happened");
+      }
+    } catch (err: any) {
+      setSignInError("An unexpected error occurred");
+      console.log("Error during the signin with Google", err);
     }
   };
 
@@ -153,8 +152,7 @@ export function useUser() {
       await client.mutate<SignOutMutation, SignOutMutationVariables>({
         mutation: SIGN_OUT,
       });
-      await signOutWithGoogle();
-      Router.reload();
+      signOutWithGoogle();
     } catch (err: any) {
       console.log(err?.message ?? err);
     }
@@ -169,6 +167,7 @@ export function useUser() {
       console.log(err?.message ?? err);
     }
   };
+
   return {
     isSignedIn,
     signIn,
@@ -184,4 +183,5 @@ export function useUser() {
     signUpWithGoogle,
   };
 }
+
 export default useAuth;

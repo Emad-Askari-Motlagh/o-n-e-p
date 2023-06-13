@@ -29,6 +29,7 @@ import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
 import HistoryItem from "@/components/HistoryItem";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 const OrdersHistory = () => {
   const [showModal, setShowModal] = useState(false);
@@ -85,6 +86,7 @@ const OrdersHistory = () => {
         <title>OrdersHistory</title>
         <meta name="description" content="OrdersHistory page" />
       </Head>
+      <AnimatedHeader>Order`s History</AnimatedHeader>
       <span style={{ marginLeft: "20px" }}>
         {new Date().getFullYear() +
           "-" +
@@ -92,11 +94,7 @@ const OrdersHistory = () => {
           "-" +
           new Date().getDate()}
       </span>
-      <div className={styles.search_parent} style={{ margin: "20px" }}>
-        <Search
-          label={"Hitta din restaurang"}
-          onChange={searchOverRestaurants}></Search>
-      </div>
+
       <table>
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>

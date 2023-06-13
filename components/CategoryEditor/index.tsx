@@ -5,14 +5,12 @@ import React, {
   useState,
 } from "react";
 import Modal from "components/Modal";
-import MenuUpdater from "components/MenuUpdater";
 import SucceedMessage from "../Succeed-Message";
 import Image from "next/image";
 import styles from "./styles.module.scss";
 import FileInput from "components/Image-Input";
 import Input from "components/Input";
 import Button from "../Button";
-import SelectInput from "../SelectInput";
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 import MenuSubItem from "components/RestaurantSubItem";
 import {
@@ -27,7 +25,7 @@ interface CategoryProps {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   onChangeImage: (e: ChangeEvent<HTMLInputElement>) => void;
   submited: boolean;
-  deleteCategory?: DeleteMenuCategoryMutationFn;
+  deleteCategory?: () => void;
   id?: string;
   restaurant: string;
   subCats: string[];
@@ -41,10 +39,6 @@ export default function CategoryEditor({
   onChangeImage,
   submited,
   deleteCategory,
-  id,
-  restaurant,
-  subCats,
-  addSubCategory,
 }: CategoryProps) {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -58,8 +52,7 @@ export default function CategoryEditor({
       <MenuSubItem
         label={name}
         endPoint={`${name}`}
-        image={image}
-        subCat={subCats}></MenuSubItem>
+        image={image}></MenuSubItem>
 
       <Modal
         isModalOpen={isOpen}
@@ -99,9 +92,7 @@ export default function CategoryEditor({
             />
 
             <AiFillDelete
-              onClick={() =>
-                deleteCategory({ variables: { categoryId: id, restaurant } })
-              }
+              onClick={deleteCategory}
               className="icons"
               style={{
                 color: "white",

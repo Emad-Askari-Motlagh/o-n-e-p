@@ -103,7 +103,14 @@ export default function Category() {
             submited={itemSaved}
             name={res?.collectionType}
             image={ChosenImage ? ChosenImage : res?.image}
-            deleteCategory={deleteCategory}
+            deleteCategory={() => {
+              deleteCategory({
+                variables: {
+                  categoryId: res?._id,
+                  restaurant: query?.restaurant as string,
+                },
+              });
+            }}
             submit={() =>
               updateCategory({
                 variables: {
@@ -121,29 +128,31 @@ export default function Category() {
     )
   );
 
-  const MenuEditorComponent = menuItesmData?.MenuItemByCategory?.map((res) => {
-    if (res.__typename === "MenuItem")
-      return (
-        <MenuEditor
-          subCat={res.subCat}
-          key={res?._id}
-          restaurant={query.restaurant as string}
-          category={currentCat}
-          submit={saveMenuItem}
-          data={res}
-          deleteSubCatToMenuItem={() =>
-            deleteSubCatToMenuItem({
-              variables: {
-                cat: currentCat,
-                id: res._id,
-                restaurant: query.restaurant as string,
-              },
-            })
-          }
-          isSaved={documentSaved}
-          id={res?._id}></MenuEditor>
-      );
-  });
+  const MenuEditorComponent = menuItesmData?.MenuItemByCategory?.length
+    ? menuItesmData?.MenuItemByCategory?.map((res) => {
+        if (res.__typename === "MenuItem")
+          return (
+            <MenuEditor
+              subCat={res.subCat}
+              key={res?._id}
+              restaurant={query.restaurant as string}
+              category={currentCat}
+              submit={saveMenuItem}
+              data={res}
+              deleteSubCatToMenuItem={() =>
+                deleteSubCatToMenuItem({
+                  variables: {
+                    cat: currentCat,
+                    id: res._id,
+                    restaurant: query?.restaurant as string,
+                  },
+                })
+              }
+              isSaved={documentSaved}
+              id={res?._id}></MenuEditor>
+          );
+      })
+    : !menuItemsLoading && <ErrorCard>The category is empty for now</ErrorCard>;
   return (
     <div className={styles.container}>
       <div className={styles.add_button_parent}>

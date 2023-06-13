@@ -36,8 +36,12 @@ const AdminsOrders = () => {
     extra: { name: string; quantity: string }[];
     description: string;
   }>();
-  const { AdminOrders, adminOrdersError, DeleteItemFromAdminList } =
-    useOrders();
+  const {
+    AdminOrders,
+    adminOrdersError,
+    DeleteItemFromAdminList,
+    adminOrdersLoading,
+  } = useOrders();
   const date = new Date();
 
   function onClick(id: string, fact: typeof currentOrderInfo) {
@@ -54,7 +58,7 @@ const AdminsOrders = () => {
   }
   const orders = data?.length ? data : AdminOrders;
   if (!orders?.length) return <Warning label="Orders" message="Loading..." />;
-  if (error || adminOrdersError)
+  if ((error || adminOrdersError) && !adminOrdersLoading)
     return (
       <Warning
         label="Orders"
@@ -86,7 +90,9 @@ const AdminsOrders = () => {
             <TableHeader>price</TableHeader>
             <TableHeader>Order Time</TableHeader>
             <TableHeader>View</TableHeader>
-            <TableHeader>View</TableHeader>
+            <TableHeader>
+              <BiTrash />
+            </TableHeader>
           </tr>
           {Array.isArray(orders) &&
             orders.map((fact, i) => {

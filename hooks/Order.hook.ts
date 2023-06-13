@@ -47,7 +47,7 @@ const useOrders = () => {
   const {
     data,
     error: adminOrdersError,
-    loading: getAdminOrders_loading,
+    loading: adminOrdersLoading,
   } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS, {
     pollInterval: 5000,
     onError: (err) => err.graphQLErrors.map((e) => console.log(e.extensions)),
@@ -95,7 +95,7 @@ const useOrders = () => {
     orders: fetchedOrders?.Orders,
     loading,
     AdminOrders: data?.AdminOrders,
-    getAdminOrders_loading,
+    adminOrdersLoading,
     addOrder,
     removeOrder,
     orderDataLoading,
