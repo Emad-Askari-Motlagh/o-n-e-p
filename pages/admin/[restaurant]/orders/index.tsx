@@ -23,12 +23,17 @@ import { BiTrash } from "react-icons/bi";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import useEventSource from "hooks/EventSource.hook";
+import {
+  AdminOrdersQuery,
+  AdminOrdersQueryVariables,
+} from "@/server/generated/graphql";
+import { GET_ADMIN_ORDERS } from "@/server/graphql/querys/querys.graphql";
+import { useQuery } from "@apollo/client";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const AdminsOrders = () => {
   const [showAlert, setShowAlert] = useState(false);
-
   const [infoOpen, setInfoOpen] = useState(false);
-  const [searchResult, setSearchResult] = useState<string>();
   const [error, setError] = useState(false);
   const { data } = useEventSource(`${process.env.SERVER_LINK}/api/adminOrders`);
   const [currentOrderInfo, setCurrentOrderInfo] = useState<{
@@ -37,11 +42,13 @@ const AdminsOrders = () => {
     description: string;
   }>();
   const {
-    AdminOrders,
-    adminOrdersError,
-    DeleteItemFromAdminList,
-    adminOrdersLoading,
-  } = useOrders();
+    data: AdminOrdersData,
+    error: adminOrdersError,
+    loading: adminOrdersLoading,
+  } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS, {
+    pollInterval: 150000,
+  });
+  const { DeleteItemFromAdminList } = useOrders();
   const date = new Date();
 
   function onClick(id: string, fact: typeof currentOrderInfo) {
@@ -56,8 +63,14 @@ const AdminsOrders = () => {
       },
     });
   }
-  const orders = data?.length ? data : AdminOrders;
-  if (!orders?.length) return <Warning label="Orders" message="Loading..." />;
+  const orders: AdminOrdersQuery[] | null = data?.length
+    ? data
+    : AdminOrdersData?.AdminOrders;
+  if (!orders?.length)
+    return (
+      <AiOutlineLoading3Quarters
+        style={{ color: "#fff" }}></AiOutlineLoading3Quarters>
+    );
   if ((error || adminOrdersError) && !adminOrdersLoading)
     return (
       <Warning

@@ -44,14 +44,7 @@ const useOrders = () => {
   const router = useRouter();
 
   const restaurant = (router.query as { name: string }).name;
-  const {
-    data,
-    error: adminOrdersError,
-    loading: adminOrdersLoading,
-  } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS, {
-    pollInterval: 5000,
-    onError: (err) => err.graphQLErrors.map((e) => console.log(e.extensions)),
-  });
+
   const refetchTask = [
     { query: GET_ADMIN_ORDERS },
     "AdminOrders",
@@ -94,8 +87,6 @@ const useOrders = () => {
   return {
     orders: fetchedOrders?.Orders,
     loading,
-    AdminOrders: data?.AdminOrders,
-    adminOrdersLoading,
     addOrder,
     removeOrder,
     orderDataLoading,
@@ -103,7 +94,6 @@ const useOrders = () => {
     addExtra,
     addExtraLoading,
     addExtraError,
-    adminOrdersError,
     DeleteItemFromAdminList,
   };
 };
