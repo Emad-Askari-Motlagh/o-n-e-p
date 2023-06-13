@@ -17,9 +17,9 @@ function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
         {image && (
           <Image
             alt="Sub Item"
+            width={"800"}
+            height={"800"}
             className={styles.image}
-            width="800"
-            height="800"
             src={image}
             layout="intrinsic"></Image>
         )}

@@ -58,9 +58,14 @@ $BC_COLOR: #242424;
   }
   .image_con {
     position: relative;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    margin: auto;
     .image {
-      position: absolute;
+      object-fit: cover;
+      margin: auto;
     }
   }
   .item {

@@ -246,7 +246,7 @@ type Query {
   OrderItems: OrderItem
   Orders(restaurant: String!): [OrderItem]!
   CostumerOrders(restaurant: String!): [OrderItem]!
-  AdminOrders: [PayedItem]!
+  AdminOrders: [PayedItem]
   Address: CostumerAddress
   PayedOrders(restaurant: String!): [OrderHistory]!
   FetchAllMenuItems(restaurant: String!): [MenuItem]!

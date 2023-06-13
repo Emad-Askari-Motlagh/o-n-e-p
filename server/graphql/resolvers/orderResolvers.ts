@@ -183,7 +183,7 @@ const orderResolvers = {
 
         const id = new mongoose.Types.ObjectId(costumerId);
         const oldOrder = await Order.findOne({ product: productId });
-
+        console.log(productId, oldOrder);
         if (oldOrder) {
           const newOrder = await Order.findOneAndUpdate(
             {

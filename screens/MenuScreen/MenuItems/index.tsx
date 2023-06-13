@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import MenuItem from "components/MenuItem";
 import PrimaryLayout from "components/Primary-layout";
 import useOrders from "hooks/Order.hook";
-import Form from "components/MenuItem/Form";
 import ChoisesCard from "components/MenuItem/ChoisesCard";
 import Selection from "components/Selection";
 import Button from "@/components/Button";
@@ -49,7 +48,6 @@ export default function Items({
     removeOrder,
     addOrder,
     loading: orderLoading,
-    AdminOrders,
     addExtra,
   } = useOrders();
 
@@ -190,6 +188,10 @@ export default function Items({
                 addOrder={() =>
                   addOrder({
                     variables: { productId: res._id },
+                    onError: (err) =>
+                      err.graphQLErrors.map((res) => {
+                        console.log(res.extensions);
+                      }),
                   })
                 }
                 removeOrder={() =>

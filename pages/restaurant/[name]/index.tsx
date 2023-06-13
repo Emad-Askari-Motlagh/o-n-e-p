@@ -17,6 +17,8 @@ import {
   AddCostumerMutation,
   AddCostumerMutationVariables,
 } from "@/server/generated/graphql";
+import Image from "next/image";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
@@ -60,13 +62,11 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 
   return (
     <div className={styles.container}>
-      <motion.h1
-        initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}>
+      <AnimatedHeader color="fff">
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}
-      </motion.h1>
+      </AnimatedHeader>
 
       {!COSTUMER ? (
         // If COSTUMER is not available, render the registration form
@@ -82,15 +82,15 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
             <RestaurantSubItem
               label={"EAT HERE"}
               endPoint={"Menu"}
-              image={"/3.webp"}
-              key={1}
+              image={"/1.webp"}
+              key={2}
             />
           </div>
           <div className={styles.item_parent}>
             <RestaurantSubItem
               label={"TAKE AWAY"}
               endPoint={"Menu"}
-              image={"/1.webp"}
+              image={"/take-away.webp"}
               key={2}
             />
           </div>

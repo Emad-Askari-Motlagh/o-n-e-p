@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import styles from "./sidebar.module.scss";
 import { BiBasket, BiBookAdd, BiCode } from "react-icons/bi";
-import { IoIosArrowDropright, IoLogoBitcoin } from "react-icons/io";
-import { FcAbout } from "react-icons/fc";
 import {
   RiContactsLine,
-  RiCustomerServiceLine,
   RiDashboard2Fill,
   RiReservedFill,
-  RiUser2Fill,
 } from "react-icons/ri";
 import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
