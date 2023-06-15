@@ -13,9 +13,17 @@ import { authOptions } from "pages/api/auth/[...nextauth]";
 import { signIn } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth";
 import { GraphQLError } from "graphql";
-import { EditUserInfoItemMutationVariables } from "@/server/generated/graphql";
+import {
+  AddCostumerAddressMutationVariables,
+  CreateUserMutationVariables,
+  EditUserInfoItemMutationVariables,
+  MutationUpdateUserArgs,
+  Resolvers,
+  SignInMutationVariables,
+  UpdatePasswordMutationVariables,
+} from "@/server/generated/graphql";
 
-const userResolvers = {
+const userResolvers: Resolvers = {
   Query: {
     //Find the user by id
     async CurrentUser(_: any, __: any, { userId }: { userId: string | null }) {
@@ -47,11 +55,7 @@ const userResolvers = {
   Mutation: {
     async CreateUser(
       __: any,
-      {
-        email,
-        password,
-        username,
-      }: { email: string; password: string; username: string },
+      { email, password, username }: CreateUserMutationVariables,
       { res }: { res: NextApiResponse }
     ) {
       try {
@@ -98,7 +102,7 @@ const userResolvers = {
 
     async SignIn(
       _: any,
-      { email, password }: { email: string; password: string },
+      { email, password }: SignInMutationVariables,
       { res }: { res: NextApiResponse }
     ) {
       try {
@@ -197,7 +201,7 @@ const userResolvers = {
 
     async UpdateUser(
       __: any,
-      { username, id }: { username: string; id: string },
+      { email, id }: MutationUpdateUserArgs,
       context: NextPageContext & { user: object }
     ) {
       try {
@@ -207,7 +211,7 @@ const userResolvers = {
           throw new ApolloError("User not found", "USER_NOT_FOUND");
         }
 
-        doc.username = username;
+        doc.username = email;
         await doc.save();
 
         if (!context.user) {
@@ -225,11 +229,7 @@ const userResolvers = {
 
     async UpdatePassword(
       __: any,
-      {
-        token,
-        newPass,
-        userId,
-      }: { token: string; newPass: string; userId: string },
+      { token, newPass, userId }: UpdatePasswordMutationVariables,
       { req }: { req: NextApiRequest }
     ) {
       try {
@@ -314,7 +314,7 @@ const userResolvers = {
     },
     async AddAddress(
       __: any,
-      { address }: { address: string },
+      { address }: AddCostumerAddressMutationVariables,
       context: NextPageContext & { sub: string }
     ) {
       try {
@@ -345,12 +345,12 @@ const userResolvers = {
         );
 
         if (!user) {
-          throw new Error("User not found");
+          throw new ApolloError("User not found");
         }
 
         return user;
       } catch (err) {
-        throw new Error(err?.message || err);
+        throw new ApolloError(err?.message || err);
       }
     },
   },

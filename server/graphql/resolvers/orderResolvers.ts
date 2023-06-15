@@ -1,12 +1,12 @@
 import {
   AddOrderMutationVariables,
+  Resolvers,
   ResolversParentTypes,
-} from "./../../generated/graphql";
+} from "server/generated/graphql";
 import Order from "@/server/mongoSchema/orderschema";
 import { ApolloError, ForbiddenError } from "apollo-server";
 import mongoose, { Types } from "mongoose";
 import { createPubSub } from "@graphql-yoga/node";
-import { GraphQLError } from "graphql";
 // import { loadStripe } from "@stripe/stripe-js";
 import PayedItem from "server/mongoSchema/payedItemSchema";
 import sellSchema from "server/mongoSchema/sellSchema";
@@ -34,7 +34,7 @@ const messages: {
   content: string;
 }[] = [];
 
-const orderResolvers = {
+const orderResolvers: Resolvers = {
   Query: {
     messages: () => messages,
     async OrderItems(_: any, __: any, { costumerId }: { costumerId: string }) {

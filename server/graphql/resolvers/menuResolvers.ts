@@ -1,11 +1,28 @@
 import { GraphQLError } from "graphql";
 import { ApolloError } from "apollo-server";
-import { SchemaType, SchemaTypes, Types } from "mongoose";
+import { Types } from "mongoose";
 import Restaurant from "@/server/mongoSchema/restaurantSchema";
 import MenuItem from "server/mongoSchema/MenuItemSchema";
 import menuCategorySchema from "@/server/mongoSchema/menuCategorySchema";
 import Menu from "server/mongoSchema/MenuItemSchema";
 import userSchema from "@/server/mongoSchema/userSchema";
+import {
+  AddMenuCategoryMutationVariables,
+  AddMenuItemMutationVariables,
+  AddMenuItemSubCategoryMutationVariables,
+  AddSubCategoryMutationVariables,
+  DeleteMenuCategoryMutationVariables,
+  DeleteMenuItemSubCategoryMutationVariables,
+  FetchAllMenuItemsQueryVariables,
+  MenuByCategoryQueryVariables,
+  MenuBySubCategoryQueryVariables,
+  MenuItemByCategoryQueryVariables,
+  MenuItemCountQueryVariables,
+  MenuQueryVariables,
+  Resolvers,
+  UpdateCategoryMutationVariables,
+  UpdateMenuItemsMutationVariables,
+} from "@/server/generated/graphql";
 // Define the interface for the MenuItem object
 interface MenuItemObject {
   name: string;
@@ -15,103 +32,7 @@ interface OrderItemObject {
   orderQuantity: number;
 }
 
-interface CostumerMenuChoises {
-  __resolveType: (object: MenuItemObject | OrderItemObject) => string | null;
-}
-
-interface FetchAllMenuItemsArgs {
-  restaurant: string;
-}
-
-interface MenuArgs {
-  restaurant: string;
-}
-
-interface MenuByCategoryArgs {
-  restaurant: string;
-}
-
-interface MenuBySubCategoryArgs {
-  subCategory: string;
-  restaurant: string;
-}
-
-interface MenuItemByCategoryArgs {
-  category: string;
-  restaurant: string;
-}
-
-interface MenuItemCountArgs {
-  category: string;
-  restaurant: string;
-}
-
-interface AddMenuArgs {
-  category: string;
-  restaurant: string;
-}
-
-interface AddMenuCategoryArgs {
-  name: string;
-  image: string;
-  parent: string;
-  restaurant: string;
-}
-
-interface AddMenuItemArgs {
-  category: string;
-  restaurant: string;
-  subCat: string[];
-  input: {
-    name: string;
-    description: string;
-    price: number;
-    images: string[];
-  };
-}
-
-interface UpdateMenuItemsArgs {
-  productId: string;
-  restaurant: string;
-  category: string;
-  input: {
-    name: string;
-    description: string;
-    price: number;
-    images: string[];
-  };
-}
-
-interface UpdateCategoryArgs {
-  category: string;
-  image: string;
-  categoryId: string;
-}
-
-interface DeleteMenuCategoryArgs {
-  categoryId: string;
-  restaurant: string;
-}
-
-interface AddSubCategoryArgs {
-  id: string;
-  restaurant: string;
-  cat: string;
-}
-
-interface AddMenuItemSubCategoryArgs {
-  id: string;
-  restaurant: string;
-  cat: string;
-}
-
-interface DeleteMenuItemSubCategoryArgs {
-  id: string;
-  restaurant: string;
-  cat: string;
-}
-
-const menuResolvers = {
+const menuResolvers: Resolvers = {
   CostumerMenuChoises: {
     __resolveType: (object: MenuItemObject | OrderItemObject) => {
       if (object) {
@@ -125,7 +46,10 @@ const menuResolvers = {
   },
 
   Query: {
-    async FetchAllMenuItems(_: any, { restaurant }: FetchAllMenuItemsArgs) {
+    async FetchAllMenuItems(
+      _: any,
+      { restaurant }: FetchAllMenuItemsQueryVariables
+    ) {
       const res = await MenuItem.aggregate([
         {
           $match: { restaurant },
@@ -133,7 +57,7 @@ const menuResolvers = {
       ]);
       return res;
     },
-    async Menu(_: any, args: MenuArgs, context: any) {
+    async Menu(_: any, args: MenuQueryVariables, context: any) {
       try {
         const res = await Menu.aggregate([
           { $match: { restaurant: args.restaurant } },
@@ -180,7 +104,7 @@ const menuResolvers = {
       }
     },
 
-    async MenuByCategory(_: any, args: MenuByCategoryArgs, context: any) {
+    async MenuByCategory(_: any, args: MenuByCategoryQueryVariables) {
       try {
         const { restaurant } = args;
         const res = await menuCategorySchema.find({
@@ -196,7 +120,11 @@ const menuResolvers = {
         );
       }
     },
-    async MenuBySubCategory(_: any, args: MenuBySubCategoryArgs, context: any) {
+    async MenuBySubCategory(
+      _: any,
+      args: MenuBySubCategoryQueryVariables,
+      context: any
+    ) {
       const { subCategory, restaurant } = args;
 
       try {
@@ -217,7 +145,7 @@ const menuResolvers = {
 
     async MenuItemByCategory(
       _: any,
-      args: MenuItemByCategoryArgs,
+      args: MenuItemByCategoryQueryVariables,
       { costumerId }: any
     ) {
       try {
@@ -237,7 +165,7 @@ const menuResolvers = {
         throw new ApolloError("Couldn't find any item", "400");
       }
     },
-    async MenuItemCount(_: any, args: MenuItemCountArgs) {
+    async MenuItemCount(_: any, args: MenuItemCountQueryVariables) {
       try {
         const { category, restaurant } = args;
         return 3;
@@ -249,7 +177,7 @@ const menuResolvers = {
   },
 
   Mutation: {
-    async AddMenu(_: any, args: AddMenuArgs, { userId }: { userId: string }) {
+    async AddMenu(_: any, args: any, { userId }: { userId: string }) {
       try {
         if (!userId) {
           return null;
@@ -272,7 +200,7 @@ const menuResolvers = {
     },
     async AddMenuCategory(
       _: any,
-      { name, image, parent, restaurant }: AddMenuCategoryArgs,
+      { name, image, parent, restaurant }: AddMenuCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       try {
@@ -299,7 +227,7 @@ const menuResolvers = {
         console.log(err);
       }
     },
-    async AddMenuItem(_: any, args: AddMenuItemArgs) {
+    async AddMenuItem(_: any, args: AddMenuItemMutationVariables) {
       try {
         const {
           category,
@@ -326,7 +254,11 @@ const menuResolvers = {
       }
     },
 
-    async UpdateMenuItems(_: any, args: UpdateMenuItemsArgs, { userId }: any) {
+    async UpdateMenuItems(
+      _: any,
+      args: UpdateMenuItemsMutationVariables,
+      { userId }: any
+    ) {
       try {
         const { productId, restaurant, category, input } = args;
         const id = new Types.ObjectId(productId);
@@ -355,7 +287,7 @@ const menuResolvers = {
     },
     async UpdateCategory(
       _: any,
-      { category, image, categoryId }: UpdateCategoryArgs,
+      { category, image, categoryId }: UpdateCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       try {
@@ -384,7 +316,7 @@ const menuResolvers = {
     },
     async DeleteMenuCategory(
       _: any,
-      { categoryId, restaurant }: DeleteMenuCategoryArgs,
+      { categoryId, restaurant }: DeleteMenuCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       try {
@@ -410,7 +342,7 @@ const menuResolvers = {
 
     async AddSubCategory(
       _: any,
-      { id, restaurant, cat }: AddSubCategoryArgs,
+      { id, restaurant, cat }: AddSubCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       try {
@@ -444,7 +376,7 @@ const menuResolvers = {
     },
     async AddMenuItemSubCategory(
       _: any,
-      { id, restaurant, cat }: AddMenuItemSubCategoryArgs,
+      { id, restaurant, cat }: AddMenuItemSubCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       try {
@@ -461,7 +393,7 @@ const menuResolvers = {
     },
     async DeleteMenuItemSubCategory(
       _: any,
-      { id, restaurant, cat }: DeleteMenuItemSubCategoryArgs,
+      { id, restaurant, cat }: DeleteMenuItemSubCategoryMutationVariables,
       { userId }: { userId: string }
     ) {
       if (!userId) return null;

@@ -1,17 +1,21 @@
-import { NextApiResponse } from "next";
 import Costumer from "server/mongoSchema/costumerSchema";
 import { ApolloError } from "apollo-server";
 import { storeCookie, deleteCookie } from "lib/storeCookie";
 import { Types } from "mongoose";
 import {
   Resolvers,
-  CostumerResolvers,
   AddCostumerMutationVariables,
+  CostumerQueryVariables,
 } from "server/generated/graphql";
 
-const costumerResolvers = {
+const costumerResolvers: Resolvers = {
   Query: {
-    Costumer: async (_parent, _args, { costumerId }, _info) => {
+    Costumer: async (
+      _parent: any,
+      _args: CostumerQueryVariables,
+      { costumerId },
+      _info
+    ) => {
       try {
         if (!costumerId) {
           return null;

@@ -1,8 +1,8 @@
-import { MutationAddSellInfoArgs } from "@/server/generated/graphql";
+import { MutationAddSellInfoArgs, Resolvers } from "@/server/generated/graphql";
 import Sell from "@/server/mongoSchema/sellSchema";
 import { Types } from "mongoose";
 
-const sellResolvers = {
+const sellResolvers: Resolvers = {
   Query: {},
   Mutation: {
     async AddSellInfo(
