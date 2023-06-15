@@ -10,7 +10,7 @@ import React, {
 import Input from "../Input";
 import Button from "components/Button";
 import styles from "./styles.module.scss";
-import FileInput from "../Image-Input";
+import FileInput from "../FileInput";
 import useUpload from "hooks/upload.hook";
 import Image from "next/image";
 import SucceedMessage from "../Succeed-Message";

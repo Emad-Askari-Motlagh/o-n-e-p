@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./auth.module.scss";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { motion } from "framer-motion";
-import Header_animations from "components/framer_helpers/Header_animations";
+import Header_animations from "@/components/FramerHelper/Header_animations";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";

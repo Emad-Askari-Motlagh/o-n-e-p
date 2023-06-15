@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useRouter } from "next/router";
 import axios from "axios";
-
 import styles from "./styles.module.scss";
+import Link from "next/link";
 
 const EmailVerify = () => {
+  const router = useRouter();
+  const { id, token } = router.query;
   const [validUrl, setValidUrl] = useState(false);
-  const param = useParams();
 
   useEffect(() => {
     const verifyEmailUrl = async () => {
       try {
-        const url = `http://localhost:8080/api/users/${param.id}/verify/${param.token}`;
-        const { data } = await axios.get(url);
-        console.log(data);
+        const url = `http://localhost:8080/api/users/${id}/verify/${token}`;
+        await axios.get(url);
         setValidUrl(true);
       } catch (error) {
         console.log(error);
         setValidUrl(false);
       }
     };
-    verifyEmailUrl();
-  }, [param]);
+
+    if (id && token) {
+      verifyEmailUrl();
+    }
+  }, [id, token]);
 
   return (
     <>
@@ -29,8 +32,8 @@ const EmailVerify = () => {
         <div className={styles.container}>
           {/* <img src={success} alt="success_img" className={styles.success_img} /> */}
           <h1>Email verified successfully</h1>
-          <Link to="/login">
-            <button className={styles.green_btn}>Login</button>
+          <Link href="/login">
+            <a className={styles.green_btn}>Login</a>
           </Link>
         </div>
       ) : (

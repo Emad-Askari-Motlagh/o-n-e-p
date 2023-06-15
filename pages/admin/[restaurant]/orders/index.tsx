@@ -13,7 +13,7 @@ import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import Modal from "components/WarningModal";
 import InfoModal from "components/Modal";
-import Search from "components/Search-form";
+import Search from "@/components/SearchForm";
 import Warning from "@/components/Warning";
 import { MdOutlineExpandMore } from "react-icons/md";
 import AdminOrdersInfo from "@/components/AdminOrdersInfo";

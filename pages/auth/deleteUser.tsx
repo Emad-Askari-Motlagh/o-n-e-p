@@ -5,7 +5,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import router from "next/router";
 import { motion } from "framer-motion";
 import isEmpty from "is-empty";
-import Header_animations from "components/framer_helpers/Header_animations";
+import Header_animations from "@/components/FramerHelper/Header_animations";
 
 export default function Login() {
   const [username, setUsername] = useState(null);

@@ -48,7 +48,7 @@ export default function Payment({
           isModalOpen={isModalOpen}
           label="Payment">
           <div style={{ color: "white" }}>
-            <Addresses mydata={address} />
+            <Addresses data={address} />
             <Info>
               OBS! for payment use: Card number:4242424242424242 Expire
               date:1234 ccv:567 Zip:12345

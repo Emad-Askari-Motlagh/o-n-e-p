@@ -9,7 +9,7 @@ import {
 } from "@/server/generated/graphql";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 import PrimaryLayout from "components/Primary-layout";
-import Search from "components/Search-form";
+import Search from "@/components/SearchForm";
 import Restaurants from "screens/Home.Screen";
 import { AiOutlineFork } from "react-icons/ai";
 

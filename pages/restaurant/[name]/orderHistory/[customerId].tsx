@@ -11,7 +11,7 @@ import PrimaryLayout from "components/Primary-layout/index";
 import { useRouter } from "node_modules/next/router";
 import { MdOutlineExpandMore } from "react-icons/md";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
-import Search from "components/Search-form";
+import Search from "@/components/SearchForm";
 import searchByQuery from "lib/searchByQuery";
 import ErrorCard from "components/ErrorCard";
 import { useMutation, useQuery } from "@apollo/client";

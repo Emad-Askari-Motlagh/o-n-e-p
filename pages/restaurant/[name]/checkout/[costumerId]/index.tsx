@@ -11,11 +11,7 @@ import Warning from "@/components/Warning";
 import ErrorCard from "@/components/ErrorCard";
 
 import styles from "./style.module.scss";
-import {
-  COSTUMER_ADDRESS,
-  GET_ORDERS_CONSTANTLY,
-  GET_PAYED_ORDERS,
-} from "@/server/graphql/querys/querys.graphql";
+import { COSTUMER_ADDRESS } from "@/server/graphql/querys/querys.graphql";
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import { PayMutation, PayMutationVariables } from "@/server/generated/graphql";
 

@@ -2,7 +2,7 @@ import useUpload from "hooks/upload.hook";
 import Image from "next/image";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "../Button";
-import FileInput from "../Image-Input";
+import FileInput from "../FileInput";
 import Info from "../Info";
 import Input from "../Input";
 import SucceedMessage from "../Succeed-Message";

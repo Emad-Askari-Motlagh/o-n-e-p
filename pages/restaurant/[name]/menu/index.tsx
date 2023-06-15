@@ -10,7 +10,7 @@ import {
   MenuByCategoryQuery,
   MenuByCategoryQueryVariables,
 } from "server/generated/graphql";
-import Header_animations from "@/components/framer_helpers/Header_animations";
+import Header_animations from "@/components/FramerHelper/Header_animations";
 import Head from "next/head";
 
 export default function Menu() {

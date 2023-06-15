@@ -22,7 +22,7 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import Modall from "@/components/Modal";
 import AddCategory from "@/components/AddCategory";
-import Header_animations from "@/components/framer_helpers/Header_animations";
+import Header_animations from "@/components/FramerHelper/Header_animations";
 
 export default function MenuItems() {
   const { user } = useUser();

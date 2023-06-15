@@ -8,7 +8,7 @@ import Modal from "components/Modal";
 import SucceedMessage from "../Succeed-Message";
 import Image from "next/image";
 import styles from "./styles.module.scss";
-import FileInput from "components/Image-Input";
+import FileInput from "@/components/FileInput";
 import Input from "components/Input";
 import Button from "../Button";
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";

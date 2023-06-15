@@ -11,8 +11,9 @@ import { CgMore } from "react-icons/cg";
 import Input from "@/components/Input";
 import { MenuItemByCategoryQuery } from "@/server/generated/graphql";
 import styles from "./styles.module.scss";
+import ErrorCard from "@/components/ErrorCard";
 
-interface MyTipes<P> {
+interface ItemsType<P> {
   data: P;
 }
 
@@ -32,7 +33,7 @@ interface MenuItemSelection {
 export default function Items({
   items,
 }: {
-  items: MyTipes<MenuItemByCategoryQuery>;
+  items: ItemsType<MenuItemByCategoryQuery>;
 }) {
   const Router = useRouter();
 
@@ -42,6 +43,7 @@ export default function Items({
   const [costumerExtraChoises, setCostumerExtraChoises] = useState<
     MenuItemExtra[]
   >([]);
+  const [Error, setError] = useState("");
   const [description, setDescription] = useState<string>("");
   const {
     orders,
@@ -53,34 +55,41 @@ export default function Items({
 
   const restaurant = Router.query?.name as string;
 
-  function onEnterModal(
-    item: { _id: string },
-    items: { name: string; extra: MenuItemExtra[] }[]
-  ) {
-    if (!item) return;
-    items.map((res) => {
-      setSelection([...res.extra]);
-    });
-  }
+  useEffect(() => {
+    if (items) {
+      const selectedItem = items.find((item) => item.name === "Pommes");
+      if (selectedItem) {
+        setSelectedItem(selectedItem.name);
+        setSelection(selectedItem.extra);
+      }
+    }
+  }, [items]);
 
   function onSelect(e) {
     if (!selection.length) {
       return;
     }
 
-    const { _id, name, price } = selection.find(
-      (val) => val.name === e.target.value
+    const selectedExtra = selection.find(
+      (extra) => extra.name === e.target.value
     );
 
-    setSelectedItem(name);
-    const isMatch = !!costumerExtraChoises.find((extra) => extra.name === name);
+    if (!selectedExtra) {
+      return;
+    }
+
+    setSelectedItem(selectedExtra.name);
+
+    const isMatch = costumerExtraChoises.some(
+      (extra) => extra.name === selectedExtra.name
+    );
     if (!isMatch) {
-      setCostumerExtraChoises([
-        ...costumerExtraChoises,
+      setCostumerExtraChoises((prevChoises) => [
+        ...prevChoises,
         {
-          _id,
-          name,
-          price,
+          _id: selectedExtra._id,
+          name: selectedExtra.name,
+          price: selectedExtra.price,
           quantity: 1,
         },
       ]);
@@ -89,15 +98,21 @@ export default function Items({
 
   async function submit(res: { _id: string }) {
     try {
+      const order = orders.find((order) => order.product._id === res._id);
+
+      if (!order) {
+        throw new Error("Order not found");
+      }
+
       await addExtra({
         variables: {
           description,
-          id: orders.find((r) => r.product._id === res._id)._id,
-          orderItem: costumerExtraChoises.map((r) => ({
-            name: r.name,
-            price: r.price,
-            _id: r._id,
-            quantity: r.quantity,
+          id: order._id,
+          orderItem: costumerExtraChoises.map((extra) => ({
+            name: extra.name,
+            price: extra.price,
+            _id: extra._id,
+            quantity: extra.quantity,
           })),
         },
         onCompleted: () => {
@@ -105,7 +120,8 @@ export default function Items({
         },
       });
     } catch (error) {
-      console.log(error);
+      console.log("Error:", error);
+      // Handle the error here (e.g., display an error message)
     }
   }
 
@@ -188,15 +204,17 @@ export default function Items({
                 addOrder={() =>
                   addOrder({
                     variables: { productId: res._id },
-                    onError: (err) =>
-                      err.graphQLErrors.map((res) => {
-                        console.log(res.extensions);
-                      }),
+                    onError: (e) => {
+                      setError("Internal Error");
+                    },
                   })
                 }
                 removeOrder={() =>
                   removeOrder({
                     variables: { productId: res._id },
+                    onError: (e) => {
+                      setError("Internal Error");
+                    },
                   })
                 }
                 price={res.price}
@@ -210,8 +228,7 @@ export default function Items({
               <Modal
                 isModalOpen={exrasOrderModal}
                 setIsModalOpen={setExtraOrderModalOpen}
-                label={"Extra"}
-                onEnter={() => onEnterModal(res, items)}>
+                label={"Extra"}>
                 <div>
                   <form
                     style={{
@@ -237,9 +254,9 @@ export default function Items({
                       minRows={4}
                       multiline
                       placeholder="Extra description"
-                      onChange={(e) =>
-                        setDescription(e.target.value)
-                      }></Input>{" "}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                    {Error && <ErrorCard>Something went wrong</ErrorCard>}
                     <Button
                       width="80%"
                       type="submit"

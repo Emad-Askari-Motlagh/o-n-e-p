@@ -1,3 +1,5 @@
+import { ReadStream } from "fs";
+
 export type File = {
   filename: string;
   mimetype: string;

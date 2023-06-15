@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
-import Header_animations from "components/framer_helpers/Header_animations";
+import Header_animations from "@/components/FramerHelper/Header_animations";
 import { useUser } from "hooks/Context.hook";
 import Input from "components/Input";
 import PrimaryLayout from "components/Primary-layout";

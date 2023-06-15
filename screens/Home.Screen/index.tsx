@@ -8,7 +8,6 @@ export default function HomeScreen({
 }: {
   ALL_RESTAURANTS: IRestaurant[] | null;
 }) {
-  const restaurantArray = ALL_RESTAURANTS ? ALL_RESTAURANTS : Array(6).fill(1);
   const placeHolder = "...";
   if (!ALL_RESTAURANTS) {
     return null;
