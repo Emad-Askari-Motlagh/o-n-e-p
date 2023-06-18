@@ -1,7 +1,8 @@
 import React from "react";
+import "./terms.module.scss";
 export default function terms() {
   return (
-    <div>
+    <div className={"terms_wrapper"}>
       <h2>Privacy Policy</h2>
       <p>
         Your privacy is important to us. It is shopia&#39;s policy to respect

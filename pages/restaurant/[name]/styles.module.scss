@@ -49,8 +49,9 @@ $BC_COLOR: #242424;
   background: url("/n.webp"), #282828 no-repeat center center;
   background-blend-mode: multiply, screen;
   background-size: cover;
-  padding-top: 20px;
+
   min-height: 80vmin;
+
   label {
     text-align: center;
     color: whitesmoke;
@@ -67,21 +68,35 @@ $BC_COLOR: #242424;
       padding: 20px auto;
     }
   }
-  .items_parent {
-    flex-wrap: wrap;
+  .images_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include lg {
+      flex-direction: column;
+    }
+    span {
+      color: whitesmoke;
+      font-weight: 900;
+      font-size: 150%;
+    }
+  }
+  .image1_parent {
+    background: url("/food3.webp") no-repeat center center;
+  }
+  .image2_parent {
+    background: url("/food4.webp") no-repeat center center;
+  }
+  .image1_parent,
+  .image2_parent {
     display: flex;
     justify-content: space-around;
-    width: 100%;
-    align-items: center;
-    min-height: calc(100vmin - 50vmin);
 
-    @include md {
-      width: 70%;
-      min-height: inherit;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: auto;
+    align-items: center;
+    width: 50%;
+    height: 100vh;
+    @include lg {
+      width: 90%;
     }
   }
 }

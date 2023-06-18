@@ -17,8 +17,8 @@ import {
   AddCostumerMutation,
   AddCostumerMutationVariables,
 } from "@/server/generated/graphql";
-import Image from "next/image";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import Link from "next/link";
 
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
@@ -77,23 +77,17 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
         </>
       ) : (
         // If COSTUMER is available, render the alternatives
-        <div className={styles.items_parent}>
-          <div className={styles.item_parent}>
-            <RestaurantSubItem
-              label={"EAT HERE"}
-              endPoint={"Menu"}
-              image={"/1.webp"}
-              key={2}
-            />
-          </div>
-          <div className={styles.item_parent}>
-            <RestaurantSubItem
-              label={"TAKE AWAY"}
-              endPoint={"Menu"}
-              image={"/take-away.webp"}
-              key={2}
-            />
-          </div>
+        <div className={styles.images_container}>
+          <Link href={`${Router.asPath}/menu`}>
+            <div className={styles.image1_parent}>
+              <span className={styles.image_label}>TAKE AWAY</span>
+            </div>
+          </Link>
+          <Link href={`${Router.asPath}/menu`}>
+            <div className={styles.image2_parent}>
+              <span className={styles.image_label}>EAT HERE</span>
+            </div>
+          </Link>
         </div>
       )}
     </div>

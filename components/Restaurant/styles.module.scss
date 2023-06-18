@@ -19,14 +19,17 @@
 .container {
   width: 100%;
   height: 100%;
+
   .restaurant_card_wrapper {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: 1fr;
     align-content: center;
     justify-content: center;
-    gap: 2%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
     width: 100%;
     padding: 0 14px;
+    max-width: 1920px;
+    margin: auto;
     @include portrait {
       margin: 10px auto;
       display: flex;
@@ -35,11 +38,10 @@
     }
     .images {
       border-radius: 5%;
-      border: 4px solid #e4e6eb;
       overflow: hidden;
-      width: 100%;
+      width: 70%;
       position: relative;
-      margin: 20px 4px;
+      box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
       @include portrait {
         width: 80%;
       }

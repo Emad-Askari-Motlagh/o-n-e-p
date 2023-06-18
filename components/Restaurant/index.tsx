@@ -65,24 +65,6 @@ export default function Restaurant({
             </LinkButton>
           </div>
         </section>
-        <section className={styles.right_card}>
-          <div className={styles.images}>
-            <Image
-              src={images && images?.[1]}
-              width={600}
-              height={600}
-              layout="responsive"
-              alt={name}></Image>
-          </div>
-          <div className={styles.images}>
-            <Image
-              src={images && images?.[2]}
-              width={600}
-              height={600}
-              layout="responsive"
-              alt={name}></Image>
-          </div>
-        </section>
       </div>
     </div>
   );

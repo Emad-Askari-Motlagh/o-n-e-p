@@ -56,6 +56,7 @@ export default function Login() {
     validateOnMount: true,
 
     async onSubmit(values, { resetForm, setErrors }) {
+      setError("");
       try {
         const token = await signIn({
           email: values.email,

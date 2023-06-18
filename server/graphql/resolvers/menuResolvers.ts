@@ -260,10 +260,12 @@ const menuResolvers: Resolvers = {
       { userId }: any
     ) {
       try {
+        if (!userId) return null;
         const { productId, restaurant, category, input } = args;
+        console.log(args);
         const id = new Types.ObjectId(productId);
         const newMenu = await Menu.findOneAndUpdate(
-          { restaurant, category, _id: id },
+          { _id: id },
           {
             name: input.name,
             price: input.price,

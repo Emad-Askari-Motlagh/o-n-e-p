@@ -1,12 +1,4 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  EventHandler,
-  FormEvent,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, useState } from "react";
 import Input from "../Input";
 import Button from "components/Button";
 import styles from "./styles.module.scss";
@@ -51,7 +43,7 @@ export default function MenuItem({
           name: name ? name : data.name,
           description: description ? description : data.description,
           price: price ? price : data.price,
-          images: [image as string],
+          images: [image as string] ?? data?.images[0],
         },
       },
       onCompleted: () => {
@@ -82,13 +74,14 @@ export default function MenuItem({
           label={"Name"}
           type="text"
           defaultValue={data.name}
+          value={data.name}
           onChange={(e) => setName(e.target.value)}
         />
         <Input
           placeholder={"Price"}
           type="number"
           label={"Price"}
-          defaultValue={`${data.price} . 00`}
+          value={`${data.price} . 00`}
           onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
         <Input
@@ -104,7 +97,7 @@ export default function MenuItem({
           placeholder="Category"
           label={"Add to category"}
           type="text"
-          defaultValue={data.subCat[subCat.length - 1]}
+          value={data.subCat[subCat.length - 1]}
           onChange={(e) => setSubCat(e.target.value)}
         />
         {submited && <SucceedMessage>Item Changed Successfuly</SucceedMessage>}
