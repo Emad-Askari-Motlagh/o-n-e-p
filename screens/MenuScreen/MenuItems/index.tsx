@@ -267,7 +267,7 @@ export default function Items({
                       Submit
                     </Button>
                   </form>
-                  {costumerExtraChoises?.length && MenuItems}{" "}
+                  {costumerExtraChoises?.length && MenuItems}
                 </div>
               </Modal>
             </div>

@@ -6,7 +6,6 @@ import { NextApiRequest } from "next";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "components/Primary-layout";
 import RegisterForm from "components/CostumerRegistration";
-import RestaurantSubItem from "components/RestaurantSubItem";
 import ErrorCard from "components/ErrorCard";
 import SucceedMessage from "@/components/Succeed-Message";
 import { ADD_COSTUMER } from "server/graphql/querys/mutations.graphql";
@@ -79,13 +78,13 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
         // If COSTUMER is available, render the alternatives
         <div className={styles.images_container}>
           <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.image1_parent}>
-              <span className={styles.image_label}>TAKE AWAY</span>
+            <div className={styles.image2_parent}>
+              <span className={styles.image_label}>EAT HERE</span>
             </div>
           </Link>
           <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.image2_parent}>
-              <span className={styles.image_label}>EAT HERE</span>
+            <div className={styles.image1_parent}>
+              <span className={styles.image_label}>TAKE AWAY</span>
             </div>
           </Link>
         </div>
