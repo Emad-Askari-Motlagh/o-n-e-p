@@ -94,6 +94,7 @@ $BC_COLOR: #242424;
     margin: auto;
     flex-wrap: wrap;
     min-width: 300px;
+
     @include md {
       width: 90%;
       display: flex;

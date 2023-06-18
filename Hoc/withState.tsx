@@ -7,7 +7,6 @@ function withState<P>(Component: React.ComponentType<P>) {
     return (
       <Component
         {...props}
-        emi="emi"
         signOut={signOut}
         user={user}
         costumerData={costumerData}
