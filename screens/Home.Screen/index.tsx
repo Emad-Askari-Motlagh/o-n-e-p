@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, useRef, useState, useId } from "react";
+import React from "react";
 import styles from "./styles.module.scss";
 import Restaurant from "components/Restaurant";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
