@@ -1,17 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import styles from "./header.module.scss";
 import Navbar from "./Navbar";
 import NavItem from "./NavItem";
-import { useRouter } from "next/router";
 import Logo from "components/Logo";
 import { CgProfile } from "react-icons/cg";
-import {
-  CgDetailsMore,
-  CgLoadbar,
-  CgUser,
-  CgShoppingCart,
-  CgHome,
-} from "react-icons/cg";
+import { CgDetailsMore, CgLoadbar, CgUser, CgHome } from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
 import { useUser } from "hooks/Context.hook";
@@ -77,10 +70,6 @@ export default function Header(props) {
               </div>
             </Link>
           }
-        />
-        <NavItem
-          header_label=""
-          icon={<CgShoppingCart className={styles.icons} />}
         />
 
         <NavItem

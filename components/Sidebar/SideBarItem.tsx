@@ -34,9 +34,7 @@ export default function SideBarItem({
       <div className={styles.menu_item_layer_one}>
         <div className={styles[sideBarClassName]} />
         <span className={styles.icon_button}>{leftIcon}</span>
-        <Link href={endPoint ?? "#"}>
-          <a rel="noopener">{itemsLabel}</a>
-        </Link>
+        <Link href={endPoint ?? "#"}>{itemsLabel}</Link>
         <div className={styles.icon_right}> {rightIcon}</div>
       </div>
     </div>

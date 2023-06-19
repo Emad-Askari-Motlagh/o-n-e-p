@@ -1,7 +1,7 @@
 import style from "./Layout.module.scss";
 import Sidebar from "components/Sidebar";
 import RouteBar from "components/RouteIndicator";
-import PageTwo from "components/Footer";
+import Footer from "components/Footer";
 import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";
 import { useRouter } from "next/router";
@@ -77,7 +77,7 @@ function PrimaryLayout({
       </main>
 
       <footer className={style.footer}>
-        <PageTwo />
+        <Footer />
       </footer>
     </div>
   );

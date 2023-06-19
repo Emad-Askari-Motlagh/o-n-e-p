@@ -7,7 +7,7 @@ class MyDocument extends Document {
         <Head>
           <link rel="manifest" href="/manifest.json" />
 
-          <meta name="theme-color" content="#fff" />
+          <meta name="theme-color" content="#282828" />
         </Head>
         <body>
           <Main />

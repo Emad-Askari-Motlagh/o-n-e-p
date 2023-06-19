@@ -35,6 +35,7 @@ export default function Restaurant({
               src={images && images?.[0]}
               width={600}
               height={600}
+              priority
               layout="responsive"
               alt={name}></Image>
           </div>

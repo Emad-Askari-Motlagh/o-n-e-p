@@ -1,5 +1,3 @@
-import { useApollo } from "@/lib/apollo/apollo-client";
-import { ApolloProvider } from "@apollo/client";
 import { useUser } from "hooks/Context.hook";
 import React, { createContext, ReactNode } from "react";
 

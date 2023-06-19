@@ -12,7 +12,6 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@/lib/apollo/apollo-client";
-import { SessionProvider } from "next-auth/react";
 
 const Noop = ({ children }: { children: any }) => <>{children}</>;
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -55,32 +54,28 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
       </Head>
       {loading ? (
         <ApolloProvider client={client}>
-          <SessionProvider>
-            <AuthProvider>
-              <Layout>
-                <div className={styles.container}>
-                  <div className={styles.spinner}>
-                    <Lottie
-                      loop
-                      animationData={lottieJson}
-                      play
-                      style={{ width: 200, height: 200, margin: "auto" }}
-                    />
-                  </div>
+          <AuthProvider>
+            <Layout>
+              <div className={styles.container}>
+                <div className={styles.spinner}>
+                  <Lottie
+                    loop
+                    animationData={lottieJson}
+                    play
+                    style={{ width: 200, height: 200, margin: "auto" }}
+                  />
                 </div>
-              </Layout>
-            </AuthProvider>
-          </SessionProvider>
+              </div>
+            </Layout>
+          </AuthProvider>
         </ApolloProvider>
       ) : (
         <ApolloProvider client={client}>
-          <SessionProvider>
-            <AuthProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </AuthProvider>
-          </SessionProvider>
+          <AuthProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </AuthProvider>
         </ApolloProvider>
       )}
     </>

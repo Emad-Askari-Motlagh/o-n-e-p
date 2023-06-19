@@ -45,7 +45,7 @@ export default function Menu() {
                     key={index}
                     label={res.itemName}
                     endPoint={res.itemName}
-                    image={res.image ?? "/2.webp"}
+                    image={res.image}
                   />
                 </li>
               );

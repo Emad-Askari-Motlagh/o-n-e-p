@@ -94,9 +94,11 @@ $BC_COLOR: #242424;
     justify-content: space-around;
     align-items: center;
     width: 50%;
-    height: 100vmin;
+    height: 500px;
+    background-size: contain;
     @include lg {
-      width: 80%;
+      width: 70%;
+      height: 400px;
     }
   }
 }
