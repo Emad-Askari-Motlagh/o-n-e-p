@@ -15,7 +15,7 @@ export default function HomeScreen({
 
   return (
     <div className={styles.container}>
-      {ALL_RESTAURANTS.map((res) => {
+      {ALL_RESTAURANTS.map((res, i) => {
         return (
           <Restaurant
             location={res.location}
@@ -26,6 +26,7 @@ export default function HomeScreen({
             endPoint={`/restaurant/${res?.name}`}
             buttonLabel="Begin to order"
             openTimes={res?.openTimes}
+            index={i}
           />
         );
       })}

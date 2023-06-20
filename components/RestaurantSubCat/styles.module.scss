@@ -52,6 +52,7 @@ $BC_COLOR: #242424;
   overflow: hidden;
   margin: 4% 0;
   max-width: 400px;
+
   @include md {
     max-width: initial;
   }

@@ -16,6 +16,13 @@ import {
 import { useUser } from "hooks/Context.hook";
 import styles from "./style.module.scss";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
+import {
+  EditRestaurantInfoItemMutation,
+  EditRestaurantInfoItemMutationVariables,
+  EditUserInfoItemMutation,
+  EditUserInfoItemMutationVariables,
+} from "@/server/generated/graphql";
 
 interface ProfileProps {
   RES: string;
@@ -32,19 +39,19 @@ interface UserInfo {
 }
 
 const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
-  const res = JSON.parse(RES) as Restaurant;
+  const res: IRestaurant = JSON.parse(RES);
   const { user } = useUser();
   const userInfo = user.data?.CurrentUser as UserInfo;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
 
-  const [changeUserInfo, { data: userEditData }] = useMutation(
-    EDIT_USER_INFO_ITEM,
-    refetch
-  );
-  const [changeRestaurantInfo, { data: restaurantEditData }] = useMutation(
-    EDIT_RESTAURANT_INFO_ITEM,
-    refetch
-  );
+  const [changeUserInfo, { data: userEditData }] = useMutation<
+    EditUserInfoItemMutation,
+    EditUserInfoItemMutationVariables
+  >(EDIT_USER_INFO_ITEM, refetch);
+  const [changeRestaurantInfo, { data: restaurantEditData }] = useMutation<
+    EditRestaurantInfoItemMutation,
+    EditRestaurantInfoItemMutationVariables
+  >(EDIT_RESTAURANT_INFO_ITEM, refetch);
 
   if (!user.data?.CurrentUser) {
     return null;
@@ -56,7 +63,7 @@ const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
         <span>
           <CgProfile className={styles.icon} />
         </span>
-        <AnimatedHeader>Profile</AnimatedHeader>
+        <h1>Profile</h1>
       </div>
       <Restaurant
         location={res.location}
@@ -66,6 +73,7 @@ const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
         images={res.images}
         endPoint={`/admin/${res.name}/menu`}
         buttonLabel="Edit the menu"
+        index={1}
       />
       <InfoParent type="user" header="User information">
         <InfoItem

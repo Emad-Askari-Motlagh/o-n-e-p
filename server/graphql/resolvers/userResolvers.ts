@@ -7,11 +7,6 @@ import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
 import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
 import sgMail from "@sendgrid/mail";
-import Realm from "realm";
-import { google } from "googleapis";
-import { authOptions } from "pages/api/auth/[...nextauth]";
-import { signIn } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth";
 import { GraphQLError } from "graphql";
 import {
   AddCostumerAddressMutationVariables,
@@ -173,31 +168,7 @@ const userResolvers: Resolvers = {
       _: any,
       __: any,
       { req, res }: { req: NextApiRequest; res: NextApiResponse }
-    ) {
-      try {
-        const session = await unstable_getServerSession(req, res, authOptions);
-
-        if (session) {
-          const user = await new User({
-            email: session.user?.email,
-            name: session.user?.name,
-          });
-
-          // //Set a token to cookie
-
-          //Save it
-          const doc = await user.save();
-          console.log(session, doc);
-          return doc;
-        } else {
-          throw new ApolloError(
-            "Right now there is an error on google auth. Please try again later"
-          );
-        }
-      } catch (err: any) {
-        throw new ApolloError(err?.message);
-      }
-    },
+    ) {},
 
     async UpdateUser(
       __: any,

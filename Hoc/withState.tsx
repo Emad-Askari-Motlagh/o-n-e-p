@@ -1,5 +1,5 @@
 import { useUser } from "hooks/Context.hook";
-import React, { ReactComponentElement } from "react";
+import React from "react";
 
 function withState<P>(Component: React.ComponentType<P>) {
   const ComponentWithState = (props: P & JSX.IntrinsicAttributes) => {

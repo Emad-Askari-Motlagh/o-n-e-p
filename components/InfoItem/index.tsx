@@ -17,9 +17,8 @@ interface InfoItemProps {
   label: string;
   value: string;
   changeItem: EditRestaurantInfoItemMutationFn;
-  type: string;
-  children: JSX.Element;
-  myR: React.LegacyRef<HTMLDivElement>;
+  type?: string;
+  children?: JSX.Element;
   field?: string;
 }
 const InfoItem: React.FC<InfoItemProps> = ({
@@ -28,13 +27,13 @@ const InfoItem: React.FC<InfoItemProps> = ({
   changeItem,
   type,
   children,
-  myR,
+
   field,
 }: InfoItemProps) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className={styles.info_parent} ref={myR}>
+    <div className={styles.info_parent}>
       <div className={styles.parent}>
         <div className={styles.info_section}>
           <label>{label}</label>

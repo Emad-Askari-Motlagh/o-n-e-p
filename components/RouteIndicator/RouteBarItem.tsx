@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-
 import React, { useEffect, useState } from "react";
 import captalizer from "utils/captalizeFirstLetter";
 import styles from "./styles.module.scss";

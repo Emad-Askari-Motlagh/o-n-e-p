@@ -4,7 +4,6 @@ import React, { RefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_RAPPORT } from "@/server/graphql/querys/mutations.graphql";
-import SelectInput from "@/components/SelectInput";
 import React_Calendar from "components/Calendar";
 import jsPDF from "jspdf";
 import Button from "@/components/Button";
@@ -14,6 +13,7 @@ import {
 } from "@/server/generated/graphql";
 import Info from "@/components/Info";
 import Head from "next/head";
+import ErrorCard from "@/components/ErrorCard";
 
 export default function Rapport() {
   const [sortType, setSortType] = useState("year");
@@ -25,10 +25,10 @@ export default function Rapport() {
   const {
     user: { data: userData },
   } = useUser();
-  const [getAnalistics, { data: rapportData }] = useMutation<
-    GetRapportMutation,
-    GetRapportMutationVariables
-  >(GET_RAPPORT);
+  const [
+    getAnalistics,
+    { data: rapportData, loading: rapportLoading, error: rapportError },
+  ] = useMutation<GetRapportMutation, GetRapportMutationVariables>(GET_RAPPORT);
 
   useEffect(() => {
     getAnalistics({
@@ -61,7 +61,8 @@ export default function Rapport() {
 
     // doc.save("report.pdf");
   };
-
+  if (rapportError && !rapportLoading)
+    return <ErrorCard>There is an error</ErrorCard>;
   return (
     <div className={styles.dash_container}>
       <Head>
@@ -98,47 +99,48 @@ export default function Rapport() {
             )}
           </div>
 
-          {rapportData?.GetRapport.flatMap((res, i) => {
-            return (
-              <div className={styles.rapport_wraper} key={i}>
-                {res.categorizedByDate?.length ? (
-                  <div>
-                    <h3>{userData.CurrentUser.restaurant.name}</h3>
-                    <div className={styles.dates}>
-                      <span>From :{beginDate?.toLocaleString()}</span>
-                      <span>Untill: {finishDate?.toLocaleString()}</span>
+          {rapportData?.GetRapport?.length &&
+            rapportData?.GetRapport.flatMap((res, i) => {
+              return (
+                <div className={styles.rapport_wraper} key={i}>
+                  {res.categorizedByDate?.length ? (
+                    <div>
+                      <h3>{userData.CurrentUser.restaurant.name}</h3>
+                      <div className={styles.dates}>
+                        <span>From :{beginDate?.toLocaleString()}</span>
+                        <span>Untill: {finishDate?.toLocaleString()}</span>
+                      </div>
                     </div>
-                  </div>
-                ) : null}
-                {res.categorizedByTags.map((re, i) => (
-                  <RapportItem
-                    key={re._id}
-                    val={re._id}
-                    sum={re.sum}
-                    moms={Math.round(re.sum * 0.3)}
-                  />
-                ))}
+                  ) : null}
+                  {res.categorizedByTags.map((re, i) => (
+                    <RapportItem
+                      key={re._id}
+                      val={re._id}
+                      sum={re.sum}
+                      moms={Math.round(re.sum * 0.3)}
+                    />
+                  ))}
 
-                {res.categorizedByName.map((re, i) => (
-                  <RapportItem
-                    key={re._id}
-                    val={re._id}
-                    sum={re.sum}
-                    moms={Math.round(re.sum * 0.3)}
-                  />
-                ))}
+                  {res.categorizedByName.map((re, i) => (
+                    <RapportItem
+                      key={re._id}
+                      val={re._id}
+                      sum={re.sum}
+                      moms={Math.round(re.sum * 0.3)}
+                    />
+                  ))}
 
-                {res.categorizedByDate.map((re, i) => (
-                  <RapportItem
-                    key={re._id}
-                    val={"Total sale:"}
-                    sum={re.sum}
-                    moms={Math.round(re.sum * 0.3)}
-                  />
-                ))}
-              </div>
-            );
-          })}
+                  {res.categorizedByDate.map((re, i) => (
+                    <RapportItem
+                      key={re._id}
+                      val={"Total sale:"}
+                      sum={re.sum}
+                      moms={Math.round(re.sum * 0.3)}
+                    />
+                  ))}
+                </div>
+              );
+            })}
         </div>
         {doc && (
           <>

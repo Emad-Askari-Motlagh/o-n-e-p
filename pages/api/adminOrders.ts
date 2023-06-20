@@ -10,7 +10,7 @@ const orderFetcher = async () => {
     .find({})
     .populate({ path: "costumer", model: "Costumer" })
     .populate("product");
-  console.log(fetchedOrders);
+
   return fetchedOrders;
 };
 

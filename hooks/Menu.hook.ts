@@ -6,8 +6,8 @@ import {
   DeleteMenuItemSubCategoryMutationVariables,
   FetchAllMenuItemsQuery,
   FetchAllMenuItemsQueryVariables,
-} from "./../server/generated/graphql";
-import { GET_ALL_MENU_ITEMS } from "./../server/graphql/querys/querys.graphql";
+} from "server/generated/graphql";
+import { GET_ALL_MENU_ITEMS } from "server/graphql/querys/querys.graphql";
 import React, { useState } from "react";
 
 import {
@@ -71,7 +71,7 @@ export default function useMenu() {
         setIsModalOpen(false);
         setIsItemSaved(false);
         reload();
-      }, 1500);
+      }, 1000);
     },
   });
 
@@ -125,7 +125,7 @@ export default function useMenu() {
       setTimeout(() => {
         setIsModalOpen(false);
         reload();
-      }, 1500);
+      }, 1000);
     },
   });
   const [deleteSubCatToMenuItem] = useMutation<
@@ -159,7 +159,7 @@ export default function useMenu() {
       setTimeout(() => {
         setIsModalOpen(false);
         reload();
-      }, 1500);
+      }, 1000);
     },
     onError: (err) => {
       err.graphQLErrors.map((re) => {
@@ -180,7 +180,7 @@ export default function useMenu() {
       setDocumentSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
-      }, 2000);
+      }, 1000);
     },
   });
   const [deleteCategory] = useMutation<
@@ -197,7 +197,7 @@ export default function useMenu() {
       setDocumentSaved(true);
       setTimeout(() => {
         setIsModalOpen(false);
-      }, 2000);
+      }, 1000);
     },
   });
   const {

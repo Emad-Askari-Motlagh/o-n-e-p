@@ -1,5 +1,4 @@
 import { useApollo } from "@/lib/apollo/apollo-client";
-import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { ADD_ORDER } from "server/graphql/querys/mutations.graphql";
 

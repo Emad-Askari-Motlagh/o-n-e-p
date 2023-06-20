@@ -17,12 +17,17 @@ import { useRouter } from "next/router";
 import { useUser } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
+import { TableHead } from "@mui/material";
+import ErrorCard from "@/components/ErrorCard";
 
 const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);
   const [refetch, setRefetch] = useState(true);
   const { costumerData } = useUser();
+  const [description, setDescription] = useState("");
+  const [quantity, setQuantity] = useState<number>();
+  const [bookingError, setBookingError] = useState("");
   const { query } = useRouter();
   const [isDeleted, setIsDeleted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -37,28 +42,38 @@ const Reservation = () => {
   }, [refetch, query, url]);
   async function reserve(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
-
-    const res = await axios.post(url, {
-      date: startDate,
-    });
-    if (res.data) {
-      setIsSaved(true);
-      setTimeout(() => {
-        setRefetch(!refetch);
-        setIsSaved(false);
-        globalThis.location.reload();
-      }, 1500);
+    setBookingError("");
+    try {
+      const res = await axios.post(url, {
+        date: startDate,
+        description,
+        quantity,
+      });
+      if (res.data) {
+        setIsSaved(true);
+        setTimeout(() => {
+          setRefetch(!refetch);
+          setIsSaved(false);
+          globalThis.location.reload();
+        }, 1500);
+      } else {
+        throw new Error("There was an error");
+      }
+    } catch (error: any) {
+      setBookingError(error?.Message ?? "There was an error");
     }
   }
   async function deleteTheBook(id: string) {
-    const res = await axios.delete(url, { params: { bookId: id } });
-    if (res.status === 200) {
-      setIsDeleted(true);
+    try {
+      const res = await axios.delete(url, { params: { bookId: id } });
+
       setTimeout(() => {
         setRefetch(!refetch);
         globalThis.location.reload();
         setIsDeleted(false);
       }, 1000);
+    } catch (error) {
+      setBookingError("Unexpected error");
     }
   }
   return (
@@ -69,6 +84,7 @@ const Reservation = () => {
       </Head>
       <div className={styles.calandar_container}>
         <h2>Make your Reservation</h2>
+
         <div className={styles.table_container}>
           {oldDate.length ? (
             <>
@@ -111,6 +127,7 @@ const Reservation = () => {
               {isDeleted && (
                 <SucceedMessage>Your Booking Is Deleted</SucceedMessage>
               )}
+              {bookingError && <ErrorCard>bookingError</ErrorCard>}
             </>
           ) : null}
         </div>
@@ -120,14 +137,20 @@ const Reservation = () => {
             <DatePicker handleChange={(date: Date) => setStartDate(date)} />
           </div>
 
-          <Input type="text" placeholder="Antal" label="For how many?" />
+          <Input
+            type="number"
+            placeholder="Antal"
+            label="For how many?"
+            onChange={(e) => setQuantity(e.target.value)}
+          />
 
           <Input
             placeholder="Description"
             multiline
             minRows={4}
             width="100%"
-            label="Description"></Input>
+            label="Description"
+            onChange={(e) => setDescription(e.target.value)}></Input>
 
           {isSaved && <SucceedMessage>Your Booking Is Accepted</SucceedMessage>}
           <Button width="80%" type="submit" onClick={reserve}>

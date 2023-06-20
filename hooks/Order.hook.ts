@@ -28,7 +28,7 @@ import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
 } from "server/graphql/querys/querys.graphql";
-import { MutationFunctionOptions, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
 type MyTypes = {

@@ -7,22 +7,24 @@ interface IReservation extends Document {
   description: string;
   date: Date;
   restaurant: string | IRestaurant;
-  customer: Types.ObjectId | I_CostumerDocument;
+  costumer: Types.ObjectId | I_CostumerDocument;
+  quantity: number;
 }
 
 const reservationSchema: Schema<IReservation> = new mongoose.Schema(
   {
     description: String,
+    quantity: Number,
     date: { type: Date },
     restaurant: {
       type: String,
       ref: "Restaurant",
       required: true,
     },
-    customer: {
+    costumer: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: "Customer",
+      ref: "Costumer",
     },
   },
   { timestamps: true }

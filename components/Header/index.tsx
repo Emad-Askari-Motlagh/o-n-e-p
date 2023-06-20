@@ -77,7 +77,6 @@ export default function Header(props) {
           icon={
             <Link href={userData?.CurrentUser ? "/profile" : "/auth/login"}>
               <div>
-                {" "}
                 <CgProfile className={styles.icons} color="tomato" />
               </div>
             </Link>

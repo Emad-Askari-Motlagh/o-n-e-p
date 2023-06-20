@@ -1,11 +1,10 @@
-import userSchema from "@/server/mongoSchema/userSchema";
 import { NextApiRequest } from "next";
 // import { createServer } from "@graphql-yoga/node";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "@/server/graphql/typeDef/schema.graphql";
 import resolvers from "@/server/graphql/resolvers";
 import dbInit from "@/lib/dbInit";
-import JWT, { JwtPayload } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 
 // const pubsub = new PubSub();
 

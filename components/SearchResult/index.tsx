@@ -2,7 +2,7 @@ import { AddMenuItemSubCategoryMutationFn } from "@/server/generated/graphql";
 import Image from "next/image";
 import React, { MouseEventHandler } from "react";
 import Button from "../Button";
-import Button2 from "../Button2";
+import Button2 from "../ButtonSecoundary";
 import styles from "./styles.module.scss";
 
 interface SearchResultProps {

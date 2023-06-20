@@ -2,8 +2,8 @@
 @import "styles/breakpoints.scss";
 
 //Variables//
-$ITEM_BORDERS: 40px;
-$ITEMS_WIDTH: 40%;
+$ITEM_BORDERS: 10px;
+$ITEMS_WIDTH: 0%;
 $ITEMS_HEIGHT: 400px;
 $BC_COLOR: #242424;
 //mixings//
@@ -16,7 +16,6 @@ $BC_COLOR: #242424;
     flex-direction: column;
   }
   .table_container {
-    border: 2px solid rgba(0, 0, 0, 0.206);
     margin-top: 1em;
     border-radius: 10px;
     h3 {
@@ -63,7 +62,6 @@ $BC_COLOR: #242424;
 
     color: rgb(213, 189, 189);
 
-    font-family: "playfair" sans-serif;
     margin: 40px auto;
     height: max-content;
     border-radius: 20px;
@@ -71,7 +69,6 @@ $BC_COLOR: #242424;
 
     margin-bottom: 20%;
     box-shadow: rgba(41, 38, 38, 0.495) 4px 4px 12px, rgba(19, 18, 18, 0.417) -4px -4px 12px inset;
-    border-radius: 10px 140px;
 
     background-color: transparent;
 
@@ -109,7 +106,7 @@ $BC_COLOR: #242424;
     position: relative;
     color: #fff;
     font: 900 30px Montserrat;
-    text-shadow: 0 10px 25px rgba(0, 0, 0);
+    text-shadow: 0 2px 2px rgba(0, 0, 0);
   }
 
   label {

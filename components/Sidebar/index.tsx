@@ -11,7 +11,7 @@ import DropdownItem from "./SideBarItem";
 import { useRouter } from "node_modules/next/router";
 import { FaJediOrder } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
-import Button2 from "../Button2";
+import Button2 from "../ButtonSecoundary";
 import { CostumerQuery, CostumerQueryResult } from "@/server/generated/graphql";
 import { IoFastFoodOutline } from "react-icons/io5";
 

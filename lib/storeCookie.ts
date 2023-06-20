@@ -1,5 +1,4 @@
 import cookie from "cookie";
-import { Http2ServerResponse } from "http2";
 import { NextApiResponse } from "next";
 
 const deleteCookieOptions = {

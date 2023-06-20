@@ -23,7 +23,7 @@ $box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    padding: 2em;
+
     box-shadow: $box-shadow;
     margin-bottom: 3%;
     @include lg {
@@ -34,11 +34,14 @@ $box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
     .header_container {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
         width: max-content;
+        height: max-content;
+        text-align: left;
+        padding: 1rem;
         & > * {
-            margin: 1rem;
+            margin: 0.1rem;
         }
 
         .icon {

@@ -1,12 +1,10 @@
 import { useRouter } from "next/router";
-import { signOut as signOutWithGoogle } from "next-auth/react";
+
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
   SignInMutation,
   SignInMutationVariables,
-  SignInWithGoogleMutation,
-  SignInWithGoogleMutationVariables,
   SignOutMutation,
   SignOutMutationVariables,
   CurrentUserQuery,
@@ -27,7 +25,6 @@ import {
   LOGIN,
   SIGN_OUT,
   CREATE_USER,
-  LOGIN_WITH_GOOGLE,
   SIGN_OUT_COSTUMER,
 } from "server/graphql/querys/mutations.graphql";
 
@@ -102,26 +99,6 @@ export function useUser() {
     }
   };
 
-  const SigninWithGoogle = async () => {
-    try {
-      const result = await client.mutate<
-        SignInWithGoogleMutation,
-        SignInWithGoogleMutationVariables
-      >({
-        mutation: LOGIN_WITH_GOOGLE,
-      });
-      setAuthToken(result.data?.SignInWithGoogle.token);
-      if (result.data) {
-        return result.data.SignInWithGoogle.token;
-      } else {
-        setSignInError("Error on signin happened");
-      }
-    } catch (err: any) {
-      setSignInError("An unexpected error occurred");
-      console.log("Error during the signin with Google", err);
-    }
-  };
-
   const signUp = async ({
     email,
     password,
@@ -152,17 +129,7 @@ export function useUser() {
       await client.mutate<SignOutMutation, SignOutMutationVariables>({
         mutation: SIGN_OUT,
       });
-      signOutWithGoogle();
-    } catch (err: any) {
-      console.log(err?.message ?? err);
-    }
-  };
-
-  const signUpWithGoogle = async () => {
-    try {
-      await client.mutate({
-        mutation: SIGN_UP_WITH_GOOGLE,
-      });
+      Router.push("/");
     } catch (err: any) {
       console.log(err?.message ?? err);
     }
@@ -176,11 +143,9 @@ export function useUser() {
     client,
     user: userData,
     signUp,
-    SigninWithGoogle,
     token: authToken,
     costumerData,
     signInError,
-    signUpWithGoogle,
   };
 }
 
