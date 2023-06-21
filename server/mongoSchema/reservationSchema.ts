@@ -9,12 +9,16 @@ interface IReservation extends Document {
   restaurant: string | IRestaurant;
   costumer: Types.ObjectId | I_CostumerDocument;
   quantity: number;
+  name: string;
+  email: string;
 }
 
 const reservationSchema: Schema<IReservation> = new mongoose.Schema(
   {
     description: String,
     quantity: Number,
+    name: String,
+    email: String,
     date: { type: Date },
     restaurant: {
       type: String,

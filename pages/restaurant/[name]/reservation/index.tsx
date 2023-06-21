@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  EventHandler,
-  ChangeEvent,
-  MouseEventHandler,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/Primary-layout";
 import DatePicker from "@/components/DatePicker";
@@ -17,45 +10,56 @@ import { useRouter } from "next/router";
 import { useUser } from "hooks/Context.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
-import { TableHead } from "@mui/material";
 import ErrorCard from "@/components/ErrorCard";
 
 const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [oldDate, setOldRes] = useState([]);
   const [refetch, setRefetch] = useState(true);
-  const { costumerData } = useUser();
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState<number>();
+  const [bookingName, setBookingName] = useState("");
   const [bookingError, setBookingError] = useState("");
   const { query } = useRouter();
   const [isDeleted, setIsDeleted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const url = `/api/reservation/${query.name}`;
+  const url = `${process.env.SERVER_LINK}/api/reservation/${query.name}`;
   const formRef = useRef();
+  const { costumerData } = useUser();
   useEffect(() => {
     fetchReservations();
     async function fetchReservations() {
-      const res = await axios.get(url);
-      setOldRes(res.data);
+      try {
+        const res = await axios.get(url);
+        setOldRes(res.data);
+      } catch (err) {
+        setBookingError("There was an error");
+        return;
+      }
     }
   }, [refetch, query, url]);
   async function reserve(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     setBookingError("");
+    if (!costumerData.data) {
+      return;
+    }
     try {
       const res = await axios.post(url, {
         date: startDate,
         description,
         quantity,
+        email: costumerData?.data.Costumer.email,
+        name: bookingName,
       });
+
       if (res.data) {
         setIsSaved(true);
         setTimeout(() => {
           setRefetch(!refetch);
           setIsSaved(false);
           globalThis.location.reload();
-        }, 1500);
+        }, 1000);
       } else {
         throw new Error("There was an error");
       }
@@ -66,7 +70,6 @@ const Reservation = () => {
   async function deleteTheBook(id: string) {
     try {
       const res = await axios.delete(url, { params: { bookId: id } });
-
       setTimeout(() => {
         setRefetch(!refetch);
         globalThis.location.reload();
@@ -76,6 +79,7 @@ const Reservation = () => {
       setBookingError("Unexpected error");
     }
   }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -107,9 +111,7 @@ const Reservation = () => {
                         </span>
                       </td>
                       <td>
-                        <span className={styles.name}>
-                          {res?.costumer?.name}
-                        </span>
+                        <span className={styles.name}>{res?.name}</span>
                       </td>
                       <td>
                         <span className={styles.quantity}>4 Persons</span>
@@ -132,7 +134,12 @@ const Reservation = () => {
           ) : null}
         </div>
         <form ref={formRef}>
-          <Input type="text" placeholder="Name" label="Customer`s name" />
+          <Input
+            type="text"
+            placeholder="Name"
+            label="Customer`s name"
+            onChange={(e) => setBookingName(e.target.value)}
+          />
           <div style={{ margin: "0.2rem auto", width: "100%" }}>
             <DatePicker handleChange={(date: Date) => setStartDate(date)} />
           </div>

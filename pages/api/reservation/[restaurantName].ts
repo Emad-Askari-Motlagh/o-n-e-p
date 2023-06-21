@@ -10,20 +10,18 @@ export const config = {
 
 const createReservation = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const costumerId = req.cookies["costumerId"];
-    if (!costumerId) {
-      return res.status(404).end();
-    }
-    const customerId = new Types.ObjectId(costumerId);
     const restaurantName = req.query.restaurantName as string;
-    const { description, quantity } = req.body;
-
+    const { description, quantity, email, name } = req.body;
+    const costumerId = req.cookies["costumerId"];
+    const id = new Types.ObjectId(costumerId);
     const reservation = await new Reservation({
       restaurant: restaurantName,
-      customer: new mongoose.Types.ObjectId(customerId),
+      costumer: id,
       date: new Date(),
       description,
       quantity,
+      email,
+      name,
     });
     await reservation.save();
     res.status(201).json(reservation);
@@ -35,16 +33,14 @@ const createReservation = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const getReservations = async (req: NextApiRequest, res: NextApiResponse) => {
   const costumerId = req.cookies["costumerId"];
-  if (!costumerId) {
-    return res.status(404).end();
-  }
-  const customerId = new Types.ObjectId(costumerId);
+
+  const id = new Types.ObjectId(costumerId);
   try {
     const restaurantName = req.query.restaurantName as string;
     const oldReservations = await Reservation.find({
       restaurant: restaurantName,
-      costumer: costumerId,
-    });
+      costumer: id,
+    }).populate("costumer");
     res.status(200).json(oldReservations);
   } catch (error) {
     console.error("Error fetching reservations:", error);
