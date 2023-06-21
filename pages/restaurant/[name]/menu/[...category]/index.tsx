@@ -17,6 +17,7 @@ import {
   MenuItemByCategoryQueryVariables,
 } from "server/generated/graphql";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 // Dynamic import the MenuItems component
 const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"));
@@ -64,12 +65,9 @@ export default function Menu() {
         <title>Menu Page</title>
         <meta name="description" content="This is the menu page" />
       </Head>
-      <motion.label
-        className={styles.label}
-        initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}>
-        {router.query?.name}
-      </motion.label>
+      <AnimatedHeader fontSize="20px">
+        {router.query?.name} - Menu Items
+      </AnimatedHeader>
       <div className={styles.items_parent}>
         {data?.MenuBySubCategory?.length ? (
           <CategoryItems items={data?.MenuBySubCategory} />

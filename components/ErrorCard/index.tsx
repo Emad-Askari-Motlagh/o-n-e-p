@@ -1,12 +1,6 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import {
-  IoInformationCircleSharp,
-  IoWarning,
-  IoWarningOutline,
-} from "react-icons/io5";
-import { GiObservatory } from "react-icons/gi";
-import { BiErrorAlt, BiInfoCircle } from "react-icons/bi";
+import { BiErrorAlt } from "react-icons/bi";
 
 export default function ErrorCard({
   children,

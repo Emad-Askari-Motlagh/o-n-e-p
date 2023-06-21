@@ -16,6 +16,7 @@ import { signIn as signInWithGoogle } from "next-auth/react";
 import { useRouter } from "next/router";
 import Info from "@/components/Info";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 export default function Login() {
   const [error, setError] = useState<string | null>("");
@@ -86,16 +87,14 @@ export default function Login() {
       initial={{ opacity: 0, y: -200 }}
       animate={{ opacity: 1, y: 0 }}
       className={styles.login_container}>
-      {" "}
       <Head>
         <title>Login</title>
         <meta name="description" content="Login page" />
       </Head>
-      <Header_animations text=" Login" />
-      <Header_animations
-        text="Welcome back, nice to have you here "
-        style={{ color: "white", fontSize: "12px" }}
-      />
+      <AnimatedHeader>Login</AnimatedHeader>
+      <AnimatedHeader fontSize="14px">
+        Welcome back, nice to have you here{" "}
+      </AnimatedHeader>
       <Info>
         For testing one of restaurant`s feautures, you can use email:
         emad.askari@gmail.com & password: emadi

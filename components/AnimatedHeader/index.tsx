@@ -5,9 +5,14 @@ import styles from "./AnimatedHeader.module.scss";
 interface AnimatedHeaderProps {
   children: ReactNode;
   color?: string;
+  fontSize?: string;
 }
 
-const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({ children, color }) => {
+const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
+  children,
+  color,
+  fontSize,
+}) => {
   const headerVariants: Variants = {
     initial: { opacity: 0, y: -200 },
     animate: { opacity: 1, y: 0 },
@@ -15,7 +20,7 @@ const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({ children, color }) => {
 
   return (
     <motion.h1
-      style={{ color }}
+      style={{ color, fontSize }}
       className={styles.header_con}
       initial="initial"
       animate="animate"

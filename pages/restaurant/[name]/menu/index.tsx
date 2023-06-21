@@ -12,6 +12,7 @@ import {
 } from "server/generated/graphql";
 import Header_animations from "@/components/FramerHelper/Header_animations";
 import Head from "next/head";
+import AnimatedHeader from "@/components/AnimatedHeader";
 
 export default function Menu() {
   const Router = useRouter();
@@ -33,7 +34,7 @@ export default function Menu() {
         <ErrorCard>Couldn`t find any item</ErrorCard>
       ) : (
         <>
-          <Header_animations text="Menu"></Header_animations>
+          <AnimatedHeader fontSize="25px">Menu Categorys</AnimatedHeader>
           <ul className={styles.items_parent}>
             {(data?.MenuByCategory
               ? data?.MenuByCategory
