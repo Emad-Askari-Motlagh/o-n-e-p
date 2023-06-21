@@ -15,7 +15,6 @@ const schema = makeExecutableSchema({
 
 import { createServer, createPubSub } from "@graphql-yoga/node";
 import { AuthenticationError } from "apollo-server-core";
-import { getSession } from "next-auth/react";
 
 interface ReturnContext {
   id: string;
@@ -34,9 +33,6 @@ const server = createServer({
   context: async ({ req }: { req: NextApiRequest }) => {
     await dbInit();
     let { token, costumerId } = req.cookies;
-    const session = await getSession({
-      req,
-    });
 
     // 1. Find optional visitor id
     let id: string | number | null = null;
@@ -46,10 +42,6 @@ const server = createServer({
       if (token) {
         let obj = JWT.verify(token, "MY_SECRET");
         id = (obj as ReturnContext).id;
-      }
-
-      if (session) {
-        id = session?._id;
       }
     } catch (err) {
       console.error("error on apollo server", err); // expired token, invalid token
