@@ -17,7 +17,7 @@ interface RetaurantProps {
   openTimes?: string;
   index?: number;
 }
-export default function Restaurant({
+export default function RestaurantCard({
   name,
   endPoint,
   children,

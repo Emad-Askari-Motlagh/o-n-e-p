@@ -1,6 +1,12 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import { IoInformation, IoInformationCircleSharp } from "react-icons/io5";
+import {
+  IoInformationCircleSharp,
+  IoWarning,
+  IoWarningOutline,
+} from "react-icons/io5";
+import { GiObservatory } from "react-icons/gi";
+import { BiErrorAlt, BiInfoCircle } from "react-icons/bi";
 
 export default function ErrorCard({
   children,
@@ -9,9 +15,7 @@ export default function ErrorCard({
 }) {
   return (
     <div className={styles["error-component"]}>
-      <IoInformationCircleSharp
-        size={35}
-        color="tomato"></IoInformationCircleSharp>
+      <BiErrorAlt size={35} color="#ff6f6197"></BiErrorAlt>
       <span className={styles["error-message"]}>{children}</span>
     </div>
   );

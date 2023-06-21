@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import Restaurant from "components/Restaurant";
+import Restaurant from "@/components/RestaurantCard";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 
 export default function HomeScreen({

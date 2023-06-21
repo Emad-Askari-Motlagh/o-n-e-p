@@ -6,7 +6,7 @@ import dbInit from "@/lib/dbInit";
 import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
 import PrimaryLayout from "@/components/Primary-layout";
 import InfoItem from "@/components/InfoItem";
-import Restaurant from "@/components/Restaurant";
+import Restaurant from "@/components/RestaurantCard";
 import { CgProfile } from "react-icons/cg";
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import {

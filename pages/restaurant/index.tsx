@@ -12,6 +12,7 @@ import PrimaryLayout from "components/Primary-layout";
 import Search from "@/components/SearchForm";
 import Restaurants from "screens/Home.Screen";
 import { AiOutlineFork } from "react-icons/ai";
+import ErrorCard from "@/components/ErrorCard";
 
 interface HomeProps {
   ALL_RESTAURANTS: IRestaurant[] | null;
@@ -37,7 +38,9 @@ export default function Home({ ALL_RESTAURANTS }: HomeProps) {
       <Search label="Hitta din restaurang" onChange={handleSearchChange}>
         <AiOutlineFork color="white" />
       </Search>
-
+      {!restaurants?.length && ALL_RESTAURANTS?.length && (
+        <ErrorCard>Couldn`t find any restaurant</ErrorCard>
+      )}
       <Restaurants
         ALL_RESTAURANTS={searchQuery ? restaurants : ALL_RESTAURANTS}
       />

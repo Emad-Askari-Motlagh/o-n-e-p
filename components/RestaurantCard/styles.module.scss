@@ -88,7 +88,7 @@
           }
         }
         .restaurant_label {
-          @include desc_font_size(1.5);
+          @include desc_font_size(1.2);
           font-weight: 900;
           text-shadow: 1px 1px 1px black;
           color: whitesmoke;
@@ -96,12 +96,14 @@
           width: max-content;
         }
         .restaurant_description {
-          color: #8898a6;
-          @include desc_font_size(0.6);
+          color: rgb(217, 217, 217);
+
+          @include desc_font_size(0.5);
         }
         .restaurant_openTime {
           color: rgb(214, 107, 88);
-          @include desc_font_size(0.6);
+          @include desc_font_size(0.4);
+          opacity: 0.7;
           margin: auto;
           text-align: center;
         }
