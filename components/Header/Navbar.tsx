@@ -1,17 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { ReactNode, FC } from "react";
 import styles from "./header.module.scss";
-import router from "next/router";
-import {
-  CgDetailsMore,
-  CgLoadbar,
-  CgUser,
-  CgShoppingCart,
-  CgHome,
-} from "react-icons/cg";
-import { trimUserName } from "utils/stringHelpers";
 
-function Navbar({ children }) {
-  return <nav className={styles.navbar}>{children}</nav>;
+interface NavbarProps {
+  children: ReactNode;
 }
+
+const Navbar: FC<NavbarProps> = ({ children }) => {
+  return <nav className={styles.navbar}>{children}</nav>;
+};
 
 export default Navbar;

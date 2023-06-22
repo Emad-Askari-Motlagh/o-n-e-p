@@ -1,31 +1,56 @@
-import React from "react";
+import React, { ReactNode, FC } from "react";
 import styles from "./header.module.scss";
 import Navbar from "./Navbar";
 import NavItem from "./NavItem";
 import Logo from "components/Logo";
-import { CgProfile } from "react-icons/cg";
-import { CgDetailsMore, CgLoadbar, CgUser, CgHome } from "react-icons/cg";
+import {
+  CgProfile,
+  CgDetailsMore,
+  CgLoadbar,
+  CgUser,
+  CgHome,
+} from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
 import { useUser } from "hooks/Context.hook";
 
-export default function Header(props) {
+interface HeaderProps {
+  user: {
+    data: any;
+    error: any;
+    loading: boolean;
+  };
+  costumer: {
+    data: any;
+    error: any;
+    loading: boolean;
+  };
+  setIsVisible?: (visible: boolean) => void;
+  isVisible?: boolean;
+}
+
+const Header: FC<HeaderProps> = (props) => {
   const { data: userData, error: userError, loading: userLoading } = props.user;
-  const { data: costumerData, costumerError, costumerLoading } = props.costumer;
+  const {
+    data: costumerData,
+    error: costumerError,
+    loading: costumerLoading,
+  } = props.costumer;
   const { user } = useUser();
   const homeEndPoint = user.data?.CurrentUser
     ? `/admin/${user.data.CurrentUser.restaurant.name}`
     : "/restaurant";
+
   return (
     <Navbar {...props}>
       <div
-        onClick={() => props?.setIsVisible(!props?.isVisible)}
+        onClick={() => props?.setIsVisible?.(!props?.isVisible)}
         className={styles.more_icon_container}>
         <CgDetailsMore
           className={styles.moreIconInHeader}
           color="white"
           size={40}
-          onClick={() => props?.setIsVisible(false)}
+          onClick={() => props?.setIsVisible?.(false)}
         />
       </div>
 
@@ -44,7 +69,8 @@ export default function Header(props) {
             typeof costumerData === "undefined"
               ? "red"
               : "tomato"
-          }></CgUser>
+          }
+        />
 
         {(costumerLoading || userLoading) && (
           <CgLoadbar color="white" className={styles.navBar_icons} />
@@ -85,4 +111,6 @@ export default function Header(props) {
       </ul>
     </Navbar>
   );
-}
+};
+
+export default Header;
