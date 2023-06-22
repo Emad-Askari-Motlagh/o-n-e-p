@@ -28,14 +28,7 @@ interface SidebarProps {
     name: string;
   };
 }
-function SideBar({
-  signOut,
-  isCurrent,
-  restaurant,
-  isAdmin,
-  costumerData,
-  user,
-}: SidebarProps) {
+function SideBar({ signOut, restaurant, costumerData, user }: SidebarProps) {
   const Router = useRouter();
   async function SignOut() {
     await signOut();

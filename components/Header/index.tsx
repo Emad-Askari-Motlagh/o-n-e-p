@@ -42,8 +42,8 @@ export default function Header(props) {
           color={
             typeof userData === "undefined" ||
             typeof costumerData === "undefined"
-              ? "white"
-              : "red"
+              ? "red"
+              : "tomato"
           }></CgUser>
 
         {(costumerLoading || userLoading) && (

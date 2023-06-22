@@ -7,30 +7,31 @@ $sideBar-width: 300px;
   width: 100%;
 
   grid-template-areas:
-    "head head"
-    "nav  main"
-    "nav  foot";
+    "header header"
+    "side  main"
+    "side  foot";
   grid-template-rows: 80px 1fr 80px;
   grid-template-columns: 250px 1fr;
   position: relative;
-  @include portrait {
+
+  @include lg {
     display: flex;
     flex-direction: column;
   }
 }
 .header {
-  grid-area: head;
-  @include portrait {
+  grid-area: header;
+  @include lg {
     height: 80px;
   }
 }
 .aside {
-  grid-area: nav;
+  grid-area: side;
   z-index: 4;
 
   -webkit-mask-image: linear-gradient(to top, transparent 1%, black 1%);
   mask-image: linear-gradient(to top, transparent 1%, black 1%);
-  @include portrait {
+  @include lg {
     transition: left 0.4s ease-in-out;
     position: absolute;
     top: 0;
