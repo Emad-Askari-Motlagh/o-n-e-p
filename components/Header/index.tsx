@@ -13,18 +13,14 @@ import {
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
 import { useUser } from "hooks/Context.hook";
+import {
+  CostumerQueryResult,
+  CurrentUserQueryResult,
+} from "@/server/generated/graphql";
 
 interface HeaderProps {
-  user: {
-    data: any;
-    error: any;
-    loading: boolean;
-  };
-  costumer: {
-    data: any;
-    error: any;
-    loading: boolean;
-  };
+  user: CurrentUserQueryResult;
+  costumer: CostumerQueryResult;
   setIsVisible?: (visible: boolean) => void;
   isVisible?: boolean;
 }
@@ -36,6 +32,7 @@ const Header: FC<HeaderProps> = (props) => {
     error: costumerError,
     loading: costumerLoading,
   } = props.costumer;
+
   const { user } = useUser();
   const homeEndPoint = user.data?.CurrentUser
     ? `/admin/${user.data.CurrentUser.restaurant.name}`
