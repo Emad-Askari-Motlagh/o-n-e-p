@@ -55,9 +55,9 @@ const Header: FC<HeaderProps> = (props) => {
         <div className={styles.restaurant_logo}>
           <Logo />
         </div>
-
         <label className={styles.app_logo_name}>Beställät</label>
       </div>
+
       <div className={styles.websites_name_caption}>
         <CgUser
           className={styles.user_logo}

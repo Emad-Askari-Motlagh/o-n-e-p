@@ -21,8 +21,8 @@ const NavItem: FC<NavItemProps> = ({
       className={styles.nav_item}
       onClick={onClick}
       onPointerLeave={onPointerLeave}>
-      {children}
       {icon}
+      {children}
       <span>{header_label}</span>
     </li>
   );

@@ -62,65 +62,6 @@ $speed: 500ms;
   margin: auto;
   border-top-width: 0;
 }
-.websites_name_caption {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .restaurant_logo {
-    @include lg {
-      display: none;
-    }
-  }
-  .user_logo {
-    font-size: 36px;
-    @include lg {
-      font-size: 20px;
-    }
-  }
-  .app_name {
-    font-family: "Amaranth", sans-serif;
-    font-size: 20px;
-    margin: 5px;
-    color: #e3e2df;
-    @include lg {
-      font-size: 16px;
-    }
-  }
-  .app_logo_name {
-    font-size: 20px;
-    margin: 5px;
-    color: #e3e2df;
-    @include lg {
-      display: none;
-    }
-  }
-}
-
-.items_cont {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: max-content;
-  height: 100%;
-  .icons {
-    width: 40px;
-    color: wheat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin: auto;
-    transition: all 0.3s ease-in;
-    &:hover {
-      color: rgb(161, 80, 66);
-    }
-    @include lg {
-      width: 24px;
-    }
-  }
-}
 
 .navbar {
   width: 100%;
@@ -136,9 +77,11 @@ $speed: 500ms;
     @include lg {
       display: inline;
     }
+
     .moreIconInHeader {
       display: none;
       cursor: pointer;
+
       @include lg {
         display: inline;
       }
@@ -149,23 +92,96 @@ $speed: 500ms;
     display: flex;
     justify-content: center;
     align-items: center;
+
     @include md {
       flex-direction: column;
+
       span {
         font-size: 10px;
       }
     }
   }
+
   .nav_item {
     margin: 0 4%;
     list-style: none;
     cursor: pointer;
     transition: all 0.2s ease-in;
+
     @include lg {
       margin: 0 8%;
     }
+
     &:hover {
       transform: scale(1.1);
+    }
+  }
+}
+
+.websites_name_caption {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .restaurant_logo {
+    @include lg {
+      display: none;
+    }
+  }
+
+  .user_logo {
+    font-size: 36px;
+
+    @include lg {
+      font-size: 20px;
+    }
+  }
+
+  .app_name {
+    font-family: "Amaranth", sans-serif;
+    font-size: 20px;
+    margin: 5px;
+    color: #e3e2df;
+
+    @include lg {
+      font-size: 16px;
+    }
+  }
+
+  .app_logo_name {
+    font-size: 20px;
+    margin: 5px;
+    color: #e3e2df;
+
+    @include lg {
+      display: none;
+    }
+  }
+}
+
+.items_cont {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+
+  .icons {
+    width: 40px;
+    color: wheat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      color: rgb(161, 80, 66);
+    }
+
+    @include lg {
+      width: 24px;
     }
   }
 }
@@ -176,9 +192,11 @@ $speed: 500ms;
   justify-content: center;
   align-items: center;
   transition: color 0.2s ease-in-out;
+
   &:hover {
     transform: scale(1.1);
   }
+
   @include md {
     font-size: 24px;
   }

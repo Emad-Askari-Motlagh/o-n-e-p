@@ -13,3 +13,7 @@ Welcome to my React-based food ordering portfolio app! The app uses Nextjs, Scss
 Typescript, Graphql and websockets and it is only for testing
 purposes and show some skills. The portfolio designed to show different ability and skills all in one place. The app is 70% done and there is lots of error handling and performance optimzation still
 left to be done.
+User test Email:emad.akari@gmail.com
+Uset test password:emadi
+
+Costumer test Email:emad.akari@gmail.com
