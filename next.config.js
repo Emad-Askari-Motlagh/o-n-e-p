@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const runtimeCaching = require("next-pwa/cache");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -63,4 +66,4 @@ const withPWA = require("next-pwa")({
   buildExcludes: [/middleware-manifest.json$/],
 });
 
-module.exports = withPWA(nextConfig);
+module.exports = withBundleAnalyzer(withPWA(nextConfig));

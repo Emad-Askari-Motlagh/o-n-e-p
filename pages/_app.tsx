@@ -1,11 +1,9 @@
 import "../styles/globals.scss";
 import type { ReactElement, ReactNode } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useEffect } from "react";
+import React from "react";
 import Router from "next/router";
-import Lottie from "react-lottie-player";
 import styles from "../styles/share.module.scss";
-import lottieJson from "../public/spinner2.json";
 import { AuthProvider } from "../providers/authProvider";
 import Head from "next/head";
 import type { NextPage } from "next";
@@ -58,12 +56,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
             <Layout>
               <div className={styles.container}>
                 <div className={styles.spinner}>
-                  <Lottie
-                    loop
-                    animationData={lottieJson}
-                    play
-                    style={{ width: 200, height: 200, margin: "auto" }}
-                  />
+                  <div>Loading...</div>
                 </div>
               </div>
             </Layout>
