@@ -1,18 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import styles from "./auth.module.scss";
-import { IoIosArrowRoundBack } from "react-icons/io";
 import { motion } from "framer-motion";
-import Header_animations from "@/components/FramerHelper/Header_animations";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
-import { useFormik, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import { useUser } from "hooks/Context.hook";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
 import Input from "components/Input";
 import LoginSucceed from "components/Succeed-Message";
-import { signIn as signInWithGoogle } from "next-auth/react";
 import { useRouter } from "next/router";
 import Info from "@/components/Info";
 import Head from "next/head";
@@ -21,28 +18,10 @@ import AnimatedHeader from "@/components/AnimatedHeader";
 export default function Login() {
   const [error, setError] = useState<string | null>("");
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-  const { signIn, signOut, user, signInError } = useUser();
+  const { signIn, signInError } = useUser();
   const Router = useRouter();
 
-  const onSuccess = async () => {
-    try {
-      await signInWithGoogle("google", {
-        ...values,
-        redirect: false,
-      });
-    } catch (err) {
-      setError(signInError);
-    }
-  };
-  const {
-    handleChange,
-    handleSubmit,
-    values,
-    touched,
-    errors,
-    setErrors,
-    handleBlur,
-  } = useFormik({
+  const { handleChange, handleSubmit, values, touched, errors } = useFormik({
     initialValues: {
       email: "",
       password: "",
@@ -146,19 +125,6 @@ export default function Login() {
           <a>Do you forgot your password?</a>
         </Link>
       </div>
-      {/*--------this part is for the situation that user can register--------------------*/}
-      {/* <div className={styles.login_alternatives_container}>
-        <div onClick={onSuccess} className={styles.auth_buttons}>
-          <FaGoogle className={styles.icons}></FaGoogle>
-          <span> Signin with Google</span>
-        </div>
-      </div> */}
-      {/* <Link href="/auth/signup">
-        <a className={styles.account_recomendation}>
-          Dont you have an account?
-          <h3>Register now</h3>
-        </a>
-      </Link> */}
     </motion.div>
   );
 }
