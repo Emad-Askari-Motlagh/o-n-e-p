@@ -3,6 +3,7 @@ const runtimeCaching = require("next-pwa/cache");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  distDir: "build",
   compiler: {
     removeConsole: process.env.NODE_ENV !== "development",
   },
