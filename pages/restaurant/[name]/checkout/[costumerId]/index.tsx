@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Label from "components/Label";
 import SummaryItem from "components/SummaryItem";
 import Payment from "components/Payment";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import useOrders from "hooks/Order.hook";
 import Warning from "@/components/Warning";
 import ErrorCard from "@/components/ErrorCard";

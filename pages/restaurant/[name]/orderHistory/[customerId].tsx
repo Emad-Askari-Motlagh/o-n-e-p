@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import styles from "./styles.module.scss";
-import PrimaryLayout from "components/Primary-layout/index";
+import PrimaryLayout from "@/components/PrimaryLayout/index";
 import { useRouter } from "node_modules/next/router";
 import { MdOutlineExpandMore } from "react-icons/md";
 import captalizeFirstLetter from "lib/captalizeFirstChar";

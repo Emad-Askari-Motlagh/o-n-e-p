@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import styles from "./orders.module.scss";
-import PrimaryLayout from "components/Primary-layout/index";
+import PrimaryLayout from "@/components/PrimaryLayout/index";
 import { FiEye } from "react-icons/fi";
 import useOrders from "hooks/Order.hook";
 import captalizeFirstLetter from "lib/captalizeFirstChar";

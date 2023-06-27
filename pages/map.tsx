@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import Map from "@/components/Map";
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import { useRouter } from "next/router";
 
 import React from "react";

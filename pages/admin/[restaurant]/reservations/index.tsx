@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./styles.module.scss";
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { GiConfirmed } from "react-icons/gi";

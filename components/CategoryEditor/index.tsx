@@ -12,7 +12,7 @@ import FileInput from "@/components/FileInput";
 import Input from "components/Input";
 import Button from "../Button";
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
-import MenuSubItem from "components/RestaurantSubItem";
+import MenuSubItem from "@/components/RestaurantParentCard";
 import {
   DeleteMenuCategoryMutationFn,
   UpdateCategoryMutationFn,

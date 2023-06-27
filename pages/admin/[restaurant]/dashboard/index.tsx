@@ -1,4 +1,4 @@
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import { useUser } from "hooks/Context.hook";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import MenuEditor from "components/MenuEditor";
 import { useRouter } from "next/router";
 import { IoMdAddCircle } from "react-icons/io";

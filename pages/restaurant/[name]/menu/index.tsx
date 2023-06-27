@@ -1,6 +1,6 @@
 import ErrorCard from "components/ErrorCard";
-import PrimaryLayout from "components/Primary-layout";
-import RestaurantSubItem from "components/RestaurantSubItem";
+import PrimaryLayout from "@/components/PrimaryLayout";
+import RestaurantSubItem from "@/components/RestaurantParentCard";
 import { GET_MENU_CATREGORY } from "@/server/graphql/querys/querys.graphql";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";

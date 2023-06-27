@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import styles from "./styles.module.scss";
 import ErrorCard from "components/ErrorCard";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import {
   GET_MENU_BY_SUB_CATEGORY,
   GET_MENU_ITEM_BY_CATREGORY,

@@ -1,5 +1,5 @@
 import InfoItem from "@/components/InfoItem";
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import SucceedMessage from "@/components/Succeed-Message";
 import {
   EDIT_RESTAURANT_INFO_ITEM,

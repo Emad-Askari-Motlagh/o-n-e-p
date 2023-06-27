@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/share.module.scss";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import Link from "next/link";
 
 export default function ErrorPage() {

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import MenuItem from "components/MenuItem";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import useOrders from "hooks/Order.hook";
 import ChoisesCard from "components/MenuItem/ChoisesCard";
 import Selection from "components/Selection";

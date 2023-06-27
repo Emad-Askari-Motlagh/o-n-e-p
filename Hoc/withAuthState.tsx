@@ -1,7 +1,7 @@
 import { useUser } from "hooks/Context.hook";
 import React from "react";
 
-function withState<P>(Component: React.ComponentType<P>) {
+function withAuthState<P>(Component: React.ComponentType<P>) {
   const ComponentWithState = (props: P & JSX.IntrinsicAttributes) => {
     const { signOut, user, costumerData, signOutCostumer } = useUser();
     return (
@@ -16,4 +16,4 @@ function withState<P>(Component: React.ComponentType<P>) {
   };
   return ComponentWithState;
 }
-export default withState;
+export default withAuthState;

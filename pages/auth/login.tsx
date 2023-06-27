@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
 import { useUser } from "hooks/Context.hook";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
 import Input from "components/Input";
 import LoginSucceed from "components/Succeed-Message";

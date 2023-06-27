@@ -9,7 +9,7 @@ import { useFormik, ErrorMessage } from "formik";
 import Header_animations from "@/components/FramerHelper/Header_animations";
 import { useUser } from "hooks/Context.hook";
 import Input from "components/Input";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
 import LoginSucceed from "components/Succeed-Message";
 

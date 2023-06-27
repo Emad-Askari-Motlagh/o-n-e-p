@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { decodeJwt } from "@/lib/storeJwt";
 import dbInit from "@/lib/dbInit";
 import userSchema, { I_UserDocument } from "@/server/mongoSchema/userSchema";
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import InfoItem from "@/components/InfoItem";
 import Restaurant from "@/components/RestaurantCard";
 import { CgProfile } from "react-icons/cg";

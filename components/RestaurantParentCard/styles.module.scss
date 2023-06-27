@@ -44,9 +44,11 @@ $BC_COLOR: #242424;
 .items_card_container {
   position: relative;
   transition: all 0.2s ease-in;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border: 2px solid rgba(167, 164, 164, 0.146);
   border-radius: $ITEM_BORDERS;
-  border: 1px solid rgba(128, 128, 128, 0.146);
+
   cursor: pointer;
   backdrop-filter: blur(5px);
   overflow: hidden;
@@ -76,7 +78,8 @@ $BC_COLOR: #242424;
 
   &:hover {
     transform: scale(1.03);
-    box-shadow: rgba(20, 20, 21, 0.063) 0px 7px 12px 0px;
-    border: 2px solid rgba(167, 164, 164, 0.146);
+    box-shadow: rgba(108, 106, 106, 0.16) 0px 10px 36px 0px, rgba(139, 137, 137, 0.06) 0px 0px 0px 1px;
+
+    border: 3px solid rgba(128, 128, 128, 0.146);
   }
 }

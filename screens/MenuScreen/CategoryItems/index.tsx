@@ -1,4 +1,4 @@
-import RestaurantSubItem from "@/components/RestaurantSubItem";
+import RestaurantSubItem from "@/components/RestaurantParentCard";
 import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import { i_MenuCategoryDocument } from "server/mongoSchema/menuCategorySchema";

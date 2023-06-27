@@ -1,5 +1,5 @@
 import MenuItem from "components/MenuItem";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import useOrders from "hooks/Order.hook";
 import { GET_MENU_ITEM_BY_CATREGORY } from "server/graphql/querys/querys.graphql";
 import { useMutation, useQuery } from "@apollo/client";

@@ -1,4 +1,4 @@
-import style from "./Layout.module.scss";
+import React, { ReactNode } from "react";
 import Sidebar from "components/Sidebar";
 import RouteBar from "components/RouteIndicator";
 import Footer from "components/Footer";
@@ -6,14 +6,15 @@ import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";
 import { useRouter } from "next/router";
 import Sammary from "components/OrdersSammary";
-import { ReactNode } from "react";
-import WithHigherOrder from "../../Hoc/withState";
 import {
   CostumerQueryResult,
   CurrentUserQueryResult,
   SignOutCostumerMutationFn,
   SignOutMutationFn,
 } from "@/server/generated/graphql";
+import styles from "./Layout.module.scss";
+import WithAuthState from "../../Hoc/withAuthState";
+
 type LayoutProps = {
   children: ReactNode;
   isCurrent: boolean;
@@ -35,8 +36,8 @@ function PrimaryLayout({
   const router = useRouter();
 
   return (
-    <div className={style.layout}>
-      <header className={style.header}>
+    <div className={styles.layout}>
+      <header className={styles.header}>
         <HeaderScreen
           user={user}
           isVisible={isVisible}
@@ -45,7 +46,7 @@ function PrimaryLayout({
         />
       </header>
       <aside
-        className={style.aside}
+        className={styles.sidebar}
         style={{
           left: isVisible ? 0 : "-250px",
         }}>
@@ -66,7 +67,7 @@ function PrimaryLayout({
         />
       </aside>
 
-      <main className={style.main}>
+      <main className={styles.main}>
         <div style={{ width: "100%" }}>
           <RouteBar user={user} />
         </div>
@@ -76,11 +77,11 @@ function PrimaryLayout({
         )}
       </main>
 
-      <footer className={style.footer}>
+      <footer className={styles.footer}>
         <Footer />
       </footer>
     </div>
   );
 }
 
-export default WithHigherOrder(PrimaryLayout);
+export default WithAuthState(PrimaryLayout);

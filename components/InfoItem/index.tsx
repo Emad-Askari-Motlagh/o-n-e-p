@@ -1,4 +1,4 @@
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import { useProvideAuth } from "hooks/Context.hook";
 import React, { PropsWithChildren, useState, LegacyRef } from "react";
 import styles from "./style.module.scss";

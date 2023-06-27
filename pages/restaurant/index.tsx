@@ -8,7 +8,7 @@ import {
   RestaurantsQueryVariables,
 } from "@/server/generated/graphql";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import Search from "@/components/SearchForm";
 import Restaurants from "screens/Home.Screen";
 import { AiOutlineFork } from "react-icons/ai";
@@ -16,9 +16,10 @@ import ErrorCard from "@/components/ErrorCard";
 
 interface HomeProps {
   ALL_RESTAURANTS: IRestaurant[] | null;
+  loading: boolean;
 }
 
-export default function Home({ ALL_RESTAURANTS }: HomeProps) {
+export default function Home({ ALL_RESTAURANTS, loading }: HomeProps) {
   const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -32,14 +33,17 @@ export default function Home({ ALL_RESTAURANTS }: HomeProps) {
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
-
+  const errorMessage = "Couldn`t find any restaurants";
   return (
     <>
       <Search label="Hitta din restaurang" onChange={handleSearchChange}>
         <AiOutlineFork color="white" />
       </Search>
-      {!restaurants?.length && ALL_RESTAURANTS?.length && (
-        <ErrorCard>Couldn`t find any restaurant</ErrorCard>
+      {!ALL_RESTAURANTS?.length && !loading && (
+        <ErrorCard>{errorMessage}</ErrorCard>
+      )}
+      {!restaurants?.length && searchQuery && (
+        <ErrorCard>{errorMessage}</ErrorCard>
       )}
       <Restaurants
         ALL_RESTAURANTS={searchQuery ? restaurants : ALL_RESTAURANTS}
@@ -66,6 +70,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
         ALL_RESTAURANTS: res.data?.Restaurants || [],
         adminIsOnline: !!req.cookies?.token,
         costumerIsOnline: !!req.cookies?.costumerId,
+        loading: res.loading,
       },
     };
   } catch (err) {
@@ -75,6 +80,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
         ALL_RESTAURANTS: [],
         adminIsOnline: false,
         costumerIsOnline: false,
+        loading: false,
       },
     };
   }

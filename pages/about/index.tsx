@@ -1,4 +1,4 @@
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import React from "react";
 import styles from "./styles.module.scss";
 type Props = {};

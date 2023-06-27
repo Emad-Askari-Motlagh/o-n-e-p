@@ -4,7 +4,7 @@ import {
   GET_MENU_CATREGORY,
   GET_MENU_ITEM_BY_CATREGORY,
 } from "server/graphql/querys/querys.graphql";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";

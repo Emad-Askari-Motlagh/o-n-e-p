@@ -1,6 +1,6 @@
 import Button from "components/Button";
 import Input from "components/Input";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import styles from "./style.module.scss";

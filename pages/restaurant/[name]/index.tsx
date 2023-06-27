@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useMutation } from "@apollo/client";
 import { NextApiRequest } from "next";
 import styles from "./styles.module.scss";
-import PrimaryLayout from "components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import RegisterForm from "components/CostumerRegistration";
 import ErrorCard from "components/ErrorCard";
 import SucceedMessage from "@/components/Succeed-Message";

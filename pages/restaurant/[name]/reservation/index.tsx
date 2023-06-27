@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./styles.module.scss";
-import PrimaryLayout from "@/components/Primary-layout";
+import PrimaryLayout from "@/components/PrimaryLayout";
 import DatePicker from "@/components/DatePicker";
 import Head from "next/head";
 import Input from "@/components/Input";
