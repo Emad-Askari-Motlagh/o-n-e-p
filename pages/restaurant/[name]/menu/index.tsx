@@ -4,13 +4,12 @@ import RestaurantSubItem from "@/components/RestaurantParentCard";
 import { GET_MENU_CATREGORY } from "@/server/graphql/querys/querys.graphql";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useEffect, useId } from "react";
+import React from "react";
 import styles from "./menu.module.scss";
 import {
   MenuByCategoryQuery,
   MenuByCategoryQueryVariables,
 } from "server/generated/graphql";
-import Header_animations from "@/components/FramerHelper/Header_animations";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 

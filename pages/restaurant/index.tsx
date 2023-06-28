@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useMemo } from "react";
 import { NextApiRequest } from "next";
 import { initializeApollo } from "@/lib/apollo/apollo-client";
 import { FETCH_ALL_RESTAURANTS } from "server/graphql/querys/querys.graphql";
@@ -21,20 +21,20 @@ interface HomeProps {
 }
 
 export default function Home({ ALL_RESTAURANTS, loading }: HomeProps) {
-  const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  useEffect(() => {
-    const filteredRestaurants = ALL_RESTAURANTS.filter((res) => {
+  const restaurants = useMemo(() => {
+    return ALL_RESTAURANTS.filter((res) => {
       return res.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
-    setRestaurants(filteredRestaurants);
   }, [searchQuery, ALL_RESTAURANTS]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
-  const errorMessage = "Couldn`t find any restaurants";
+
+  const errorMessage = "Couldn't find any restaurants";
+
   return (
     <div>
       <Head>
