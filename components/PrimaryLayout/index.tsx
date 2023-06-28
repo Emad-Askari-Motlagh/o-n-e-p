@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import Sidebar from "components/Sidebar";
-import RouteBar from "components/RouteIndicator";
+import RouteBar from "@/components/RouteBar";
 import Footer from "components/Footer";
 import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";

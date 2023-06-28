@@ -37,8 +37,8 @@ export default function RouteBarItem({
   }, [router.asPath, name]);
 
   return (
-    <div
-      className={styles.routeItemParent}
+    <li
+      className={styles.routeItem}
       style={{
         display: decodeURI(router.asPath.toLowerCase()).match(
           name.toLowerCase()
@@ -46,14 +46,14 @@ export default function RouteBarItem({
           ? "initial"
           : "none",
       }}>
-      <li className={styles.li}>
+      <div className={styles.routeItem_child}>
         <span style={{ color: "whitesmoke", marginRight: "0.1em" }}>➢</span>
         <Link href={src}>
           <a className={styles[sideBarClassName]}>
             {user?._id === captalizer(name) ? user.name : `${captalizer(name)}`}
           </a>
         </Link>
-      </li>
-    </div>
+      </div>
+    </li>
   );
 }

@@ -11,22 +11,23 @@ export default function PageTwo() {
       <div className={styles.footer_wrapper}>
         <div className={styles.footer__col1}>
           <div className={styles.footer__col2}>
-            <Link href="www.google.com">
-              <a href="www.google.com">
+            <Link href="/404">
+              <a id="facebook-address">
                 <GrFacebook size={16} color="gray" />
               </a>
             </Link>
 
-            <Link href="www.google.com">
-              <a href="www.google.com">
+            <Link href="/404">
+              <a>
                 <AiFillTwitterCircle
+                  id="twitter-address"
                   size={16}
                   color="gray"></AiFillTwitterCircle>
               </a>
             </Link>
 
-            <Link href="www.google.com">
-              <a>
+            <Link href="/404">
+              <a id="Email-address">
                 <ImMail4 size={16} color="gray" />
               </a>
             </Link>
