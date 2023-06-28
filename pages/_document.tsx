@@ -6,8 +6,11 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="manifest" href="/manifest.json" />
-
           <meta name="theme-color" content="#282828" />
+          <meta
+            name="description"
+            content="Restaurant order platform - Easy Order "
+          />
         </Head>
         <body>
           <Main />
