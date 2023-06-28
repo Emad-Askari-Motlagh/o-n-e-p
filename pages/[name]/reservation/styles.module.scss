@@ -10,6 +10,14 @@ $BC_COLOR: #242424;
 
 .container {
   width: 100%;
+
+  input,
+  textarea::placeholder {
+    color: #fff !important;
+  }
+  textarea::placeholder {
+    color: #fff !important;
+  }
   h2 {
     font-size: 23px;
     margin: auto;

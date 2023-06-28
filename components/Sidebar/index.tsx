@@ -10,8 +10,8 @@ import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
 import { useRouter } from "next/router";
 import { FaJediOrder } from "react-icons/fa";
-import Button2 from "../ButtonSecoundary";
-import { CostumerQuery, CostumerQueryResult } from "@/server/generated/graphql";
+import Button2 from "@/components/ButtonSecoundary";
+import { CostumerQuery } from "@/server/generated/graphql";
 import { IoFastFoodOutline, IoSettings } from "react-icons/io5";
 
 interface SidebarProps {
