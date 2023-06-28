@@ -9,7 +9,7 @@ export default function CheckOutBar({ onClick }) {
   return (
     <div className={styles.container}>
       <div className={styles.parent}>
-        <LinkButton href={`/restaurant/${router.query.name}/checkout/2345`}>
+        <LinkButton href={`/restaurant/${router.query.name}/checkout`}>
           Checkout
         </LinkButton>
         <div className={styles.downArrow_parent}>
