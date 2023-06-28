@@ -156,7 +156,7 @@ const userResolvers: Resolvers = {
         await deleteCookie(["token"], res);
         return "User signed Out";
       } catch (err) {
-        console.log(err);
+        throw new ApolloError("Error deleting cookie");
       }
     },
     async SignInWithGoogle(

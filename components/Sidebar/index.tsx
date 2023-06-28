@@ -8,12 +8,11 @@ import {
 } from "react-icons/ri";
 import { MdRestaurantMenu } from "react-icons/md";
 import DropdownItem from "./SideBarItem";
-import { useRouter } from "node_modules/next/router";
+import { useRouter } from "next/router";
 import { FaJediOrder } from "react-icons/fa";
-import { GoSettings } from "react-icons/go";
 import Button2 from "../ButtonSecoundary";
 import { CostumerQuery, CostumerQueryResult } from "@/server/generated/graphql";
-import { IoFastFoodOutline } from "react-icons/io5";
+import { IoFastFoodOutline, IoSettings } from "react-icons/io5";
 
 interface SidebarProps {
   signOut: () => void;
@@ -32,7 +31,7 @@ function SideBar({ signOut, restaurant, costumerData, user }: SidebarProps) {
   const Router = useRouter();
   async function SignOut() {
     await signOut();
-    Router.push("/");
+    window.location.href = "/";
   }
 
   const fetchedUser = user;
@@ -77,7 +76,7 @@ function SideBar({ signOut, restaurant, costumerData, user }: SidebarProps) {
               endPoint={`/admin/${fetchedUser?.restaurant.name}/reservations`}
               itemsLabel="Reservations"></DropdownItem>
             <DropdownItem
-              leftIcon={<GoSettings className={styles.nav_item_icons} />}
+              leftIcon={<IoSettings className={styles.nav_item_icons} />}
               rightIcon={null}
               endPoint={`/admin/${fetchedUser?.restaurant.name}`}
               itemsLabel="Setting"></DropdownItem>
@@ -89,17 +88,17 @@ function SideBar({ signOut, restaurant, costumerData, user }: SidebarProps) {
               <DropdownItem
                 leftIcon={<BiBasket className={styles.nav_item_icons} />}
                 rightIcon={null}
-                endPoint={`/restaurant/${Router.query.name}/checkout/22`}
+                endPoint={`/${Router.query.name}/checkout`}
                 itemsLabel="Orders"></DropdownItem>
               <DropdownItem
                 leftIcon={<FaJediOrder className={styles.nav_item_icons} />}
                 rightIcon={null}
-                endPoint={`/restaurant/${Router.query.name}/orderHistory/${costumerData?.Costumer?._id}`}
+                endPoint={`/${Router.query.name}/orderHistory/${costumerData?.Costumer?._id}`}
                 itemsLabel="Orders History"></DropdownItem>
               <DropdownItem
                 leftIcon={<RiContactsLine className={styles.nav_item_icons} />}
                 rightIcon={null}
-                endPoint={`/restaurant/${Router.query.name}/reservation`}
+                endPoint={`/${Router.query.name}/reservation`}
                 itemsLabel="Reservations"></DropdownItem>
             </>
           )

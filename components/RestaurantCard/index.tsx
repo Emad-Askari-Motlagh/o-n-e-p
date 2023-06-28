@@ -20,8 +20,6 @@ interface RetaurantProps {
 export default function RestaurantCard({
   name,
   endPoint,
-  children,
-  images,
   description,
   location,
   buttonLabel,

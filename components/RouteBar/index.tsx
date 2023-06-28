@@ -16,9 +16,7 @@ const RouteBar: React.FC<RouteBarProps> = ({ user }) => {
     const ee = decodeURI(router.asPath).split("/");
     setAllRoutes(ee.filter((res) => res));
   }, [router.asPath]);
-
-  if (allRoutes[0] !== "restaurant" && allRoutes[0] !== "admin") return null;
-
+  if (router.pathname === "/") return null;
   return (
     <div className={styles.container}>
       <ul className={styles.list_parent}>

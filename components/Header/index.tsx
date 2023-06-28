@@ -36,7 +36,7 @@ const Header: FC<HeaderProps> = (props) => {
   const { user } = useUser();
   const homeEndPoint = user.data?.CurrentUser
     ? `/admin/${user.data.CurrentUser.restaurant.name}`
-    : "/restaurant";
+    : "/";
 
   return (
     <Navbar {...props}>

@@ -24,7 +24,7 @@ export default function HomeScreen({
           name={res?.name ?? placeHolder}
           description={res?.description ?? placeHolder}
           images={res?.images}
-          endPoint={`/restaurant/${res?.name}`}
+          endPoint={`/${res?.name}`}
           buttonLabel="Begin to order"
           openTimes={res?.openTimes}
           index={i}

@@ -129,7 +129,6 @@ export function useUser() {
       await client.mutate<SignOutMutation, SignOutMutationVariables>({
         mutation: SIGN_OUT,
       });
-      Router.push("/");
     } catch (err: any) {
       console.log(err?.message ?? err);
     }

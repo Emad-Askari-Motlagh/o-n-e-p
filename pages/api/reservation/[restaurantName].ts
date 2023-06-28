@@ -37,10 +37,12 @@ const getReservations = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = new Types.ObjectId(costumerId);
   try {
     const restaurantName = req.query.restaurantName as string;
+    console.log(restaurantName, id);
     const oldReservations = await Reservation.find({
       restaurant: restaurantName,
       costumer: id,
     }).populate("costumer");
+    console.log(oldReservations);
     res.status(200).json(oldReservations);
   } catch (error) {
     console.error("Error fetching reservations:", error);

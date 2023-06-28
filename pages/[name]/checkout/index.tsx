@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+
 import Label from "components/Label";
+import SummaryItem from "components/SummaryItem";
+import Payment from "components/Payment";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import useOrders from "hooks/Order.hook";
 import Warning from "@/components/Warning";
@@ -9,13 +12,6 @@ import styles from "./style.module.scss";
 import { COSTUMER_ADDRESS } from "@/server/graphql/querys/querys.graphql";
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import { PayMutation, PayMutationVariables } from "@/server/generated/graphql";
-import dynamic from "next/dynamic";
-import SimpleLoading from "@/components/SimpleLoading";
-
-const SummaryItem = dynamic(() => import("components/SummaryItem"));
-const Payment = dynamic(() => import("components/Payment"), {
-  loading: () => <SimpleLoading />,
-});
 
 export default function CheckOut() {
   const router = useRouter();
@@ -51,7 +47,7 @@ export default function CheckOut() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   if (paymentSuccess)
     return <Warning label="Checkout" message="Your order saved sucessefuly" />;
-  if (!orders?.length && !loading)
+  if (!orders?.length)
     return <Warning label="Checkout" message="You have not any orders" />;
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import axios from "axios";
@@ -13,9 +13,9 @@ const Reservation = () => {
   const { query } = useRouter();
 
   const { user } = useUser();
-  const url = `/api/admin/reservations/${query.restaurant}`;
+  const url = `/api/reservation/${query.name}`;
   useEffect(() => {
-    if (user.data?.CurrentUser) {
+    if (user.data?.CurrentUser && !user.loading) {
       fetchReservations();
     }
 
@@ -23,15 +23,18 @@ const Reservation = () => {
       const res = await axios.get(url);
       setOldRes(res.data);
     }
-  }, [refetch, url, user.data?.CurrentUser]);
+  }, [refetch, url, user.data]);
+
   return (
     <div className={styles.container}>
       <div className={styles.calandar_container}>
         <h2>Reservations</h2>
-        {!user.data?.CurrentUser && <ErrorCard>Please login first</ErrorCard>}
+        {!user.data?.CurrentUser && !user.loading && (
+          <ErrorCard>Please login first</ErrorCard>
+        )}
 
         <div className={styles.table_container}>
-          {oldDate.length ? (
+          {oldDate?.length ? (
             <>
               <h3>Reservations:</h3>
               <table className={styles.old_reserved_date}>
