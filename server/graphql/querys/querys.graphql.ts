@@ -146,6 +146,7 @@ export const GET_ORDERS_CONSTANTLY = gql`
         price
         description
         _id
+        images
       }
       extra {
         name

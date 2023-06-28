@@ -1,6 +1,6 @@
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "@/components/PrimaryLayout";
-import RestaurantSubItem from "@/components/RestaurantParentCard";
+import RestaurantParentCard from "@/components/RestaurantParentCard";
 import { GET_MENU_CATREGORY } from "@/server/graphql/querys/querys.graphql";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -39,18 +39,19 @@ export default function Menu() {
         <>
           <AnimatedHeader fontSize="25px">Menu Categories</AnimatedHeader>
           <ul className={styles.items_parent}>
-            {menuItems.map((res, index) => {
-              return (
-                <li key={index} className={styles.item_parent}>
-                  <RestaurantSubItem
-                    key={index}
-                    label={res.itemName}
-                    endPoint={res.itemName}
-                    image={res.image}
-                  />
-                </li>
-              );
-            })}
+            {menuItems?.length &&
+              menuItems.map((res, index) => {
+                return (
+                  <li key={index} className={styles.item_parent}>
+                    <RestaurantParentCard
+                      key={index}
+                      label={res.itemName}
+                      endPoint={res.itemName}
+                      image={res.image}
+                    />
+                  </li>
+                );
+              })}
           </ul>
         </>
       )}

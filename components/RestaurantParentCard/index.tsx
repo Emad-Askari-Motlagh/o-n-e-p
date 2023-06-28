@@ -20,6 +20,8 @@ function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
             width={"800"}
             height={"800"}
             className={styles.image}
+            objectFit="cover"
+            objectPosition="center"
             src={image}
             layout="intrinsic"></Image>
         )}
