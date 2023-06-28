@@ -4,7 +4,7 @@ import RestaurantSubItem from "@/components/RestaurantParentCard";
 import { GET_MENU_CATREGORY } from "@/server/graphql/querys/querys.graphql";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./menu.module.scss";
 import {
   MenuByCategoryQuery,
@@ -22,6 +22,10 @@ export default function Menu() {
     variables: { restaurant: Router.query?.name as string },
   });
 
+  const menuItems = useMemo(() => {
+    return data?.MenuByCategory ?? [];
+  }, [data]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -30,15 +34,12 @@ export default function Menu() {
         <meta name="description" content={`${Router.query?.name} menu`} />
       </Head>
       {error ? (
-        <ErrorCard>Couldn`t find any item</ErrorCard>
+        <ErrorCard>Couldn't find any item</ErrorCard>
       ) : (
         <>
-          <AnimatedHeader fontSize="25px">Menu Categorys</AnimatedHeader>
+          <AnimatedHeader fontSize="25px">Menu Categories</AnimatedHeader>
           <ul className={styles.items_parent}>
-            {(data?.MenuByCategory
-              ? data?.MenuByCategory
-              : Array(data?.MenuByCategory?.length).fill(1)
-            ).map((res, index) => {
+            {menuItems.map((res, index) => {
               return (
                 <li key={index} className={styles.item_parent}>
                   <RestaurantSubItem

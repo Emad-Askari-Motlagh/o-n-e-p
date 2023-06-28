@@ -6,15 +6,14 @@ import {
 import Order from "@/server/mongoSchema/orderschema";
 import { ApolloError, ForbiddenError } from "apollo-server";
 import mongoose, { Types } from "mongoose";
-import { createPubSub } from "@graphql-yoga/node";
 // import { loadStripe } from "@stripe/stripe-js";
 import PayedItem from "server/mongoSchema/payedItemSchema";
 import sellSchema from "server/mongoSchema/sellSchema";
 import costumerHistory from "@/server/mongoSchema/costumerHistory";
 import payedItemSchema from "server/mongoSchema/payedItemSchema";
 // import Stripe from "stripe";
+console;
 
-const pubsub = createPubSub();
 async function fetchOrders(query: object) {
   return await Order.find(query).populate("product").populate("costumer");
 }
@@ -183,7 +182,7 @@ const orderResolvers: Resolvers = {
 
         const id = new mongoose.Types.ObjectId(costumerId);
         const oldOrder = await Order.findOne({ product: productId });
-        console.log(productId, oldOrder);
+
         if (oldOrder) {
           const newOrder = await Order.findOneAndUpdate(
             {
@@ -367,7 +366,7 @@ const orderResolvers: Resolvers = {
           );
         }
 
-        return "ok";
+        return "OK";
       } catch (err) {
         console.log(err);
       }

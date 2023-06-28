@@ -14,7 +14,7 @@ import Lottie from "lottie-react";
 import groovyWalkAnimation from "../public/spinner2.json";
 
 const LottieComponent = () => (
-  <Lottie animationData={groovyWalkAnimation} loop={true} />
+  <Lottie animationData={groovyWalkAnimation} loop={true} size={33} />
 );
 
 const Noop = ({ children }: { children: any }) => <>{children}</>;
