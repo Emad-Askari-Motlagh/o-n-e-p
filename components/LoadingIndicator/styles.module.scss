@@ -1,0 +1,15 @@
+.spinner {
+    min-height: calc(100vmin - 100px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__icon {
+        width: 200px;
+        margin: auto;
+    }
+    .loading_h5 {
+        text-align: center;
+        font-family: "Archivo Black", sans-serif;
+        color: #a0c1b8;
+    }
+}

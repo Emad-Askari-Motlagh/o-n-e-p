@@ -33,7 +33,7 @@ export default function Menu() {
         <title>{Router.query?.name}</title>
         <meta name="description" content={`${Router.query?.name} menu`} />
       </Head>
-      {error ? (
+      {error && !loading ? (
         <ErrorCard>Couldn't find any item</ErrorCard>
       ) : (
         <>

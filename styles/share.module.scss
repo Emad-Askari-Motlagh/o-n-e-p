@@ -8,11 +8,7 @@ $box-shadow: var($main-box-shadow);
   font-size: 14px;
   color: wheat;
 }
-@import "./fonts.scss";
 
-.my-modal .modal-content {
-  background-color: #383838;
-}
 .container {
   width: 100%;
   height: 100%;
@@ -27,13 +23,6 @@ $box-shadow: var($main-box-shadow);
   }
   .fix_height {
     min-height: calc(100vmin - 80px);
-  }
-  .spinner {
-    .loading_h5 {
-      text-align: center;
-      font-family: "Archivo Black", sans-serif;
-      color: #a0c1b8;
-    }
   }
 }
 .error_container {
