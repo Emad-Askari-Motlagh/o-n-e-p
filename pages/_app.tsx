@@ -10,6 +10,12 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@/lib/apollo/apollo-client";
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "../public/spinner2.json";
+
+const LottieComponent = () => (
+  <Lottie animationData={groovyWalkAnimation} loop={true} />
+);
 
 const Noop = ({ children }: { children: any }) => <>{children}</>;
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -56,7 +62,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) {
             <Layout>
               <div className={styles.container}>
                 <div className={styles.spinner}>
-                  <div>Loading...</div>
+                  <LottieComponent></LottieComponent>
                 </div>
               </div>
             </Layout>

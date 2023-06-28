@@ -6,9 +6,9 @@ import {
   Area,
   Tooltip,
   CartesianGrid,
-  Line,
 } from "recharts";
 import styles from "./styles.module.scss";
+import Head from "next/head";
 
 const mounths = [
   "jan",
@@ -24,28 +24,13 @@ const mounths = [
   "november",
   "december",
 ];
-// const data = [];
-
-// for (let num = 1; num <= mounths.length; num++) {
-//   data.push({
-//     date: num,
-//     value: num,
-//     mounth: mounths[num - 1],
-//   });
-//   if (mounths[num - 1] === "feb") {
-//     data.splice(num - 1, 1, {
-//       date: 1,
-//       value: 10,
-//       mounth: mounths[num - 1],
-//     });
-//   }
-// }
 
 export default function Chart({ data, sortType }) {
   const dat = data?.GetAnalistics;
   const dataa = dat?.length && dat?.flatMap((res) => [res]);
   return (
     <div className={styles.container}>
+      <Head></Head>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart data={dataa}>
           <defs>

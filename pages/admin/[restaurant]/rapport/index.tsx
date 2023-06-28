@@ -1,11 +1,10 @@
 import PrimaryLayout from "@/components/PrimaryLayout";
 import { useUser } from "hooks/Context.hook";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { GET_RAPPORT } from "@/server/graphql/querys/mutations.graphql";
 import React_Calendar from "components/Calendar";
-import jsPDF from "jspdf";
 import Button from "@/components/Button";
 import {
   GetRapportMutation,
@@ -41,25 +40,8 @@ export default function Rapport() {
     // doc.save("a4.pdf");
   }, [beginDate, finishDate, getAnalistics]);
 
-  const exportPDF = async () => {
-    const unit = "pt";
-    const size = "A4"; // Use A1, A2, A3 or A4
-    const orientation = "portrait"; // portrait or landscape
-
-    const marginLeft = 40;
-    const doc = new jsPDF(orientation, unit, size);
-
-    doc.setFontSize(150);
-    doc.setFillColor("#383838");
-    const title = "My Awesome Report";
-    const headers = [["NAME", "PROFESSION"]];
-    doc.setFontSize(5);
-    doc.setTextColor(200, 25, 50);
-    doc.setLineDashPattern([40, 20], 33);
-
-    setDoc(doc.output("datauristring"));
-
-    // doc.save("report.pdf");
+  const exportPDF = () => {
+    return null;
   };
   if (rapportError && !rapportLoading)
     return <ErrorCard>There is an error</ErrorCard>;
@@ -153,9 +135,7 @@ export default function Rapport() {
           </>
         )}
 
-        <Button width="80%" onClick={exportPDF}>
-          Z Rapport
-        </Button>
+        <Button width="80%">Z Rapport</Button>
       </div>
     </div>
   );
