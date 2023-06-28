@@ -14,8 +14,12 @@ $sidebar-width: 300px;
   position: relative;
 
   @include lg {
-    display: flex;
-    flex-direction: column;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-rows: 80px auto 80px;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -51,7 +55,6 @@ $sidebar-width: 300px;
 .footer {
   grid-area: footer;
   z-index: 1;
-  height: max-content;
 }
 
 .checkout-button {
