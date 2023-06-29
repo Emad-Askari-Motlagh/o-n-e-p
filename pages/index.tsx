@@ -10,11 +10,12 @@ import {
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Search from "@/components/SearchForm";
-import Restaurants from "screens/Home.Screen";
 import { AiOutlineFork } from "react-icons/ai";
 import ErrorCard from "@/components/ErrorCard";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 
+const Restaurants = dynamic(() => import("screens/Home.Screen"));
 interface HomeProps {
   ALL_RESTAURANTS: IRestaurant[] | null;
   loading: boolean;
