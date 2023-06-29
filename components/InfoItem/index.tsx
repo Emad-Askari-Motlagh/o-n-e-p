@@ -1,17 +1,9 @@
-import PrimaryLayout from "@/components/PrimaryLayout";
-import { useProvideAuth } from "hooks/Context.hook";
-import React, { PropsWithChildren, useState, LegacyRef } from "react";
+import React, { useState } from "react";
 import styles from "./style.module.scss";
 import { AiOutlineEdit } from "react-icons/ai";
 import Modall from "@/components/Modal";
-import Input from "@/components/Input";
-import Button from "../Button";
 import InfoEditor from "../InfoEditor/InfoItem";
-import {
-  EditRestaurantInfoItemMutation,
-  EditRestaurantInfoItemMutationFn,
-  EditUserInfoItemMutationFn,
-} from "@/server/generated/graphql";
+import { EditRestaurantInfoItemMutationFn } from "@/server/generated/graphql";
 
 interface InfoItemProps {
   label: string;

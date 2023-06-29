@@ -3,16 +3,10 @@
 .bill_info_container {
     width: 100%;
 
-    & > * {
-        font-size: 60%;
-        margin: 1em;
-        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-    }
     .price_parent {
         display: flex;
         justify-content: center;
         align-items: center;
         color: #ffffff;
-        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
     }
 }

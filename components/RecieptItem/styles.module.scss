@@ -2,7 +2,15 @@
 
 .recipet_container {
   color: #ffffffc4;
-
+  font-family: "Archivo Black", sans-serif;
+  &__id {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    & > * {
+      margin: 0.3rem;
+    }
+  }
   table {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     display: table;
@@ -30,7 +38,7 @@
       width: 100vw;
       font-weight: 900;
       font-size: 12px;
-      font-family: "Archivo Black", sans-serif;
+
       span {
         font-size: 6px;
       }

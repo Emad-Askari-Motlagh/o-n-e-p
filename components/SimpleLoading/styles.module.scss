@@ -2,9 +2,13 @@
     border: 5px solid #f3f3f3;
     border-top: 5px solid tomato;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     animation: spin 1s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 @keyframes spin {
     0% {

@@ -83,6 +83,16 @@ export default function Stripe({
             <span>{`Price:${sum}.00 kr`} </span>
           </div>
           <div className={style.stripe_info}>
+            {" "}
+            <Image
+              alt="cards-images"
+              src="/cards.webp"
+              height={50}
+              width={400}
+              objectFit="contain"
+              objectPosition="center"
+              style={{ margin: "auto" }}
+            />
             <AnimatedHeader Logo={<MdCreditCard />}>Card Info</AnimatedHeader>
             <CardElement
               options={{
@@ -92,15 +102,7 @@ export default function Stripe({
               }}
             />
           </div>
-          <Image
-            alt="cards-images"
-            src="/cards.webp"
-            height={50}
-            width={400}
-            objectFit="contain"
-            objectPosition="center"
-            style={{ margin: "auto" }}
-          />
+
           {error && <ErrorCard>{error}</ErrorCard>}
           {success && (
             <SucceedMessage>{`You paid ${sum} , kr successfuly`}</SucceedMessage>

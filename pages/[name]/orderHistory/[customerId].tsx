@@ -1,23 +1,14 @@
-import React, {
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/PrimaryLayout/index";
 import { useRouter } from "node_modules/next/router";
 import { MdOutlineExpandMore } from "react-icons/md";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
-import Search from "@/components/SearchForm";
-import searchByQuery from "lib/searchByQuery";
 import ErrorCard from "components/ErrorCard";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PAYED_ORDERS } from "@/server/graphql/querys/querys.graphql";
 import { GET_BILL_INFO } from "@/server/graphql/querys/mutations.graphql";
-import RecieptItem from "@/components/RecieptItem";
 import Modall from "@/components/Modal";
 import {
   GetBillInfoMutation,
@@ -30,12 +21,11 @@ import TableHeader from "@/components/Table/TableHeader";
 import HistoryItem from "@/components/HistoryItem";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import { BiHistory } from "react-icons/bi";
 
 const OrdersHistory = () => {
   const [showModal, setShowModal] = useState(false);
-  const [BillData, setBillData] = useState();
   const router = useRouter();
-  const [searchResult, setSearchResult] = useState<string>();
   const { data, loading } = useQuery<
     PayedOrdersQuery,
     PayedOrdersQueryVariables
@@ -46,16 +36,6 @@ const OrdersHistory = () => {
     GetBillInfoMutation,
     GetBillInfoMutationVariables
   >(GET_BILL_INFO);
-  function searchOverRestaurants(e) {
-    try {
-      e.preventDefault();
-      //Filter the restaurants when user begin to search
-      const query = e.target.value;
-      setSearchResult(query);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   function onClick(id: string) {
     setShowModal(!showModal);
@@ -83,10 +63,10 @@ const OrdersHistory = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>OrdersHistory</title>
-        <meta name="description" content="OrdersHistory page" />
+        <title>Orders History</title>
+        <meta name="description" content="Costumer order History page" />
       </Head>
-      <AnimatedHeader>Order`s History</AnimatedHeader>
+      <AnimatedHeader Logo={<BiHistory />}>Order`s History</AnimatedHeader>
       <span style={{ marginLeft: "20px" }}>
         {new Date().getFullYear() +
           "-" +
