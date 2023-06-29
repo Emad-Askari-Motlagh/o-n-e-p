@@ -7,6 +7,7 @@ class MyDocument extends Document {
         <Head>
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#282828" />
+          <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
             content="Restaurant order platform - Easy Order "

@@ -12,6 +12,8 @@ import styles from "./style.module.scss";
 import { COSTUMER_ADDRESS } from "@/server/graphql/querys/querys.graphql";
 import { PAY } from "@/server/graphql/querys/mutations.graphql";
 import { PayMutation, PayMutationVariables } from "@/server/generated/graphql";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import { IoBagCheckOutline } from "react-icons/io5";
 
 export default function CheckOut() {
   const router = useRouter();
@@ -53,7 +55,7 @@ export default function CheckOut() {
   return (
     <div className={styles.container}>
       {/* Checkout label */}
-      <Label label_name={"Checkout"} />
+      <AnimatedHeader Logo={<IoBagCheckOutline />}>Checkout</AnimatedHeader>
 
       <div className={styles.items_Parent}>
         {loading && (

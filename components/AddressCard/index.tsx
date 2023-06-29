@@ -19,22 +19,16 @@ export default function AddressCard({ data }: AddressCardProps) {
 
   return (
     <div className={styles.container}>
-      <h4 className={styles.header}>
-        <span>Address</span>
-      </h4>
-      <hr />
       <div className={styles.addressContainer}>
         <p>
           <span>Full address</span>
           <span>{address}</span>
         </p>
         <p>
-          {" "}
           <span>Region</span>
           <span>{region}</span>
         </p>
         <p>
-          {" "}
           <span>Post number</span>
           <span>{postNumber}</span>
         </p>

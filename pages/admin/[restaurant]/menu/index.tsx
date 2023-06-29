@@ -23,6 +23,8 @@ import { IoMdAddCircle } from "react-icons/io";
 import Modall from "@/components/Modal";
 import AddCategory from "@/components/AddCategory";
 import Header_animations from "@/components/FramerHelper/Header_animations";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 export default function MenuItems() {
   const { user } = useUser();
@@ -65,9 +67,9 @@ export default function MenuItems() {
 
   return (
     <div className={styles.container}>
-      <Header_animations
-        text="Restaurant Menu"
-        style={{ color: "white" }}></Header_animations>
+      <AnimatedHeader Logo={<MdOutlineRestaurantMenu />}>
+        Restaurant`s Menu
+      </AnimatedHeader>
       <div className={styles.add_button_parent}>
         <IoMdAddCircle
           className={styles.add_button}

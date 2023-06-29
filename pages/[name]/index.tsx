@@ -18,6 +18,7 @@ import {
 } from "@/server/generated/graphql";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import Link from "next/link";
+import { CgSelect } from "react-icons/cg";
 
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
@@ -61,7 +62,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 
   return (
     <div className={styles.container}>
-      <AnimatedHeader color="#fff">
+      <AnimatedHeader color="#fff" Logo={<CgSelect />}>
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}

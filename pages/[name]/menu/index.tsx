@@ -12,6 +12,7 @@ import {
 } from "server/generated/graphql";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import { BiCategoryAlt } from "react-icons/bi";
 
 export default function Menu() {
   const Router = useRouter();
@@ -37,7 +38,9 @@ export default function Menu() {
         <ErrorCard>Couldn't find any item</ErrorCard>
       ) : (
         <>
-          <AnimatedHeader fontSize="25px">Menu Categories</AnimatedHeader>
+          <AnimatedHeader Logo={<BiCategoryAlt />}>
+            Menu Categories
+          </AnimatedHeader>
           <ul className={styles.items_parent}>
             {menuItems?.length &&
               menuItems.map((res, index) => {

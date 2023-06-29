@@ -101,7 +101,6 @@ $base-color: #282828;
       .user_icon {
         color: #e2d5d5;
         background-color: tomato;
-
         border-radius: 50%;
         padding: 1%;
       }
@@ -113,6 +112,7 @@ $base-color: #282828;
     }
     .nav_item_icons {
       font-size: 33px;
+      color: rgb(211, 184, 160);
     }
     .logout_button {
       background-color: lightgray;

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { motion } from "framer-motion";
 import style from "./stripe.module.scss";
 import { Alert } from "react-bootstrap";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import SucceedMessage from "../Succeed-Message";
 import { PayMutationFn } from "@/server/generated/graphql";
+import Image from "next/image";
+import { MdCreditCard } from "react-icons/md";
+import AnimatedHeader from "../AnimatedHeader";
+import ErrorCard from "../ErrorCard";
+
 type StripeProps = {
   sum: number;
   quantity: number;
@@ -78,14 +82,10 @@ export default function Stripe({
             <label>{`Quantity:  ${quantity}`}</label>
             <span>{`Price:${sum}.00 kr`} </span>
           </div>
-          <div style={{ marginBottom: "4%" }}>
-            <motion.label
-              className={style.card_label}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              layoutId="title">
-              Card specifications
-            </motion.label>
+          <div className={style.stripe_info}>
+            <AnimatedHeader Logo={<MdCreditCard color="sandybrown" />}>
+              Card Info
+            </AnimatedHeader>
             <CardElement
               options={{
                 style: {
@@ -94,7 +94,16 @@ export default function Stripe({
               }}
             />
           </div>
-          {error && <Alert variant="danger">{error}</Alert>}
+          <Image
+            alt="cards-images"
+            src="/cards.webp"
+            height={50}
+            width={400}
+            objectFit="contain"
+            objectPosition="center"
+            style={{ margin: "auto" }}
+          />
+          {error && <ErrorCard>{error}</ErrorCard>}
           {success && (
             <SucceedMessage>{`You paid ${sum} , kr successfuly`}</SucceedMessage>
           )}

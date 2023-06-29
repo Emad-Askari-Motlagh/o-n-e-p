@@ -32,7 +32,27 @@
       box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       border-radius: 10px;
       width: 100%;
-      font-family: "Playfair Display", serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .stripe_info {
+        width: 100%;
+        & > * {
+          margin: 1rem;
+        }
+        &__label {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        &__logo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0.5rem;
+        }
+      }
     }
   }
   .productsContainer {

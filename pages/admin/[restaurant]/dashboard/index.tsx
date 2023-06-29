@@ -15,6 +15,7 @@ import {
 } from "@/server/generated/graphql";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import { AiOutlineDashboard } from "react-icons/ai";
 
 export default function Dashboard() {
   const [sortType, setSortType] = useState(new Date());
@@ -38,9 +39,8 @@ export default function Dashboard() {
       <Head>
         <title>Dashboard - Admin</title>
         <meta name="description" content="Admin`s Dashboard" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AnimatedHeader>Dashboard</AnimatedHeader>
+      <AnimatedHeader Logo={<AiOutlineDashboard />}>Dashboard</AnimatedHeader>
       <div className={styles.calendar_parent}>
         <React_Calendar
           label="Choose A Year"

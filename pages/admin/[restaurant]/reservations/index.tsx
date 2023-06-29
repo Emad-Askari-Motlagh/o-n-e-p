@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { GiConfirmed } from "react-icons/gi";
 import { useUser } from "hooks/Context.hook";
 import ErrorCard from "@/components/ErrorCard";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import { RiReservedLine } from "react-icons/ri";
 
 const Reservation = () => {
   const [oldDate, setOldRes] = useState([]);
@@ -27,13 +29,12 @@ const Reservation = () => {
   return (
     <div className={styles.container}>
       <div className={styles.calandar_container}>
-        <h2>Reservations</h2>
+        <AnimatedHeader Logo={<RiReservedLine />}>Reservations</AnimatedHeader>
         {!user.data?.CurrentUser && <ErrorCard>Please login first</ErrorCard>}
 
         <div className={styles.table_container}>
           {oldDate.length ? (
             <>
-              <h3>Reservations:</h3>
               <table className={styles.old_reserved_date}>
                 <thead>
                   <tr>

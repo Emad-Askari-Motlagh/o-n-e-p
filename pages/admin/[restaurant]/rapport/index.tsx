@@ -13,6 +13,8 @@ import {
 import Info from "@/components/Info";
 import Head from "next/head";
 import ErrorCard from "@/components/ErrorCard";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import { ImParagraphJustify } from "react-icons/im";
 
 export default function Rapport() {
   const [sortType, setSortType] = useState("year");
@@ -51,7 +53,7 @@ export default function Rapport() {
         <title>Restaurant rapport page</title>
         <meta name="description" content="Restaurant rapport page" />
       </Head>
-      <h1>Rapport</h1>
+      <AnimatedHeader Logo={<ImParagraphJustify />}>Rapport</AnimatedHeader>
       <div className={styles.rapport}>
         <div className={styles.calendar_parent}>
           <React_Calendar

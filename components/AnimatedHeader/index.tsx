@@ -6,12 +6,14 @@ interface AnimatedHeaderProps {
   children: ReactNode;
   color?: string;
   fontSize?: string;
+  Logo?: any;
 }
 
 const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
   children,
   color,
   fontSize,
+  Logo,
 }) => {
   const headerVariants: Variants = {
     initial: { opacity: 0, y: -200 },
@@ -21,11 +23,12 @@ const AnimatedHeader: React.FC<AnimatedHeaderProps> = ({
   return (
     <motion.h1
       style={{ color, fontSize }}
-      className={styles.header_con}
+      className={styles.header_container}
       initial="initial"
       animate="animate"
       variants={headerVariants}>
-      {children}
+      <span className={styles.header_container__logo}>{Logo}</span>
+      <span className={styles.header_container__label}> {children}</span>
     </motion.h1>
   );
 };

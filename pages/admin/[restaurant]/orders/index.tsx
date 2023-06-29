@@ -15,7 +15,11 @@ import Modal from "components/WarningModal";
 import InfoModal from "components/Modal";
 import Search from "@/components/SearchForm";
 import Warning from "@/components/Warning";
-import { MdOutlineExpandMore } from "react-icons/md";
+import {
+  MdBorderStyle,
+  MdOutlineBorderStyle,
+  MdOutlineExpandMore,
+} from "react-icons/md";
 import AdminOrdersInfo from "@/components/AdminOrdersInfo";
 import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
@@ -85,7 +89,9 @@ const AdminsOrders = () => {
         <meta name="description" content="Admin Orders page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AnimatedHeader>Admin`s Orders</AnimatedHeader>
+      <AnimatedHeader Logo={<MdOutlineBorderStyle />}>
+        Admin`s Orders
+      </AnimatedHeader>
       <span style={{ marginLeft: "20px" }}>
         {date.getFullYear() +
           "-" +

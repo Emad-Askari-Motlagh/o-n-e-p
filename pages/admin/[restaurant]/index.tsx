@@ -60,10 +60,7 @@ const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
-        <span>
-          <CgProfile className={styles.icon} />
-        </span>
-        <h1>Profile</h1>
+        <AnimatedHeader Logo={<CgProfile />}>Profile / Setting</AnimatedHeader>
       </div>
       <Restaurant
         location={res.location}

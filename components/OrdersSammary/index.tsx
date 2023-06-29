@@ -12,7 +12,24 @@ export default function Summary() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { loading, removeOrder, addOrder, orders } = useOrders();
 
-  if (!orders?.length) return null;
+  if (!orders?.length) {
+    return null;
+  }
+
+  const summaryItems = orders.map((res, i) => (
+    <SummaryItem
+      key={res?._id}
+      id={res?.product._id}
+      description={res?.product.description}
+      name={res?.product?.name}
+      ImageSrc={"/1.webp"}
+      quantity={res?.orderQuantity}
+      removeOrder={removeOrder}
+      addOrder={addOrder}
+      price={res?.product.price}
+    />
+  ));
+
   return (
     <div className={style.checkout_container}>
       {isModalOpen && (
@@ -25,27 +42,15 @@ export default function Summary() {
               <span style={{ color: "white" }}>Loading...</span>
             </div>
           )}
-          {!orders?.length && !loading && (
+          {!orders?.length && !loading ? (
             <div className={style.error_Parent}>
               <span style={{ color: "white" }}>OBS!</span>
               <span style={{ color: "white" }}>You have not any orders</span>
             </div>
+          ) : (
+            summaryItems
           )}
-          {Array.isArray(orders) &&
-            router.query.name &&
-            orders.map((res, i) => (
-              <SummaryItem
-                key={res?._id}
-                id={res?.product._id}
-                description={res?.product.description}
-                name={res?.product?.name}
-                ImageSrc={"/1.webp"}
-                quantity={res?.orderQuantity}
-                removeOrder={removeOrder}
-                addOrder={addOrder}
-                price={res?.product.price}
-              />
-            ))}
+
           <div
             className={style.button_parent}
             onClick={() => setIsModalOpen(false)}>

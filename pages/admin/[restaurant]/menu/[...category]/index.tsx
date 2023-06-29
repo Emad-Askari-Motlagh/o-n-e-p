@@ -12,6 +12,8 @@ import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
 import dynamic from "next/dynamic";
 import Info from "@/components/Info";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
 const Selection = dynamic(() => import("@/components/Selection"));
 const AddCategory = dynamic(() => import("@/components/AddCategory"));
 const MenuAdder = dynamic(() => import("@/components/MenuAdder"));
@@ -155,6 +157,9 @@ export default function Category() {
     : !menuItemsLoading && <ErrorCard>The category is empty for now</ErrorCard>;
   return (
     <div className={styles.container}>
+      <AnimatedHeader Logo={<MdOutlineRestaurantMenu />}>
+        Edit - Menu Items / Category
+      </AnimatedHeader>
       <div className={styles.add_button_parent}>
         <div>
           <IoMdAddCircle

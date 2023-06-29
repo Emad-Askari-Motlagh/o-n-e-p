@@ -1,6 +1,6 @@
 @import "/styles/breakpoints";
 
-.header_con {
+.header_container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,9 +11,23 @@
     background-image: linear-gradient(to left, #dad6e3, #bcbcbc);
     color: transparent;
     background-clip: text;
+    margin: 1rem;
     -webkit-background-clip: text;
 
+    &__label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.5rem;
+        color: sandybrown;
+    }
+
     @include sm {
-        font-size: 1rem;
+        font-size: 1.5rem;
     }
 }

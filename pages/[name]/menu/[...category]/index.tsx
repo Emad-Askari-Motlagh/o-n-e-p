@@ -18,6 +18,7 @@ import {
 } from "server/generated/graphql";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import { CgMenuHotdog } from "react-icons/cg";
 
 // Dynamic import the MenuItems component
 const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"));
@@ -65,7 +66,7 @@ export default function Menu() {
         <title>Menu Page</title>
         <meta name="description" content="This is the menu page" />
       </Head>
-      <AnimatedHeader fontSize="20px">
+      <AnimatedHeader Logo={<CgMenuHotdog />}>
         {router.query?.name} - Menu Items
       </AnimatedHeader>
       <div className={styles.items_parent}>
