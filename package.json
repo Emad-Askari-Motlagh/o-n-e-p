@@ -86,8 +86,10 @@
     "@types/react-datepicker": "^4.11.2",
     "@types/react-dom": "^18.0.10",
     "@types/sendgrid": "^4.3.0",
+    "@zeit/next-css": "^1.0.1",
     "cross-env": "^7.0.3",
     "eslint": "8.23.0",
-    "eslint-config-next": "12.2.5"
+    "eslint-config-next": "12.2.5",
+    "next-purgecss": "^4.0.0"
   }
 }

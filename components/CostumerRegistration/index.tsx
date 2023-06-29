@@ -33,7 +33,7 @@ export default function CostumerRegister({ onSubmit }) {
   });
 
   return (
-    <div className={`${styles.costumerRegContainer} ${"fix_height"}`}>
+    <div className={`${styles.costumerRegContainer}`}>
       <form onSubmit={handleSubmit}>
         <div>
           <Input

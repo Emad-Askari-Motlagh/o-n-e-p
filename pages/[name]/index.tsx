@@ -94,6 +94,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 };
 export default Restaurant;
 Restaurant.Layout = PrimaryLayout;
+
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   try {
     await dbInit(); // Initialize MongoDB
