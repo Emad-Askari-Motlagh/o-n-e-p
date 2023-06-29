@@ -20,9 +20,7 @@
   border-radius: 7px;
   display: flex;
   flex-direction: column;
-  label {
-    font-family: "Playfair Display", sans-serif;
-  }
+
   .innerContainer {
     width: 100%;
     position: relative;
@@ -38,8 +36,14 @@
       flex-direction: column;
       .stripe_info {
         width: 100%;
+
         & > * {
           margin: 1rem;
+        }
+        &__cards_image {
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
         &__label {
           display: flex;

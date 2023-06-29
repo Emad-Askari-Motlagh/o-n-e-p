@@ -115,9 +115,7 @@ const AdminsOrders = () => {
         setIsModalOpen={setInfoOpen}
         isModalOpen={infoOpen}
         label="Orders's extra info">
-        <div>
-          <AdminOrdersInfo currentOrderInfo={currentOrderInfo} />
-        </div>
+        <AdminOrdersInfo currentOrderInfo={currentOrderInfo} />
       </InfoModal>
       <Modal
         setIsModalOpen={setShowAlert}

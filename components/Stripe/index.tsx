@@ -83,16 +83,18 @@ export default function Stripe({
             <span>{`Price:${sum}.00 kr`} </span>
           </div>
           <div className={style.stripe_info}>
-            {" "}
-            <Image
-              alt="cards-images"
-              src="/cards.webp"
-              height={50}
-              width={400}
-              objectFit="contain"
-              objectPosition="center"
-              style={{ margin: "auto" }}
-            />
+            <div className={style.stripe_info__cards_image}>
+              <Image
+                alt="cards-images"
+                src="/cards.webp"
+                height={50}
+                width={400}
+                objectFit="contain"
+                objectPosition="center"
+                style={{ margin: "auto" }}
+              />
+            </div>
+
             <AnimatedHeader Logo={<MdCreditCard />}>Card Info</AnimatedHeader>
             <CardElement
               options={{
