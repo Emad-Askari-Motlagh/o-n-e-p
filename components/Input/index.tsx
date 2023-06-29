@@ -21,6 +21,7 @@ type InputProps = {
   maxRows?: number;
   minRows?: number;
   value?: string | number;
+  id?: string;
 };
 function InputComponent({
   required = true,
@@ -38,12 +39,13 @@ function InputComponent({
   maxRows,
   minRows,
   value,
+  id,
 }: InputProps) {
   return (
     <TextField
       value={value}
       helperText={`Please enter your ${placeholder}`}
-      id="demo-helper-text-misaligned"
+      id={id}
       label={name}
       placeholder={placeholder}
       autoFocus={false}

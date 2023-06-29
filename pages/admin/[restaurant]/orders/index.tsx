@@ -1,50 +1,27 @@
-import React, {
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import styles from "./orders.module.scss";
-import PrimaryLayout from "@/components/PrimaryLayout/index";
-import { FiEye } from "react-icons/fi";
-import useOrders from "hooks/Order.hook";
-import captalizeFirstLetter from "lib/captalizeFirstChar";
-import Modal from "components/WarningModal";
-import InfoModal from "components/Modal";
-import Search from "@/components/SearchForm";
-import Warning from "@/components/Warning";
-import {
-  MdBorderStyle,
-  MdOutlineBorderStyle,
-  MdOutlineExpandMore,
-} from "react-icons/md";
-import AdminOrdersInfo from "@/components/AdminOrdersInfo";
-import TableData from "@/components/Table/TableData";
-import TableHeader from "@/components/Table/TableHeader";
+import React, { useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BiTrash } from "react-icons/bi";
-import Head from "next/head";
-import AnimatedHeader from "@/components/AnimatedHeader";
+import { MdOutlineBorderStyle, MdOutlineExpandMore } from "react-icons/md";
+import { useQuery } from "@apollo/client";
+import useOrders from "hooks/Order.hook";
 import useEventSource from "hooks/EventSource.hook";
 import {
   AdminOrdersQuery,
   AdminOrdersQueryVariables,
 } from "@/server/generated/graphql";
 import { GET_ADMIN_ORDERS } from "@/server/graphql/querys/querys.graphql";
-import { useQuery } from "@apollo/client";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import AnimatedHeader from "@/components/AnimatedHeader";
+import PrimaryLayout from "@/components/PrimaryLayout";
+import TableHeader from "@/components/Table/TableHeader";
+import Warning from "@/components/Warning";
+import Modal from "components/WarningModal";
+import InfoModal from "components/Modal";
+import AdminOrdersInfo from "@/components/AdminOrdersInfo";
+import Head from "next/head";
+import styles from "./orders.module.scss";
+import OrderCard from "@/components/OrderCard";
 
 const AdminsOrders = () => {
-  const [showAlert, setShowAlert] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(false);
-  const [error, setError] = useState(false);
-  const { data } = useEventSource(`${process.env.SERVER_LINK}/api/adminOrders`);
-  const [currentOrderInfo, setCurrentOrderInfo] = useState<{
-    _id: string;
-    extra: { name: string; quantity: string }[];
-    description: string;
-  }>();
   const {
     data: AdminOrdersData,
     error: adminOrdersError,
@@ -52,36 +29,46 @@ const AdminsOrders = () => {
   } = useQuery<AdminOrdersQuery, AdminOrdersQueryVariables>(GET_ADMIN_ORDERS, {
     pollInterval: 150000,
   });
+  const {
+    data: livsAdminOrders,
+  }: { data: typeof AdminOrdersData.AdminOrders } = useEventSource(
+    `${process.env.SERVER_LINK}/api/adminOrders`
+  );
   const { DeleteItemFromAdminList } = useOrders();
-  const date = new Date();
+  const [showAlert, setShowAlert] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [currentOrderInfo, setCurrentOrderInfo] = useState<{
+    _id: string;
+    extra: { name: string; quantity: string }[];
+    description: string;
+  }>();
 
-  function onClick(id: string, fact: typeof currentOrderInfo) {
-    setCurrentOrderInfo(fact);
-    setInfoOpen(true);
-  }
-  function onDeleteItem(item) {
-    DeleteItemFromAdminList({
-      variables: {
-        itemId: item._id,
-        costumerId: item.costumer._id,
-      },
-    });
-  }
-  const orders: AdminOrdersQuery[] | null = data?.length
-    ? data
+  const orders = livsAdminOrders?.length
+    ? livsAdminOrders
     : AdminOrdersData?.AdminOrders;
-  if (!orders?.length)
-    return (
-      <AiOutlineLoading3Quarters
-        style={{ color: "#fff" }}></AiOutlineLoading3Quarters>
-    );
-  if ((error || adminOrdersError) && !adminOrdersLoading)
+
+  if (adminOrdersLoading) {
+    return <AiOutlineLoading3Quarters style={{ color: "#fff" }} />;
+  }
+
+  if (adminOrdersError && !adminOrdersLoading) {
     return (
       <Warning
         label="Orders"
-        message="Unexpected error happend. Please try later"
+        message="Unexpected error happened. Please try again later"
       />
     );
+  }
+
+  if (!orders?.length) {
+    return null;
+  }
+
+  function onClick(id: string, order: typeof currentOrderInfo) {
+    setCurrentOrderInfo(order);
+    setInfoOpen(true);
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -93,13 +80,8 @@ const AdminsOrders = () => {
         Admin`s Orders
       </AnimatedHeader>
       <span style={{ marginLeft: "20px" }}>
-        {date.getFullYear() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getDate()}
+        {new Date().toLocaleDateString()}
       </span>
-
       <table>
         <tbody>
           <tr style={{ backgroundColor: "tomato" }}>
@@ -113,72 +95,42 @@ const AdminsOrders = () => {
               <BiTrash />
             </TableHeader>
           </tr>
-          {Array.isArray(orders) &&
-            orders.map((fact, i) => {
-              return (
-                <tr key={i}>
-                  <TableData style={{ tableLayout: "auto", width: "10%" }}>
-                    {fact?.costumer?.table}
-                  </TableData>
-                  <TableData>
-                    {captalizeFirstLetter(fact?.product?.name as string)}
-                  </TableData>
-                  <TableData
-                    style={{ tableLayout: "auto", width: "10%" }}
-                    color={
-                      (fact?.orderQuantity as number) <= 1 ? "white" : "tomato"
-                    }>
-                    {fact?.orderQuantity}
-                  </TableData>
-                  <TableData
-                    style={{
-                      tableLayout: "auto",
-                      width: "15%",
-                    }}>{`${fact?.product?.price}.00 kr`}</TableData>
-                  <TableData>{new Date(fact?.date).toLocaleString()}</TableData>
-                  <TableData style={{ tableLayout: "auto", width: "10%" }}>
-                    <MdOutlineExpandMore
-                      style={{ cursor: "pointer" }}
-                      onClick={() => onClick(fact?._id as string, fact)}
-                    />
-                  </TableData>
-                  <TableData style={{ tableLayout: "auto", width: "5%" }}>
-                    <BiTrash
-                      style={{ cursor: "pointer" }}
-                      onClick={() => onDeleteItem(fact)}
-                    />
-                  </TableData>
-                </tr>
-              );
-            })}
+          {
+            <OrderCard
+              orders={orders}
+              onClick={onClick}
+              onDeleteItem={(item) =>
+                DeleteItemFromAdminList({
+                  variables: {
+                    itemId: item._id,
+                    costumerId: item.costumer._id,
+                  },
+                })
+              }
+            />
+          }
         </tbody>
       </table>
-      <div>
-        <InfoModal
-          setIsModalOpen={setInfoOpen}
-          isModalOpen={infoOpen}
-          label="Orders`s extra info">
-          {
-            <div>
-              <AdminOrdersInfo currentOrderInfo={currentOrderInfo} />
-            </div>
-          }
-        </InfoModal>
-      </div>
-      <div>
-        <Modal
-          setIsModalOpen={setShowAlert}
-          isModalOpen={showAlert}
-          button_label="Let`s see the orders"
-          label="New order">
-          <div>
-            <span style={{ color: "wheat" }}>New order</span>
-            <audio autoPlay>
-              <source src="/alert2.mp3" type="audio/mpeg" />
-            </audio>
-          </div>
-        </Modal>
-      </div>
+      <InfoModal
+        setIsModalOpen={setInfoOpen}
+        isModalOpen={infoOpen}
+        label="Orders's extra info">
+        <div>
+          <AdminOrdersInfo currentOrderInfo={currentOrderInfo} />
+        </div>
+      </InfoModal>
+      <Modal
+        setIsModalOpen={setShowAlert}
+        isModalOpen={showAlert}
+        button_label="Let's see the orders"
+        label="New order">
+        <div>
+          <span style={{ color: "wheat" }}>New order</span>
+          <audio autoPlay>
+            <source src="/alert2.mp3" type="audio/mpeg" />
+          </audio>
+        </div>
+      </Modal>
     </div>
   );
 };

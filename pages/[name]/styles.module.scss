@@ -68,7 +68,7 @@ $BC_COLOR: #242424;
       padding: 20px auto;
     }
   }
-  .images_container {
+  .alternatives {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,25 +80,25 @@ $BC_COLOR: #242424;
       font-weight: 900;
       font-size: 150%;
     }
-  }
-  .image1_parent {
-    background: url("/food3.webp") no-repeat center center;
-  }
-  .image2_parent {
-    background: url("/food4.webp") no-repeat center center;
-  }
-  .image1_parent,
-  .image2_parent {
-    cursor: pointer;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 50%;
-    height: 500px;
-    background-size: contain;
-    @include lg {
-      width: 70%;
-      height: 400px;
+    &__eat_here {
+      background: url("/food3.webp") no-repeat center center;
+    }
+    &__take_away {
+      background: url("/food4.webp") no-repeat center center;
+    }
+    &__eat_here,
+    &__take_away {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 50%;
+      height: 500px;
+      background-size: contain;
+      @include lg {
+        width: 70%;
+        height: 400px;
+      }
     }
   }
 }

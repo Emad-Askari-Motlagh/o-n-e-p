@@ -27,6 +27,18 @@ export default function Menu() {
     return data?.MenuByCategory ?? [];
   }, [data]);
 
+  const menuItemsComponent = menuItems.map((res, index) => {
+    return (
+      <li key={index} className={styles.item_parent}>
+        <RestaurantParentCard
+          key={index}
+          label={res.itemName}
+          endPoint={res.itemName}
+          image={res.image}
+        />
+      </li>
+    );
+  });
   return (
     <div className={styles.container}>
       <Head>
@@ -42,19 +54,7 @@ export default function Menu() {
             Menu Categories
           </AnimatedHeader>
           <ul className={styles.items_parent}>
-            {menuItems?.length &&
-              menuItems.map((res, index) => {
-                return (
-                  <li key={index} className={styles.item_parent}>
-                    <RestaurantParentCard
-                      key={index}
-                      label={res.itemName}
-                      endPoint={res.itemName}
-                      image={res.image}
-                    />
-                  </li>
-                );
-              })}
+            {menuItems?.length && menuItemsComponent}
           </ul>
         </>
       )}

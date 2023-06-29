@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 import styles from "./styles.module.scss";
 import { AiFillBell } from "react-icons/ai";
-import { Modal as BootstrapModal, Button } from "react-bootstrap";
+import { Modal as BootstrapModal } from "react-bootstrap";
 
-export default function Modal(
-  { children, setIsModalOpen, isModalOpen, label, onExit, button_label },
-  props
-) {
+interface ModalProps {
+  children: ReactNode;
+  setIsModalOpen: (isOpen: boolean) => void;
+  isModalOpen: boolean;
+  label: string;
+  onExit?: () => void;
+  button_label: string;
+}
+
+export default function Modal({
+  children,
+  setIsModalOpen,
+  isModalOpen,
+  label,
+  onExit,
+  button_label,
+}: ModalProps) {
   return (
     <>
       <BootstrapModal
-        {...props}
         show={isModalOpen}
         onHide={() => setIsModalOpen(false)}
         keyboard={false}

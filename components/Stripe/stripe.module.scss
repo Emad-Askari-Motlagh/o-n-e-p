@@ -1,5 +1,5 @@
 @import "/styles/fonts";
-
+@import "/styles/breakpoints";
 @mixin borderB {
   &::after {
     content: "";
@@ -92,18 +92,19 @@
     justify-content: space-around;
     align-items: center;
     margin: auto;
-
     width: 40%;
   }
 }
 .container form {
   border: 1px solid rgba(128, 128, 128, 0.185);
-  padding: 22px 22px;
+  padding: 12px 12px;
   width: 40%;
   min-height: 400px;
   margin: auto;
   margin-bottom: 4vh;
-  font-family: "Playfair Display", serif;
+  @include sm {
+    min-height: 300px;
+  }
   .card_label {
     margin: auto;
     text-align: center;

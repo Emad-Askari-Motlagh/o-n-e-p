@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./footer.module.scss";
 import { GrFacebook } from "react-icons/gr";
 import { AiFillTwitterCircle } from "react-icons/ai";
@@ -11,13 +11,13 @@ export default function PageTwo() {
       <div className={styles.footer_wrapper}>
         <div className={styles.footer__col1}>
           <div className={styles.footer__col2}>
-            <Link href="/404">
+            <Link href="www.facebook.com">
               <a id="facebook-address">
                 <GrFacebook size={16} color="gray" />
               </a>
             </Link>
 
-            <Link href="/404">
+            <Link href="www.twitter.com">
               <a>
                 <AiFillTwitterCircle
                   id="twitter-address"

@@ -42,6 +42,7 @@ export default function CostumerRegister({ onSubmit }) {
             label={"Tables number"}
             type="number"
             onChange={handleChange}
+            id="Tables number"
           />
 
           {touched.table && errors.table ? (
@@ -60,6 +61,7 @@ export default function CostumerRegister({ onSubmit }) {
           label={"Costumer`s name"}
           type="text"
           onChange={handleChange}
+          id="costumer"
         />
         {errors.name && touched.name ? (
           <Alert
@@ -76,6 +78,7 @@ export default function CostumerRegister({ onSubmit }) {
           label={"Costumer`s email"}
           type="email"
           onChange={handleChange}
+          id="email"
         />
         {errors.email && touched.email ? (
           <Alert

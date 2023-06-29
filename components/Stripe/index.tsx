@@ -83,9 +83,7 @@ export default function Stripe({
             <span>{`Price:${sum}.00 kr`} </span>
           </div>
           <div className={style.stripe_info}>
-            <AnimatedHeader Logo={<MdCreditCard color="sandybrown" />}>
-              Card Info
-            </AnimatedHeader>
+            <AnimatedHeader Logo={<MdCreditCard />}>Card Info</AnimatedHeader>
             <CardElement
               options={{
                 style: {

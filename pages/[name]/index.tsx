@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { motion } from "framer-motion";
 import { useMutation } from "@apollo/client";
 import { NextApiRequest } from "next";
 import styles from "./styles.module.scss";
@@ -62,7 +61,7 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
 
   return (
     <div className={styles.container}>
-      <AnimatedHeader color="#fff" Logo={<CgSelect />}>
+      <AnimatedHeader Logo={<CgSelect />}>
         {!COSTUMER
           ? "Costumer Registration"
           : "Please choose one of the alternatives!"}
@@ -77,14 +76,14 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
         </>
       ) : (
         // If COSTUMER is available, render the alternatives
-        <div className={styles.images_container}>
+        <div className={styles.alternatives}>
           <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.image2_parent}>
+            <div className={styles.alternatives__eat_here}>
               <span className={styles.image_label}>EAT HERE</span>
             </div>
           </Link>
           <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.image1_parent}>
+            <div className={styles.alternatives__take_away}>
               <span className={styles.image_label}>TAKE AWAY</span>
             </div>
           </Link>

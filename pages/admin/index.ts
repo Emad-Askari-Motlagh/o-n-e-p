@@ -18,7 +18,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
       // If no token is found, redirect to the restaurant page
       return {
         redirect: {
-          destination: "/restaurant",
+          destination: "/",
           permanent: false,
         },
       };
@@ -30,7 +30,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
       // If the token is invalid or user ID is not present, redirect to the restaurant page
       return {
         redirect: {
-          destination: "/restaurant",
+          destination: "/",
           permanent: false,
         },
       };
@@ -42,7 +42,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
       // If the user is not found, redirect to the restaurant page
       return {
         redirect: {
-          destination: "/restaurant",
+          destination: "/",
           permanent: false,
         },
       };
@@ -58,7 +58,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     console.log(error);
     return {
       redirect: {
-        destination: "/restaurant",
+        destination: "/",
         permanent: false,
       },
     };
