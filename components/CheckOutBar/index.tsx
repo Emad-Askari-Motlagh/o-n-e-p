@@ -4,16 +4,21 @@ import { BiRightDownArrowCircle } from "react-icons/bi";
 import LinkButton from "../LinkButton";
 import { useRouter } from "next/router";
 
-export default function CheckOutBar({ onClick }) {
+interface CheckOutBarProps {
+  onClick: React.MouseEventHandler<HTMLDivElement>;
+}
+
+const CheckOutBar: React.FC<CheckOutBarProps> = ({ onClick }) => {
   const router = useRouter();
+
   return (
     <div className={styles.container}>
       <div className={styles.parent}>
-        <LinkButton href={`/restaurant/${router.query.name}/checkout`}>
+        <LinkButton href={`/${router.query.name}/checkout`}>
           Checkout
         </LinkButton>
         <div className={styles.downArrow_parent}>
-          <div className={styles.items_view_label}>See your items </div>
+          <div className={styles.items_view_label}>See your items</div>
           <div className={styles.downArrow}>
             <BiRightDownArrowCircle onClick={onClick} />
           </div>
@@ -21,4 +26,6 @@ export default function CheckOutBar({ onClick }) {
       </div>
     </div>
   );
-}
+};
+
+export default CheckOutBar;
