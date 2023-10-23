@@ -1,20 +1,5 @@
 import { useRouter } from "next/router";
-
-import {
-  CreateUserMutation,
-  CreateUserMutationVariables,
-  SignInMutation,
-  SignInMutationVariables,
-  SignOutMutation,
-  SignOutMutationVariables,
-  CurrentUserQuery,
-  CurrentUserQueryVariables,
-  CostumerQuery,
-  CostumerQueryVariables,
-  SignOutCostumerMutation,
-  SignOutCostumerMutationVariables,
-} from "server/generated/graphql";
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext, useCallback } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useApollo } from "lib/apollo/apollo-client";
 import {
@@ -29,110 +14,72 @@ import {
 } from "server/graphql/querys/mutations.graphql";
 
 const authContext = createContext({});
-interface User {
-  email: string;
-  _id: string;
-  name: string;
-  restaurant: string;
-}
 
-const useAuth = () => {
-  return useContext(authContext);
-};
-
+type UserInput = { email: string; password: string; username?: string };
 export function useUser() {
   const [authToken, setAuthToken] = useState<string | undefined>();
-  const authHeaders = getAuthHeaders();
   const Router = useRouter();
   const client = useApollo({});
   const [signInError, setSignInError] = useState<string | undefined>();
-  const costumerData = useQuery<CostumerQuery, CostumerQueryVariables>(
-    GET_COSTUMER
-  );
+  const costumerData = useQuery(GET_COSTUMER);
+  const userData = useQuery(GET_CURRENT_USER);
 
-  const [signOutCostumer] = useMutation<
-    SignOutCostumerMutation,
-    SignOutCostumerMutationVariables
-  >(SIGN_OUT_COSTUMER);
-  const userData = useQuery<CurrentUserQuery, CurrentUserQueryVariables>(
-    GET_CURRENT_USER
-  );
+  const isSignedIn = useCallback(() => !!authToken, [authToken]);
 
-  const isSignedIn = () => {
-    return !!authToken;
-  };
+  const getAuthHeaders = useCallback(() => {
+    return authToken ? { authorization: `Bearer ${authToken}` } : null;
+  }, [authToken]);
 
-  function getAuthHeaders() {
-    if (!authToken) return null;
-    return {
-      authorization: `Bearer ${authToken}`,
-    };
-  }
+  const [signOutCostumer] = useMutation(SIGN_OUT_COSTUMER);
 
-  const signIn = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    try {
-      const result = await client.mutate<
-        SignInMutation,
-        SignInMutationVariables
-      >({
-        mutation: LOGIN,
-        variables: { email, password },
-        refetchQueries: [{ query: GET_CURRENT_USER }],
-      });
-      const token = result.data?.SignIn.token;
-
-      if (token) {
-        setAuthToken(token);
-        return token;
-      } else {
-        return null;
+  const signIn = useCallback(
+    async ({ email, password }: UserInput) => {
+      try {
+        const result = await client.mutate({
+          mutation: LOGIN,
+          variables: { email, password },
+          refetchQueries: [{ query: GET_CURRENT_USER }],
+        });
+        const token = result.data?.SignIn.token;
+        if (token) {
+          setAuthToken(token);
+          return token;
+        } else {
+          return null;
+        }
+      } catch (err) {
+        setSignInError("An unexpected error occurred");
+        console.log("Error during the signin", err);
       }
-    } catch (err: any) {
-      setSignInError("An unexpected error occurred");
-      console.log("Error during the signin", err);
-    }
-  };
+    },
+    [client]
+  );
 
-  const signUp = async ({
-    email,
-    password,
-    username,
-  }: {
-    email: string;
-    password: string;
-    username: string;
-  }) => {
+  const signUp = useCallback(
+    async ({ email, password, username }: UserInput) => {
+      try {
+        const result = await client.mutate({
+          mutation: CREATE_USER,
+          variables: { email, password, username },
+        });
+        Router.push("/auth/login");
+        return result.data?.CreateUser;
+      } catch (err) {
+        console.log(err?.message ?? err);
+      }
+    },
+    [client, Router]
+  );
+
+  const signOut = useCallback(async () => {
     try {
-      const result = await client.mutate<
-        CreateUserMutation,
-        CreateUserMutationVariables
-      >({
-        mutation: CREATE_USER,
-        variables: { email, password, username },
-      });
-
-      Router.push("/auth/login");
-      return result.data?.CreateUser;
-    } catch (err: any) {
-      console.log(err?.message ?? err);
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await client.mutate<SignOutMutation, SignOutMutationVariables>({
+      await client.mutate({
         mutation: SIGN_OUT,
       });
-    } catch (err: any) {
+    } catch (err) {
       console.log(err?.message ?? err);
     }
-  };
+  }, [client]);
 
   return {
     isSignedIn,
@@ -147,5 +94,9 @@ export function useUser() {
     signInError,
   };
 }
+
+const useAuth = () => {
+  return useContext(authContext);
+};
 
 export default useAuth;

@@ -2,10 +2,8 @@ import PrimaryLayout from "@/components/PrimaryLayout";
 import { useUser } from "hooks/Context.hook";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import Chart from "components/Chart";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ANALISTICS } from "@/server/graphql/querys/mutations.graphql";
-import SelectInput from "@/components/SelectInput";
 import React_Calendar from "components/Calendar";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,7 +14,12 @@ import {
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { AiOutlineDashboard } from "react-icons/ai";
+import dynamic from "next/dynamic";
+import SimpleLoading from "@/components/SimpleLoading";
 
+const Chart = dynamic(() => import("@/components/Chart"), {
+  loading: () => <SimpleLoading />,
+});
 export default function Dashboard() {
   const [sortType, setSortType] = useState(new Date());
   const router = useRouter();
@@ -30,9 +33,11 @@ export default function Dashboard() {
   >(GET_ANALISTICS);
   useEffect(() => {
     getAnalistics({
-      variables: { year: sortType?.getFullYear() },
+      variables: {
+        year: sortType?.getFullYear(),
+      },
     });
-  }, [sortType, getAnalistics]);
+  }, [sortType]);
 
   return (
     <div className={styles.dash_container}>
@@ -44,7 +49,9 @@ export default function Dashboard() {
       <div className={styles.calendar_parent}>
         <React_Calendar
           label="Choose A Year"
-          handleChange={(value) => setSortType(value)}
+          handleChange={(value: Date) => {
+            setSortType(new Date(value));
+          }}
           value={sortType}
         />
       </div>

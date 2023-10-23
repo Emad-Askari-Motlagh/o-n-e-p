@@ -1,18 +1,20 @@
 import * as React from "react";
-import dayjs, { Dayjs } from "dayjs";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import styles from "./styles.module.scss";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import WithMuiTheme from "../../Hoc/withMuiTheme";
 
-function MaterialUIPickers({ handleChange, label, value }) {
+interface CalendarType {
+  handleChange: (value: Date) => void;
+  label: string;
+  value: Date;
+}
+
+function Calendar({ handleChange, label, value }: CalendarType) {
   return (
     <div className={styles.container}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -30,4 +32,4 @@ function MaterialUIPickers({ handleChange, label, value }) {
     </div>
   );
 }
-export default WithMuiTheme(MaterialUIPickers);
+export default WithMuiTheme(Calendar);
