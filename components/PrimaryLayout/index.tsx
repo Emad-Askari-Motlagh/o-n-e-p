@@ -1,8 +1,4 @@
 import React, { ReactNode } from "react";
-import Sidebar from "components/Sidebar";
-import RouteBar from "@/components/RouteBar";
-import Footer from "components/Footer";
-import HeaderScreen from "components/Header";
 import useVisible from "hooks/useVisible";
 import { useRouter } from "next/router";
 import Sammary from "components/OrdersSammary";
@@ -14,6 +10,21 @@ import {
 } from "@/server/generated/graphql";
 import styles from "./Layout.module.scss";
 import WithAuthState from "../../Hoc/withAuthState";
+import dynamic from "next/dynamic";
+import SimpleLoading from "../SimpleLoading";
+// Lazy load the Footer and HeaderScreen and SideBar components
+const RouteBar = dynamic(() => import("@/components/RouteBar"), {
+  loading: () => <SimpleLoading />,
+});
+const Sidebar = dynamic(() => import("@/components/Sidebar"), {
+  loading: () => <SimpleLoading />,
+});
+const Footer = dynamic(() => import("components/Footer"), {
+  loading: () => <SimpleLoading />,
+});
+const HeaderScreen = dynamic(() => import("components/Header"), {
+  loading: () => <SimpleLoading />,
+});
 
 type LayoutProps = {
   children: ReactNode;
@@ -72,9 +83,7 @@ function PrimaryLayout({
           <RouteBar user={user} />
         </div>
         {children}
-        {costumerData?.data && router.query.name && (
-          <Sammary costumerData={costumerData.data.Costumer} />
-        )}
+        {costumerData?.data && router.query.name && <Sammary />}
       </main>
 
       <footer className={styles.footer}>

@@ -22,7 +22,11 @@ import { CgSelect } from "react-icons/cg";
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
 }
-
+interface AlternativesItemProps {
+  label: string;
+  variant: "eatHere" | "takeAway";
+  endPoint: string;
+}
 const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
   const [error, setError] = useState<string | null>(null);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
@@ -77,21 +81,38 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
       ) : (
         // If COSTUMER is available, render the alternatives
         <div className={styles.alternatives}>
-          <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.alternatives__eat_here}>
-              <span className={styles.image_label}>EAT HERE</span>
-            </div>
-          </Link>
-          <Link href={`${Router.asPath}/menu`}>
-            <div className={styles.alternatives__take_away}>
-              <span className={styles.image_label}>TAKE AWAY</span>
-            </div>
-          </Link>
+          <AlternativesItem
+            endPoint={`${Router.asPath}/menu`}
+            label="EAT HERE"
+            variant="eatHere"
+          />
+          <AlternativesItem
+            endPoint={`${Router.asPath}/menu`}
+            label="TAKE AWAY"
+            variant="takeAway"
+          />
         </div>
       )}
     </div>
   );
 };
+
+const AlternativesItem: React.FC<AlternativesItemProps> = ({
+  label,
+  variant,
+  endPoint,
+}) => (
+  <Link href={endPoint}>
+    <div
+      className={
+        variant === "eatHere"
+          ? styles.alternatives__eat_here
+          : styles.alternatives__take_away
+      }>
+      <span className={styles.image_label}>{label}</span>
+    </div>
+  </Link>
+);
 export default Restaurant;
 Restaurant.Layout = PrimaryLayout;
 

@@ -8,13 +8,16 @@ import { useUser } from "hooks/Context.hook";
 import ErrorCard from "@/components/ErrorCard";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { RiReservedLine } from "react-icons/ri";
+import SimpleLoading from "@/components/SimpleLoading";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 const Reservation = () => {
   const [oldDate, setOldRes] = useState([]);
-  const [refetch, setRefetch] = useState(true);
+  const [hasData, setDataStatus] = useState(true);
   const { query } = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const { user } = useUser();
+  const [error, setError] = useState("");
   const url = `/api/admin/reservations/${query.restaurant}`;
   useEffect(() => {
     if (user.data?.CurrentUser) {
@@ -22,18 +25,37 @@ const Reservation = () => {
     }
 
     async function fetchReservations() {
-      const res = await axios.get(url);
-      setOldRes(res.data);
+      try {
+        setLoading(true);
+        const res = await axios.get(url);
+        if (res.data) {
+          if (res.data.length) {
+            setOldRes(res.data);
+            setLoading(false);
+          } else {
+            setError("No reservation found");
+          }
+        } else {
+          setError("There was an error fetching reservations");
+        }
+      } catch (error) {
+        setError("There was an error fetching reservations");
+        setLoading(false);
+      }
     }
-  }, [refetch, url, user.data?.CurrentUser]);
+  }, [url, user.data?.CurrentUser]);
   return (
     <div className={styles.container}>
       <div className={styles.calandar_container}>
         <AnimatedHeader Logo={<RiReservedLine />}>Reservations</AnimatedHeader>
-        {!user.data?.CurrentUser && <ErrorCard>Please login first</ErrorCard>}
+        {user.loading ? (
+          <SimpleLoading />
+        ) : (
+          !user.data?.CurrentUser && <ErrorCard>Please login first</ErrorCard>
+        )}
 
         <div className={styles.table_container}>
-          {oldDate.length ? (
+          {oldDate.length > 0 && (
             <>
               <table className={styles.old_reserved_date}>
                 <thead>
@@ -68,8 +90,12 @@ const Reservation = () => {
                 </tbody>
               </table>
             </>
+          )}
+
+          {loading && hasData ? (
+            <LoadingIndicator animation={false} />
           ) : (
-            <ErrorCard>There isn`t any reservation yet</ErrorCard>
+            oldDate.length === 0 && <ErrorCard>{error}</ErrorCard>
           )}
         </div>
       </div>

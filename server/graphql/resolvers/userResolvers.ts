@@ -7,9 +7,8 @@ import mongoose from "mongoose";
 import JWT from "jsonwebtoken";
 import { NextPageContext, NextApiResponse, NextApiRequest } from "next";
 import sgMail from "@sendgrid/mail";
-import { GraphQLError } from "graphql";
+
 import {
-  AddCostumerAddressMutationVariables,
   CreateUserMutationVariables,
   EditUserInfoItemMutationVariables,
   MutationUpdateUserArgs,
@@ -18,30 +17,41 @@ import {
   UpdatePasswordMutationVariables,
 } from "@/server/generated/graphql";
 
+interface MutationAddAddressArgs {
+  address: string; // or whatever the correct type is, if it's not string
+}
+interface ResolverArgs<TInput, TOutput> {
+  input: TInput;
+}
+
+interface ResolverFunction<TInput, TOutput> {
+  (
+    parent: any,
+    args: ResolverArgs<TInput, TOutput>,
+    context: any,
+    info: any
+  ): TOutput;
+}
+
+interface User {
+  id: string;
+  username: string;
+  email: string;
+}
+
 const userResolvers: Resolvers = {
   Query: {
-    //Find the user by id
     async CurrentUser(_: any, __: any, { userId }: { userId: string | null }) {
-      try {
-        if (!userId) {
-          return null;
-        }
+      if (!userId) return null;
 
-        const id = new mongoose.Types.ObjectId(userId);
+      const id = new mongoose.Types.ObjectId(userId);
+      const user = await User.findById(id).populate("restaurant");
 
-        const user = await User.findById(id).populate("restaurant");
-
-        if (!user) {
-          throw new ApolloError("User not found", "USER_NOT_FOUND");
-        }
-
-        return user;
-      } catch (err) {
-        throw new ApolloError(
-          err?.message || "Failed to fetch user",
-          "FETCH_USER_FAILED"
-        );
+      if (!user) {
+        throw new ApolloError("User not found", "USER_NOT_FOUND");
       }
+
+      return user;
     },
   },
   User: {
@@ -53,46 +63,38 @@ const userResolvers: Resolvers = {
       { email, password, username }: CreateUserMutationVariables,
       { res }: { res: NextApiResponse }
     ) {
-      try {
-        const oldUser = await User.findOne({ email: email });
-        //check if there is a user already
-        if (oldUser) {
-          throw new ApolloError(
-            "There is a user match with this email, Please login"
-          );
-        }
-        //Hash the password
-        const hashedPass = await bcrypt.hash(password, 10);
-        //Create a new user in DB
-        if (!hashedPass) {
-          throw new ApolloError("Error when hashing the password");
-        }
-        const user = await new User({
-          email: email.toLowerCase(),
-          password: hashedPass,
-          name: username,
-        });
-        //Create the token
-        let token = storeJwt({
-          user: user.email,
-          id: user._id,
-        });
+      const oldUser = await User.findOne({ email });
 
-        // //Set a token to cookie
-        await storeCookie({ token: token }, res, 30000);
-
-        user.token = token;
-        //Save it
-        const doc = await user.save();
-
-        //Get the user that we have created and return it
-        return {
-          id: doc.id,
-          ...doc._doc,
-        };
-      } catch (err: any) {
-        throw new ApolloError(err?.message ? err.message : err);
+      if (oldUser) {
+        throw new ApolloError(
+          "There is a user match with this email, Please login"
+        );
       }
+
+      const hashedPass = await bcrypt.hash(password, 10);
+      if (!hashedPass) {
+        throw new ApolloError("Error when hashing the password");
+      }
+
+      const user = new User({
+        email: email.toLowerCase(),
+        password: hashedPass,
+        name: username,
+      });
+
+      const token = storeJwt({
+        user: user.email,
+        id: user._id,
+      });
+
+      await storeCookie({ token: token }, res, 30000);
+      user.token = token;
+      const doc = await user.save();
+
+      return {
+        id: doc.id,
+        ...doc._doc,
+      };
     },
 
     async SignIn(
@@ -100,102 +102,69 @@ const userResolvers: Resolvers = {
       { email, password }: SignInMutationVariables,
       { res }: { res: NextApiResponse }
     ) {
-      try {
-        const lowerCaseEmail = email.toLowerCase();
-        //check if there is any user with given email
-        const existingUser = await User.findOne({
-          email: lowerCaseEmail,
-        });
-        //check if there is not any user with this email
-        if (!existingUser) {
-          throw new ApolloError(
-            "User could not be found.",
-            "Please register first"
-          );
-        }
+      const lowerCaseEmail = email.toLowerCase();
+      const existingUser = await User.findOne({
+        email: lowerCaseEmail,
+      });
 
-        //Compare the pssword with hashed password
-        const doesPasswordMatch = await bcrypt.compareSync(
-          password,
-          existingUser.password
-        );
-
-        //if the passwords do not match
-        if (!doesPasswordMatch) {
-          throw new GraphQLError(
-            "You are not authorized to perform this action.",
-            {
-              extensions: {
-                code: "FORBIDDEN",
-              },
-            }
-          );
-        }
-
-        const token = await storeJwt({
-          user: existingUser.email,
-          id: existingUser._id,
-        });
-
-        if (!token) {
-          return null;
-        }
-        await existingUser.set("token", token).save();
-        // //Set a token to cookie
-        await storeCookie({ token }, res, 60 * 60 * 60);
-        //finally return the token
-        return { token };
-      } catch (err: any) {
-        console.log(err);
-        throw new ApolloError(err?.message ? err.message : err);
+      if (!existingUser) {
+        throw new ApolloError("User could not be found. Please register first");
       }
+
+      const doesPasswordMatch = bcrypt.compareSync(
+        password,
+        existingUser.password
+      );
+
+      if (!doesPasswordMatch) {
+        throw new ApolloError("You are not authorized to perform this action.");
+      }
+
+      const token = await storeJwt({
+        user: existingUser.email,
+        id: existingUser._id,
+      });
+
+      if (!token) {
+        return null;
+      }
+      await existingUser.set("token", token).save();
+      await storeCookie({ token }, res, 60 * 60 * 60);
+      return { token };
     },
-    //signOut user
+
     async SignOut(_: any, __: any, { res }: { res: NextApiResponse }) {
-      try {
-        await deleteCookie(["token"], res);
-        return "User signed Out";
-      } catch (err) {
-        throw new ApolloError("Error deleting cookie");
-      }
+      await deleteCookie(["token"], res);
+      return "User signed Out";
     },
-    async SignInWithGoogle(
-      _: any,
-      __: any,
-      { req }: { req: NextApiRequest }
-    ) {},
+
+    async SignInWithGoogle(_: any, __: any, { req }: { req: NextApiRequest }) {
+      // Implementation needed
+    },
+
     async SignUpWithGoogle(
       _: any,
       __: any,
       { req, res }: { req: NextApiRequest; res: NextApiResponse }
-    ) {},
+    ) {
+      // Implementation needed
+    },
 
     async UpdateUser(
       __: any,
       { email, id }: MutationUpdateUserArgs,
       context: NextPageContext & { user: object }
     ) {
-      try {
-        const doc = await User.findById(id);
+      const doc = await User.findById(id);
 
-        if (!doc) {
-          throw new ApolloError("User not found", "USER_NOT_FOUND");
-        }
-
-        doc.username = email;
-        await doc.save();
-
-        if (!context.user) {
-          return {};
-        }
-
-        return doc;
-      } catch (err) {
-        throw new ApolloError(
-          err?.message || "Failed to update user",
-          "UPDATE_USER_FAILED"
-        );
+      if (!doc) {
+        throw new ApolloError("User not found", "USER_NOT_FOUND");
       }
+
+      doc.username = email;
+      await doc.save();
+
+      return doc;
     },
 
     async UpdatePassword(
@@ -203,126 +172,110 @@ const userResolvers: Resolvers = {
       { token, newPass, userId }: UpdatePasswordMutationVariables,
       { req }: { req: NextApiRequest }
     ) {
-      try {
-        if (!token || !newPass || !userId) {
-          return null;
-        }
-
-        const user = await User.findOne({ _id: userId, token });
-
-        if (!user) {
-          throw new ApolloError("User not found or token is invalid");
-        }
-
-        const decoded = JWT.verify(token, "MY_SECRET") as { email: string };
-
-        if (!decoded) {
-          throw new ApolloError("Token is not valid");
-        }
-
-        const email = decoded.email.toLowerCase();
-        const hashedPass = await bcrypt.hash(newPass, 10);
-
-        if (!hashedPass) {
-          throw new ApolloError("Error when hashing the password");
-        }
-
-        const doc = await User.findOneAndUpdate(
-          { email },
-          { password: hashedPass },
-          { new: true } // To return the updated document
-        );
-
-        if (!doc) {
-          throw new ApolloError("User not found");
-        }
-
-        user.token = null;
-        user.save();
-
-        return doc;
-      } catch (err) {
-        throw new ApolloError(err?.message || err);
+      if (!token || !newPass || !userId) {
+        return null;
       }
+
+      const user = await User.findOne({ _id: userId, token });
+
+      if (!user) {
+        throw new ApolloError("User not found or token is invalid");
+      }
+
+      const decoded = JWT.verify(token, "MY_SECRET") as { email: string };
+      if (!decoded) {
+        throw new ApolloError("Token is not valid");
+      }
+
+      const email = decoded.email.toLowerCase();
+      const hashedPass = await bcrypt.hash(newPass, 10);
+      const doc = await User.findOneAndUpdate(
+        { email },
+        { password: hashedPass },
+        { new: true }
+      );
+
+      if (!doc) {
+        throw new ApolloError("User not found");
+      }
+
+      user.token = null;
+      user.save();
+
+      return doc;
     },
 
     async SendResetPassword(_: any, { email }: { email: string }) {
-      try {
-        const doc = await User.findOne({ email: email.toLowerCase() });
-        if (!doc) {
-          return null;
-        }
-
-        const token = JWT.sign({ email, id: doc._id }, "MY_SECRET");
-
-        const sender = "emad.askari@gmail.com";
-        //  Process a POST request
-        const msg = {
-          to: email, // Change to your recipient
-          from: sender, // Change to your verified sender
-          subject: "Costumer request",
-          templateId: "d-a67f652d66a84353abe2760295691596",
-          dynamicTemplateData: {
-            id: doc._id,
-            token,
-            user: doc.email,
-          },
-        };
-
-        //Send a mail to the user
-
-        const api_key: string | undefined = process.env.SENDGRID_API_KEY;
-
-        sgMail.setApiKey(api_key as string);
-        await sgMail.send(msg);
-
-        doc.token = token;
-        doc.save();
-        return doc;
-      } catch (err: any) {
-        throw new ApolloError(err?.message || "Couldnt send the message");
+      const doc = await User.findOne({ email: email.toLowerCase() });
+      if (!doc) {
+        return null;
       }
+
+      const token = JWT.sign({ email, id: doc._id }, "MY_SECRET");
+      const msg = {
+        to: email,
+        from: "emad.askari@gmail.com",
+        subject: "Costumer request",
+        templateId: "d-a67f652d66a84353abe2760295691596",
+        dynamicTemplateData: {
+          id: doc._id,
+          token,
+          user: doc.email,
+        },
+      };
+
+      const api_key = process.env.SENDGRID_API_KEY!;
+      sgMail.setApiKey(api_key);
+      await sgMail.send(msg);
+
+      doc.token = token;
+      doc.save();
+      return doc;
     },
+
     async AddAddress(
       __: any,
-      { address }: AddCostumerAddressMutationVariables,
+      args: MutationAddAddressArgs,
       context: NextPageContext & { sub: string }
-    ) {
-      try {
-        const doc = await User.findById(context.sub);
-        await doc.$set({
-          myArray: [{ name: address }],
-        });
-        await doc.save();
-        return doc;
-      } catch (err) {
-        throw new ApolloError("Couldnt save the address");
+    ): Promise<User | null> {
+      const { address } = args;
+
+      if (!address) {
+        throw new ApolloError("Address is required");
       }
+
+      const doc = await User.findById(context.sub);
+      if (!doc) {
+        throw new ApolloError("User not found", "USER_NOT_FOUND");
+      }
+
+      await doc.$set({
+        myArray: [{ name: address }],
+      });
+      await doc.save();
+
+      return doc;
     },
+
     async EditUserInfoItem(
       _: any,
       { name, value }: EditUserInfoItemMutationVariables,
       { userId }: { userId: string }
     ) {
-      try {
-        if (!userId) {
-          return null;
-        }
-        const id = new mongoose.Types.ObjectId(userId);
-        const user = await User.findOneAndUpdate(
-          { _id: id },
-          { $set: { name: value } },
-          { new: true } // To return the updated document
-        );
-
-        if (!user) {
-          throw new ApolloError("User not found");
-        }
-
-        return user;
-      } catch (err) {
-        throw new ApolloError(err?.message || err);
+      if (!userId) {
+        return null;
       }
+      const id = new mongoose.Types.ObjectId(userId);
+      const user = await User.findById(id).populate("restaurant");
+
+      if (!user) {
+        throw new ApolloError("User not found", "USER_NOT_FOUND");
+      }
+
+      (user as any)[name] = value;
+      await user.save();
+
+      return user;
     },
   },
 };
