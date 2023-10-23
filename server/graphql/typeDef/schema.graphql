@@ -1,7 +1,37 @@
-union CostumerMenuChoises = OrderItem | MenuItem
-union SaveCookie = CookieSuccess | CookieError
-union InfoItem = User | Restaurant
 scalar Date
+
+type Address {
+  first: String!
+  secound: String!
+}
+
+type AdminOrder {
+  orderQuantity: Int
+  id: ID
+  costumer: Costumer
+  product: MenuItem
+  restaurant: String
+  _id: ID
+  date: Date
+  description: String
+  extra: [ExtraItem]
+}
+
+type Analistic {
+  _id: ID
+  sum: Int
+}
+
+type Category {
+  _id: String
+  sum: Int
+}
+
+type CategoryParent {
+  categorizedByTags: [Category]
+  categorizedByName: [Category]
+  categorizedByDate: [Category]
+}
 
 type CookieError {
   message: String!
@@ -10,19 +40,88 @@ type CookieError {
 type CookieSuccess {
   message: String
 }
-type Address {
-  first: String!
-  secound: String!
+
+union CostumerMenuChoises = OrderItem | MenuItem
+
+type Costumer {
+  name: String
+  table: Int
+  email: String
+  _id: ID
 }
-type UploadedFileResponse {
-  filename: String!
-  mimetype: String!
-  encoding: String!
+
+type CostumerAddress {
+  title: String
+  city: String
+  region: String
+  postNumber: Int
+  address: String
 }
+
+type ExtraItem {
+  name: String
+  price: Int
+  quantity: Int
+  id: ID
+  _id: ID
+}
+
+union InfoItem = User | Restaurant
+
+type Location {
+  type: String!
+  coordinates: [Float!]
+}
+
+type Menu {
+  restaurant: Restaurant
+  category: [MenuParent]
+  _id: ID
+}
+
+type MenuParent {
+  itemName: String
+  collectionType: String
+  item: [MenuItem]
+  restaurant: Restaurant
+  image: String
+  _id: ID
+  subCategory: [String]
+  parent: String
+  extra: [ExtraItem]
+}
+
+type MenuItem {
+  name: String
+  itemsType: String
+  price: Int
+  description: String
+  quantity: Int
+  availability: Boolean
+  _id: ID
+  id: ID
+  restaurant: String
+  category: String
+  orderQuantity: Int
+  images: [String]
+  subCat: [String]
+  extra: [ExtraItem]
+}
+
 type Message {
   content: String
   id: ID
   user: String
+}
+
+type OrderHistory {
+  costumer: Costumer
+  products: [MenuItem]
+  restaurant: String
+  date: Date
+  _id: ID
+  createdAt: Date
+  price: Float
 }
 
 type OrderItem {
@@ -34,6 +133,7 @@ type OrderItem {
   _id: ID
   extra: [ExtraItem]
 }
+
 type PayedItem {
   costumer: Costumer
   product: MenuItem
@@ -44,31 +144,6 @@ type PayedItem {
   orderQuantity: Int
   description: String
   extra: [ExtraItem]
-}
-type OrderHistory {
-  costumer: Costumer
-  products: [MenuItem]
-  restaurant: String
-  date: Date
-  _id: ID
-  createdAt: Date
-  price: Float
-}
-type MenuSubItem {
-  _id: MenuItem
-}
-
-type User {
-  name: String!
-  email: String!
-  password: String!
-  token: String!
-  _id: ID!
-  isAdmin: Boolean!
-  restaurant: Restaurant!
-}
-type myArray {
-  name: String!
 }
 
 type Restaurant {
@@ -87,101 +162,7 @@ type Restaurant {
   foodTypes: String
 }
 
-type Location {
-  type: String!
-  coordinates: [Float!]
-}
-
-type Token {
-  token: String!
-}
-type Costumer {
-  name: String
-  table: Int
-  email: String
-  _id: ID
-}
-type MenuItem {
-  name: String
-  itemsType: String
-  price: Int
-  description: String
-  quantity: Int
-  availability: Boolean
-  _id: ID
-  id: ID
-  restaurant: String
-  category: String
-  orderQuantity: Int
-  images: [String]
-  subCat: [String]
-  extra: [ExtraItem]
-}
-type MenuParent {
-  itemName: String
-  collectionType: String
-  item: [MenuItem]
-  restaurant: Restaurant
-  image: String
-  _id: ID
-  subCategory: [String]
-  parent: String
-  extra: [ExtraItem]
-}
-type ExtraItem {
-  name: String
-  price: Int
-  quantity: Int
-  id: ID
-  _id: ID
-}
-type AdminOrder {
-  orderQuantity: Int
-  id: ID
-  costumer: Costumer
-  product: MenuItem
-  restaurant: String
-  _id: ID
-  date: Date
-  description: String
-  extra: [ExtraItem]
-}
-type Analistic {
-  _id: ID
-  sum: Int
-}
-
-type Category {
-  _id: String
-  sum: Int
-}
-type CategoryParent {
-  categorizedByTags: [Category]
-  categorizedByName: [Category]
-  categorizedByDate: [Category]
-}
-
-input MenuItemInput {
-  name: String
-  itemsType: String
-  price: Int
-  description: String
-  quantity: Int
-  availability: Boolean
-}
-
-type Menu {
-  restaurant: Restaurant
-  category: [MenuParent]
-  _id: ID
-}
-type CostumerAddress {
-  title: String
-  city: String
-  region: String
-  postNumber: Int
-  address: String
-}
+union SaveCookie = CookieSuccess | CookieError
 
 type SellInfo {
   _id: ID
@@ -191,25 +172,35 @@ type SellInfo {
   items: [MenuItem]
   costumer: Costumer
 }
+
+type Token {
+  token: String!
+}
+
+type UploadedFileResponse {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type User {
+  name: String!
+  email: String!
+  password: String!
+  token: String!
+  _id: ID!
+  isAdmin: Boolean!
+  restaurant: Restaurant!
+}
+
+# Inputs
+
 input CostumerAddressInput {
   title: String
   city: String
   region: String
   postNumber: Int
   address: String
-}
-input MenuParentInput {
-  id: Int!
-  itemName: String!
-  collectionType: String!
-  item: [MenuItemInput!]
-}
-input MenuItemInput {
-  id: String
-  price: Int
-  description: String
-  name: String
-  images: [String]
 }
 
 input ExtraItemInput {
@@ -218,23 +209,41 @@ input ExtraItemInput {
   quantity: Int
   _id: ID
 }
+
 input LocationInput {
   mytype: String!
   coordinates: [Int!]
 }
+
+input MenuParentInput {
+  id: Int!
+  itemName: String!
+  collectionType: String!
+  item: [MenuItemInput!]
+}
+
+input MenuItemInput {
+  id: String
+  price: Int
+  description: String
+  name: String
+  images: [String]
+}
+
 input RegisterInput {
   email: String!
   password: String!
 }
-# type Subscription {
-#   messages: [Message]
-# }
+
+# Queries
 
 type Query {
-  messages: [Message!]
-  CurrentUser: User
-  Restaurants: [Restaurant]
+  AdminOrders: [PayedItem]
+  Address: CostumerAddress
   Costumer: Costumer
+  CostumerOrders(restaurant: String!): [OrderItem]!
+  CurrentUser: User
+  FetchAllMenuItems(restaurant: String!): [MenuItem]!
   Menu(restaurant: String!): [MenuParent]
   MenuByCategory(restaurant: String): [MenuParent]
   MenuBySubCategory(restaurant: String!, subCategory: String): [MenuParent]
@@ -245,20 +254,35 @@ type Query {
   MenuItemCount(category: String!, restaurant: String!): OrderItem
   OrderItems: OrderItem
   Orders(restaurant: String!): [OrderItem]!
-  CostumerOrders(restaurant: String!): [OrderItem]!
-  AdminOrders: [PayedItem]
-  Address: CostumerAddress
   PayedOrders(restaurant: String!): [OrderHistory]!
-  FetchAllMenuItems(restaurant: String!): [MenuItem]!
+  Restaurants: [Restaurant]
+  messages: [Message!]
 }
-
+#Mutations
 type Mutation {
-  CreateUser(email: String!, password: String!, username: String!): User!
-  SignIn(email: String!, password: String!): Token!
-  SignInWithGoogle: User
-  SignUpWithGoogle: User
-  UpdateUser(id: String!, email: String!): User!
   AddAddress(address: String!): User!
+  AddCostumer(name: String!, table: Int!, email: String!): Costumer
+  AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
+  AddExtraItem(id: ID, orderItem: [ExtraItemInput], description: String): String
+  AddMenu(category: [MenuParentInput!], restaurant: String!): Menu
+  AddMenuCategory(
+    name: String!
+    image: String!
+    restaurant: String!
+    parent: String!
+  ): MenuParent
+  AddMenuItem(
+    restaurant: String!
+    category: String!
+    input: MenuItemInput
+    subCat: [String]
+  ): MenuItem
+  AddMenuItemSubCategory(
+    cat: String!
+    id: String!
+    restaurant: String!
+  ): MenuItem
+  AddOrder(productId: ID!): [AdminOrder]!
   AddRestaurant(
     name: String!
     owner: String!
@@ -271,31 +295,41 @@ type Mutation {
     rating: Int!
     id: String!
   ): Restaurant!
-  AddCostumer(name: String!, table: Int!, email: String!): Costumer
-  FetchRestaurantsByQuery(searchQuery: String): [Restaurant]
-  AddMenu(category: [MenuParentInput!], restaurant: String!): Menu
-  AddMenuItem(
+  AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
+  AddSubCategory(cat: String!, id: String!, restaurant: String!): MenuParent
+  CostumerExpiry: CookieSuccess
+  CreateUser(email: String!, password: String!, username: String!): User!
+  DeleteCostumer(costumerId: String): Costumer
+  DeleteItemFromAdminList(itemId: String, costumerId: String): String
+  DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
+  DeleteMenuItemSubCategory(
+    cat: String!
+    id: String!
     restaurant: String!
-    category: String!
-    input: MenuItemInput
-    subCat: [String]
   ): MenuItem
+  EditRestaurantInfoItem(name: String!, value: String!): Restaurant
+  EditUserInfoItem(name: String!, value: String!): User
+  EmitSocket: OrderItem
+  FetchRestaurantsByQuery(searchQuery: String): [Restaurant]
+  GetAnalistics(year: Int): [Analistic]
+  GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
+  GetCostumerOrders(restaurant: String!): [OrderItem]!
+  GetOrderItem(productId: ID!, restaurant: String!): OrderItem
+  GetRapport(beginDate: Date, finishDate: Date): [CategoryParent]
+  Pay(restaurant: String!, products: [String!], price: Float!): SellInfo!
+  PostMessage(user: String!, content: String!): ID!
+  RemoveOrder(productId: ID!): [AdminOrder]!
+  SendResetPassword(email: String!): User!
+  SignIn(email: String!, password: String!): Token!
+  SignInWithGoogle: User
   SignOut: String
   SignOutCostumer: String
-  AddMenuCategory(
-    name: String!
-    image: String!
-    restaurant: String!
-    parent: String!
-  ): MenuParent
-  AddOrder(productId: ID!): [AdminOrder]!
-  RemoveOrder(productId: ID!): [AdminOrder]!
-  GetOrderItem(productId: ID!, restaurant: String!): OrderItem
-  CostumerExpiry: CookieSuccess
-  DeleteCostumer(costumerId: String): Costumer
-  EmitSocket: OrderItem
-  PostMessage(user: String!, content: String!): ID!
-  GetCostumerOrders(restaurant: String!): [OrderItem]!
+  SignUpWithGoogle: User
+  UpdateCategory(
+    category: String
+    image: String
+    categoryId: String!
+  ): MenuParent!
   UpdateMenuItems(
     productId: ID!
     restaurant: String!
@@ -303,32 +337,5 @@ type Mutation {
     input: MenuItemInput
   ): MenuItem!
   UpdatePassword(token: String!, newPass: String!, userId: String!): User!
-  SendResetPassword(email: String!): User!
-  UpdateCategory(
-    category: String
-    image: String
-    categoryId: String!
-  ): MenuParent!
-  Pay(restaurant: String!, products: [String!], price: Float!): SellInfo!
-  AddCostumerAddress(address: CostumerAddressInput): CostumerAddress
-  EditUserInfoItem(name: String!, value: String!): User
-  EditRestaurantInfoItem(name: String!, value: String!): Restaurant
-  AddSellInfo(price: Float!, restaurant: String!, items: [String]!): SellInfo!
-  GetAnalistics(year: Int): [Analistic]
-  GetRapport(beginDate: Date, finishDate: Date): [CategoryParent]
-  GetBillInfo(restaurant: String!, recieptId: String!): OrderHistory!
-  DeleteMenuCategory(categoryId: String!, restaurant: String!): String!
-  AddSubCategory(cat: String!, id: String!, restaurant: String!): MenuParent
-  AddMenuItemSubCategory(
-    cat: String!
-    id: String!
-    restaurant: String!
-  ): MenuItem
-  DeleteMenuItemSubCategory(
-    cat: String!
-    id: String!
-    restaurant: String!
-  ): MenuItem
-  AddExtraItem(id: ID, orderItem: [ExtraItemInput], description: String): String
-  DeleteItemFromAdminList(itemId: String, costumerId: String): String
+  UpdateUser(id: String!, email: String!): User!
 }
