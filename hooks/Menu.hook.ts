@@ -69,7 +69,9 @@ export function useMenu() {
     FetchAllMenuItemsQuery,
     FetchAllMenuItemsQueryVariables
   >(GET_ALL_MENU_ITEMS, {
-    variables: { restaurant: "Göteburgare" },
+    variables: {
+      restaurant: (query?.restaurant as string) || (query?.name as string),
+    },
   });
 
   const [updateCategory] = useMutation<

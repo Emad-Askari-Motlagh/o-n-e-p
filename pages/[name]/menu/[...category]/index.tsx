@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useQuery } from "@apollo/client";
-import { motion } from "framer-motion";
 import styles from "./styles.module.scss";
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "@/components/PrimaryLayout";

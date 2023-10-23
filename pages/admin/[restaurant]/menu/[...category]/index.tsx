@@ -7,7 +7,7 @@ import styles from "./styles.module.scss";
 import Modall from "@/components/Modal";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
-import useMenu from "hooks/Menu.hook";
+import { useMenu } from "hooks/Menu.hook";
 import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -30,9 +30,7 @@ export default function Category() {
   );
   const currentCat = query?.category?.[query?.category?.length - 1];
   const {
-    menuItesmData,
     menuItemsLoading,
-    menuItemsError,
     deleteCategory,
     saveMenuItem,
     addCategory,
@@ -43,14 +41,14 @@ export default function Category() {
     itemSaved,
     documentSaved,
     menuBySubCategoryData,
-    menuBySubCategoryError,
-    menuBySubCategoryLoading,
     addCategoryData,
     setIsModalOpen,
     errorOnSavingItem,
     allItems,
     AddSubCatToMenuItem,
     deleteSubCatToMenuItem,
+
+    menuItemsData,
   } = useMenu();
 
   const options = useRef([
@@ -130,8 +128,8 @@ export default function Category() {
     )
   );
 
-  const MenuEditorComponent = menuItesmData?.MenuItemByCategory?.length
-    ? menuItesmData?.MenuItemByCategory?.map((res) => {
+  const MenuEditorComponent = menuItemsData?.MenuItemByCategory?.length
+    ? menuItemsData?.MenuItemByCategory?.map((res) => {
         if (res.__typename === "MenuItem")
           return (
             <MenuEditor

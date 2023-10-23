@@ -1,9 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import {
-  GET_MENU_CATREGORY,
-  GET_MENU_ITEM_BY_CATREGORY,
-} from "server/graphql/querys/querys.graphql";
+import React, { useState } from "react";
+import { GET_MENU_CATREGORY } from "server/graphql/querys/querys.graphql";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
@@ -22,7 +19,6 @@ import {
 import { IoMdAddCircle } from "react-icons/io";
 import Modall from "@/components/Modal";
 import AddCategory from "@/components/AddCategory";
-import Header_animations from "@/components/FramerHelper/Header_animations";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 
