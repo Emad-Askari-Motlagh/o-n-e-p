@@ -1,5 +1,5 @@
 import PrimaryLayout from "@/components/PrimaryLayout";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { useMutation } from "@apollo/client";

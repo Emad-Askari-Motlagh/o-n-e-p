@@ -6,7 +6,7 @@ import {
 } from "@/server/graphql/querys/mutations.graphql";
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import React, { ReactNode } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";

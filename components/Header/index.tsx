@@ -12,7 +12,7 @@ import {
 } from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import {
   CostumerQueryResult,
   CurrentUserQueryResult,

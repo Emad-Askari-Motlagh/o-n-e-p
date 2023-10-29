@@ -1,4 +1,4 @@
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import React from "react";
 
 function withAuthState<P>(Component: React.ComponentType<P>) {

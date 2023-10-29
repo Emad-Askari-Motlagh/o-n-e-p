@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
 import Header_animations from "@/components/FramerHelper/Header_animations";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import Input from "components/Input";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";

@@ -7,7 +7,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
 import ErrorCard from "@/components/ErrorCard";

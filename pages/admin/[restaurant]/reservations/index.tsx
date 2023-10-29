@@ -4,7 +4,7 @@ import PrimaryLayout from "@/components/PrimaryLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { GiConfirmed } from "react-icons/gi";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import ErrorCard from "@/components/ErrorCard";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { RiReservedLine } from "react-icons/ri";

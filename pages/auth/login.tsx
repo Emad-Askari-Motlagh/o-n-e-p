@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik } from "formik";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
 import Input from "components/Input";

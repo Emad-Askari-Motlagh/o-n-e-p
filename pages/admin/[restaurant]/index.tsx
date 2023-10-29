@@ -13,7 +13,7 @@ import {
   EDIT_RESTAURANT_INFO_ITEM,
   EDIT_USER_INFO_ITEM,
 } from "@/server/graphql/querys/mutations.graphql";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import styles from "./style.module.scss";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";

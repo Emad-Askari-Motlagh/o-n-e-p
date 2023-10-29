@@ -10,8 +10,9 @@ import Costumer from "server/mongoSchema/costumerSchema";
 import { I_CostumerDocument } from "server/mongoSchema/costumerSchema";
 import Link from "next/link";
 import { CgSelect } from "react-icons/cg";
-import useAuth from "hooks/useAuth";
+import useAuth from "hooks/Auth.hook";
 import AnimatedHeader from "@/components/AnimatedHeader";
+import dbInit from "@/lib/dbInit";
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
 }
@@ -40,6 +41,13 @@ const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
           email,
           table,
           name,
+        },
+        onCompleted: () => {
+          setIsRegistered(true);
+          setError(null);
+          setTimeout(() => {
+            Router.reload();
+          }, 1000);
         },
       });
     } catch (err: any) {
