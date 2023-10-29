@@ -1,23 +1,16 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useMutation } from "@apollo/client";
 import { NextApiRequest } from "next";
 import styles from "./styles.module.scss";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import RegisterForm from "components/CostumerRegistration";
 import ErrorCard from "components/ErrorCard";
 import SucceedMessage from "@/components/Succeed-Message";
-import { ADD_COSTUMER } from "server/graphql/querys/mutations.graphql";
-import dbInit from "lib/dbInit";
 import Costumer from "server/mongoSchema/costumerSchema";
 import { I_CostumerDocument } from "server/mongoSchema/costumerSchema";
-import {
-  AddCostumerMutation,
-  AddCostumerMutationVariables,
-} from "@/server/generated/graphql";
-import AnimatedHeader from "@/components/AnimatedHeader";
 import Link from "next/link";
 import { CgSelect } from "react-icons/cg";
+import useAuth from "hooks/useAuth";
 
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
@@ -30,20 +23,11 @@ interface AlternativesItemProps {
 const Restaurant: React.FC<RestaurantProps> = ({ COSTUMER }) => {
   const [error, setError] = useState<string | null>(null);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const [addCostumer] = useMutation<
-    AddCostumerMutation,
-    AddCostumerMutationVariables
-  >(ADD_COSTUMER, {
-    onCompleted: () => {
-      setIsRegistered(true);
-      setError(null);
-      setTimeout(() => {
-        Router.reload();
-      }, 1000);
-    },
-  });
-  const Router = useRouter();
 
+  const Router = useRouter();
+  const {
+    addCostumerMutation: [addCostumer],
+  } = useAuth();
   const submitForm = async (values: {
     email: string;
     table: number;

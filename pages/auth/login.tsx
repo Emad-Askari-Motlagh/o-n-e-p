@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik } from "formik";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
 import Input from "components/Input";
@@ -18,7 +18,7 @@ import AnimatedHeader from "@/components/AnimatedHeader";
 export default function Login() {
   const [error, setError] = useState<string | null>("");
   const [loginSuccesed, setLoginSuccesed] = useState(false);
-  const { signIn, signInError } = useUser();
+  const { signIn, signInError } = useAuth();
   const Router = useRouter();
 
   const { handleChange, handleSubmit, values, touched, errors } = useFormik({

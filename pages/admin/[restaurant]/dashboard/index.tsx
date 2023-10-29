@@ -1,5 +1,5 @@
 import PrimaryLayout from "@/components/PrimaryLayout";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { useMutation, useQuery } from "@apollo/client";
@@ -25,12 +25,13 @@ export default function Dashboard() {
   const router = useRouter();
   const {
     user: { data: userData },
-  } = useUser();
+  } = useAuth();
 
   const [getAnalistics, { data: analisticsData }] = useMutation<
     GetAnalisticsMutation,
     GetAnalisticsMutationVariables
   >(GET_ANALISTICS);
+
   useEffect(() => {
     getAnalistics({
       variables: {

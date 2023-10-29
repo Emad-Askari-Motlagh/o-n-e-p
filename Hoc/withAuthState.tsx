@@ -1,9 +1,9 @@
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import React from "react";
 
 function withAuthState<P>(Component: React.ComponentType<P>) {
   const ComponentWithState = (props: P & JSX.IntrinsicAttributes) => {
-    const { signOut, user, costumerData, signOutCostumer } = useUser();
+    const { signOut, user, costumerData, signOutCostumer } = useAuth();
     return (
       <Component
         {...props}

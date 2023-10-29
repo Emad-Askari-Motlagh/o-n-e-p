@@ -13,7 +13,7 @@ import {
   EDIT_RESTAURANT_INFO_ITEM,
   EDIT_USER_INFO_ITEM,
 } from "@/server/graphql/querys/mutations.graphql";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import styles from "./style.module.scss";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { IRestaurant } from "@/server/mongoSchema/restaurantSchema";
@@ -40,7 +40,7 @@ interface UserInfo {
 
 const Profile: React.FC<ProfileProps> = ({ RES }: ProfileProps) => {
   const res: IRestaurant = JSON.parse(RES);
-  const { user } = useUser();
+  const { user } = useAuth();
   const userInfo = user.data?.CurrentUser as UserInfo;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
 

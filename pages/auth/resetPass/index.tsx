@@ -7,7 +7,6 @@ import styles from "./style.module.scss";
 import { FiKey } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { NextApiRequest, NextApiResponse } from "next";
-import axios from "axios";
 import { ApolloError, useMutation } from "@apollo/client";
 import {
   SEND_RESET_PASSWORD,

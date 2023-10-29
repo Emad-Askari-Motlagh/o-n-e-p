@@ -3,7 +3,7 @@ import { NextApiRequest } from "next";
 import { decodeJwt } from "@/lib/storeJwt";
 import userSchema from "@/server/mongoSchema/userSchema";
 
-export default function Admin() {
+export default function Admin(): null {
   return null;
 }
 

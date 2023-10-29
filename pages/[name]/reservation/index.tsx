@@ -7,7 +7,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import { BiTrash } from "react-icons/bi";
 import SucceedMessage from "@/components/Succeed-Message";
 import ErrorCard from "@/components/ErrorCard";
@@ -25,7 +25,7 @@ const Reservation = () => {
   const [isSaved, setIsSaved] = useState(false);
   const url = `${process.env.SERVER_LINK}/api/reservation/${query.name}`;
   const formRef = useRef();
-  const { costumerData } = useUser();
+  const { costumerData } = useAuth();
   useEffect(() => {
     fetchReservations();
     async function fetchReservations() {

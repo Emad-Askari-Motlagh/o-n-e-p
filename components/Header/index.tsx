@@ -12,7 +12,7 @@ import {
 } from "react-icons/cg";
 import Link from "next/link";
 import captalizeFirstChar from "lib/captalizeFirstChar";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import {
   CostumerQueryResult,
   CurrentUserQueryResult,
@@ -33,7 +33,7 @@ const Header: FC<HeaderProps> = (props) => {
     loading: costumerLoading,
   } = props.costumer;
 
-  const { user } = useUser();
+  const { user } = useAuth();
   const homeEndPoint = user.data?.CurrentUser
     ? `/admin/${user.data.CurrentUser.restaurant.name}`
     : "/";

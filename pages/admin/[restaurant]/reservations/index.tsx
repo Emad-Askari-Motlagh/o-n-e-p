@@ -4,7 +4,7 @@ import PrimaryLayout from "@/components/PrimaryLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { GiConfirmed } from "react-icons/gi";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import ErrorCard from "@/components/ErrorCard";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { RiReservedLine } from "react-icons/ri";
@@ -16,7 +16,7 @@ const Reservation = () => {
   const [hasData, setDataStatus] = useState(true);
   const { query } = useRouter();
   const [loading, setLoading] = useState(false);
-  const { user } = useUser();
+  const { user } = useAuth();
   const [error, setError] = useState("");
   const url = `/api/admin/reservations/${query.restaurant}`;
   useEffect(() => {

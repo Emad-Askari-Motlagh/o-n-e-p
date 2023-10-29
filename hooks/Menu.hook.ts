@@ -17,6 +17,7 @@ import {
   GET_ALL_MENU_ITEMS,
   GET_MENU_ITEM_BY_CATREGORY,
   GET_MENU_BY_SUB_CATEGORY,
+  GET_MENU_CATREGORY,
 } from "server/graphql/querys/querys.graphql";
 
 import {
@@ -40,6 +41,8 @@ import {
   UpdateCategoryMutationVariables,
   UpdateMenuItemsMutation,
   UpdateMenuItemsMutationVariables,
+  MenuByCategoryQuery,
+  MenuByCategoryQueryVariables,
 } from "@/server/generated/graphql";
 import { GraphQLError } from "graphql";
 
@@ -50,7 +53,7 @@ export function useMenu() {
   const [itemSaved, setIsItemSaved] = useState(false);
 
   const currentCat = query?.category?.[query?.category?.length - 1];
-
+  const Router = useRouter();
   const handleCompleted = useCallback(() => {
     setIsItemSaved(true);
     setTimeout(() => {
@@ -64,7 +67,30 @@ export function useMenu() {
       console.error(error.extensions);
     });
   }, []);
-
+  const menuItemByCategory = useQuery<
+    MenuItemByCategoryQuery,
+    MenuItemByCategoryQueryVariables
+  >(GET_MENU_ITEM_BY_CATREGORY, {
+    variables: {
+      category: currentCat as string,
+      restaurant: Router.query?.name as string,
+    },
+  });
+  const menuBySubCategory = useQuery<
+    MenuBySubCategoryQuery,
+    MenuBySubCategoryQueryVariables
+  >(GET_MENU_BY_SUB_CATEGORY, {
+    variables: {
+      restaurant: Router.query?.name as string,
+      subCategory: currentCat,
+    },
+  });
+  const MenuByCategory = useQuery<
+    MenuByCategoryQuery,
+    MenuByCategoryQueryVariables
+  >(GET_MENU_CATREGORY, {
+    variables: { restaurant: Router.query?.name as string },
+  });
   const { data: allItems } = useQuery<
     FetchAllMenuItemsQuery,
     FetchAllMenuItemsQueryVariables
@@ -171,6 +197,7 @@ export function useMenu() {
     saveMenuItem,
     addCategory,
     addMenuItem,
+    menuItemByCategory,
     addSubCategory,
     updateCategory,
     isModalOpen,
@@ -185,5 +212,7 @@ export function useMenu() {
     allItems,
     AddSubCatToMenuItem,
     deleteSubCatToMenuItem,
+    MenuByCategory,
+    menuBySubCategory,
   };
 }

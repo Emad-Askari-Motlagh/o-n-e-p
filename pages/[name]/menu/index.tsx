@@ -1,27 +1,19 @@
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import RestaurantParentCard from "@/components/RestaurantParentCard";
-import { GET_MENU_CATREGORY } from "@/server/graphql/querys/querys.graphql";
-import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import styles from "./menu.module.scss";
-import {
-  MenuByCategoryQuery,
-  MenuByCategoryQueryVariables,
-} from "server/generated/graphql";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { BiCategoryAlt } from "react-icons/bi";
+import { useMenu } from "hooks/Menu.hook";
 
 export default function Menu() {
   const Router = useRouter();
-  const { data, error, loading } = useQuery<
-    MenuByCategoryQuery,
-    MenuByCategoryQueryVariables
-  >(GET_MENU_CATREGORY, {
-    variables: { restaurant: Router.query?.name as string },
-  });
+  const {
+    MenuByCategory: { data, loading, error },
+  } = useMenu();
 
   const menuItems = useMemo(() => {
     return data?.MenuByCategory ?? [];

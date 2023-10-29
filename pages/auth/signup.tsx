@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { Alert } from "react-bootstrap";
 import { useFormik, ErrorMessage } from "formik";
 import Header_animations from "@/components/FramerHelper/Header_animations";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import Input from "components/Input";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import Button from "components/Button";
@@ -15,7 +15,7 @@ import LoginSucceed from "components/Succeed-Message";
 
 export default function Signup() {
   const [error, setError] = useState(null);
-  const { signUp, signUpWithGoogle } = useUser();
+  const { signUp } = useAuth();
   const [loginSuccesed, setLoginSuccesed] = useState(false);
 
   const { handleChange, handleSubmit, values, touched, errors } = useFormik({
@@ -51,7 +51,7 @@ export default function Signup() {
     },
   });
   async function signUpGoogle() {
-    await signUpWithGoogle();
+    return null;
   }
   return (
     <motion.div

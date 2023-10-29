@@ -1,5 +1,5 @@
 import PrimaryLayout from "@/components/PrimaryLayout";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { useMutation } from "@apollo/client";
@@ -25,7 +25,7 @@ export default function Rapport() {
 
   const {
     user: { data: userData },
-  } = useUser();
+  } = useAuth();
   const [
     getAnalistics,
     { data: rapportData, loading: rapportLoading, error: rapportError },

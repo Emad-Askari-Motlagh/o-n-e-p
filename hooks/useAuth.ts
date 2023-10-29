@@ -11,12 +11,15 @@ import {
   SIGN_OUT,
   CREATE_USER,
   SIGN_OUT_COSTUMER,
+  ADD_COSTUMER,
 } from "server/graphql/querys/mutations.graphql";
-
-const authContext = createContext({});
+import {
+  AddCostumerMutation,
+  AddCostumerMutationVariables,
+} from "@/server/generated/graphql";
 
 type UserInput = { email: string; password: string; username?: string };
-export function useUser() {
+function useAuth() {
   const [authToken, setAuthToken] = useState<string | undefined>();
   const Router = useRouter();
   const client = useApollo({});
@@ -31,7 +34,10 @@ export function useUser() {
   }, [authToken]);
 
   const [signOutCostumer] = useMutation(SIGN_OUT_COSTUMER);
-
+  const addCostumerMutation = useMutation<
+    AddCostumerMutation,
+    AddCostumerMutationVariables
+  >(ADD_COSTUMER);
   const signIn = useCallback(
     async ({ email, password }: UserInput) => {
       try {
@@ -92,11 +98,8 @@ export function useUser() {
     token: authToken,
     costumerData,
     signInError,
+    addCostumerMutation,
   };
 }
-
-const useAuth = () => {
-  return useContext(authContext);
-};
 
 export default useAuth;

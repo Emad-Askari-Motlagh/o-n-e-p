@@ -1,14 +1,13 @@
 import InfoItem from "@/components/InfoItem";
 import PrimaryLayout from "@/components/PrimaryLayout";
-import SucceedMessage from "@/components/Succeed-Message";
 import {
   EDIT_RESTAURANT_INFO_ITEM,
   EDIT_USER_INFO_ITEM,
 } from "@/server/graphql/querys/mutations.graphql";
 import { GET_CURRENT_USER } from "@/server/graphql/querys/querys.graphql";
 import { gql, useMutation } from "@apollo/client";
-import { useUser } from "hooks/Context.hook";
-import React, { useEffect, useRef, useState } from "react";
+import useAuth from "hooks/useAuth";
+import React, { ReactNode } from "react";
 import styles from "./style.module.scss";
 import { CgProfile } from "react-icons/cg";
 import Head from "next/head";
@@ -18,7 +17,7 @@ export default function Profile() {
   //     name<T>:string
   // };
 
-  const { user } = useUser();
+  const { user } = useAuth();
   const userInfo = user.data?.CurrentUser;
   const refetch = { refetchQueries: [{ query: GET_CURRENT_USER }] };
 
@@ -86,7 +85,15 @@ export default function Profile() {
   );
 }
 
-const InfoParent = ({ header, children, type }) => {
+const InfoParent = ({
+  header,
+  children,
+  type,
+}: {
+  header: string;
+  children: ReactNode;
+  type: string;
+}) => {
   return (
     <div className={styles.restaurant_section}>
       <div className={styles.header_parent}>

@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import styles from "../styles/share.module.scss";
-import { AuthProvider } from "../providers/authProvider";
 import Head from "next/head";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -64,11 +63,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <title>Bestellät - Restaurants-List</title>
       </Head>
       <ApolloProvider client={client}>
-        <AuthProvider>
-          <Layout>
-            {loading ? <LoadingIndicator /> : <Component {...pageProps} />}
-          </Layout>
-        </AuthProvider>
+        <Layout>
+          {loading ? <LoadingIndicator /> : <Component {...pageProps} />}
+        </Layout>
       </ApolloProvider>
     </>
   );

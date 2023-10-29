@@ -1,6 +1,7 @@
 import {
   ADD_EXTRA_ORDER,
   DELETE_ADMIN_ORDER,
+  GET_BILL_INFO,
 } from "./../server/graphql/querys/mutations.graphql";
 
 import {
@@ -17,6 +18,11 @@ import {
   RemoveOrderMutationVariables,
   AddOrderMutationFn,
   RemoveOrderMutationFn,
+  PayedOrdersQuery,
+  PayedOrdersQueryVariables,
+  GetBillInfoMutation,
+  GetBillInfoMutationVariables,
+  OrdersQueryVariables,
 } from "server/generated/graphql";
 import { useEffect, useState } from "react";
 import {
@@ -27,6 +33,7 @@ import {
 import {
   GET_ADMIN_ORDERS,
   GET_ORDERS_CONSTANTLY,
+  GET_PAYED_ORDERS,
 } from "server/graphql/querys/querys.graphql";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -65,7 +72,17 @@ const useOrders = () => {
         refetchQueries: refetchTask,
       }
     );
+  const payedOrders = useQuery<PayedOrdersQuery, PayedOrdersQueryVariables>(
+    GET_PAYED_ORDERS,
+    {
+      variables: { restaurant: router.query?.name as string },
+    }
+  );
 
+  const getBillInfo = useMutation<
+    GetBillInfoMutation,
+    GetBillInfoMutationVariables
+  >(GET_BILL_INFO);
   const [removeOrder] = useMutation<
     RemoveOrderMutation,
     RemoveOrderMutationVariables
@@ -95,6 +112,8 @@ const useOrders = () => {
     addExtraLoading,
     addExtraError,
     DeleteItemFromAdminList,
+    payedOrders,
+    getBillInfo,
   };
 };
 

@@ -6,36 +6,23 @@ import { useRouter } from "node_modules/next/router";
 import { MdOutlineExpandMore } from "react-icons/md";
 import captalizeFirstLetter from "lib/captalizeFirstChar";
 import ErrorCard from "components/ErrorCard";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_PAYED_ORDERS } from "@/server/graphql/querys/querys.graphql";
-import { GET_BILL_INFO } from "@/server/graphql/querys/mutations.graphql";
 import Modall from "@/components/Modal";
-import {
-  GetBillInfoMutation,
-  GetBillInfoMutationVariables,
-  PayedOrdersQuery,
-  PayedOrdersQueryVariables,
-} from "@/server/generated/graphql";
 import TableData from "@/components/Table/TableData";
 import TableHeader from "@/components/Table/TableHeader";
 import HistoryItem from "@/components/HistoryItem";
 import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { BiHistory } from "react-icons/bi";
+import useOrders from "hooks/Order.hook";
 
 const OrdersHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const { data, loading } = useQuery<
-    PayedOrdersQuery,
-    PayedOrdersQueryVariables
-  >(GET_PAYED_ORDERS, {
-    variables: { restaurant: router.query?.name as string },
-  });
-  const [getInfo, { data: billInfoData }] = useMutation<
-    GetBillInfoMutation,
-    GetBillInfoMutationVariables
-  >(GET_BILL_INFO);
+
+  const {
+    payedOrders: { data, loading },
+    getBillInfo: [getInfo, { data: billInfoData }],
+  } = useOrders();
 
   function onClick(id: string) {
     setShowModal(!showModal);

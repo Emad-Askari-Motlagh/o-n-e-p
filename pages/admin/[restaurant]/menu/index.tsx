@@ -5,7 +5,7 @@ import PrimaryLayout from "@/components/PrimaryLayout";
 import styles from "./menu.module.scss";
 import CategoryEditor from "@/components/CategoryEditor";
 import useUpload from "hooks/upload.hook";
-import { useUser } from "hooks/Context.hook";
+import useAuth from "hooks/useAuth";
 import {
   ADD_MENU_CATEGORY,
   UPDATE_CATEGORY,
@@ -23,7 +23,7 @@ import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 export default function MenuItems() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [ChosenImage, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [showModal, setShowModal] = useState(false);
