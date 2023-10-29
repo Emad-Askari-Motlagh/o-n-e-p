@@ -6,7 +6,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
 import Modall from "@/components/Modal";
 import CategoryEditor from "@/components/CategoryEditor";
-import useUpload from "hooks/Upload.hook";
+import useUpload from "hooks/upload.hook";
 import { useMenu } from "hooks/Menu.hook";
 import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
