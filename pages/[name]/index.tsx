@@ -11,7 +11,7 @@ import { I_CostumerDocument } from "server/mongoSchema/costumerSchema";
 import Link from "next/link";
 import { CgSelect } from "react-icons/cg";
 import useAuth from "hooks/useAuth";
-
+import AnimatedHeader from "@/components/AnimatedHeader";
 interface RestaurantProps {
   COSTUMER: I_CostumerDocument | null;
 }

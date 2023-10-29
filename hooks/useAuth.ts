@@ -34,10 +34,12 @@ function useAuth() {
   }, [authToken]);
 
   const [signOutCostumer] = useMutation(SIGN_OUT_COSTUMER);
+
   const addCostumerMutation = useMutation<
     AddCostumerMutation,
     AddCostumerMutationVariables
   >(ADD_COSTUMER);
+
   const signIn = useCallback(
     async ({ email, password }: UserInput) => {
       try {
