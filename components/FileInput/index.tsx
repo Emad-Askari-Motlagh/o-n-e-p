@@ -1,4 +1,4 @@
-import useUpload from "hooks/Upload.hook";
+import useUpload from "hooks/Uploader.hook";
 import styles from "./styles.module.scss";
 import React, { ChangeEvent, useState } from "react";
 

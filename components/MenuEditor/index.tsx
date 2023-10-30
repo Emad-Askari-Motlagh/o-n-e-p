@@ -1,10 +1,5 @@
-import React, {
-  ChangeEvent,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from "react";
-import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
+import React, { MouseEventHandler, useState } from "react";
+import { AiOutlineEdit } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import Inputs from "./MenuItem";

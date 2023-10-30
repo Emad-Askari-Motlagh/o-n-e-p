@@ -6,7 +6,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import styles from "./styles.module.scss";
 import Modall from "@/components/Modal";
 import CategoryEditor from "@/components/CategoryEditor";
-import useUpload from "hooks/Upload.hook";
+import useUpload from "hooks/Uploader.hook";
 import { useMenu } from "hooks/Menu.hook";
 import MenuItemComponent from "@/components/SearchResult";
 import { SelectChangeEvent } from "@mui/material";
@@ -15,6 +15,7 @@ import Info from "@/components/Info";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import LoadingIndicator from "@/components/LoadingIndicator";
+
 const Selection = dynamic(() => import("@/components/Selection"), {
   loading: () => <LoadingIndicator animation />,
 });

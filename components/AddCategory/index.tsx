@@ -1,4 +1,4 @@
-import useUpload from "hooks/upload.hook";
+import useUpload from "hooks/Uploader.hook";
 import Image from "next/image";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "../Button";
