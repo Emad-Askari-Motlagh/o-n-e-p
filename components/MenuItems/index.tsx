@@ -72,7 +72,6 @@ export default function Items() {
               description={res?.description}
               name={res?.name}
               ImageSrc={"/1.webp"}
-              restaurant={restaurant}
               addOrder={() =>
                 addOrder({
                   variables: { productId: res._id },

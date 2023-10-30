@@ -23,7 +23,8 @@ function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
             objectFit="cover"
             objectPosition="center"
             src={image}
-            layout="intrinsic"></Image>
+            layout="intrinsic"
+            loading="lazy"></Image>
         )}
         <div className={styles.item}>
           <span>{label}</span>

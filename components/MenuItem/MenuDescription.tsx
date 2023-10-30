@@ -23,6 +23,7 @@ export default function MenuDescription({
         alt="Menu Item"
         height={200}
         layout="intrinsic"
+        loading="lazy"
       />
 
       <div className={styles.description}>

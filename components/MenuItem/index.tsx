@@ -29,7 +29,6 @@ const MenuItem = ({
   addOrder,
   price,
   quantity,
-  itemsChildren,
 }: MenuItemProps) => {
   const sum = price * quantity;
   return (
