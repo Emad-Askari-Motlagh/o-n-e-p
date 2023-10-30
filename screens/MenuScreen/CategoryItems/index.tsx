@@ -6,7 +6,7 @@ import { i_MenuCategoryDocument } from "server/mongoSchema/menuCategorySchema";
 export default function CategoryItems({
   items,
 }: {
-  items: [i_MenuCategoryDocument];
+  items: i_MenuCategoryDocument[];
 }) {
   return (
     <div className={styles.container}>

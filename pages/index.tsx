@@ -15,7 +15,7 @@ import ErrorCard from "@/components/ErrorCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-const Restaurants = dynamic(() => import("screens/Home.Screen"));
+const Restaurants = dynamic(() => import("@/screens/HomeScreen"));
 interface HomeProps {
   ALL_RESTAURANTS: IRestaurant[] | null;
   loading: boolean;

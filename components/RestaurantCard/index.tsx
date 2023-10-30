@@ -26,7 +26,7 @@ export default function RestaurantCard({
   openTimes,
   index,
 }: RetaurantProps) {
-  const image = (index) =>
+  const image = (index: number) =>
     index === 0 ? `url("/res1-cut.webp")` : `url("/res2-cut.webp")`;
   return (
     <div className={styles.container}>

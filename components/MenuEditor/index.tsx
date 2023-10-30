@@ -9,13 +9,9 @@ import styles from "./styles.module.scss";
 import Image from "next/image";
 import Inputs from "./MenuItem";
 import Modal from "components/Modal";
-import MenuItem from "../MenuItem";
 import MenuUpdater from "../MenuUpdater";
 import { BiMinusCircle } from "react-icons/bi";
-import {
-  DeleteMenuItemSubCategoryMutationFn,
-  UpdateMenuItemsMutationFn,
-} from "@/server/generated/graphql";
+import { UpdateMenuItemsMutationFn } from "@/server/generated/graphql";
 import Tooltip from "components/MuiTooltip";
 
 interface MenuEditor {

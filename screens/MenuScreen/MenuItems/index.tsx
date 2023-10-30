@@ -13,10 +13,6 @@ import { MenuItemByCategoryQuery } from "@/server/generated/graphql";
 import styles from "./styles.module.scss";
 import ErrorCard from "@/components/ErrorCard";
 
-interface ItemsType<P> {
-  data: P;
-}
-
 interface MenuItemExtra {
   _id: string;
   name: string;
@@ -30,11 +26,7 @@ interface MenuItemSelection {
   extra: MenuItemExtra[];
 }
 
-export default function Items({
-  items,
-}: {
-  items: ItemsType<MenuItemByCategoryQuery>;
-}) {
+export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
   const Router = useRouter();
 
   const [selectedItem, setSelectedItem] = useState<string>("Pommes");
