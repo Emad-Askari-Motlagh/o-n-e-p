@@ -14,10 +14,19 @@ import dynamic from "next/dynamic";
 import Info from "@/components/Info";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-const Selection = dynamic(() => import("@/components/Selection"));
-const AddCategory = dynamic(() => import("@/components/AddCategory"));
-const MenuAdder = dynamic(() => import("@/components/MenuAdder"));
-const ErrorCard = dynamic(() => import("@/components/ErrorCard"));
+import LoadingIndicator from "@/components/LoadingIndicator";
+const Selection = dynamic(() => import("@/components/Selection"), {
+  loading: () => <LoadingIndicator animation />,
+});
+const AddCategory = dynamic(() => import("@/components/AddCategory"), {
+  loading: () => <LoadingIndicator animation />,
+});
+const MenuAdder = dynamic(() => import("@/components/MenuAdder"), {
+  loading: () => <LoadingIndicator animation />,
+});
+const ErrorCard = dynamic(() => import("@/components/ErrorCard"), {
+  loading: () => <LoadingIndicator animation />,
+});
 
 export default function Category() {
   const { query, push, reload } = useRouter();

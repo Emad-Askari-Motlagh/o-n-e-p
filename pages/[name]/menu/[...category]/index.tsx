@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useQuery } from "@apollo/client";
 import styles from "./styles.module.scss";
 import ErrorCard from "components/ErrorCard";
 import PrimaryLayout from "@/components/PrimaryLayout";
@@ -9,13 +8,19 @@ import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { CgMenuHotdog } from "react-icons/cg";
 import { useMenu } from "hooks/Menu.hook";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 // Dynamic import the MenuItems component
-const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"));
+const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"), {
+  loading: () => <LoadingIndicator animation />,
+});
 
 // Dynamic import the CategoryItems component
 const CategoryItems = dynamic(
-  () => import("@/screens/MenuScreen/CategoryItems")
+  () => import("@/screens/MenuScreen/CategoryItems"),
+  {
+    loading: () => <LoadingIndicator animation />,
+  }
 );
 
 export default function Menu() {
