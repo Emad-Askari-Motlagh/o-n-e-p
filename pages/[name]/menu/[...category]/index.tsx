@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import styles from "./styles.module.scss";
@@ -8,18 +8,18 @@ import Head from "next/head";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { CgMenuHotdog } from "react-icons/cg";
 import { useMenu } from "hooks/Menu.hook";
-import LoadingIndicator from "@/components/LoadingIndicator";
+import SimpleLoading from "@/components/SimpleLoading";
 
 // Dynamic import the MenuItems component
 const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"), {
-  loading: () => <LoadingIndicator animation />,
+  loading: () => <SimpleLoading />,
 });
 
 // Dynamic import the CategoryItems component
 const CategoryItems = dynamic(
   () => import("@/screens/MenuScreen/CategoryItems"),
   {
-    loading: () => <LoadingIndicator animation />,
+    loading: () => <SimpleLoading />,
   }
 );
 
@@ -54,7 +54,7 @@ export default function Menu() {
         ) : menuItemsData?.MenuItemByCategory.length ? (
           <MenuItems items={menuItemsData?.MenuItemByCategory} />
         ) : (
-          !loading && <ErrorCard>Sorry</ErrorCard>
+          !loading && <ErrorCard>Sorry! couldnt find any item</ErrorCard>
         )}
       </div>
     </div>

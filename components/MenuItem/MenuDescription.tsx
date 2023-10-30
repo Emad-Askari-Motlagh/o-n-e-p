@@ -24,7 +24,6 @@ export default function MenuDescription({
         height={200}
         layout="intrinsic"
         loading="lazy"
-        priority
       />
 
       <div className={styles.description}>

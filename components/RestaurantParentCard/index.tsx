@@ -24,7 +24,6 @@ function RestaurantSubItem({ label, image, endPoint }: RestaurantSubItemProps) {
             objectPosition="center"
             src={image}
             layout="intrinsic"
-            priority
             loading="lazy"></Image>
         )}
         <div className={styles.item}>

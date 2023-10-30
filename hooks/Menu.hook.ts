@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "@apollo/client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import {
   ADD_MENU_ITEM_SUB_CATEGORY,
@@ -53,7 +53,7 @@ export function useMenu() {
   const [itemSaved, setIsItemSaved] = useState(false);
 
   const currentCat = query?.category?.[query?.category?.length - 1];
-  const Router = useRouter();
+
   const handleCompleted = useCallback(() => {
     setIsItemSaved(true);
     setTimeout(() => {
@@ -73,30 +73,28 @@ export function useMenu() {
   >(GET_MENU_ITEM_BY_CATREGORY, {
     variables: {
       category: currentCat as string,
-      restaurant: Router.query?.name as string,
+      restaurant: (query?.name as string) || (query?.name as string),
     },
   });
   const menuBySubCategory = useQuery<
     MenuBySubCategoryQuery,
     MenuBySubCategoryQueryVariables
   >(GET_MENU_BY_SUB_CATEGORY, {
-    variables: {
-      restaurant: Router.query?.name as string,
-      subCategory: currentCat,
-    },
+    variables: { restaurant: query?.name as string, subCategory: currentCat },
   });
+
   const MenuByCategory = useQuery<
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
-    variables: { restaurant: Router.query?.name as string },
+    variables: { restaurant: query?.name as string },
   });
   const { data: allItems } = useQuery<
     FetchAllMenuItemsQuery,
     FetchAllMenuItemsQueryVariables
   >(GET_ALL_MENU_ITEMS, {
     variables: {
-      restaurant: (query?.restaurant as string) || (query?.name as string),
+      restaurant: (query?.name as string) || (query?.name as string),
     },
   });
 
@@ -113,16 +111,6 @@ export function useMenu() {
     UpdateCategoryMutationVariables
   >(ADD_MENU_SUB_CATEGORY, {
     refetchQueries: [{ query: GET_MENU_BY_SUB_CATEGORY }],
-  });
-
-  const { data, error, loading } = useQuery<
-    MenuBySubCategoryQuery,
-    MenuBySubCategoryQueryVariables
-  >(GET_MENU_BY_SUB_CATEGORY, {
-    variables: {
-      restaurant: query.restaurant as string,
-      subCategory: currentCat,
-    },
   });
 
   const [addMenuItem, { error: errorOnSavingItem }] = useMutation<
@@ -203,9 +191,6 @@ export function useMenu() {
     isModalOpen,
     itemSaved,
     documentSaved,
-    menuBySubCategoryData: data,
-    menuBySubCategoryError: error,
-    menuBySubCategoryLoading: loading,
     setIsModalOpen,
     addCategoryData,
     errorOnSavingItem,

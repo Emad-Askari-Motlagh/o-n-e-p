@@ -26,7 +26,7 @@ export default function Menu() {
           key={index}
           label={res.itemName}
           endPoint={res.itemName}
-          image={res.image}
+          image={res?.image}
         />
       </li>
     );
