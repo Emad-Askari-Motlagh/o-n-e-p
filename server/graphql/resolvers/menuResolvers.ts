@@ -50,12 +50,21 @@ const menuResolvers: Resolvers = {
       _: any,
       { restaurant }: FetchAllMenuItemsQueryVariables
     ) {
-      const res = await MenuItem.aggregate([
-        {
-          $match: { restaurant },
-        },
-      ]);
-      return res;
+      try {
+        console.log("here s");
+        const res = await MenuItem.aggregate([
+          {
+            $match: { restaurant },
+          },
+        ]);
+
+        return res;
+      } catch (error) {
+        throw new ApolloError(
+          "An error occurred while fetching the all menu items",
+          "500"
+        );
+      }
     },
     async Menu(_: any, args: MenuQueryVariables, context: any) {
       try {
@@ -100,7 +109,10 @@ const menuResolvers: Resolvers = {
         return res;
       } catch (err) {
         console.log(err);
-        throw new ApolloError("An error occurred while fetching the menu", 500);
+        throw new ApolloError(
+          "An error occurred while fetching the menu",
+          "500"
+        );
       }
     },
 

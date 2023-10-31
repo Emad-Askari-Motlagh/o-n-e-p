@@ -14,19 +14,19 @@ import dynamic from "next/dynamic";
 import Info from "@/components/Info";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-import LoadingIndicator from "@/components/LoadingIndicator";
+import SimpleLoading from "@/components/SimpleLoading";
 
 const Selection = dynamic(() => import("@/components/Selection"), {
-  loading: () => <LoadingIndicator animation />,
+  loading: () => <SimpleLoading />,
 });
 const AddCategory = dynamic(() => import("@/components/AddCategory"), {
-  loading: () => <LoadingIndicator animation />,
+  loading: () => <SimpleLoading />,
 });
 const MenuAdder = dynamic(() => import("@/components/MenuAdder"), {
-  loading: () => <LoadingIndicator animation />,
+  loading: () => <SimpleLoading />,
 });
 const ErrorCard = dynamic(() => import("@/components/ErrorCard"), {
-  loading: () => <LoadingIndicator animation />,
+  loading: () => <SimpleLoading />,
 });
 
 export default function Category() {
@@ -50,7 +50,7 @@ export default function Category() {
     isModalOpen,
     itemSaved,
     documentSaved,
-    menuBySubCategoryData,
+    menuBySubCategory: menuBySubCategoryResult,
     addCategoryData,
     setIsModalOpen,
     errorOnSavingItem,
@@ -75,7 +75,7 @@ export default function Category() {
     if (allItems?.FetchAllMenuItems?.length && actionType === "import item") {
       setImportedItems([...allItems?.FetchAllMenuItems]);
     }
-  }, [actionType, allItems?.FetchAllMenuItems]);
+  }, [actionType, allItems]);
 
   const MenuItems = importedItems.map((item) => {
     return (
@@ -99,8 +99,8 @@ export default function Category() {
     );
   });
 
-  const CategoryEditorComponent = menuBySubCategoryData?.MenuBySubCategory.map(
-    (res, i) => (
+  const CategoryEditorComponent =
+    menuBySubCategoryResult.data?.MenuBySubCategory.map((res, i) => (
       <div key={res?._id}>
         <div className={styles.category_parent}>
           <CategoryEditor
@@ -135,8 +135,7 @@ export default function Category() {
           />
         </div>
       </div>
-    )
-  );
+    ));
 
   const MenuEditorComponent = menuItemsData?.MenuItemByCategory?.length
     ? menuItemsData?.MenuItemByCategory?.map((res) => {
@@ -148,7 +147,7 @@ export default function Category() {
               restaurant={query.restaurant as string}
               category={currentCat}
               submit={saveMenuItem}
-              data={res}
+              data={res as { images: string[]; name: string; price: number }}
               deleteSubCatToMenuItem={() =>
                 deleteSubCatToMenuItem({
                   variables: {
@@ -199,7 +198,7 @@ export default function Category() {
             />
           )}
           {actionType === "create item" &&
-          !menuBySubCategoryData?.MenuBySubCategory?.length ? (
+          !menuBySubCategoryResult.data?.MenuBySubCategory?.length ? (
             <MenuAdder
               submit={addMenuItem}
               restaurant={query.restaurant as string}
@@ -222,7 +221,7 @@ export default function Category() {
       </div>
 
       <div className={styles.items_parent}>
-        {menuBySubCategoryData?.MenuBySubCategory?.length
+        {menuBySubCategoryResult.data?.MenuBySubCategory?.length
           ? CategoryEditorComponent
           : MenuEditorComponent}
       </div>

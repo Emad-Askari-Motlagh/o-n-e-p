@@ -80,21 +80,30 @@ export function useMenu() {
     MenuBySubCategoryQuery,
     MenuBySubCategoryQueryVariables
   >(GET_MENU_BY_SUB_CATEGORY, {
-    variables: { restaurant: query?.name as string, subCategory: currentCat },
+    variables: {
+      restaurant: (query?.name as string) || (query?.restaurant as string),
+      subCategory: currentCat,
+    },
+    onCompleted: (d) => {
+      console.log(d);
+    },
+    onError: (err) => err.graphQLErrors.map((r) => console.log(r.extensions)),
   });
 
   const MenuByCategory = useQuery<
     MenuByCategoryQuery,
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
-    variables: { restaurant: query?.name as string },
+    variables: {
+      restaurant: (query?.name as string) || (query?.restaurant as string),
+    },
   });
   const { data: allItems } = useQuery<
     FetchAllMenuItemsQuery,
     FetchAllMenuItemsQueryVariables
   >(GET_ALL_MENU_ITEMS, {
     variables: {
-      restaurant: (query?.name as string) || (query?.name as string),
+      restaurant: (query?.name as string) || (query?.restaurant as string),
     },
   });
 
