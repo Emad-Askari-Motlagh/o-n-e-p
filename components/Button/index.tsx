@@ -6,7 +6,7 @@ type ButtonProps = {
   style?: React.CSSProperties;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  type?: string;
+  type?: "button" | "submit" | "reset";
 };
 
 export default function Button({
@@ -18,7 +18,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <div className={styles.container} style={{ width: width }}>
-      <button onClick={onClick} className={styles.btn_grad}>
+      <button onClick={onClick} className={styles.btn_grad} type={type}>
         {children}
       </button>
     </div>

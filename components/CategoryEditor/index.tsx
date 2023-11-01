@@ -13,10 +13,6 @@ import Input from "components/Input";
 import Button from "../Button";
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 import MenuSubItem from "@/components/RestaurantParentCard";
-import {
-  DeleteMenuCategoryMutationFn,
-  UpdateCategoryMutationFn,
-} from "@/server/generated/graphql";
 
 interface CategoryProps {
   name: string;
@@ -52,26 +48,30 @@ export default function CategoryEditor({
       <MenuSubItem
         label={name}
         endPoint={`${name}`}
-        image={image}></MenuSubItem>
+        image={image}
+      ></MenuSubItem>
 
       <Modal
         isModalOpen={isOpen}
         setIsModalOpen={setIsOpen}
-        label="Category Editor">
+        label="Category Editor"
+      >
         <form
           style={{
             width: "100%",
             display: "flex",
             flexDirection: "column",
           }}
-          onSubmit={submit}>
+          onSubmit={submit}
+        >
           <div
             className={styles.image}
             style={{
               display: "flex",
               justifyContent: "space-around",
               alignItems: "center",
-            }}>
+            }}
+          >
             {image && (
               <Image
                 style={{
@@ -80,7 +80,8 @@ export default function CategoryEditor({
                 alt="ok"
                 width={100}
                 height={100}
-                src={image}></Image>
+                src={image}
+              ></Image>
             )}
             <FileInput
               label="Upload Image"
@@ -104,7 +105,8 @@ export default function CategoryEditor({
           <Input
             placeholder={"Category`s name"}
             name={name}
-            onChange={onChange}></Input>
+            onChange={onChange}
+          ></Input>
           {submited && (
             <SucceedMessage>Item Changed Successfuly</SucceedMessage>
           )}
