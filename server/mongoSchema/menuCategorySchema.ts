@@ -8,8 +8,8 @@ export interface i_MenuCategoryDocument extends Document {
   collectionType: string;
   subCategory: string[];
   parent: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const MenuCategorySchema = new Schema<i_MenuCategoryDocument>(

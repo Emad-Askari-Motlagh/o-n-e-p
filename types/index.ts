@@ -20,3 +20,11 @@ export interface IUploader {
     { file }: { file: Promise<File> }
   ) => Promise<UploadedFileResponse>;
 }
+export type AdminExtendedQuery = {
+  name: string;
+};
+export type CostumerExtendedQuery = {
+  restaurant: string;
+  category: string[] | string;
+};
+export type ExtendedQuery = CostumerExtendedQuery & AdminExtendedQuery;

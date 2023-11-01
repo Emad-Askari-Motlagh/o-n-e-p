@@ -16,7 +16,7 @@ interface MenuEditor {
   category: string;
   id: string;
   isSaved?: boolean;
-  subCat?: string[] | string;
+  subCat: string[] | string;
   deleteSubCatToMenuItem: MouseEventHandler<SVGElement>;
 }
 export default function MenuEditor({

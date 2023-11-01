@@ -51,7 +51,6 @@ const menuResolvers: Resolvers = {
       { restaurant }: FetchAllMenuItemsQueryVariables
     ) {
       try {
-        console.log("here s");
         const res = await MenuItem.aggregate([
           {
             $match: { restaurant },

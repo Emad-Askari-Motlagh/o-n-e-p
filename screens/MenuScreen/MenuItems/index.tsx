@@ -12,6 +12,8 @@ import Input from "@/components/Input";
 import { MenuItemByCategoryQuery } from "@/server/generated/graphql";
 import styles from "./styles.module.scss";
 import ErrorCard from "@/components/ErrorCard";
+import { ExtendedQuery } from "types";
+import { I_MenuItemDocument } from "@/server/mongoSchema/MenuItemSchema";
 
 interface MenuItemExtra {
   _id: string;
@@ -24,11 +26,12 @@ interface MenuItemSelection {
   _id: string;
   name: string;
   extra: MenuItemExtra[];
+  price: number;
 }
 
 export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
-  const Router = useRouter();
-
+  const { query: rawQery } = useRouter();
+  const query = rawQery as ExtendedQuery;
   const [selectedItem, setSelectedItem] = useState<string>("Pommes");
   const [selection, setSelection] = useState<MenuItemSelection[]>([]);
   const [exrasOrderModal, setExtraOrderModalOpen] = useState(false);
@@ -45,14 +48,25 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
     addExtra,
   } = useOrders();
 
-  const restaurant = Router.query?.name as string;
+  function isMenuItem(obj: any): obj is I_MenuItemDocument {
+    return (
+      obj.__typename === "MenuItem" &&
+      typeof obj.name === "string" &&
+      typeof obj.name === "object" && // Add more checks as needed
+      Array.isArray(obj.subCat)
+    ); // Just as an example
+  }
 
   useEffect(() => {
     if (items) {
-      const selectedItem = items.find((item) => item.name === "Pommes");
-      if (selectedItem) {
-        setSelectedItem(selectedItem.name);
-        setSelection(selectedItem.extra);
+      const selected = items.MenuItemByCategory.find((item) => {
+        if (isMenuItem(item)) {
+          item.name === "Pommes";
+        }
+      });
+      if (selectedItem && isMenuItem(selected)) {
+        setSelectedItem(selected.name);
+        setSelection(selected.extra);
       }
     }
   }, [items]);

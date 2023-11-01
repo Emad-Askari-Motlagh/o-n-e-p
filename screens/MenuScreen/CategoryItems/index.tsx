@@ -3,11 +3,7 @@ import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import { i_MenuCategoryDocument } from "server/mongoSchema/menuCategorySchema";
 
-export default function CategoryItems({
-  items,
-}: {
-  items: i_MenuCategoryDocument[];
-}) {
+export default function CategoryItems<T>({ items }: { items: T[] }) {
   return (
     <div className={styles.container}>
       {items.length &&

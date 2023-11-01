@@ -13,7 +13,7 @@ interface InputsTypes {
   submit: UpdateMenuItemsMutationFn;
   restaurant: string;
   category: string;
-  subCat: string[];
+  subCat: string[] | string;
 }
 export default function MenuItem({
   data,

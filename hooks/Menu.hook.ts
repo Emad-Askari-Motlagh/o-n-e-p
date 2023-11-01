@@ -45,9 +45,12 @@ import {
   MenuByCategoryQueryVariables,
 } from "@/server/generated/graphql";
 import { GraphQLError } from "graphql";
+import { ExtendedQuery } from "types";
 
 export function useMenu() {
-  const { query, reload } = useRouter();
+  const { query: rawQuery, reload } = useRouter();
+  const query = rawQuery as ExtendedQuery;
+
   const [documentSaved, setDocumentSaved] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemSaved, setIsItemSaved] = useState(false);
@@ -72,8 +75,8 @@ export function useMenu() {
     MenuItemByCategoryQueryVariables
   >(GET_MENU_ITEM_BY_CATREGORY, {
     variables: {
-      category: currentCat as string,
-      restaurant: (query?.name as string) || (query?.name as string),
+      category: currentCat,
+      restaurant: query?.name || query?.restaurant,
     },
   });
   const menuBySubCategory = useQuery<
@@ -81,13 +84,9 @@ export function useMenu() {
     MenuBySubCategoryQueryVariables
   >(GET_MENU_BY_SUB_CATEGORY, {
     variables: {
-      restaurant: (query?.name as string) || (query?.restaurant as string),
+      restaurant: query?.name || query?.restaurant,
       subCategory: currentCat,
     },
-    onCompleted: (d) => {
-      console.log(d);
-    },
-    onError: (err) => err.graphQLErrors.map((r) => console.log(r.extensions)),
   });
 
   const MenuByCategory = useQuery<
@@ -95,7 +94,7 @@ export function useMenu() {
     MenuByCategoryQueryVariables
   >(GET_MENU_CATREGORY, {
     variables: {
-      restaurant: (query?.name as string) || (query?.restaurant as string),
+      restaurant: query?.name || query?.restaurant,
     },
   });
   const { data: allItems } = useQuery<
@@ -103,7 +102,7 @@ export function useMenu() {
     FetchAllMenuItemsQueryVariables
   >(GET_ALL_MENU_ITEMS, {
     variables: {
-      restaurant: (query?.name as string) || (query?.restaurant as string),
+      restaurant: query?.name || query?.restaurant,
     },
   });
 
