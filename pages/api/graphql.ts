@@ -22,7 +22,10 @@ const pubSub = createPubSub();
 const server = createServer({
   cors: {
     credentials: true,
-    origin: ["https://emad-portfolio.herokuapp.com"], // your frontend url.
+    origin: [
+      "https://emad-portfolio.herokuapp.com",
+      "http://localhost:3000/api/graphql",
+    ], // your frontend url.
   },
 
   plugins: [],
