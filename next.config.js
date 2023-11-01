@@ -4,6 +4,7 @@ const runtimeCaching = require("next-pwa/cache");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
   compiler: {
     removeConsole: process.env.NODE_ENV !== "development",
   },
@@ -12,11 +13,6 @@ const nextConfig = {
   },
 
   webpack: (config, { isServer, dev }) => {
-    // Fixes npm packages that depend on `fs` module
-
-    // this will just update topLevelAwait property of config.experiments
-    // config.experiments.topLevelAwait = true
-
     config.module.rules.push({
       test: /\.graphql?$/,
       loader: "webpack-graphql-loader",

@@ -72,7 +72,7 @@ const SummaryItem: FC<SummaryItemProps> = ({
       </div>
 
       {/* Price */}
-      <div className={styles.price_cont}>
+      <div className={styles.price_count}>
         <span>{`${sum},00 kr`}</span>
       </div>
     </div>

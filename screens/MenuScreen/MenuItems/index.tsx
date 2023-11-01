@@ -58,7 +58,7 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
   }
 
   useEffect(() => {
-    if (items) {
+    if (items.MenuItemByCategory?.length) {
       const selected = items.MenuItemByCategory.find((item) => {
         if (isMenuItem(item)) {
           item.name === "Pommes";
