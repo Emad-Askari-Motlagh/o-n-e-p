@@ -14,6 +14,7 @@ import styles from "./styles.module.scss";
 import ErrorCard from "@/components/ErrorCard";
 import { ExtendedQuery } from "types";
 import { I_MenuItemDocument } from "@/server/mongoSchema/MenuItemSchema";
+import { SelectChangeEvent } from "@mui/material";
 
 interface MenuItemExtra {
   _id: string;
@@ -22,23 +23,17 @@ interface MenuItemExtra {
   quantity: number;
 }
 
-interface MenuItemSelection {
-  _id: string;
-  name: string;
-  extra: MenuItemExtra[];
-  price: number;
-}
-
 export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
   const { query: rawQery } = useRouter();
   const query = rawQery as ExtendedQuery;
   const [selectedItem, setSelectedItem] = useState<string>("Pommes");
-  const [selection, setSelection] = useState<MenuItemSelection[]>([]);
+  const [selection, setSelection] = useState<I_MenuItemDocument[]>([]);
   const [exrasOrderModal, setExtraOrderModalOpen] = useState(false);
   const [costumerExtraChoises, setCostumerExtraChoises] = useState<
     MenuItemExtra[]
   >([]);
-  const [Error, setError] = useState("");
+  const [ErrorOnSubmit, setError] = useState("");
+  const [ErrorOnAddExtra, setErrorOnAddExtra] = useState("");
   const [description, setDescription] = useState<string>("");
   const {
     orders,
@@ -49,29 +44,29 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
   } = useOrders();
 
   function isMenuItem(obj: any): obj is I_MenuItemDocument {
-    return (
-      obj.__typename === "MenuItem" &&
-      typeof obj.name === "string" &&
-      typeof obj.name === "object" && // Add more checks as needed
-      Array.isArray(obj.subCat)
-    ); // Just as an example
+    return obj.__typename === "MenuItem" && typeof obj.name === "string";
+  }
+  function isOrderItem(
+    obj: any
+  ): obj is { __typename: "OrderItem"; orderQuantity?: number | null } {
+    return obj.__typename === "OrderItem";
   }
 
   useEffect(() => {
     if (items.MenuItemByCategory?.length) {
       const selected = items.MenuItemByCategory.find((item) => {
-        if (isMenuItem(item)) {
-          item.name === "Pommes";
-        }
+        return isMenuItem(item) && item.name === "Pommes";
       });
-      if (selectedItem && isMenuItem(selected)) {
+      if (selected && isMenuItem(selected)) {
         setSelectedItem(selected.name);
-        setSelection(selected.extra);
+        setSelection([selected]);
+      } else {
+        const orderItem = items.MenuItemByCategory.find(isOrderItem);
       }
     }
-  }, [items]);
+  }, [items, selectedItem]);
 
-  function onSelect(e) {
+  function onSelect(e: SelectChangeEvent) {
     if (!selection.length) {
       return;
     }
@@ -123,11 +118,11 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
         },
         onCompleted: () => {
           setExtraOrderModalOpen(false);
+          setErrorOnAddExtra("");
         },
       });
     } catch (error) {
-      console.log("Error:", error);
-      // Handle the error here (e.g., display an error message)
+      setErrorOnAddExtra("Couldn't add extra");
     }
   }
 
@@ -162,13 +157,15 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
   }
 
   function countQuantity(
-    id: number,
-    orders: [{ orderQuantity: number; product: { _id: number } }]
-  ) {
+    id: string,
+    orders: [{ orderQuantity: number; product: { _id: string } }]
+  ): number {
+    // Ensure the return type is number.
     if (Array.isArray(orders) && id) {
       const result = orders.find((ress) => ress.product?._id === id);
       return result ? result.orderQuantity : 0;
     }
+    return 0;
   }
 
   const MenuItems = costumerExtraChoises.map((result, i) => (
@@ -224,7 +221,12 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
                   })
                 }
                 price={res.price}
-                quantity={countQuantity(res._id, orders)}
+                quantity={countQuantity(
+                  res._id as string,
+                  orders as [
+                    { orderQuantity: number; product: { _id: string } }
+                  ]
+                )}
               />
 
               <CgMore
@@ -262,7 +264,16 @@ export default function Items({ items }: { items: MenuItemByCategoryQuery }) {
                       placeholder="Extra description"
                       onChange={(e) => setDescription(e.target.value)}
                     />
-                    {Error && <ErrorCard>Something went wrong</ErrorCard>}
+                    {ErrorOnSubmit && (
+                      <ErrorCard>
+                        Something went wrong during your order
+                      </ErrorCard>
+                    )}{" "}
+                    {ErrorOnAddExtra && (
+                      <ErrorCard>
+                        Something went wrong during add to your order
+                      </ErrorCard>
+                    )}
                     <Button
                       width="80%"
                       type="submit"
