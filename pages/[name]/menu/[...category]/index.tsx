@@ -9,6 +9,7 @@ import AnimatedHeader from "@/components/AnimatedHeader";
 import { CgMenuHotdog } from "react-icons/cg";
 import { useMenu } from "hooks/Menu.hook";
 import SimpleLoading from "@/components/SimpleLoading";
+import { MenuItemByCategoryQuery } from "@/server/generated/graphql";
 
 // Dynamic import the MenuItems component
 const MenuItems = dynamic(() => import("screens/MenuScreen/MenuItems"), {
@@ -52,7 +53,9 @@ export default function Menu() {
         {data?.MenuBySubCategory?.length ? (
           <CategoryItems items={data?.MenuBySubCategory} />
         ) : menuItemsData?.MenuItemByCategory.length ? (
-          <MenuItems items={menuItemsData?.MenuItemByCategory} />
+          <MenuItems
+            items={menuItemsData?.MenuItemByCategory as MenuItemByCategoryQuery}
+          />
         ) : (
           !loading && <ErrorCard>Sorry! couldnt find any item</ErrorCard>
         )}

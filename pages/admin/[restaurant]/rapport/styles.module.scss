@@ -36,6 +36,8 @@
         font-size: xx-large;
     }
     .rapport {
+        width: 90%;
+        margin: auto;
     }
     .calendar_parent {
         display: flex;
@@ -51,18 +53,18 @@
         .rapport_wraper {
             background-color: #ffff;
             border: 2px solid black;
-            padding: 2rem;
-            max-width: 1200px;
 
             margin: auto;
             h3 {
                 margin: auto;
                 text-align: center;
+                padding: 1rem;
             }
             .dates {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                padding: 1rem;
 
                 & > * {
                     font-size: 10px;

@@ -18,7 +18,7 @@ interface MenuItemProps {
   addOrder: AddOrderMutationFn;
   price: number;
   quantity: number;
-  itemsChildren: JSX.Element;
+  itemsChildren?: JSX.Element;
 }
 const MenuItem = ({
   description,

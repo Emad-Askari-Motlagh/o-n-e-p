@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { GET_MENU_CATREGORY } from "server/graphql/querys/querys.graphql";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import styles from "./menu.module.scss";
-import CategoryEditor from "@/components/CategoryEditor";
+
 import useUpload from "hooks/Uploader.hook";
 import useAuth from "hooks/Auth.hook";
 import {
@@ -21,7 +21,11 @@ import Modall from "@/components/Modal";
 import AddCategory from "@/components/AddCategory";
 import AnimatedHeader from "@/components/AnimatedHeader";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-
+import dynamic from "next/dynamic";
+import SimpleLoading from "@/components/SimpleLoading";
+const CategoryEditor = dynamic(() => import("@/components/CategoryEditor"), {
+  loading: () => <SimpleLoading />,
+});
 export default function MenuItems() {
   const { user } = useAuth();
   const [ChosenImage, setImage] = useState("");

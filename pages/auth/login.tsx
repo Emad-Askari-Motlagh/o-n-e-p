@@ -51,7 +51,6 @@ export default function Login() {
         } else {
           throw new Error("Invalid login");
         }
-        resetForm();
       } catch (err) {
         setError("Error on login");
         console.log(err);

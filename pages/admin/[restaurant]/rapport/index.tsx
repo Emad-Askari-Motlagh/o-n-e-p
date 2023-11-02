@@ -42,7 +42,7 @@ export default function Rapport() {
     // doc.save("a4.pdf");
   }, [beginDate, finishDate, getAnalistics]);
 
-  const exportPDF = () => {
+  const exportPDF = (): null => {
     return null;
   };
   if (rapportError && !rapportLoading)
@@ -148,7 +148,7 @@ function RapportItem({
   sum,
   moms,
 }: {
-  val: number;
+  val: string;
   sum: number;
   moms: number;
 }) {
