@@ -60,11 +60,6 @@ export default function Stripe({
               products: orders?.map((res: { _id: string }) => res?._id),
               price: sum,
             },
-            onCompleted: () => {
-              setTimeout(() => {
-                router.push(redirectPath);
-              }, 2000);
-            },
           });
         }
       } catch (err: any) {

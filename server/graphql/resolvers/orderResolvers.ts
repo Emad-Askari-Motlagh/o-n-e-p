@@ -277,33 +277,37 @@ const orderResolvers: Resolvers = {
         restaurant,
         products,
         price,
-      }: { restaurant: string; products: [string]; price: number },
+      }: { restaurant: string; products: string[]; price: number },
       { costumerId }: { costumerId: string }
     ) {
+      if (!costumerId) {
+        return null;
+      }
+      const session = await mongoose.startSession();
       try {
-        // if (!costumerId) {
-        //   return null;
-        // }
-
         const cosId = new mongoose.Types.ObjectId(costumerId);
-        // await Order.aggregate([
-        //   {
-        //     $group: {
-        //       _id: { month: { $month: "$date" }, year: { $year: "$date" } },
-        //       totalAmount: {
-        //         $sum: { $multiply: ["$price", "$orderQuantity"] },
-        //       },
-        //       count: { $sum: 1 },
-        //     },
-        //   },
-        // ]);
 
-        const items = await Order.distinct("product");
+        session.startTransaction();
+        await Order.aggregate([
+          {
+            $group: {
+              _id: { month: { $month: "$date" }, year: { $year: "$date" } },
+              totalAmount: {
+                $sum: { $multiply: ["$price", "$orderQuantity"] },
+              },
+              count: { $sum: 1 },
+            },
+          },
+        ]);
+        // Your existing logic to get distinct items
+        const items = await Order.distinct("product").session(session);
 
-        await products.map(async (res) => {
-          const id = new Types.ObjectId(res);
-          const order = await Order.findById(id);
-          const payedOrder = await new PayedItem({
+        // Process each product inside the transaction
+        for (const res of products) {
+          const id = new mongoose.Types.ObjectId(res);
+          const order = await Order.findById(id).session(session);
+
+          const payedOrder = new PayedItem({
             restaurant: restaurant,
             costumer: cosId,
             product: order?.product,
@@ -312,32 +316,43 @@ const orderResolvers: Resolvers = {
             extra: order?.extra,
           });
 
-          const payedOrders = await payedOrder.save();
-          if (!payedOrders) {
-            throw new ApolloError("Couldnt save order");
-          }
-          await Order.findOneAndRemove({ _id: id });
-          return order;
-        });
+          await payedOrder.save({ session });
 
-        const cosHistoryDocument = await new costumerHistory({
+          if (!payedOrder) {
+            throw new ApolloError("Could not save order");
+          }
+
+          await Order.findOneAndRemove({ _id: id }).session(session);
+        }
+
+        // Create customer history document
+        const cosHistoryDocument = new costumerHistory({
           restaurant: restaurant,
           costumer: cosId,
           products: items,
           price: price,
         });
-        await cosHistoryDocument.save();
+        await cosHistoryDocument.save({ session });
 
-        const sell = await new sellSchema({
+        // Create sell document
+        const sell = new sellSchema({
           restaurant: restaurant,
           costumer: cosId,
           items: items,
           sum: price,
         });
-        await sell.save();
+        await sell.save({ session });
+
+        // Commit the transaction
+        await session.commitTransaction();
         return sell;
-      } catch (err: any) {
+      } catch (err) {
+        // Abort the transaction in case of error
+        await session.abortTransaction();
         throw err;
+      } finally {
+        // End the session
+        session.endSession();
       }
     },
     async GetBillInfo(_, { restaurant, recieptId }) {

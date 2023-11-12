@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import Payment from "components/Payment";
 import PrimaryLayout from "@/components/PrimaryLayout";
 import useOrders from "hooks/Order.hook";
 import Warning from "@/components/Warning";
@@ -13,11 +12,14 @@ import AnimatedHeader from "@/components/AnimatedHeader";
 import { IoBagCheckOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
 import SimpleLoading from "@/components/SimpleLoading";
+import Link from "next/link";
 
 const SummaryItem = dynamic(() => import("components/SummaryItem"), {
   loading: () => <SimpleLoading />,
 });
-
+const Payment = dynamic(() => import("components/Payment"), {
+  loading: () => <SimpleLoading />,
+});
 export default function CheckOut() {
   const router = useRouter();
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -33,9 +35,13 @@ export default function CheckOut() {
   const [pay] = useMutation<PayMutation, PayMutationVariables>(PAY, {
     onCompleted: () => {
       setPaymentSuccess(true);
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
     },
     onError: (err) => {
       // Handle payment error
+      err.graphQLErrors.map((r) => console.log(r.extensions));
       setPaymentError(true);
       setTimeout(() => {
         router.reload();
@@ -50,8 +56,14 @@ export default function CheckOut() {
   }, 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  if (paymentSuccess)
-    return <Warning label="Checkout" message="Your order saved sucessefuly" />;
+  if (paymentSuccess) {
+    return (
+      <div className={styles.successed}>
+        <Warning label="Checkout" message="Your order saved sucessefuly" />
+      </div>
+    );
+  }
+
   if (!orders?.length && !loading)
     return <Warning label="Checkout" message="You have not any orders" />;
 

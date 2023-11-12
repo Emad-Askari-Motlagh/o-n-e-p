@@ -50,9 +50,9 @@ export default function Menu() {
         {router.query?.name} - Menu Items
       </AnimatedHeader>
       <div className={styles.items_parent}>
-        {data?.MenuBySubCategory?.length ? (
+        {data?.MenuBySubCategory?.length > 0 ? (
           <CategoryItems items={data?.MenuBySubCategory} />
-        ) : menuItemsData?.MenuItemByCategory.length ? (
+        ) : menuItemsData?.MenuItemByCategory.length > 0 ? (
           <MenuItems
             items={menuItemsData?.MenuItemByCategory as MenuItemByCategoryQuery}
           />
